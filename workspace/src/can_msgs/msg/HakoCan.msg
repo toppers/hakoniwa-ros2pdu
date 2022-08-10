@@ -1,1 +1,2 @@
-uint8[8]	data
+HakoCanHead head
+HakoCanBody body
