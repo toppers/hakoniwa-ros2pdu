@@ -1,5 +1,4 @@
 #include "can_proxy_hako.hpp"
-#include <hako.hpp>
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,8 +19,10 @@ static std::shared_ptr<hako::IHakoSimulationEventController> hako_sim_ctrl = nul
 static std::shared_ptr<hako::IHakoAssetController> hako_asset = nullptr;
 static HakoTimeType hako_delta_usec = 1000;
 
-bool can_proxy_hako_init(const char *asset_name)
+bool can_proxy_hako_init(const char *asset_name, HakoTimeType delta_usec)
 {
+    hako_delta_usec = delta_usec;
+
     signal(SIGINT, hako_asset_signal_handler);
     signal(SIGTERM, hako_asset_signal_handler);
 
@@ -67,7 +68,7 @@ bool can_proxy_hako_run()
         //hako_asset->write_pdu(*hako_asset_name, 1, buf, 100);
         hako_asset->notify_write_pdu_done(*hako_asset_name);
     }
-    return hako_asset_is_end;
+    return (hako_asset_is_end == false);
 }
 void can_proxy_hako_fin()
 {

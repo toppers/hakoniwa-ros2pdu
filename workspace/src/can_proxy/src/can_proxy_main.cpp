@@ -8,13 +8,13 @@
 #include <iostream>
 
 using namespace std::chrono_literals;
-//#define HAKO
+#define HAKO
 
 int main(int argc, char **argv) 
 {
     rclcpp::init(argc, argv);
 #ifdef HAKO
-    can_proxy_hako_init("can_proxy_node");
+    can_proxy_hako_init("can_proxy_node", 10 * 1000);
 #endif
     auto node = rclcpp::Node::make_shared("can_proxy_node");
 
