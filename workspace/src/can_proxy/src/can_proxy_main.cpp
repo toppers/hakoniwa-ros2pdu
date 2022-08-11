@@ -10,6 +10,26 @@
 using namespace std::chrono_literals;
 #define HAKO
 
+static void send_dummy_data()
+{
+    Hako_HakoCan can_msg;
+    can_msg.head.rtr = 0;
+    can_msg.head.ide = 1;
+    can_msg.head.dlc = 8;
+    can_msg.head.channel = 1;
+    can_msg.head.dlc = 8;
+
+    can_msg.body.data[0] = 0;
+    can_msg.body.data[1] = 1;
+    can_msg.body.data[2] = 2;
+    can_msg.body.data[3] = 3;
+    can_msg.body.data[4] = 4;
+    can_msg.body.data[5] = 5;
+    can_msg.body.data[6] = 6;
+    can_msg.body.data[7] = 7;
+    can_proxy_hako_tx_data(0, can_msg);
+}
+
 int main(int argc, char **argv) 
 {
     bool is_rx_mode = true;
@@ -43,7 +63,8 @@ int main(int argc, char **argv)
             can_proxy_rx_publish();
         }
         else {
-            //TODO
+            //TODO dummy data send
+            send_dummy_data();
         }
 #endif
         rclcpp::spin_some(node);

@@ -70,12 +70,38 @@ bool can_proxy_hako_run(bool &can_step)
 }
 bool can_proxy_hako_rx_data(HakoPduChannelIdType pdu_channel, Hako_HakoCan &can_msg)
 {
-     if (hako_asset->is_simulation_mode()) {
-        if (hako_asset->is_pdu_dirty(pdu_channel)) {
-            return hako_asset->read_pdu(*hako_asset_name, pdu_channel, (char *)&can_msg, sizeof(Hako_HakoCan));
-        }
-     }
-     return false;
+    if (hako_asset->is_pdu_created() == false) {
+        return false;
+    }
+    else if (hako_asset->is_simulation_mode()) {
+       if (hako_asset->is_pdu_dirty(pdu_channel)) {
+           bool ret = hako_asset->read_pdu(*hako_asset_name, pdu_channel, (char *)&can_msg, sizeof(Hako_HakoCan));
+           hako_asset->notify_read_pdu_done(*hako_asset_name);
+           return ret;
+       }
+    }
+    return false;
+}
+bool can_proxy_hako_tx_data(HakoPduChannelIdType pdu_channel, Hako_HakoCan &can_msg)
+{
+    static bool is_init[HAKO_PDU_CHANNEL_MAX];
+    if (is_init[pdu_channel] == false) {
+        hako_asset->create_pdu_channel(pdu_channel, sizeof(Hako_HakoCan));
+        is_init[pdu_channel] = true;
+    }
+    else if (hako_asset->is_pdu_created() == false) {
+        return false;
+    }
+    else if (hako_asset->is_simulation_mode())
+    {
+       return hako_asset->write_pdu(*hako_asset_name, pdu_channel, (char *)&can_msg, sizeof(Hako_HakoCan));
+    }
+    else if (hako_asset->is_pdu_sync_mode(*hako_asset_name))
+    {
+        hako_asset->write_pdu(*hako_asset_name, pdu_channel, (char*)&can_msg, sizeof(Hako_HakoCan));
+        hako_asset->notify_write_pdu_done(*hako_asset_name);
+    }
+    return false;
 }
 
 void can_proxy_hako_fin()
