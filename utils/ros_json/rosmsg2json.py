@@ -22,8 +22,8 @@ for line in text:
   tmp = line.strip()
   if (len(tmp) > 0) and  (tmp[0:1] != '#'):
   	array=tmp.split()
-	entry = { 'name': array[1], 'type': array[0] }
-	out_data['fields'].append(entry)
+  	entry = { 'name': array[1], 'type': array[0] }
+  	out_data['fields'].append(entry)
 
 #print(json.dumps(out_data, ensure_ascii=False, indent=2))
 

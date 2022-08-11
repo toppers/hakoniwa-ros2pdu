@@ -42,7 +42,7 @@ function create_ros_json_file()
     else
         mkdir -p ${DST_DIR}/${pkg_name}
     fi
-    python2 rosmsg2json.py ${filepath} ${DST_DIR}/${pkg_name}
+    python3 rosmsg2json.py ${filepath} ${DST_DIR}/${pkg_name}
 }
 
 NEED_CREATE="TRUE"

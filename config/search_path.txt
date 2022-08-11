@@ -1,2 +1,2 @@
 /opt/ros/foxy/share
-/mnt/c/project/hakoniwa-ros2pdu/workspace/src
+/root/workspace/hakoniwa-ros2pdu/workspace/src

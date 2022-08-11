@@ -1,24 +1,24 @@
 {
   "fields": [
     {
-      "type": "uint32", 
-      "name": "channel"
-    }, 
+      "name": "channel",
+      "type": "uint32"
+    },
     {
-      "type": "uint32", 
-      "name": "ide"
-    }, 
+      "name": "ide",
+      "type": "uint32"
+    },
     {
-      "type": "uint32", 
-      "name": "rtr"
-    }, 
+      "name": "rtr",
+      "type": "uint32"
+    },
     {
-      "type": "uint32", 
-      "name": "dlc"
-    }, 
+      "name": "dlc",
+      "type": "uint32"
+    },
     {
-      "type": "uint32", 
-      "name": "canid"
+      "name": "canid",
+      "type": "uint32"
     }
   ]
 }
