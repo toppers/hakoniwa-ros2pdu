@@ -24,10 +24,28 @@ find_package(std_msgs REQUIRED)
 add_executable(can_proxy_node 
   src/can_proxy.cpp
 )
-ament_target_dependencies(can_proxy_node rclcpp std_msgs can_msgs)
+ament_target_dependencies(can_proxy_node 
+  rclcpp 
+  std_msgs 
+  can_msgs
+)
+target_link_directories(can_proxy_node
+  PRIVATE
+  ${CMAKE_CURRENT_SOURCE_DIR}/../../../../hakoniwa-core-cpp-client/cmake-build/core/src
+)
+
+target_link_libraries(can_proxy_node 
+  hako
+)
+
+target_include_directories(can_proxy_node
+  PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../pdu/types>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../hakoniwa-core-cpp-client/core/src/include>
+)
 
 install(TARGETS
-can_proxy_node
+  can_proxy_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
