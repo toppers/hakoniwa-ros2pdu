@@ -1,23 +1,37 @@
 #include <stdio.h>
 
-#include "can_msgs/msg/hako_can.hpp"
-#include "rclcpp/rclcpp.hpp"
-#include "std_msgs/msg/string.hpp"
 #include "pdu_primitive_ctypes.h"
 #include "can_proxy_hako.hpp"
+#include "can_proxy_rx.hpp"
+#include "can_proxy_tx.hpp"
 #include <iostream>
+#include <string.h>
 
 using namespace std::chrono_literals;
 #define HAKO
 
 int main(int argc, char **argv) 
 {
-    rclcpp::init(argc, argv);
+    bool is_rx_mode = true;
+    if (argc != 2) {
+        std::cout << "ARG: {tx|rx}" << std::endl;
+        return 1;
+    }
+    const char *node_name = nullptr;
+    if (strncmp("rx", argv[1], 2) == 0) {
+        node_name = "can_proxy_rx_node";
+    }
+    else {
+        is_rx_mode = false;
+        node_name = "can_proxy_tx_node";
+    }
+    std::cout << "START:" << node_name << std::endl;
 #ifdef HAKO
-    can_proxy_hako_init("can_proxy_node", 10 * 1000);
+    can_proxy_hako_init(node_name, 10 * 1000);
 #endif
-    auto node = rclcpp::Node::make_shared("can_proxy_node");
-
+    rclcpp::init(argc, argv);
+    auto node = rclcpp::Node::make_shared(node_name);
+    can_proxy_rx_init(node);
     rclcpp::WallRate rate(10ms);
     while (rclcpp::ok()) {
 #ifdef HAKO
@@ -25,6 +39,12 @@ int main(int argc, char **argv)
             break;
         }
 #endif
+        if (is_rx_mode) {
+            can_proxy_rx_publish();
+        }
+        else {
+            //TODO
+        }
         rclcpp::spin_some(node);
         rate.sleep();
     }

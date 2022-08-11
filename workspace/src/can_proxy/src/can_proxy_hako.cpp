@@ -50,7 +50,7 @@ bool can_proxy_hako_init(const char *asset_name, HakoTimeType delta_usec)
 bool can_proxy_hako_run()
 {
     if (hako_asset->is_pdu_created() == false) {
-        std::cout << "not pdu created...yet" << std::endl;
+        //std::cout << "not pdu created...yet" << std::endl;
     }
     else if (hako_asset->is_simulation_mode()) {
         hako_asset->notify_simtime(*hako_asset_name, hako_asset_time_usec);
