@@ -22,7 +22,10 @@ find_package(can_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 
 add_executable(can_proxy_node 
-  src/can_proxy.cpp
+  src/can_proxy_main.cpp
+  src/can_proxy_hako.cpp
+  src/can_proxy_tx.cpp
+  src/can_proxy_rx.cpp
 )
 ament_target_dependencies(can_proxy_node 
   rclcpp 
