@@ -59,6 +59,7 @@ bool can_proxy_hako_run(bool &can_step)
         if (world_time >= hako_asset_time_usec) {
             hako_asset_time_usec += hako_delta_usec;
             can_step = false;
+            std::cout << "TIME: " << hako_asset_time_usec << std::endl;
         }
     }
     else if (hako_asset->is_pdu_sync_mode(*hako_asset_name)) {
