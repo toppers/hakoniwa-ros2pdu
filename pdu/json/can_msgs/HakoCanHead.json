@@ -1,0 +1,24 @@
+{
+  "fields": [
+    {
+      "type": "uint32", 
+      "name": "channel"
+    }, 
+    {
+      "type": "uint32", 
+      "name": "ide"
+    }, 
+    {
+      "type": "uint32", 
+      "name": "rtr"
+    }, 
+    {
+      "type": "uint32", 
+      "name": "dlc"
+    }, 
+    {
+      "type": "uint32", 
+      "name": "canid"
+    }
+  ]
+}

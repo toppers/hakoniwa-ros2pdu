@@ -1,0 +1,12 @@
+{
+  "fields": [
+    {
+      "type": "HakoCanHead", 
+      "name": "head"
+    }, 
+    {
+      "type": "HakoCanBody", 
+      "name": "body"
+    }
+  ]
+}

@@ -10,6 +10,8 @@ CURR_DIR=`pwd`
 TOOL_DIR=utils
 JSON_DIR=${TOOL_DIR}/ros_json
 TYPES_DIR=${TOOL_DIR}/ros_types
+OUT_DIR=pdu/types
+OUT_JSON_DIR=pdu/json
 
 SEARCH_PATH=${CURR_DIR}/${1}
 PKG_MSG=${2}
@@ -24,20 +26,18 @@ cd ${CURR_DIR}
 
 #create json file
 cd ${JSON_DIR}
-bash convert_rosmsg2json.bash ${SEARCH_PATH} ${PKG_MSG} ${CURR_DIR}/out_json
+bash convert_rosmsg2json.bash ${SEARCH_PATH} ${PKG_MSG} ${CURR_DIR}/${OUT_JSON_DIR}
 cd ${CURR_DIR}
 
 #convert json file to c type header
-python3 utils/template_engine/generate.py ./template/pdu_ctypes_h.tpl ./out_json/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt > tmp_header.txt
+python3 utils/template_engine/generate.py ./template/pdu_ctypes_h.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt > tmp_header.txt
 
-if [ -d out/${PKG_NAME} ]
+if [ -d ${OUT_DIR}/${PKG_NAME} ]
 then
     :
 else
-    mkdir -p out/${PKG_NAME}
+    mkdir -p ${OUT_DIR}/${PKG_NAME}
 fi
-mv tmp_header.txt out/${PKG_NAME}/pdu_ctype_${MSG_NAME}.h 
+mv tmp_header.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_${MSG_NAME}.h 
 
 
-#rm -rf ${CURR_DIR}/out_json
-#rm -rf dep_types.txt
