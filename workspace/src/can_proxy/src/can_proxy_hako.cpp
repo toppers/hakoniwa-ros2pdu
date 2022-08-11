@@ -34,7 +34,6 @@ bool can_proxy_hako_init(const char *asset_name, HakoTimeType delta_usec)
         std::cout << "ERROR: Not found hako-master on this PC" << std::endl;
         return false;
     }
-    hako_asset->create_pdu_channel(1, 100);
     AssetCallbackType callback;
     callback.reset = reset_callback;
     callback.start = start_callback;
