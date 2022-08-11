@@ -47,8 +47,9 @@ bool can_proxy_hako_init(const char *asset_name, HakoTimeType delta_usec)
     return true;
 }
 
-bool can_proxy_hako_run()
+bool can_proxy_hako_run(bool &can_step)
 {
+    can_step = false;
     if (hako_asset->is_pdu_created() == false) {
         //std::cout << "not pdu created...yet" << std::endl;
     }
@@ -57,19 +58,26 @@ bool can_proxy_hako_run()
         HakoTimeType world_time = hako_asset->get_worldtime();
         if (world_time >= hako_asset_time_usec) {
             hako_asset_time_usec += hako_delta_usec;
+            can_step = false;
         }
-        char tmp[100];
-        hako_asset->read_pdu(*hako_asset_name, 1, tmp, 100);
-        hako_asset->notify_read_pdu_done(*hako_asset_name);
-        printf("TIME: W:%ld A:%ld\n", world_time, hako_asset_time_usec);
-        //printf("buf:%s pdu:%s\n", buf, tmp);
     }
     else if (hako_asset->is_pdu_sync_mode(*hako_asset_name)) {
+        //TODO
         //hako_asset->write_pdu(*hako_asset_name, 1, buf, 100);
         hako_asset->notify_write_pdu_done(*hako_asset_name);
     }
     return (hako_asset_is_end == false);
 }
+bool can_proxy_hako_rx_data(HakoPduChannelIdType pdu_channel, Hako_HakoCan &can_msg)
+{
+     if (hako_asset->is_simulation_mode()) {
+        if (hako_asset->is_pdu_dirty(pdu_channel)) {
+            return hako_asset->read_pdu(*hako_asset_name, pdu_channel, (char *)&can_msg, sizeof(Hako_HakoCan));
+        }
+     }
+     return false;
+}
+
 void can_proxy_hako_fin()
 {
     hako_asset->asset_unregister(*hako_asset_name);

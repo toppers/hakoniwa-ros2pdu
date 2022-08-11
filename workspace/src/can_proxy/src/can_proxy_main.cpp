@@ -35,16 +35,17 @@ int main(int argc, char **argv)
     rclcpp::WallRate rate(10ms);
     while (rclcpp::ok()) {
 #ifdef HAKO
-        if (can_proxy_hako_run() == false) {
+        bool can_step = false;
+        if (can_proxy_hako_run(can_step) == false) {
             break;
         }
-#endif
         if (is_rx_mode) {
             can_proxy_rx_publish();
         }
         else {
             //TODO
         }
+#endif
         rclcpp::spin_some(node);
         rate.sleep();
     }

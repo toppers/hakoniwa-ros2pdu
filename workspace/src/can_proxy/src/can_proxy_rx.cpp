@@ -1,6 +1,8 @@
 #include "can_msgs/msg/hako_can.hpp"
 #include "can_proxy_com.hpp"
 #include "can_proxy_rx.hpp"
+#include "can_proxy_hako.hpp"
+#include "can_msgs/pdu_ctype_HakoCan.h"
 #include <vector>
 
 static std::shared_ptr<rclcpp::Publisher<can_msgs::msg::HakoCan>> publisher[PUBLISHER_NUM];
@@ -23,18 +25,18 @@ bool can_proxy_rx_init(std::shared_ptr<rclcpp::Node> node)
 bool can_proxy_rx_publish()
 {
     auto can_msg = can_msgs::msg::HakoCan();
+    Hako_HakoCan hako_can_msg;
     for(int i = 0; i < (int)hako_topic_pdu_map.size(); ++i) {
-        can_msg.head.dlc = 8;
-        can_msg.head.ide = 1;
-        can_msg.head.rtr = 0;
-        can_msg.head.canid = 0x111;
-        can_msg.body.data[0] = 'H';
-        can_msg.body.data[1] = 'e';
-        can_msg.body.data[2] = 'l';
-        can_msg.body.data[3] = 'l';
-        can_msg.body.data[4] = 'o';
-        can_msg.body.data[5] = ' ';
-        publisher[i]->publish(can_msg);
+        if (can_proxy_hako_rx_data(hako_topic_pdu_map[i].pdu_channel, hako_can_msg)) {
+            can_msg.head.dlc = hako_can_msg.head.dlc;
+            can_msg.head.ide = hako_can_msg.head.ide;
+            can_msg.head.rtr = hako_can_msg.head.rtr;
+            can_msg.head.canid = hako_can_msg.head.canid;
+            for (int j = 0; j < 8; j++) {
+                can_msg.body.data[j] = hako_can_msg.body.data[j];
+            }
+            publisher[i]->publish(can_msg);
+        }
     }
     return true;
 }
