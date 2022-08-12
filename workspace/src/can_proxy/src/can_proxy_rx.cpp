@@ -7,6 +7,7 @@
 
 static std::shared_ptr<rclcpp::Publisher<can_msgs::msg::HakoCan>> publisher[PUBLISHER_NUM];
 static std::vector<HakoTopicPduMapType> hako_topic_pdu_map;
+static std::shared_ptr<rclcpp::Node> my_node;
 
 bool can_proxy_rx_init(std::shared_ptr<rclcpp::Node> node)
 {
@@ -15,11 +16,21 @@ bool can_proxy_rx_init(std::shared_ptr<rclcpp::Node> node)
     map_data.pdu_channel = 0;
     map_data.topic_name = "hako_can_message";
     hako_topic_pdu_map.push_back(map_data);
-
-    for(int i = 0; i < (int)hako_topic_pdu_map.size(); ++i) {
-        publisher[i] = node->create_publisher<can_msgs::msg::HakoCan>(hako_topic_pdu_map[i].topic_name, 1);
-    }
+    my_node = node;
     return true;
+}
+
+static void create_publisher(int index, Hako_HakoCan &can_msg)
+{
+    char topic_name[4096];
+    int size = snprintf(topic_name, sizeof(topic_name), "channel%u/CAN_IDE%u_RTR%u_DLC%u_0x%x", 
+        can_msg.head.channel, can_msg.head.ide, can_msg.head.rtr, can_msg.head.dlc, can_msg.head.canid);
+    char *p = new char[size+1];
+    memset(p, 0, size+1);
+    memcpy(p, topic_name, size);
+    hako_topic_pdu_map[index].topic_name = topic_name;
+    publisher[index] = my_node->create_publisher<can_msgs::msg::HakoCan>(hako_topic_pdu_map[index].topic_name, 1);
+    return;
 }
 
 bool can_proxy_rx_publish()
@@ -35,7 +46,12 @@ bool can_proxy_rx_publish()
             for (int j = 0; j < 8; j++) {
                 can_msg.body.data[j] = hako_can_msg.body.data[j];
             }
-            publisher[i]->publish(can_msg);
+            if (publisher[i] == nullptr) {
+                create_publisher(i, hako_can_msg);
+            }
+            else {
+                publisher[i]->publish(can_msg);
+            }
         }
     }
     return true;
