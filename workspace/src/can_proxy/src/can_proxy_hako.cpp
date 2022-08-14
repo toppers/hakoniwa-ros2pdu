@@ -74,7 +74,7 @@ bool can_proxy_hako_rx_data(HakoPduChannelIdType pdu_channel, Hako_HakoCan &can_
         return false;
     }
     else if (hako_asset->is_simulation_mode()) {
-       if (hako_asset->is_pdu_dirty(pdu_channel)) {
+       if (hako_asset->is_pdu_dirty(*hako_asset_name, pdu_channel)) {
            bool ret = hako_asset->read_pdu(*hako_asset_name, pdu_channel, (char *)&can_msg, sizeof(Hako_HakoCan));
            hako_asset->notify_read_pdu_done(*hako_asset_name);
            return ret;
