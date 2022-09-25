@@ -104,6 +104,12 @@ def get_msg_type(name):
 	else:
 		return tmp
 
+def get_msg_pkg(name):
+	if (name.find('/') > 0):
+		return name.split('/')[0]
+	else:
+		return pkg_name
+
 container = RosMessageContainer()
 container.to_conv = to_conv
 container.get_type = get_type
@@ -112,6 +118,7 @@ container.is_array = is_array
 container.is_primitive = is_primitive
 container.is_primitive_array = is_primitive_array
 container.get_msg_type = get_msg_type
+container.get_msg_pkg = get_msg_pkg
 container.pkg_name = pkg_name
 container.msg_type_name = msg_type_name
 container.get_array_size = get_array_size
