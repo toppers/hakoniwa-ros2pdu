@@ -1,1 +1,3 @@
 can_msgs/HakoCan
+ev3_msgs/EV3PduSensor
+ev3_msgs/EV3PduActuator

@@ -2,6 +2,7 @@
 #define _pdu_primitive_ctypes_H_
 
 #define HAKO_PDU_MAX_ARRAY_SIZE 10
+#define HAKO_STRING_SIZE    128
 
 #include <stdint.h>
 

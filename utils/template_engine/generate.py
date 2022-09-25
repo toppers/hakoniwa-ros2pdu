@@ -59,7 +59,11 @@ def is_primitive(name):
 	else:
 		return False
 
-
+def is_string(name):
+	if (name == 'string'):
+		return True
+	else:
+		return False
 
 def is_array(name):
 	if (name.find('[') > 0):
@@ -111,6 +115,7 @@ container.get_msg_type = get_msg_type
 container.pkg_name = pkg_name
 container.msg_type_name = msg_type_name
 container.get_array_size = get_array_size
+container.is_string = is_string
 
 container.includes = []
 for line in open(dep_lists, 'r'):
