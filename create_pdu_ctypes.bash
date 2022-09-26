@@ -31,6 +31,7 @@ cd ${CURR_DIR}
 
 #convert json file to c type header
 python3 utils/template_engine/generate.py ./template/pdu_ctypes_h.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt > tmp_header.txt
+python3 utils/template_engine/generate.py ./template/pdu_ctypes_conv_cpp.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt > tmp_cpp.txt
 
 if [ -d ${OUT_DIR}/${PKG_NAME} ]
 then
@@ -39,5 +40,6 @@ else
     mkdir -p ${OUT_DIR}/${PKG_NAME}
 fi
 mv tmp_header.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_${MSG_NAME}.h 
+#mv tmp_cpp.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_conv_${MSG_NAME}.cpp 
 
 

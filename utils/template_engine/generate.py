@@ -110,7 +110,15 @@ def get_msg_pkg(name):
 	else:
 		return pkg_name
 
+
+def convert_snake(str):
+    s0 = str[0].lower()
+    s1n = str[1:]
+    cs1n = re.sub("([A-Z])", lambda x:"_" + x.group(1).lower(), s1n)
+    return s0 + cs1n
+
 container = RosMessageContainer()
+container.convert_snake = convert_snake
 container.to_conv = to_conv
 container.get_type = get_type
 container.get_array_type = get_array_type
