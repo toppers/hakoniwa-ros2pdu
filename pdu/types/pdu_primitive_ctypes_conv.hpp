@@ -3,6 +3,7 @@
 
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
+#include <string>
 
 template <class PduPrimitiveType, class RosPrimitiveType> 
 void hako_convert_pdu2ros(PduPrimitiveType &src, RosPrimitiveType &dst)
@@ -11,7 +12,7 @@ void hako_convert_pdu2ros(PduPrimitiveType &src, RosPrimitiveType &dst)
     return;
 }
 template <class PduPrimitiveType, class RosPrimitiveType> 
-int hako_convert_pdu2ros_array(PduPrimitiveType &src, int src_len, RosPrimitiveType &dst, int dst_len)
+int hako_convert_pdu2ros_array(PduPrimitiveType src[], int src_len, RosPrimitiveType &dst, int dst_len)
 {
     int ret = 0;
     int len = dst_len;

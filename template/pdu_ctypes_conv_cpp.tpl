@@ -14,7 +14,10 @@ int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{container.msg_type_n
     //primitive convert
     hako_convert_pdu2ros(src.{{item["name"]}}, dst.{{item["name"]}});
 {%-	    elif (container.is_string(item["type"])): %}
-    //TODO string convertor
+    //string convertor
+    (void)hako_convert_pdu2ros_array(
+        src.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}),
+        dst.{{item["name"]}}, dst.{{item["name"]}}.length());
 {%-	    elif (container.is_primitive_array(item["type"])): %}
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
