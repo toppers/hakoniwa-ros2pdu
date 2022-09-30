@@ -1,5 +1,5 @@
-#ifndef _pdu_ctype_ev3_msgs_EV3PduSensor_H_
-#define _pdu_ctype_ev3_msgs_EV3PduSensor_H_
+#ifndef _pdu_ctype_ev3_msgs_Ev3PduSensor_H_
+#define _pdu_ctype_ev3_msgs_Ev3PduSensor_H_
 
 #include "pdu_primitive_ctypes.h"
 #include "ev3_msgs/pdu_ctype_Ev3PduColorSensor.h"
@@ -17,6 +17,6 @@ typedef struct {
         Hako_uint32 sensor_ultrasonic;
         Hako_float64 gps_lat;
         Hako_float64 gps_lon;
-} Hako_EV3PduSensor;
+} Hako_Ev3PduSensor;
 
-#endif /* _pdu_ctype_ev3_msgs_EV3PduSensor_H_ */
+#endif /* _pdu_ctype_ev3_msgs_Ev3PduSensor_H_ */

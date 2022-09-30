@@ -29,7 +29,7 @@ static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{contai
 {%-	    elif (container.is_string(item["type"])): %}
     //string convertor
     (void)hako_convert_pdu2ros_array(
-        src.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}),
+        src.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, char, {{item["name"]}}),
         dst.{{item["name"]}}, dst.{{item["name"]}}.length());
 {%-	    elif (container.is_primitive_array(item["type"])): %}
     //primitive array convertor
@@ -38,9 +38,8 @@ static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{contai
         dst.{{item["name"]}}, {{container.get_array_size(item["type"])}});
 {%-	    elif (container.is_array(item["type"])): %}
     //struct array convertor
-    (void)hako_convert_pdu2ros_{{container.get_array_type(item["type"])}}(
-        src.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}),
-        dst.{{item["name"]}}, {{container.get_array_size(item["type"])}});
+    (void)hako_convert_pdu2ros_array_{{container.get_array_type(item["type"])}}<M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}), {{container.get_array_size(item["type"])}}>(
+        src.{{item["name"]}}, dst.{{item["name"]}});
 {%-	    else: %}
     //struct convert
     hako_convert_pdu2ros_{{container.get_msg_type(item["type"])}}(src.{{item["name"]}}, dst.{{item["name"]}});
@@ -49,12 +48,14 @@ static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{contai
     return 0;
 }
 
-static inline int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} src[], int src_len, {{container.pkg_name}}::msg::{{container.msg_type_name}} dst[], int dst_len)
+
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} src[], std::array<{{container.pkg_name}}::msg::{{container.msg_type_name}}, _dst_len> &dst)
 {
     int ret = 0;
-    int len = dst_len;
-    if (dst_len < src_len) {
-        dst_len = src_len;
+    int len = _dst_len;
+    if (_dst_len < _src_len) {
+        len = _src_len;
         ret = -1;
     }
     for (int i = 0; i < len; i++) {
