@@ -5,6 +5,9 @@
 #include "ros_primitive_types.hpp"
 #include <string>
 
+#define M_SIZE(type, mem)   sizeof(((type *)0)->mem)
+#define M_ARRAY_SIZE(type, mem_type, mem)       (M_SIZE(type, mem) / sizeof(mem_type))
+
 template <class PduPrimitiveType, class RosPrimitiveType> 
 void hako_convert_pdu2ros(PduPrimitiveType &src, RosPrimitiveType &dst)
 {

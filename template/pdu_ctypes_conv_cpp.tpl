@@ -1,13 +1,26 @@
+#ifndef _PDU_CTYPE_CONV_HAKO_{{container.pkg_name}}_{{container.msg_type_name}}_HPP_
+#define _PDU_CTYPE_CONV_HAKO_{{container.pkg_name}}_{{container.msg_type_name}}_HPP_
+
 #include "pdu_primitive_ctypes.h"
-#include "ros_primitive_types.h"
+#include "ros_primitive_types.hpp"
+#include "pdu_primitive_ctypes_conv.hpp"
+/*
+ * Dependent pdu data
+ */
 #include "{{container.pkg_name}}/pdu_ctype_{{container.msg_type_name}}.h"
+/*
+ * Dependent ros data
+ */
 #include "{{container.pkg_name}}/msg/{{container.convert_snake(container.msg_type_name)}}.hpp"
 
-#define M_SIZE(type, mem)   sizeof(((type *)0)->mem)
-#define M_ARRAY_SIZE(type, mem_type, mem)       (M_SIZE(type, mem) / sizeof(mem_type))
+/*
+ * Dependent Convertors
+ */
+{%- for item in container.conv_includes: %}
+#include "{{item}}"
+{%- endfor %}
 
-
-int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} &src,  {{container.pkg_name}}::msg::{{container.msg_type_name}} &dst)
+static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} &src,  {{container.pkg_name}}::msg::{{container.msg_type_name}} &dst)
 {
 {%- for item in container.json_data["fields"]: -%}
 {%-	    if (container.is_primitive(item["type"])): %}
@@ -36,7 +49,7 @@ int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{container.msg_type_n
     return 0;
 }
 
-int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} src[], int src_len, {{container.pkg_name}}::msg::{{container.msg_type_name}} dst[], int dst_len)
+static inline int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} src[], int src_len, {{container.pkg_name}}::msg::{{container.msg_type_name}} dst[], int dst_len)
 {
     int ret = 0;
     int len = dst_len;
@@ -49,3 +62,5 @@ int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_
     }
     return ret;
 }
+
+#endif /* _PDU_CTYPE_CONV_HAKO_{{container.pkg_name}}_{{container.msg_type_name}}_HPP_ */

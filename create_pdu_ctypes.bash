@@ -40,6 +40,6 @@ else
     mkdir -p ${OUT_DIR}/${PKG_NAME}
 fi
 mv tmp_header.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_${MSG_NAME}.h 
-#mv tmp_cpp.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_conv_${MSG_NAME}.cpp 
+mv tmp_cpp.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_conv_${MSG_NAME}.hpp
 
 
