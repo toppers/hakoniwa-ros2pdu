@@ -1,0 +1,26 @@
+{
+    "fields": [
+      {
+        "topic_message_name": "TB3RoboModel_cmd_vel",
+        "topic_type_name": "geometry_msgs/Twist",
+        "robot_name": "TB3RoboModel",
+        "sub": true,
+        "pub_option": {
+          "cycle_scale": 10,
+          "latch": false,
+          "queue_size": 1
+        }
+      },
+      {
+        "topic_message_name": "TB3RoboModel_scan",
+        "topic_type_name": "sensor_msgs/LaserScan",
+        "robot_name": "TB3RoboModel",
+        "sub": false,
+        "pub_option": {
+          "cycle_scale": 10,
+          "latch": false,
+          "queue_size": 1
+        }
+      }
+    ]
+  }
