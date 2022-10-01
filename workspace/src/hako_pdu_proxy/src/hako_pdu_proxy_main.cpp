@@ -4,6 +4,7 @@
 #include "hako_pdu_proxy_libs.hpp"
 #include "hako_pdu_proxy_rx.hpp"
 #include "hako_pdu_proxy_tx.hpp"
+#include "hako_pdu_proxy_com.hpp"
 #include <iostream>
 #include <string.h>
 
@@ -19,12 +20,14 @@ int main(int argc, char **argv)
     auto node = rclcpp::Node::make_shared(node_name);
 
     /*
-     * TODO pub advertisze
+     * create publishers
      */
-    //can_proxy_rx_init(node);
+    hako_pdu_proxy_com_pub_init();
+
     /*
-     * TODO sub advertisze
+     * create subscriptions
      */
+    hako_pdu_proxy_com_sub_init();
 
     rclcpp::WallRate rate(100ms);
     while (rclcpp::ok()) {
@@ -34,8 +37,9 @@ int main(int argc, char **argv)
         }
 
         /*
-         * TODO pub run
+         * publish topic from pdu
          */
+        hako_pdu_proxy_com_publish();
 
         rclcpp::spin_some(node);
         rate.sleep();
