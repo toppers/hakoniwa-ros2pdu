@@ -16,8 +16,8 @@
 /*
  * Dependent Convertors
  */
-#include "pdu_ctype_conv_HakoCanBody.hpp"
-#include "pdu_ctype_conv_HakoCanHead.hpp"
+#include "can_msgs/pdu_ctype_conv_HakoCanBody.hpp"
+#include "can_msgs/pdu_ctype_conv_HakoCanHead.hpp"
 
 /***************************
  *

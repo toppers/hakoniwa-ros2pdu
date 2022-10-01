@@ -16,9 +16,9 @@
 /*
  * Dependent Convertors
  */
-#include "pdu_ctype_conv_Ev3PduColorSensor.hpp"
-#include "pdu_ctype_conv_Ev3PduSensorHeader.hpp"
-#include "pdu_ctype_conv_Ev3PduTouchSensor.hpp"
+#include "ev3_msgs/pdu_ctype_conv_Ev3PduColorSensor.hpp"
+#include "ev3_msgs/pdu_ctype_conv_Ev3PduSensorHeader.hpp"
+#include "ev3_msgs/pdu_ctype_conv_Ev3PduTouchSensor.hpp"
 
 /***************************
  *

@@ -16,7 +16,7 @@
 /*
  * Dependent Convertors
  */
-#include "pdu_ctype_conv_Vector3.hpp"
+#include "geometry_msgs/pdu_ctype_conv_Vector3.hpp"
 
 /***************************
  *

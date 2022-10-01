@@ -16,8 +16,8 @@
 /*
  * Dependent Convertors
  */
-#include "pdu_ctype_conv_Ev3PduActuatorHeader.hpp"
-#include "pdu_ctype_conv_Ev3PduMotor.hpp"
+#include "ev3_msgs/pdu_ctype_conv_Ev3PduActuatorHeader.hpp"
+#include "ev3_msgs/pdu_ctype_conv_Ev3PduMotor.hpp"
 
 /***************************
  *
