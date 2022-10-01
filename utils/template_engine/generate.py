@@ -9,13 +9,14 @@ from jinja2 import Template, Environment, FileSystemLoader
 
 env = Environment(loader=FileSystemLoader('./', encoding='utf8'))
 
-if len(sys.argv) != 4:
-	print("ERROR: generate.py <tpl_file> <ros_json_file> <dep_lists>")
+if len(sys.argv) != 5:
+	print("ERROR: generate.py <tpl_file> <ros_json_file> <dep_lists> <varray_size.json>")
 	sys.exit()
 
 tpl_file=sys.argv[1] 
 ros_json_file=sys.argv[2]
 dep_lists=sys.argv[3]
+varray_json_file=sys.argv[4]
 
 
 
@@ -81,12 +82,22 @@ def get_array_type(name):
 	tmp = name.split('[')
 	return tmp[0].strip()
 
-def get_array_size(name):
+def get_array_size(mem_name, name):
+	global container
+	pkg = container.pkg_name
+	type = container.msg_type_name
 	tmp = name.split('[')[1]
 	if (tmp.split(']')[0] != ''):
 		return tmp.split(']')[0]
 	else:
-		return "HAKO_PDU_MAX_ARRAY_SIZE"
+		if container.varry_json_data[pkg] == None:
+			return "HAKO_PDU_MAX_ARRAY_SIZE"
+		if container.varry_json_data[pkg][type] == None:
+			return "HAKO_PDU_MAX_ARRAY_SIZE"
+		if container.varry_json_data[pkg][type][mem_name] == None:
+			return "HAKO_PDU_MAX_ARRAY_SIZE"
+		else:
+			return container.varry_json_data[pkg][type][mem_name]
 
 def get_type(name):
 	if (is_array(name)):
@@ -117,6 +128,7 @@ def convert_snake(str):
     cs1n = re.sub("([A-Z])", lambda x:"_" + x.group(1).lower(), s1n)
     return s0 + cs1n
 
+global container
 container = RosMessageContainer()
 container.convert_snake = convert_snake
 container.to_conv = to_conv
@@ -146,6 +158,10 @@ for line in open(dep_lists, 'r'):
 
 tmp_file = open(ros_json_file)
 container.json_data = json.load(tmp_file)
+
+tmp_varry_file = open(varray_json_file)
+container.varry_json_data = json.load(tmp_varry_file)
+
 
 tpl = env.get_template(tpl_file)
 out = tpl.render({'container':container})

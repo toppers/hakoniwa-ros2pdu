@@ -30,8 +30,8 @@ bash convert_rosmsg2json.bash ${SEARCH_PATH} ${PKG_MSG} ${CURR_DIR}/${OUT_JSON_D
 cd ${CURR_DIR}
 
 #convert json file to c type header
-python3 utils/template_engine/generate.py ./template/pdu_ctypes_h.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt > tmp_header.txt
-python3 utils/template_engine/generate.py ./template/pdu_ctypes_conv_cpp.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt > tmp_cpp.txt
+python3 utils/template_engine/generate.py ./template/pdu_ctypes_h.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt ./config/varray_size.json > tmp_header.txt
+python3 utils/template_engine/generate.py ./template/pdu_ctypes_conv_cpp.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt ./config/varray_size.json > tmp_cpp.txt
 
 if [ -d ${OUT_DIR}/${PKG_NAME} ]
 then

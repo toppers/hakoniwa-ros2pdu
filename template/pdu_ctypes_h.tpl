@@ -13,9 +13,9 @@ typedef struct {
 {%-	    elif (container.is_string(item["type"])): %}
         char {{item["name"]}}[HAKO_STRING_SIZE];
 {%-	    elif (container.is_primitive_array(item["type"])): %}
-        Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}} {{item["name"]}}[{{container.get_array_size(item["type"])}}];
+        Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}} {{item["name"]}}[{{container.get_array_size(item["name"], item["type"])}}];
 {%-	    elif (container.is_array(item["type"])): %}
-        Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}} {{container.get_array_type(item["name"])}}[{{container.get_array_size(item["type"])}}];
+        Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}} {{container.get_array_type(item["name"])}}[{{container.get_array_size(item["name"], item["type"])}}];
 {%-	    else: %}
         Hako_{{container.get_msg_type(item["type"])}}    {{item["name"]}};
 {%-		endif %}

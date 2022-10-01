@@ -1,3 +1,5 @@
 can_msgs/HakoCan
 ev3_msgs/Ev3PduSensor
 ev3_msgs/Ev3PduActuator
+sensor_msgs/LaserScan
+geometry_msgs/Twist

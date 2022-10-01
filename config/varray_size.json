@@ -1,0 +1,8 @@
+{
+    "sensor_msgs": {
+        "LaserScan": {
+            "ranges": 360,
+            "intensities": 360
+        }
+    }
+}

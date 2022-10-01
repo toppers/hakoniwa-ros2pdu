@@ -38,10 +38,10 @@ static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{contai
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
         src.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}),
-        dst.{{item["name"]}}, {{container.get_array_size(item["type"])}});
+        dst.{{item["name"]}}, {{container.get_array_size(item["name"], item["type"])}});
 {%-	    elif (container.is_array(item["type"])): %}
     //struct array convertor
-    (void)hako_convert_pdu2ros_array_{{container.get_array_type(item["type"])}}<M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}), {{container.get_array_size(item["type"])}}>(
+    (void)hako_convert_pdu2ros_array_{{container.get_array_type(item["type"])}}<M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}), {{container.get_array_size(item["name"], item["type"])}}>(
         src.{{item["name"]}}, dst.{{item["name"]}});
 {%-	    else: %}
     //struct convert
@@ -85,11 +85,11 @@ static inline int hako_convert_ros2pdu_{{container.msg_type_name}}({{container.p
 {%-	    elif (container.is_primitive_array(item["type"])): %}
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
-        src.{{item["name"]}}, {{container.get_array_size(item["type"])}},
+        src.{{item["name"]}}, {{container.get_array_size(item["name"], item["type"])}},
         dst.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}));
 {%-	    elif (container.is_array(item["type"])): %}
     //struct array convertor
-    (void)hako_convert_ros2pdu_array_{{container.get_array_type(item["type"])}}<{{container.get_array_size(item["type"])}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}})>(
+    (void)hako_convert_ros2pdu_array_{{container.get_array_type(item["type"])}}<{{container.get_array_size(item["name"], item["type"])}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}})>(
         src.{{item["name"]}}, dst.{{item["name"]}});
 {%-	    else: %}
     //struct convert
