@@ -27,8 +27,6 @@ add_executable(hako_pdu_proxy_node
   src/gen/hako_pdu_proxy_com_pub.cpp
   src/gen/hako_pdu_proxy_com_sub.cpp
   src/hako_pdu_proxy_libs.cpp
-  src/hako_pdu_proxy_tx.cpp
-  src/hako_pdu_proxy_rx.cpp
 )
 ament_target_dependencies(hako_pdu_proxy_node 
   rclcpp 

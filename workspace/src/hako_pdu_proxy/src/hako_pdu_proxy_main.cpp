@@ -2,8 +2,6 @@
 
 #include "pdu_primitive_ctypes.h"
 #include "hako_pdu_proxy_libs.hpp"
-#include "hako_pdu_proxy_rx.hpp"
-#include "hako_pdu_proxy_tx.hpp"
 #include "hako_pdu_proxy_com.hpp"
 #include <iostream>
 #include <string.h>
@@ -22,12 +20,12 @@ int main(int argc, char **argv)
     /*
      * create publishers
      */
-    hako_pdu_proxy_com_pub_init();
+    hako_pdu_proxy_com_pub_init(node);
 
     /*
      * create subscriptions
      */
-    hako_pdu_proxy_com_sub_init();
+    hako_pdu_proxy_com_sub_init(node);
 
     rclcpp::WallRate rate(100ms);
     while (rclcpp::ok()) {

@@ -7,8 +7,15 @@ typedef struct {
     const char* topic_name;
 } HakoTopicPduMapType;
 
-extern void hako_pdu_proxy_com_pub_init(void);
-extern void hako_pdu_proxy_com_sub_init(void);
+#include "rclcpp/rclcpp.hpp"
+
+extern void hako_pdu_proxy_com_pub_init(std::shared_ptr<rclcpp::Node> node);
+extern void hako_pdu_proxy_com_sub_init(std::shared_ptr<rclcpp::Node> node);
 extern void hako_pdu_proxy_com_publish(void);
+
+
+/*
+ * internal apis
+ */
 
 #endif /* _CAN_PROXY_COM_HPP_ */
