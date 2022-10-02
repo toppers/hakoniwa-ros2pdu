@@ -56,12 +56,10 @@ bool hako_pdu_proxy_run(bool &can_step)
         if (world_time >= hako_asset_time_usec) {
             hako_asset_time_usec += hako_delta_usec;
             can_step = false;
-            std::cout << "TIME: " << hako_asset_time_usec << std::endl;
+            //std::cout << "TIME: " << hako_asset_time_usec << std::endl;
         }
     }
     else if (hako_asset->is_pdu_sync_mode(*hako_asset_name)) {
-        //TODO
-        //hako_asset->write_pdu(*hako_asset_name, 1, buf, 100);
         hako_asset->notify_write_pdu_done(*hako_asset_name);
     }
     return (hako_asset_is_end == false);
@@ -96,9 +94,6 @@ static void hako_asset_signal_handler(int sig)
 }
 
 
-/*
- * TODO
- */
 bool hako_pdu_proxy_rx_data(HakoPduChannelIdType pdu_channel, char* pdu_msg, int buflen)
 {
     if (hako_asset->is_pdu_created() == false) {
@@ -113,24 +108,19 @@ bool hako_pdu_proxy_rx_data(HakoPduChannelIdType pdu_channel, char* pdu_msg, int
     }
     return false;
 }
+bool hako_pdu_proxy_tx_init(HakoPduChannelIdType pdu_channel, int buflen)
+{
+    return hako_asset->create_pdu_channel(pdu_channel, buflen);
+}
 bool hako_pdu_proxy_tx_data(HakoPduChannelIdType pdu_channel, char* pdu_msg, int buflen)
 {
-    static bool is_init[HAKO_PDU_CHANNEL_MAX];
-    if (is_init[pdu_channel] == false) {
-        hako_asset->create_pdu_channel(pdu_channel, buflen);
-        is_init[pdu_channel] = true;
-    }
-    else if (hako_asset->is_pdu_created() == false) {
+    if (hako_asset->is_pdu_created() == false) {
         return false;
     }
     else if (hako_asset->is_simulation_mode())
     {
-       return hako_asset->write_pdu(*hako_asset_name, pdu_channel, pdu_msg, buflen);
-    }
-    else if (hako_asset->is_pdu_sync_mode(*hako_asset_name))
-    {
-        hako_asset->write_pdu(*hako_asset_name, pdu_channel, pdu_msg, buflen);
-        hako_asset->notify_write_pdu_done(*hako_asset_name);
+        //printf("write_pdu\n");
+        return hako_asset->write_pdu(*hako_asset_name, pdu_channel, pdu_msg, buflen);
     }
     return false;
 }

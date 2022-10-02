@@ -21,9 +21,10 @@ extern void hako_pdu_proxy_com_publish(void);
     static std::shared_ptr<rclcpp::Publisher<type>> publisher_ ##topic_name
 
 #define PUBLISHER(topic_name) publisher_ ##topic_name
-#define CREATE_PUBLISHER(type, topic_name) \
+#define CREATE_PUBLISHER(pkg, ros_type, channel_id, topic_name) \
 do {    \
-    PUBLISHER(topic_name) = my_node->create_publisher<type>(#topic_name, 1);    \
+    hako_pdu_proxy_tx_init((channel_id), sizeof(Hako_ ##ros_type)); \
+    PUBLISHER(topic_name) = my_node->create_publisher<pkg::msg::ros_type>(#topic_name, 1);    \
 } while (0)
 
 #define PUBLISH_TOPIC(topic_name, msg)   \
