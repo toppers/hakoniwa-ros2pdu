@@ -31,10 +31,18 @@ ament_target_dependencies(msg_conv_test_node
   can_msgs
   ev3_msgs
 )
+
+if (DEFINED ENV{ENV_HAKO_SOURCE_DIR})
+  set(HAKO_SOURCE_DIR "$ENV{ENV_HAKO_SOURCE_DIR}")
+else()
+  set(HAKO_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../../hakoniwa-core-cpp-client")
+endif()
 target_link_directories(msg_conv_test_node
   PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../../../hakoniwa-core-cpp-client/cmake-build/core/src
+  ${HAKO_SOURCE_DIR}/cmake-build/core/src
 )
+MESSAGE(STATUS  "env hako dir:  $ENV{ENV_HAKO_SOURCE_DIR}")
+MESSAGE(STATUS  "hako dir: " ${HAKO_SOURCE_DIR})
 
 target_link_libraries(msg_conv_test_node 
   hako
@@ -43,7 +51,7 @@ target_link_libraries(msg_conv_test_node
 target_include_directories(msg_conv_test_node
   PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../pdu/types>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../hakoniwa-core-cpp-client/core/src/include>
+  $<BUILD_INTERFACE:${HAKO_SOURCE_DIR}/hakoniwa-core-cpp-client/core/src/include>
 )
 
 install(TARGETS

@@ -32,10 +32,18 @@ ament_target_dependencies(can_proxy_node
   std_msgs 
   can_msgs
 )
+
+if (DEFINED ENV{ENV_HAKO_SOURCE_DIR})
+  set(HAKO_SOURCE_DIR "$ENV{ENV_HAKO_SOURCE_DIR}")
+else()
+  set(HAKO_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/../../../../hakoniwa-core-cpp-client")
+endif()
 target_link_directories(can_proxy_node
   PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/../../../../hakoniwa-core-cpp-client/cmake-build/core/src
+  ${HAKO_SOURCE_DIR}/cmake-build/core/src
 )
+MESSAGE(STATUS  "env hako dir:  $ENV{ENV_HAKO_SOURCE_DIR}")
+MESSAGE(STATUS  "hako dir: " ${HAKO_SOURCE_DIR})
 
 target_link_libraries(can_proxy_node 
   hako
@@ -44,7 +52,7 @@ target_link_libraries(can_proxy_node
 target_include_directories(can_proxy_node
   PRIVATE
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../pdu/types>
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../../../../hakoniwa-core-cpp-client/core/src/include>
+  $<BUILD_INTERFACE:${HAKO_SOURCE_DIR}/core/src/include>
 )
 
 install(TARGETS
