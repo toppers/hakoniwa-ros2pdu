@@ -45,11 +45,11 @@ static inline int hako_convert_pdu2ros_LaserScan(Hako_LaserScan &src,  sensor_ms
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
         src.ranges, M_ARRAY_SIZE(Hako_LaserScan, Hako_float32, ranges),
-        dst.ranges, 360);
+        dst.ranges, dst.ranges.size());
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
         src.intensities, M_ARRAY_SIZE(Hako_LaserScan, Hako_float32, intensities),
-        dst.intensities, 360);
+        dst.intensities, dst.intensities.size());
     return 0;
 }
 
@@ -58,7 +58,7 @@ int hako_convert_pdu2ros_array_LaserScan(Hako_LaserScan src[], std::array<sensor
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -93,11 +93,11 @@ static inline int hako_convert_ros2pdu_LaserScan(sensor_msgs::msg::LaserScan &sr
     hako_convert_ros2pdu(src.range_max, dst.range_max);
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
-        src.ranges, 360,
+        src.ranges, src.ranges.size(),
         dst.ranges, M_ARRAY_SIZE(Hako_LaserScan, Hako_float32, ranges));
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
-        src.intensities, 360,
+        src.intensities, src.intensities.size(),
         dst.intensities, M_ARRAY_SIZE(Hako_LaserScan, Hako_float32, intensities));
     return 0;
 }
@@ -107,7 +107,7 @@ int hako_convert_ros2pdu_array_LaserScan(std::array<sensor_msgs::msg::LaserScan,
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

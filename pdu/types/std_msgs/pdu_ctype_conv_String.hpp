@@ -34,7 +34,7 @@ int hako_convert_pdu2ros_array_String(Hako_String src[], std::array<std_msgs::ms
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -63,7 +63,7 @@ int hako_convert_ros2pdu_array_String(std::array<std_msgs::msg::String, _src_len
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

@@ -22,7 +22,7 @@ void hako_pdu_proxy_com_sub_init(std::shared_ptr<rclcpp::Node> node)
  
 {%- for item in container.json_data["fields"]: %}
 {%-     if container.is_sub(item): %}
-    CREATE_SUBSCRIBER({{container.get_pkg(item)}}::msg::{{container.get_type(item)}}, {{item["topic_message_name"]}});
+    CREATE_SUBSCRIBER({{container.get_pkg(item)}}, {{container.get_type(item)}}, {{container.get_index(item)}}, {{item["topic_message_name"]}});
 {%-     endif %}
 {%- endfor %}
 

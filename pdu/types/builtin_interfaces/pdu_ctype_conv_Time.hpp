@@ -36,7 +36,7 @@ int hako_convert_pdu2ros_array_Time(Hako_Time src[], std::array<builtin_interfac
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -65,7 +65,7 @@ int hako_convert_ros2pdu_array_Time(std::array<builtin_interfaces::msg::Time, _s
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

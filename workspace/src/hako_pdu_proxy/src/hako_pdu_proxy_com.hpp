@@ -23,7 +23,6 @@ extern void hako_pdu_proxy_com_publish(void);
 #define PUBLISHER(topic_name) publisher_ ##topic_name
 #define CREATE_PUBLISHER(pkg, ros_type, channel_id, topic_name) \
 do {    \
-    hako_pdu_proxy_tx_init((channel_id), sizeof(Hako_ ##ros_type)); \
     PUBLISHER(topic_name) = my_node->create_publisher<pkg::msg::ros_type>(#topic_name, 1);    \
 } while (0)
 
@@ -47,9 +46,10 @@ do {    \
     static std::shared_ptr<rclcpp::Subscription<type>> subscriber_ ##topic_name
 #define SUBSCRIBER(topic_name) subscriber_ ##topic_name
 #define SUB_CALLBACK_NAME(topic_name)   callback_ ##topic_name
-#define CREATE_SUBSCRIBER(type, topic_name) \
+#define CREATE_SUBSCRIBER(pkg, ros_type, channel_id, topic_name) \
 do {    \
-    SUBSCRIBER(topic_name) = my_node->create_subscription<type>(#topic_name, 1, SUB_CALLBACK_NAME(topic_name));    \
+    hako_pdu_proxy_tx_init((channel_id), sizeof(Hako_ ##ros_type)); \
+    SUBSCRIBER(topic_name) = my_node->create_subscription<pkg::msg::ros_type>(#topic_name, 1, SUB_CALLBACK_NAME(topic_name));    \
 } while (0)
 
 #define DEFINE_SUB_CALLBACK(pkg, ros_type, channel_id, topic_name) \

@@ -38,7 +38,7 @@ int hako_convert_pdu2ros_array_Ev3PduMotor(Hako_Ev3PduMotor src[], std::array<ev
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -69,7 +69,7 @@ int hako_convert_ros2pdu_array_Ev3PduMotor(std::array<ev3_msgs::msg::Ev3PduMotor
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

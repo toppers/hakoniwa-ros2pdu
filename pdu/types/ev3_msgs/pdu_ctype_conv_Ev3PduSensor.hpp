@@ -32,7 +32,7 @@ static inline int hako_convert_pdu2ros_Ev3PduSensor(Hako_Ev3PduSensor &src,  ev3
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
         src.buttons, M_ARRAY_SIZE(Hako_Ev3PduSensor, Hako_uint8, buttons),
-        dst.buttons, 1);
+        dst.buttons, dst.buttons.size());
     //struct array convertor
     (void)hako_convert_pdu2ros_array_Ev3PduColorSensor<M_ARRAY_SIZE(Hako_Ev3PduSensor, Hako_Ev3PduColorSensor, color_sensors), 2>(
         src.color_sensors, dst.color_sensors);
@@ -42,7 +42,7 @@ static inline int hako_convert_pdu2ros_Ev3PduSensor(Hako_Ev3PduSensor &src,  ev3
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
         src.motor_angle, M_ARRAY_SIZE(Hako_Ev3PduSensor, Hako_uint32, motor_angle),
-        dst.motor_angle, 3);
+        dst.motor_angle, dst.motor_angle.size());
     //primitive convert
     hako_convert_pdu2ros(src.gyro_degree, dst.gyro_degree);
     //primitive convert
@@ -61,7 +61,7 @@ int hako_convert_pdu2ros_array_Ev3PduSensor(Hako_Ev3PduSensor src[], std::array<
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -82,7 +82,7 @@ static inline int hako_convert_ros2pdu_Ev3PduSensor(ev3_msgs::msg::Ev3PduSensor 
     hako_convert_ros2pdu_Ev3PduSensorHeader(src.head, dst.head);
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
-        src.buttons, 1,
+        src.buttons, src.buttons.size(),
         dst.buttons, M_ARRAY_SIZE(Hako_Ev3PduSensor, Hako_uint8, buttons));
     //struct array convertor
     (void)hako_convert_ros2pdu_array_Ev3PduColorSensor<2, M_ARRAY_SIZE(Hako_Ev3PduSensor, Hako_Ev3PduColorSensor, color_sensors)>(
@@ -92,7 +92,7 @@ static inline int hako_convert_ros2pdu_Ev3PduSensor(ev3_msgs::msg::Ev3PduSensor 
         src.touch_sensors, dst.touch_sensors);
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
-        src.motor_angle, 3,
+        src.motor_angle, src.motor_angle.size(),
         dst.motor_angle, M_ARRAY_SIZE(Hako_Ev3PduSensor, Hako_uint32, motor_angle));
     //primitive convert
     hako_convert_ros2pdu(src.gyro_degree, dst.gyro_degree);
@@ -112,7 +112,7 @@ int hako_convert_ros2pdu_array_Ev3PduSensor(std::array<ev3_msgs::msg::Ev3PduSens
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

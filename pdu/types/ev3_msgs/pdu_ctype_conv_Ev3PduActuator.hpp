@@ -31,7 +31,7 @@ static inline int hako_convert_pdu2ros_Ev3PduActuator(Hako_Ev3PduActuator &src, 
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
         src.leds, M_ARRAY_SIZE(Hako_Ev3PduActuator, Hako_uint8, leds),
-        dst.leds, 1);
+        dst.leds, dst.leds.size());
     //struct array convertor
     (void)hako_convert_pdu2ros_array_Ev3PduMotor<M_ARRAY_SIZE(Hako_Ev3PduActuator, Hako_Ev3PduMotor, motors), 3>(
         src.motors, dst.motors);
@@ -45,7 +45,7 @@ int hako_convert_pdu2ros_array_Ev3PduActuator(Hako_Ev3PduActuator src[], std::ar
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -66,7 +66,7 @@ static inline int hako_convert_ros2pdu_Ev3PduActuator(ev3_msgs::msg::Ev3PduActua
     hako_convert_ros2pdu_Ev3PduActuatorHeader(src.head, dst.head);
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
-        src.leds, 1,
+        src.leds, src.leds.size(),
         dst.leds, M_ARRAY_SIZE(Hako_Ev3PduActuator, Hako_uint8, leds));
     //struct array convertor
     (void)hako_convert_ros2pdu_array_Ev3PduMotor<3, M_ARRAY_SIZE(Hako_Ev3PduActuator, Hako_Ev3PduMotor, motors)>(
@@ -81,7 +81,7 @@ int hako_convert_ros2pdu_array_Ev3PduActuator(std::array<ev3_msgs::msg::Ev3PduAc
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

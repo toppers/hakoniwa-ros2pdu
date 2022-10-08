@@ -42,7 +42,7 @@ int hako_convert_pdu2ros_array_Ev3PduColorSensor(Hako_Ev3PduColorSensor src[], s
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -77,7 +77,7 @@ int hako_convert_ros2pdu_array_Ev3PduColorSensor(std::array<ev3_msgs::msg::Ev3Pd
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

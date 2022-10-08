@@ -42,7 +42,7 @@ int hako_convert_pdu2ros_array_HakoCanHead(Hako_HakoCanHead src[], std::array<ca
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -77,7 +77,7 @@ int hako_convert_ros2pdu_array_HakoCanHead(std::array<can_msgs::msg::HakoCanHead
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

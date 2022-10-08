@@ -42,7 +42,7 @@ int hako_convert_pdu2ros_array_Ev3PduActuatorHeader(Hako_Ev3PduActuatorHeader sr
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -79,7 +79,7 @@ int hako_convert_ros2pdu_array_Ev3PduActuatorHeader(std::array<ev3_msgs::msg::Ev
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

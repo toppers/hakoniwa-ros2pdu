@@ -38,7 +38,7 @@ static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{contai
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
         src.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}),
-        dst.{{item["name"]}}, {{container.get_array_size(item["name"], item["type"])}});
+        dst.{{item["name"]}}, dst.{{item["name"]}}.size());
 {%-	    elif (container.is_array(item["type"])): %}
     //struct array convertor
     (void)hako_convert_pdu2ros_array_{{container.get_array_type(item["type"])}}<M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}), {{container.get_array_size(item["name"], item["type"])}}>(
@@ -56,7 +56,7 @@ int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -85,7 +85,7 @@ static inline int hako_convert_ros2pdu_{{container.msg_type_name}}({{container.p
 {%-	    elif (container.is_primitive_array(item["type"])): %}
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
-        src.{{item["name"]}}, {{container.get_array_size(item["name"], item["type"])}},
+        src.{{item["name"]}}, src.{{item["name"]}}.size(),
         dst.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}));
 {%-	    elif (container.is_array(item["type"])): %}
     //struct array convertor
@@ -104,7 +104,7 @@ int hako_convert_ros2pdu_array_{{container.msg_type_name}}(std::array<{{containe
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

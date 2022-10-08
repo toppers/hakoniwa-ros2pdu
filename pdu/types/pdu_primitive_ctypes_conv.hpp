@@ -19,8 +19,8 @@ int hako_convert_pdu2ros_array(PduPrimitiveType src[], int src_len, RosPrimitive
 {
     int ret = 0;
     int len = dst_len;
-    if (dst_len < src_len) {
-        dst_len = src_len;
+    if (src_len < dst_len) {
+        len = src_len;
         ret = -1;
     }
     for (int i = 0; i < len; i++) {
@@ -40,8 +40,8 @@ int hako_convert_ros2pdu_array(RosPrimitiveType &src, int src_len, PduPrimitiveT
 {
     int ret = 0;
     int len = dst_len;
-    if (dst_len < src_len) {
-        dst_len = src_len;
+    if (src_len < dst_len) {
+        len = src_len;
         ret = -1;
     }
     for (int i = 0; i < len; i++) {

@@ -37,7 +37,7 @@ int hako_convert_pdu2ros_array_Twist(Hako_Twist src[], std::array<geometry_msgs:
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -66,7 +66,7 @@ int hako_convert_ros2pdu_array_Twist(std::array<geometry_msgs::msg::Twist, _src_
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }

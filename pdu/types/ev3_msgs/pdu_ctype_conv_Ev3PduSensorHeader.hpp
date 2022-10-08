@@ -42,7 +42,7 @@ int hako_convert_pdu2ros_array_Ev3PduSensorHeader(Hako_Ev3PduSensorHeader src[],
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
@@ -79,7 +79,7 @@ int hako_convert_ros2pdu_array_Ev3PduSensorHeader(std::array<ev3_msgs::msg::Ev3P
 {
     int ret = 0;
     int len = _dst_len;
-    if (_dst_len < _src_len) {
+    if (_dst_len > _src_len) {
         len = _src_len;
         ret = -1;
     }
