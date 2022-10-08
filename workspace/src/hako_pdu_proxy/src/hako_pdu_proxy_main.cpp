@@ -33,11 +33,12 @@ int main(int argc, char **argv)
         if (hako_pdu_proxy_run(can_step) == false) {
             break;
         }
-
-        /*
-         * publish topic from pdu
-         */
-        hako_pdu_proxy_com_publish();
+        if (can_step) {
+            /*
+            * publish topic from pdu
+            */
+            hako_pdu_proxy_com_publish();
+        }
 
         rclcpp::spin_some(node);
         rate.sleep();
