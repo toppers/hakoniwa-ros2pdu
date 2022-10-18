@@ -68,6 +68,54 @@ def float32Tobin(arg):
 def float64Tobin(arg):
     return struct.pack('d', arg)
 
+def typeTobin(type, arg):
+    if (type == "int8"):
+        return int8Tobin(arg)
+    elif (type == "uint8"):
+        return uint8Tobin(arg)
+    elif (type == "int16"):
+        return int16Tobin(arg)
+    elif (type == "uint16"):
+        return uint16Tobin(arg)
+    elif (type == "int32"):
+        return int32Tobin(arg)
+    elif (type == "uint32"):
+        return uint32Tobin(arg)
+    elif (type == "int64"):
+        return int64Tobin(arg)
+    elif (type == "uint64"):
+        return uint64Tobin(arg)
+    elif (type == "float32"):
+        return float32Tobin(arg)
+    elif (type == "float64"):
+        return float64Tobin(arg)
+    else:
+        return None
+
+def binTovalue(type, arg):
+    if (type == "int8"):
+        return binToint8(arg)
+    elif (type == "uint8"):
+        return binTouint8(arg)
+    elif (type == "int16"):
+        return binToint16(arg)
+    elif (type == "uint16"):
+        return binTouint16(arg)
+    elif (type == "int32"):
+        return binToint32(arg)
+    elif (type == "uint32"):
+        return binTouint32(arg)
+    elif (type == "int64"):
+        return binToint64(arg)
+    elif (type == "uint64"):
+        return binTouint64(arg)
+    elif (type == "float32"):
+        return binTofloat32(arg)
+    elif (type == "float64"):
+        return binTofloat64(arg)
+    else:
+        return None
+
 def writeBinary(filepath, off, bin):
     f = open(filepath, 'r+b')
     f.seek(off, os.SEEK_SET)
