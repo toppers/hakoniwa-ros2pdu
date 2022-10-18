@@ -31,7 +31,10 @@ def is_single(data):
 def array_size(data):
     if (is_single(data)):
         return 0
-    return int(data.split(":")[5])
+    return int(data.split(":")[6])
 
 def member_off(data):
     return int(data.split(":")[4])
+
+def member_size(data):
+    return int(data.split(":")[5])

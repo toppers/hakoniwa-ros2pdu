@@ -16,19 +16,22 @@ static void hako_pdu_offset_{{container.msg_type_name}}(void)
         printf("primitive:");
         printf("{{item["name"]}}:");
         printf("{{item["type"]}}:");
-        printf("%ld", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
+        printf("%ld:", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
+        printf("%ld", sizeof(((Hako_{{container.msg_type_name}} *)0)->{{item["name"]}}));
 {%-	    elif (container.is_string(item["type"])): %}
         printf("single:");
         printf("primitive:");
         printf("{{item["name"]}}:");
         printf("string:");
-        printf("%ld", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
+        printf("%ld:", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
+        printf("%ld", sizeof(((Hako_{{container.msg_type_name}} *)0)->{{item["name"]}}));
 {%-	    elif (container.is_primitive_array(item["type"])): %}
         printf("array:");
         printf("primitive:");
         printf("{{item["name"]}}:");
         printf("{{container.get_msg_type(container.get_array_type(item["type"]))}}:");
         printf("%ld:", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
+        printf("%ld:", sizeof(((Hako_{{container.msg_type_name}} *)0)->{{item["name"]}}));
         printf("{{container.get_array_size(item["name"], item["type"])}}");
 {%-	    elif (container.is_array(item["type"])): %}
         printf("array:");
@@ -36,13 +39,15 @@ static void hako_pdu_offset_{{container.msg_type_name}}(void)
         printf("{{item["name"]}}:");
         printf("{{container.get_msg_type(container.get_array_type(item["type"]))}}:");
         printf("%ld:", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
+        printf("%ld:", sizeof(((Hako_{{container.msg_type_name}} *)0)->{{item["name"]}}));
         printf("{{container.get_array_size(item["name"], item["type"])}}");
 {%-	    else: %}
         printf("single:");
         printf("struct:");
         printf("{{item["name"]}}:");
         printf("{{item["type"]}}:");
-        printf("%ld", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
+        printf("%ld:", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
+        printf("%ld", sizeof(((Hako_{{container.msg_type_name}} *)0)->{{item["name"]}}));
 {%-		endif %}
         printf("\n");
 {%- endfor %}

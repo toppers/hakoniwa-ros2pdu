@@ -25,6 +25,17 @@ for v in json_data['fields']:
     line = offset_parser.select_by_name(lines, v['name'])
     off = offset_parser.member_off(line)
     type = offset_parser.member_type(line)
-    bin = binary_io.typeTobin(type, v['value'])
-    binary_io.writeBinary(outfile, off, bin)
+    if (offset_parser.is_single(line)):
+        bin = binary_io.typeTobin(type, v['value'])
+        binary_io.writeBinary(outfile, off, bin)
+    else:
+        i = 0
+        elm_size = offset_parser.member_size(line)
+        array_size = offset_parser.array_size(line)
+        one_elm_size = int(elm_size / array_size)
+        for elm in v['value']:
+            bin = binary_io.typeTobin(type, elm)
+            binary_io.writeBinary(outfile, off + i, bin)
+            i = i + one_elm_size
+            
 
