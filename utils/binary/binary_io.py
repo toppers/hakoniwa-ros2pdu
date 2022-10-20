@@ -37,6 +37,9 @@ def binTofloat32(binary):
 def binTofloat64(binary):
     return struct.unpack('d', binary)[0]
 
+def binTostring(binary):
+    return binary.decode()
+
 
 def int8Tobin(arg):
     return struct.pack('b', arg)
@@ -68,6 +71,9 @@ def float32Tobin(arg):
 def float64Tobin(arg):
     return struct.pack('d', arg)
 
+def stringTobin(arg):
+    return arg.encode(encoding='utf-8')
+
 def typeTobin(type, arg):
     if (type == "int8"):
         return int8Tobin(arg)
@@ -89,6 +95,8 @@ def typeTobin(type, arg):
         return float32Tobin(arg)
     elif (type == "float64"):
         return float64Tobin(arg)
+    elif (type == "string"):
+        return stringTobin(arg)
     else:
         return None
 
@@ -113,6 +121,8 @@ def binTovalue(type, arg):
         return binTofloat32(arg)
     elif (type == "float64"):
         return binTofloat64(arg)
+    elif (type == "string"):
+        return binTostring(arg)
     else:
         return None
 
