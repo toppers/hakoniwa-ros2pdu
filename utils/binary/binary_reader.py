@@ -33,7 +33,14 @@ def binary_read_recursive(json_data, base_off, typename):
                     }
                 )
             else:
-                pass
+                i = 0
+                array_size = offset_parser.array_size(line)
+                one_elm_size = int(size / array_size)
+                while i < array_size:
+                    bin = binary_io.readBinary(binary_filepath, off + (i * one_elm_size), one_elm_size)
+                    value = binary_io.binTovalue(type, bin)
+                    json_data.append(value)
+                    i = i + 1
         else:
             pass
 
