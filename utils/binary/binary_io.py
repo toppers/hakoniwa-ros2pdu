@@ -38,7 +38,7 @@ def binTofloat64(binary):
     return struct.unpack('d', binary)[0]
 
 def binTostring(binary):
-    return binary.decode()
+    return binary.decode().replace('\0', '')
 
 
 def int8Tobin(arg):

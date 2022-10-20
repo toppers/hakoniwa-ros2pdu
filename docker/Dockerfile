@@ -37,3 +37,4 @@ RUN pip install jinja2
 
 WORKDIR /root/workspace
 
+RUN apt-get update && apt-get install -y jq
