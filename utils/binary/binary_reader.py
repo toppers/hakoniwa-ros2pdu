@@ -29,6 +29,7 @@ def binary_read_recursive(json_data, base_off, typename):
                 json_data.append(
                     {
                         "name": name,
+                        "type": type,
                         "value": value
                     }
                 )
@@ -36,13 +37,51 @@ def binary_read_recursive(json_data, base_off, typename):
                 i = 0
                 array_size = offset_parser.array_size(line)
                 one_elm_size = int(size / array_size)
+                array_value = []
                 while i < array_size:
                     bin = binary_io.readBinary(binary_filepath, off + (i * one_elm_size), one_elm_size)
                     value = binary_io.binTovalue(type, bin)
-                    json_data.append(value)
+                    array_value.append(value)
                     i = i + 1
+                json_data.append(
+                    {
+                        "name": name,
+                        "type": type,
+                        "value": array_value
+                    }
+                )
         else:
-            pass
+            if (offset_parser.is_single(line)):
+                tmp_json_data = {
+                    "fields": []
+                }
+                binary_read_recursive(tmp_json_data['fields'], off, type)
+                json_data.append(
+                    {
+                        "name": name,
+                        "type": type,
+                        "value": tmp_json_data
+                    }
+                )
+            else:
+                i = 0
+                array_size = offset_parser.array_size(line)
+                one_elm_size = int(size / array_size)
+                array_value = []
+                while i < array_size:
+                    tmp_json_data = {
+                        "fields": []
+                    }
+                    binary_read_recursive(tmp_json_data['fields'], off + (i * one_elm_size), type)
+                    array_value.append(tmp_json_data)
+                    i = i + 1
+                json_data.append(
+                    {
+                        "name": name,
+                        "type": type,
+                        "value": array_value
+                    }
+                )
 
 json_data = {
     "fields": []
