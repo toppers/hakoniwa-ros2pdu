@@ -38,3 +38,4 @@ RUN pip install jinja2
 WORKDIR /root/workspace
 
 RUN apt-get update && apt-get install -y jq
+RUN pip3 --no-cache-dir install yq
