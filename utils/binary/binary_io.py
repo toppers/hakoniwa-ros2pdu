@@ -140,8 +140,12 @@ def readBinary(filepath, off, size):
     return bin
 
 def find_filepath(path, filename):
+    f_array = filename.split('/')
+    if (len(f_array) > 1):
+        filename = f_array[len(f_array) - 1]
     tmp = glob.glob(path + filename, recursive=True)
     if (len(tmp) == 0):
-        return None
+        print("ERROR: find_filepath(" + path + " ," + filename +")" )
+        exit(1)
     return tmp[0]
 
