@@ -18,4 +18,7 @@ typedef uint64_t Hako_uint64;
 typedef float Hako_float32;
 typedef double Hako_float64;
 
+typedef char Hako_string;
+typedef int Hako_bool;
+
 #endif /* _pdu_primitive_ctypes_H_ */

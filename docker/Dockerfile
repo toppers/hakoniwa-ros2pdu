@@ -25,12 +25,12 @@ RUN mkdir /root/workspace
 WORKDIR /root/workspace
 
 #hakoniwa-core
+ENV PATH /root/workspace/hakoniwa-core-cpp-client/cmake-build/core/sample/base-procs/hako-master/:${PATH}
+ENV PATH /root/workspace/hakoniwa-core-cpp-client/cmake-build/core/sample/base-procs/hako-cmd/:${PATH}
 RUN git clone --recursive https://github.com/toppers/hakoniwa-core-cpp-client.git
 WORKDIR /root/workspace/hakoniwa-core-cpp-client
 RUN bash build.bash
 
-ENV PATH /root/workspace/hakoniwa-core-cpp-client/cmake-build/core/sample/base-procs/hako-master/:${PATH}
-ENV PATH /root/workspace/hakoniwa-core-cpp-client/cmake-build/core/sample/base-procs/hako-cmd/:${PATH}
 
 # jinja2
 RUN pip install jinja2

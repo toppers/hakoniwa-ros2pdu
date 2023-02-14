@@ -3,5 +3,9 @@ ev3_msgs/Ev3PduSensor
 ev3_msgs/Ev3PduActuator
 sensor_msgs/LaserScan
 geometry_msgs/Twist
+sensor_msgs/JointState
+sensor_msgs/Image
+sensor_msgs/CompressedImage
+sensor_msgs/CameraInfo
 builtin_interfaces/Time
 std_msgs/String

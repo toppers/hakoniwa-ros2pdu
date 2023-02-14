@@ -3,6 +3,21 @@
         "LaserScan": {
             "ranges": 360,
             "intensities": 360
+        },
+        "JointState": {
+            "name": 256,
+            "position": 2,
+            "velocity": 2,
+            "effort": 2
+        },
+        "Image": {
+            "data": 1228800
+        },
+        "CompressedImage": {
+            "data": 1228800
+        },
+        "CameraInfo": {
+            "d": 5
         }
     }
 }
