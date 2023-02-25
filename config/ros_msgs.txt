@@ -4,6 +4,11 @@ ev3_msgs/Ev3PduActuator
 sensor_msgs/LaserScan
 geometry_msgs/Twist
 sensor_msgs/JointState
+geometry_msgs/Quaternion
+geometry_msgs/Point
+sensor_msgs/Imu
+nav_msgs/Odometry
+tf2_msgs/TFMessage
 sensor_msgs/Image
 sensor_msgs/CompressedImage
 sensor_msgs/CameraInfo

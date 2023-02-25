@@ -1,4 +1,9 @@
 {
+    "tf2_msgs": {
+        "TFMessage": {
+            "transforms": 1
+        }
+    },
     "sensor_msgs": {
         "LaserScan": {
             "ranges": 360,
