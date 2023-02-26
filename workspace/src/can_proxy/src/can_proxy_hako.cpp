@@ -28,7 +28,7 @@ bool can_proxy_hako_init(const char *asset_name, HakoTimeType delta_usec)
 
     hako_asset_name = new std::string(asset_name);
 
-    hako::logger::init("core");
+    //hako::logger::init("core");
     hako_asset = hako::create_asset_controller();
     if (hako_asset == nullptr) {
         std::cout << "ERROR: Not found hako-master on this PC" << std::endl;
@@ -107,7 +107,7 @@ bool can_proxy_hako_tx_data(HakoPduChannelIdType pdu_channel, Hako_HakoCan &can_
 void can_proxy_hako_fin()
 {
     hako_asset->asset_unregister(*hako_asset_name);
-    hako::logger::get("core")->flush();
+    //hako::logger::get("core")->flush();
     return;
 }
 static void reset_callback()
@@ -127,7 +127,7 @@ static void stop_callback()
 static void hako_asset_signal_handler(int sig)
 {
     if (hako_asset_name != nullptr) {
-        hako::logger::get(*hako_asset_name)->info("SIGNAL RECV: {0}", sig);
+        //hako::logger::get(*hako_asset_name)->info("SIGNAL RECV: {0}", sig);
     }
     hako_asset_is_end = true;
 }

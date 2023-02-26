@@ -45,7 +45,7 @@ static void hako_pdu_offset_{{container.msg_type_name}}(void)
         printf("array:");
         printf("struct:");
         printf("{{item["name"]}}:");
-        printf("{{container.get_msg_type(container.get_array_type(item["type"]))}}:");
+        printf("{{container.get_type(container.get_array_type(item["type"]))}}:");
         printf("%ld:", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}));
         printf("%ld:", sizeof(((Hako_{{container.msg_type_name}} *)0)->{{item["name"]}}));
         printf("{{container.get_array_size(item["name"], item["type"])}}");

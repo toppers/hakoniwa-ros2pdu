@@ -21,4 +21,8 @@ typedef double Hako_float64;
 typedef char Hako_string;
 typedef int Hako_bool;
 
+typedef struct {
+        char data[HAKO_STRING_SIZE];
+} Hako_cstring;
+
 #endif /* _pdu_primitive_ctypes_H_ */

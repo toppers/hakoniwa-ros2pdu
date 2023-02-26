@@ -28,8 +28,8 @@ static inline int hako_convert_pdu2ros_JointState(Hako_JointState &src,  sensor_
 {
     //struct convert
     hako_convert_pdu2ros_Header(src.header, dst.header);
-    //struct array convertor
-    (void)hako_convert_pdu2ros_array_string<M_ARRAY_SIZE(Hako_JointState, Hako_string, name), 256>(
+    //string array convertor
+    (void)hako_convert_pdu2ros_array_string<M_ARRAY_SIZE(Hako_JointState, Hako_cstring, name), 2>(
         src.name, dst.name);
     //primitive array convertor
     (void)hako_convert_pdu2ros_array(
@@ -70,9 +70,8 @@ static inline int hako_convert_ros2pdu_JointState(sensor_msgs::msg::JointState &
 {
     //struct convert
     hako_convert_ros2pdu_Header(src.header, dst.header);
-    //struct array convertor
-    (void)hako_convert_ros2pdu_array_string<256, M_ARRAY_SIZE(Hako_JointState, Hako_string, name)>(
-        src.name, dst.name);
+    //string array convertor
+    (void)hako_convert_ros2pdu_array_string<2, M_ARRAY_SIZE(Hako_JointState, Hako_cstring, name)>(
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
         src.position, src.position.size(),

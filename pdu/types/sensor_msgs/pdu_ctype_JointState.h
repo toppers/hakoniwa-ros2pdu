@@ -7,7 +7,7 @@
 
 typedef struct {
         Hako_Header    header;
-        Hako_string name[256];
+        Hako_cstring name[2];
         Hako_float64 position[2];
         Hako_float64 velocity[2];
         Hako_float64 effort[2];
