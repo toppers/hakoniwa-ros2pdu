@@ -78,6 +78,12 @@ def is_primitive_array(name):
 	else:
 		return False
 
+def is_string_array(name):
+	if (is_array(name) and is_string(get_array_type(name))):
+		return True
+	else:
+		return False
+
 def get_array_type(name):
 	tmp = name.split('[')
 	return tmp[0].strip()
@@ -137,6 +143,7 @@ container.get_array_type = get_array_type
 container.is_array = is_array
 container.is_primitive = is_primitive
 container.is_primitive_array = is_primitive_array
+container.is_string_array = is_string_array
 container.get_msg_type = get_msg_type
 container.get_msg_pkg = get_msg_pkg
 container.pkg_name = pkg_name
