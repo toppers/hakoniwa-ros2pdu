@@ -5,6 +5,7 @@ import sys
 
 import binary_io
 import offset_parser
+import base64
 
 if len(sys.argv) != 4:
 	print("Usage: binary_reader.py <offset_path> <typename> <binary_file> ")
@@ -30,23 +31,31 @@ def binary_read_recursive(json_data, base_off, typename):
                     {
                         "name": name,
                         "type": type,
+                        "encode_type": "text",
                         "value": value
                     }
                 )
             else:
-                i = 0
+                encode_type = "text"
                 array_size = offset_parser.array_size(line)
                 one_elm_size = int(size / array_size)
-                array_value = []
-                while i < array_size:
-                    bin = binary_io.readBinary(binary_filepath, off + (i * one_elm_size), one_elm_size)
-                    value = binary_io.binTovalue(type, bin)
-                    array_value.append(value)
-                    i = i + 1
+                if (array_size > 100):
+                    encode_type = "base64"
+                    bin = binary_io.readBinary(binary_filepath, off, size)
+                    array_value = base64.b64encode(bin)
+                else:
+                    i = 0
+                    array_value = []
+                    while i < array_size:
+                        bin = binary_io.readBinary(binary_filepath, off + (i * one_elm_size), one_elm_size)
+                        value = binary_io.binTovalue(type, bin)
+                        array_value.append(value)
+                        i = i + 1
                 json_data.append(
                     {
                         "name": name,
                         "type": type,
+                        "encode_type": encode_type,
                         "value": array_value
                     }
                 )
@@ -60,6 +69,7 @@ def binary_read_recursive(json_data, base_off, typename):
                     {
                         "name": name,
                         "type": type,
+                        "encode_type": "text",
                         "value": tmp_json_data
                     }
                 )
@@ -79,6 +89,7 @@ def binary_read_recursive(json_data, base_off, typename):
                     {
                         "name": name,
                         "type": type,
+                        "encode_type": "text",
                         "value": array_value
                     }
                 )
