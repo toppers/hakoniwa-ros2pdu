@@ -27,14 +27,7 @@ def binary_read_recursive(json_data, base_off, typename):
             if (offset_parser.is_single(line)):
                 bin = binary_io.readBinary(binary_filepath, off, size)
                 value = binary_io.binTovalue(type, bin)
-                json_data.append(
-                    {
-                        "name": name,
-                        "type": type,
-                        "encode_type": "text",
-                        "value": value
-                    }
-                )
+                json_data[name] = value
             else:
                 encode_type = "text"
                 array_size = offset_parser.array_size(line)
@@ -42,7 +35,7 @@ def binary_read_recursive(json_data, base_off, typename):
                 if (array_size > 100):
                     encode_type = "base64"
                     bin = binary_io.readBinary(binary_filepath, off, size)
-                    array_value = base64.b64encode(bin)
+                    array_value = base64.b64encode(bin).decode('utf-8')
                 else:
                     i = 0
                     array_value = []
@@ -51,52 +44,26 @@ def binary_read_recursive(json_data, base_off, typename):
                         value = binary_io.binTovalue(type, bin)
                         array_value.append(value)
                         i = i + 1
-                json_data.append(
-                    {
-                        "name": name,
-                        "type": type,
-                        "encode_type": encode_type,
-                        "value": array_value
-                    }
-                )
+                json_data[name + '_encode_type'] = encode_type
+                json_data[name] = array_value
         else:
             if (offset_parser.is_single(line)):
-                tmp_json_data = {
-                    "fields": []
-                }
-                binary_read_recursive(tmp_json_data['fields'], off, type)
-                json_data.append(
-                    {
-                        "name": name,
-                        "type": type,
-                        "encode_type": "text",
-                        "value": tmp_json_data
-                    }
-                )
+                tmp_json_data = {}
+                binary_read_recursive(tmp_json_data, off, type)
+                json_data[name] = tmp_json_data
             else:
                 i = 0
                 array_size = offset_parser.array_size(line)
                 one_elm_size = int(size / array_size)
                 array_value = []
                 while i < array_size:
-                    tmp_json_data = {
-                        "fields": []
-                    }
-                    binary_read_recursive(tmp_json_data['fields'], off + (i * one_elm_size), type)
+                    tmp_json_data = {}
+                    binary_read_recursive(tmp_json_data, off + (i * one_elm_size), type)
                     array_value.append(tmp_json_data)
                     i = i + 1
-                json_data.append(
-                    {
-                        "name": name,
-                        "type": type,
-                        "encode_type": "text",
-                        "value": array_value
-                    }
-                )
+                json_data[name] = array_value
 
-json_data = {
-    "fields": []
-}
-binary_read_recursive(json_data['fields'], 0, typename)
+json_data = {}
+binary_read_recursive(json_data, 0, typename)
 
 print(json.dumps(json_data))
