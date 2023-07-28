@@ -15,6 +15,6 @@ void hako_pdu_proxy_com_pub_init(std::shared_ptr<rclcpp::Node> node)
 
 void hako_pdu_proxy_com_publish(void)
 {
-    PUBLISH_PDU_TOPIC(geometry_msgs, Twist, 0, TB3RoboModel_cmd_vel);
+    PUBLISH_PDU_TOPIC(geometry_msgs, Twist, "TB3RoboModel", 0, TB3RoboModel_cmd_vel);
     return;
 }

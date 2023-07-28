@@ -87,6 +87,9 @@ static void stop_callback()
 
 static void hako_asset_signal_handler(int sig)
 {
+    if (sig > 0) {
+        //NOP
+    }
     if (hako_asset_name != nullptr) {
         //hako::logger::get(*hako_asset_name)->info("SIGNAL RECV: {0}", sig);
     }
@@ -94,25 +97,25 @@ static void hako_asset_signal_handler(int sig)
 }
 
 
-bool hako_pdu_proxy_rx_data(HakoPduChannelIdType pdu_channel, char* pdu_msg, int buflen)
+bool hako_pdu_proxy_rx_data(const std::string& robo_name, HakoPduChannelIdType pdu_channel, char* pdu_msg, int buflen)
 {
     if (hako_asset->is_pdu_created() == false) {
         return false;
     }
     else if (hako_asset->is_simulation_mode()) {
-       if (hako_asset->is_pdu_dirty(*hako_asset_name, pdu_channel)) {
-           bool ret = hako_asset->read_pdu(*hako_asset_name, pdu_channel, pdu_msg, buflen);
+       if (hako_asset->is_pdu_dirty(*hako_asset_name, robo_name, pdu_channel)) {
+           bool ret = hako_asset->read_pdu(*hako_asset_name, robo_name, pdu_channel, pdu_msg, buflen);
            hako_asset->notify_read_pdu_done(*hako_asset_name);
            return ret;
        }
     }
     return false;
 }
-bool hako_pdu_proxy_tx_init(HakoPduChannelIdType pdu_channel, int buflen)
+bool hako_pdu_proxy_tx_init(const std::string& robo_name, HakoPduChannelIdType pdu_channel, int buflen)
 {
-    return hako_asset->create_pdu_channel(pdu_channel, buflen);
+    return hako_asset->create_pdu_lchannel(robo_name, pdu_channel, buflen);
 }
-bool hako_pdu_proxy_tx_data(HakoPduChannelIdType pdu_channel, char* pdu_msg, int buflen)
+bool hako_pdu_proxy_tx_data(const std::string& robo_name, HakoPduChannelIdType pdu_channel, char* pdu_msg, int buflen)
 {
     if (hako_asset->is_pdu_created() == false) {
         return false;
@@ -120,7 +123,7 @@ bool hako_pdu_proxy_tx_data(HakoPduChannelIdType pdu_channel, char* pdu_msg, int
     else if (hako_asset->is_simulation_mode())
     {
         //printf("write_pdu\n");
-        return hako_asset->write_pdu(*hako_asset_name, pdu_channel, pdu_msg, buflen);
+        return hako_asset->write_pdu(*hako_asset_name, robo_name, pdu_channel, pdu_msg, buflen);
     }
     return false;
 }
