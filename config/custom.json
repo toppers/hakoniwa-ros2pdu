@@ -1,0 +1,36 @@
+{
+  "robots": [
+    {
+      "name": "TB3RoboModel",
+      "rpc_pdu_readers": [
+        {
+          "type": "geometry_msgs/Twist",
+          "org_name": "cmd_vel",
+          "name": "TB3RoboModel_cmd_vel",
+          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduReader",
+          "class_path": "",
+          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduReaderConverter",
+          "conv_class_path": "",
+          "channel_id": 0,
+          "pdu_size": 48,
+          "method_type": "UDP"
+        }
+      ],
+      "rpc_pdu_writers": [
+        {
+          "type": "sensor_msgs/LaserScan",
+          "org_name": "scan",
+          "name": "TB3RoboModel_scan",
+          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
+          "class_path": "",
+          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
+          "conv_class_path": "",
+          "channel_id": 8,
+          "pdu_size": 3044,
+          "write_cycle": 1,
+          "method_type": "MQTT"
+        }
+      ]
+    }
+  ]
+}

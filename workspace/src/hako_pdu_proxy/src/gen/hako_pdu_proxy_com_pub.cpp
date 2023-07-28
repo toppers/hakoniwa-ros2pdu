@@ -1,20 +1,20 @@
 #include "../hako_pdu_proxy_com.hpp"
 #include "../hako_pdu_proxy_libs.hpp"
-#include "geometry_msgs/pdu_ctype_conv_Twist.hpp"
+#include "sensor_msgs/pdu_ctype_conv_LaserScan.hpp"
 
 static std::shared_ptr<rclcpp::Node> my_node;
-DECLARE_PUBLISHER(geometry_msgs::msg::Twist, TB3RoboModel_cmd_vel);
+DECLARE_PUBLISHER(sensor_msgs::msg::LaserScan, TB3RoboModel_scan);
 
 void hako_pdu_proxy_com_pub_init(std::shared_ptr<rclcpp::Node> node)
 {
     my_node = node;
-    CREATE_PUBLISHER(geometry_msgs, Twist, 0, TB3RoboModel_cmd_vel);
+    CREATE_PUBLISHER(sensor_msgs, LaserScan, "TB3RoboModel", 8, TB3RoboModel_scan);
 
     return;
 }
 
 void hako_pdu_proxy_com_publish(void)
 {
-    PUBLISH_PDU_TOPIC(geometry_msgs, Twist, "TB3RoboModel", 0, TB3RoboModel_cmd_vel);
+    PUBLISH_PDU_TOPIC(sensor_msgs, LaserScan, "TB3RoboModel", 8, TB3RoboModel_scan);
     return;
 }
