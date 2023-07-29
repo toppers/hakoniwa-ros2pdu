@@ -70,6 +70,45 @@
           "method_type": "UDP"
         },
         {
+          "type": "sensor_msgs/Image",
+          "org_name": "image",
+          "name": "TB3RoboModel_image",
+          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
+          "class_path": "",
+          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
+          "conv_class_path": "",
+          "channel_id": 5,
+          "pdu_size": 1024280,
+          "write_cycle": 1000,
+          "method_type": "MQTT"
+        },
+        {
+          "type": "sensor_msgs/CompressedImage",
+          "org_name": "image/compressed",
+          "name": "TB3RoboModel_image/compressed",
+          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
+          "class_path": "",
+          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
+          "conv_class_path": "",
+          "channel_id": 6,
+          "pdu_size": 102664,
+          "write_cycle": 25,
+          "method_type": "MQTT"
+        },
+        {
+          "type": "sensor_msgs/CameraInfo",
+          "org_name": "camera_info",
+          "name": "TB3RoboModel_camera_info",
+          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
+          "class_path": "",
+          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
+          "conv_class_path": "",
+          "channel_id": 7,
+          "pdu_size": 580,
+          "write_cycle": 1,
+          "method_type": "UDP"
+        },
+        {
           "type": "sensor_msgs/LaserScan",
           "org_name": "scan",
           "name": "TB3RoboModel_scan",
