@@ -72,6 +72,7 @@ static inline int hako_convert_ros2pdu_JointState(sensor_msgs::msg::JointState &
     hako_convert_ros2pdu_Header(src.header, dst.header);
     //string array convertor
     (void)hako_convert_ros2pdu_array_string<2, M_ARRAY_SIZE(Hako_JointState, Hako_cstring, name)>(
+        src.name, dst.name);
     //primitive array convertor
     (void)hako_convert_ros2pdu_array(
         src.position, src.position.size(),

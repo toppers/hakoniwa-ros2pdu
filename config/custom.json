@@ -18,6 +18,32 @@
       ],
       "rpc_pdu_writers": [
         {
+          "type": "sensor_msgs/JointState",
+          "org_name": "image",
+          "name": "TB3RoboModel_joint",
+          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
+          "class_path": "",
+          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
+          "conv_class_path": "",
+          "channel_id": 6,
+          "pdu_size": 3044,
+          "write_cycle": 1,
+          "method_type": "MQTT"
+        },
+        {
+          "type": "sensor_msgs/CompressedImage",
+          "org_name": "image",
+          "name": "TB3RoboModel_image/comressed",
+          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
+          "class_path": "",
+          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
+          "conv_class_path": "",
+          "channel_id": 7,
+          "pdu_size": 3044,
+          "write_cycle": 1,
+          "method_type": "MQTT"
+        },
+        {
           "type": "sensor_msgs/LaserScan",
           "org_name": "scan",
           "name": "TB3RoboModel_scan",
