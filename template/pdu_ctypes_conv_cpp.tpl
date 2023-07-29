@@ -94,6 +94,7 @@ static inline int hako_convert_ros2pdu_{{container.msg_type_name}}({{container.p
 {%-	    elif (container.is_string_array(item["type"])): %}
     //string array convertor
     (void)hako_convert_ros2pdu_array_string<{{container.get_array_size(item["name"], item["type"])}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_cstring, {{item["name"]}})>(
+        src.{{item["name"]}}, dst.{{item["name"]}});
 {%-	    elif (container.is_array(item["type"])): %}
     //struct array convertor
     (void)hako_convert_ros2pdu_array_{{container.get_array_type(item["type"])}}<{{container.get_array_size(item["name"], item["type"])}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}})>(
