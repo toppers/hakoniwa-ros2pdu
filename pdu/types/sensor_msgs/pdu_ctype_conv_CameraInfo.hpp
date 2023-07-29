@@ -74,6 +74,20 @@ int hako_convert_pdu2ros_array_CameraInfo(Hako_CameraInfo src[], std::array<sens
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_CameraInfo(Hako_CameraInfo src[], std::vector<sensor_msgs::msg::CameraInfo> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_CameraInfo(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -131,4 +145,19 @@ int hako_convert_ros2pdu_array_CameraInfo(std::array<sensor_msgs::msg::CameraInf
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_CameraInfo(std::vector<sensor_msgs::msg::CameraInfo> &src, Hako_CameraInfo dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_CameraInfo(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_CameraInfo_HPP_ */

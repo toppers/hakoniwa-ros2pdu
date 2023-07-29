@@ -52,6 +52,20 @@ int hako_convert_pdu2ros_array_TransformStamped(Hako_TransformStamped src[], std
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_TransformStamped(Hako_TransformStamped src[], std::vector<geometry_msgs::msg::TransformStamped> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_TransformStamped(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -85,4 +99,19 @@ int hako_convert_ros2pdu_array_TransformStamped(std::array<geometry_msgs::msg::T
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_TransformStamped(std::vector<geometry_msgs::msg::TransformStamped> &src, Hako_TransformStamped dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_TransformStamped(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_geometry_msgs_TransformStamped_HPP_ */

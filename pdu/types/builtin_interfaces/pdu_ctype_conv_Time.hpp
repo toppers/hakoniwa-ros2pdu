@@ -45,6 +45,20 @@ int hako_convert_pdu2ros_array_Time(Hako_Time src[], std::array<builtin_interfac
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Time(Hako_Time src[], std::vector<builtin_interfaces::msg::Time> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Time(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -74,4 +88,19 @@ int hako_convert_ros2pdu_array_Time(std::array<builtin_interfaces::msg::Time, _s
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Time(std::vector<builtin_interfaces::msg::Time> &src, Hako_Time dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Time(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_builtin_interfaces_Time_HPP_ */

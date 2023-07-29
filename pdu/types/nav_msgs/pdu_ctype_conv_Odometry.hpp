@@ -58,6 +58,20 @@ int hako_convert_pdu2ros_array_Odometry(Hako_Odometry src[], std::array<nav_msgs
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Odometry(Hako_Odometry src[], std::vector<nav_msgs::msg::Odometry> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Odometry(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -93,4 +107,19 @@ int hako_convert_ros2pdu_array_Odometry(std::array<nav_msgs::msg::Odometry, _src
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Odometry(std::vector<nav_msgs::msg::Odometry> &src, Hako_Odometry dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Odometry(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_nav_msgs_Odometry_HPP_ */

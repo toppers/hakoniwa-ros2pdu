@@ -46,6 +46,20 @@ int hako_convert_pdu2ros_array_Twist(Hako_Twist src[], std::array<geometry_msgs:
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Twist(Hako_Twist src[], std::vector<geometry_msgs::msg::Twist> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Twist(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -75,4 +89,19 @@ int hako_convert_ros2pdu_array_Twist(std::array<geometry_msgs::msg::Twist, _src_
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Twist(std::vector<geometry_msgs::msg::Twist> &src, Hako_Twist dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Twist(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_geometry_msgs_Twist_HPP_ */

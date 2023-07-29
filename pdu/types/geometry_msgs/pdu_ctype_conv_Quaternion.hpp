@@ -49,6 +49,20 @@ int hako_convert_pdu2ros_array_Quaternion(Hako_Quaternion src[], std::array<geom
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Quaternion(Hako_Quaternion src[], std::vector<geometry_msgs::msg::Quaternion> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Quaternion(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -82,4 +96,19 @@ int hako_convert_ros2pdu_array_Quaternion(std::array<geometry_msgs::msg::Quatern
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Quaternion(std::vector<geometry_msgs::msg::Quaternion> &src, Hako_Quaternion dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Quaternion(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_geometry_msgs_Quaternion_HPP_ */

@@ -47,6 +47,20 @@ int hako_convert_pdu2ros_array_Transform(Hako_Transform src[], std::array<geomet
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Transform(Hako_Transform src[], std::vector<geometry_msgs::msg::Transform> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Transform(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -76,4 +90,19 @@ int hako_convert_ros2pdu_array_Transform(std::array<geometry_msgs::msg::Transfor
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Transform(std::vector<geometry_msgs::msg::Transform> &src, Hako_Transform dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Transform(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_geometry_msgs_Transform_HPP_ */

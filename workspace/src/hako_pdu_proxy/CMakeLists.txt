@@ -23,6 +23,8 @@ find_package(ev3_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(tf2_msgs REQUIRED)
 
 add_executable(hako_pdu_proxy_node 
   src/hako_pdu_proxy_main.cpp
@@ -35,6 +37,8 @@ ament_target_dependencies(hako_pdu_proxy_node
   std_msgs 
   sensor_msgs
   geometry_msgs
+  nav_msgs
+  tf2_msgs
   can_msgs
   ev3_msgs
 )

@@ -45,6 +45,20 @@ int hako_convert_pdu2ros_array_HakoCanBody(Hako_HakoCanBody src[], std::array<ca
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_HakoCanBody(Hako_HakoCanBody src[], std::vector<can_msgs::msg::HakoCanBody> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_HakoCanBody(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -74,4 +88,19 @@ int hako_convert_ros2pdu_array_HakoCanBody(std::array<can_msgs::msg::HakoCanBody
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_HakoCanBody(std::vector<can_msgs::msg::HakoCanBody> &src, Hako_HakoCanBody dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_HakoCanBody(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_can_msgs_HakoCanBody_HPP_ */

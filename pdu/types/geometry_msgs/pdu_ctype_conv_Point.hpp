@@ -47,6 +47,20 @@ int hako_convert_pdu2ros_array_Point(Hako_Point src[], std::array<geometry_msgs:
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Point(Hako_Point src[], std::vector<geometry_msgs::msg::Point> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Point(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -78,4 +92,19 @@ int hako_convert_ros2pdu_array_Point(std::array<geometry_msgs::msg::Point, _src_
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Point(std::vector<geometry_msgs::msg::Point> &src, Hako_Point dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Point(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_geometry_msgs_Point_HPP_ */

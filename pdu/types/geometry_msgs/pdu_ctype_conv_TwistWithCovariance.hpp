@@ -49,6 +49,20 @@ int hako_convert_pdu2ros_array_TwistWithCovariance(Hako_TwistWithCovariance src[
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_TwistWithCovariance(Hako_TwistWithCovariance src[], std::vector<geometry_msgs::msg::TwistWithCovariance> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_TwistWithCovariance(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -80,4 +94,19 @@ int hako_convert_ros2pdu_array_TwistWithCovariance(std::array<geometry_msgs::msg
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_TwistWithCovariance(std::vector<geometry_msgs::msg::TwistWithCovariance> &src, Hako_TwistWithCovariance dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_TwistWithCovariance(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_geometry_msgs_TwistWithCovariance_HPP_ */

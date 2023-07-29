@@ -51,6 +51,20 @@ int hako_convert_pdu2ros_array_Ev3PduSensorHeader(Hako_Ev3PduSensorHeader src[],
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Ev3PduSensorHeader(Hako_Ev3PduSensorHeader src[], std::vector<ev3_msgs::msg::Ev3PduSensorHeader> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Ev3PduSensorHeader(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -88,4 +102,19 @@ int hako_convert_ros2pdu_array_Ev3PduSensorHeader(std::array<ev3_msgs::msg::Ev3P
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Ev3PduSensorHeader(std::vector<ev3_msgs::msg::Ev3PduSensorHeader> &src, Hako_Ev3PduSensorHeader dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Ev3PduSensorHeader(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_ev3_msgs_Ev3PduSensorHeader_HPP_ */

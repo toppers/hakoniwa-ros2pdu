@@ -67,6 +67,20 @@ int hako_convert_pdu2ros_array_LaserScan(Hako_LaserScan src[], std::array<sensor
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_LaserScan(Hako_LaserScan src[], std::vector<sensor_msgs::msg::LaserScan> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_LaserScan(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -116,4 +130,19 @@ int hako_convert_ros2pdu_array_LaserScan(std::array<sensor_msgs::msg::LaserScan,
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_LaserScan(std::vector<sensor_msgs::msg::LaserScan> &src, Hako_LaserScan dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_LaserScan(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_LaserScan_HPP_ */

@@ -59,6 +59,20 @@ int hako_convert_pdu2ros_array_Image(Hako_Image src[], std::array<sensor_msgs::m
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Image(Hako_Image src[], std::vector<sensor_msgs::msg::Image> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Image(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -102,4 +116,19 @@ int hako_convert_ros2pdu_array_Image(std::array<sensor_msgs::msg::Image, _src_le
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Image(std::vector<sensor_msgs::msg::Image> &src, Hako_Image dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Image(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_Image_HPP_ */

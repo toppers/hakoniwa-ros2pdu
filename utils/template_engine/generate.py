@@ -86,7 +86,7 @@ def is_string_array(name):
 
 def get_array_type(name):
 	tmp = name.split('[')
-	return tmp[0].strip()
+	return get_msg_type(tmp[0].strip())
 
 def get_array_size(mem_name, name):
 	global container
@@ -129,6 +129,8 @@ def get_msg_pkg(name):
 
 
 def convert_snake(str):
+    if str == "TFMessage":
+        return "tf_message"
     s0 = str[0].lower()
     s1n = str[1:]
     cs1n = re.sub("([A-Z])", lambda x:"_" + x.group(1).lower(), s1n)

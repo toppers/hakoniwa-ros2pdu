@@ -51,6 +51,20 @@ int hako_convert_pdu2ros_array_Ev3PduColorSensor(Hako_Ev3PduColorSensor src[], s
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Ev3PduColorSensor(Hako_Ev3PduColorSensor src[], std::vector<ev3_msgs::msg::Ev3PduColorSensor> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Ev3PduColorSensor(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -86,4 +100,19 @@ int hako_convert_ros2pdu_array_Ev3PduColorSensor(std::array<ev3_msgs::msg::Ev3Pd
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Ev3PduColorSensor(std::vector<ev3_msgs::msg::Ev3PduColorSensor> &src, Hako_Ev3PduColorSensor dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Ev3PduColorSensor(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_ev3_msgs_Ev3PduColorSensor_HPP_ */

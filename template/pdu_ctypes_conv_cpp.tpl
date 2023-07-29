@@ -69,6 +69,20 @@ int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} src[], std::vector<{{container.pkg_name}}::msg::{{container.msg_type_name}}> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_{{container.msg_type_name}}(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -121,4 +135,19 @@ int hako_convert_ros2pdu_array_{{container.msg_type_name}}(std::array<{{containe
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_{{container.msg_type_name}}(std::vector<{{container.pkg_name}}::msg::{{container.msg_type_name}}> &src, Hako_{{container.msg_type_name}} dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_{{container.msg_type_name}}(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_{{container.pkg_name}}_{{container.msg_type_name}}_HPP_ */

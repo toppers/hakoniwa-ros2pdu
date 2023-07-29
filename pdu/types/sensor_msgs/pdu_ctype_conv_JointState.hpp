@@ -60,6 +60,20 @@ int hako_convert_pdu2ros_array_JointState(Hako_JointState src[], std::array<sens
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_JointState(Hako_JointState src[], std::vector<sensor_msgs::msg::JointState> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_JointState(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -102,4 +116,19 @@ int hako_convert_ros2pdu_array_JointState(std::array<sensor_msgs::msg::JointStat
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_JointState(std::vector<sensor_msgs::msg::JointState> &src, Hako_JointState dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_JointState(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_JointState_HPP_ */

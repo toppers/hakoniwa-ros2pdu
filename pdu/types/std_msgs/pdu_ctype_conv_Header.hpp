@@ -46,6 +46,20 @@ int hako_convert_pdu2ros_array_Header(Hako_Header src[], std::array<std_msgs::ms
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Header(Hako_Header src[], std::vector<std_msgs::msg::Header> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Header(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -77,4 +91,19 @@ int hako_convert_ros2pdu_array_Header(std::array<std_msgs::msg::Header, _src_len
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Header(std::vector<std_msgs::msg::Header> &src, Hako_Header dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Header(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_std_msgs_Header_HPP_ */

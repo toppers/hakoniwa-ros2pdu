@@ -50,6 +50,20 @@ int hako_convert_pdu2ros_array_PoseWithCovariance(Hako_PoseWithCovariance src[],
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_PoseWithCovariance(Hako_PoseWithCovariance src[], std::vector<geometry_msgs::msg::PoseWithCovariance> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_PoseWithCovariance(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -81,4 +95,19 @@ int hako_convert_ros2pdu_array_PoseWithCovariance(std::array<geometry_msgs::msg:
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_PoseWithCovariance(std::vector<geometry_msgs::msg::PoseWithCovariance> &src, Hako_PoseWithCovariance dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_PoseWithCovariance(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_geometry_msgs_PoseWithCovariance_HPP_ */

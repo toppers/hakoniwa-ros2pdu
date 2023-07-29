@@ -54,6 +54,20 @@ int hako_convert_pdu2ros_array_Ev3PduActuator(Hako_Ev3PduActuator src[], std::ar
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_pdu2ros_array_Ev3PduActuator(Hako_Ev3PduActuator src[], std::vector<ev3_msgs::msg::Ev3PduActuator> &dst)
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_pdu2ros_Ev3PduActuator(src[i], dst[i]);
+    }
+    return ret;
+}
 
 /***************************
  *
@@ -90,4 +104,19 @@ int hako_convert_ros2pdu_array_Ev3PduActuator(std::array<ev3_msgs::msg::Ev3PduAc
     }
     return ret;
 }
+template<int _src_len, int _dst_len>
+int hako_convert_ros2pdu_array_Ev3PduActuator(std::vector<ev3_msgs::msg::Ev3PduActuator> &src, Hako_Ev3PduActuator dst[])
+{
+    int ret = 0;
+    int len = _dst_len;
+    if (_dst_len > _src_len) {
+        len = _src_len;
+        ret = -1;
+    }
+    for (int i = 0; i < len; i++) {
+        (void)hako_convert_ros2pdu_Ev3PduActuator(src[i], dst[i]);
+    }
+    return ret;
+}
+
 #endif /* _PDU_CTYPE_CONV_HAKO_ev3_msgs_Ev3PduActuator_HPP_ */
