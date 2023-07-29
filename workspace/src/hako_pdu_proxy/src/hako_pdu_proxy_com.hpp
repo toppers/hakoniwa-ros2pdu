@@ -28,16 +28,18 @@ do {    \
 
 #define PUBLISH_TOPIC(topic_name, msg)   \
 do {    \
-    PUBLISHER(topic_name)->publish(msg);    \
+        PUBLISHER(topic_name)->publish(msg);    \
 } while (0)
 
-#define PUBLISH_PDU_TOPIC(pkg, ros_type, robo_name, channel_id, topic_name) \
+#define PUBLISH_PDU_TOPIC(pkg, ros_type, robo_name, channel_id, topic_name, count, write_cycle) \
 do {    \
-    auto ros_msg = pkg::msg::ros_type();  \
-    Hako_ ##ros_type pdu_msg;   \
-    if (hako_pdu_proxy_rx_data(robo_name, (channel_id), (char*)&pdu_msg, sizeof(Hako_ ##ros_type))) {    \
-        hako_convert_pdu2ros_ ##ros_type (pdu_msg, ros_msg); \
-        PUBLISH_TOPIC(topic_name, ros_msg);   \
+    if (((count) % (write_cycle)) == 0) {   \
+        auto ros_msg = pkg::msg::ros_type();  \
+        Hako_ ##ros_type pdu_msg;   \
+        if (hako_pdu_proxy_rx_data(robo_name, (channel_id), (char*)&pdu_msg, sizeof(Hako_ ##ros_type))) {    \
+            hako_convert_pdu2ros_ ##ros_type (pdu_msg, ros_msg); \
+            PUBLISH_TOPIC(topic_name, ros_msg);   \
+        }   \
     }   \
 } while (0)
 

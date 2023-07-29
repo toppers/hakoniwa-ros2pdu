@@ -36,13 +36,15 @@ void hako_pdu_proxy_com_pub_init(std::shared_ptr<rclcpp::Node> node)
 
 void hako_pdu_proxy_com_publish(void)
 {
-    PUBLISH_PDU_TOPIC(sensor_msgs, JointState, "TB3RoboModel", 1, TB3RoboModel_joint_states);
-    PUBLISH_PDU_TOPIC(sensor_msgs, Imu, "TB3RoboModel", 2, TB3RoboModel_imu);
-    PUBLISH_PDU_TOPIC(nav_msgs, Odometry, "TB3RoboModel", 3, TB3RoboModel_odom);
-    PUBLISH_PDU_TOPIC(tf2_msgs, TFMessage, "TB3RoboModel", 4, TB3RoboModel_tf);
-    PUBLISH_PDU_TOPIC(sensor_msgs, Image, "TB3RoboModel", 5, TB3RoboModel_image);
-    PUBLISH_PDU_TOPIC(sensor_msgs, CompressedImage, "TB3RoboModel", 6, TB3RoboModel_image_compressed);
-    PUBLISH_PDU_TOPIC(sensor_msgs, CameraInfo, "TB3RoboModel", 7, TB3RoboModel_camera_info);
-    PUBLISH_PDU_TOPIC(sensor_msgs, LaserScan, "TB3RoboModel", 8, TB3RoboModel_scan);
+    static unsigned long long count = 0;
+    PUBLISH_PDU_TOPIC(sensor_msgs, JointState, "TB3RoboModel", 1, TB3RoboModel_joint_states, count, 1);
+    PUBLISH_PDU_TOPIC(sensor_msgs, Imu, "TB3RoboModel", 2, TB3RoboModel_imu, count, 1);
+    PUBLISH_PDU_TOPIC(nav_msgs, Odometry, "TB3RoboModel", 3, TB3RoboModel_odom, count, 1);
+    PUBLISH_PDU_TOPIC(tf2_msgs, TFMessage, "TB3RoboModel", 4, TB3RoboModel_tf, count, 1);
+    PUBLISH_PDU_TOPIC(sensor_msgs, Image, "TB3RoboModel", 5, TB3RoboModel_image, count, 1000);
+    PUBLISH_PDU_TOPIC(sensor_msgs, CompressedImage, "TB3RoboModel", 6, TB3RoboModel_image_compressed, count, 25);
+    PUBLISH_PDU_TOPIC(sensor_msgs, CameraInfo, "TB3RoboModel", 7, TB3RoboModel_camera_info, count, 1);
+    PUBLISH_PDU_TOPIC(sensor_msgs, LaserScan, "TB3RoboModel", 8, TB3RoboModel_scan, count, 1);
+    count++;
     return;
 }

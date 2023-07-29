@@ -39,13 +39,15 @@ void hako_pdu_proxy_com_pub_init(std::shared_ptr<rclcpp::Node> node)
 
 void hako_pdu_proxy_com_publish(void)
 {
+    static unsigned long long count = 0;
 {%- for robo in container.json_data["robots"]: %}
 {%-     for item in robo["rpc_pdu_writers"]: %}
-    PUBLISH_PDU_TOPIC({{container.get_pkg(item)}}, {{container.get_type(item)}}, "{{robo["name"]}}", {{container.get_channel(item)}}, {{container.get_topic_name(item)}});
+    PUBLISH_PDU_TOPIC({{container.get_pkg(item)}}, {{container.get_type(item)}}, "{{robo["name"]}}", {{container.get_channel(item)}}, {{container.get_topic_name(item)}}, count, {{item["write_cycle"]}});
 {%-     endfor %}
 {%-     for item in robo["shm_pdu_writers"]: %}
-    PUBLISH_PDU_TOPIC({{container.get_pkg(item)}}, {{container.get_type(item)}}, "{{robo["name"]}}", {{container.get_channel(item)}}, {{container.get_topic_name(item)}});
+    PUBLISH_PDU_TOPIC({{container.get_pkg(item)}}, {{container.get_type(item)}}, "{{robo["name"]}}", {{container.get_channel(item)}}, {{container.get_topic_name(item)}}, count, {{item["write_cycle"]}});
 {%-     endfor %}
 {%- endfor %}
+    count++;
     return;
 }
