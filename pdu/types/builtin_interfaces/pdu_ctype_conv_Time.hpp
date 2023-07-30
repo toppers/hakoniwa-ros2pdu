@@ -48,17 +48,11 @@ int hako_convert_pdu2ros_array_Time(Hako_Time src[], std::array<builtin_interfac
 template<int _src_len, int _dst_len>
 int hako_convert_pdu2ros_array_Time(Hako_Time src[], std::vector<builtin_interfaces::msg::Time> &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    dst.resize(len);
-    for (int i = 0; i < len; i++) {
+    dst.resize(_src_len);
+    for (int i = 0; i < _src_len; i++) {
         (void)hako_convert_pdu2ros_Time(src[i], dst[i]);
     }
-    return ret;
+    return 0;
 }
 
 /***************************

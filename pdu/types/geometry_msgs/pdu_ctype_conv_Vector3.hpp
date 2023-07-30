@@ -50,17 +50,11 @@ int hako_convert_pdu2ros_array_Vector3(Hako_Vector3 src[], std::array<geometry_m
 template<int _src_len, int _dst_len>
 int hako_convert_pdu2ros_array_Vector3(Hako_Vector3 src[], std::vector<geometry_msgs::msg::Vector3> &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    dst.resize(len);
-    for (int i = 0; i < len; i++) {
+    dst.resize(_src_len);
+    for (int i = 0; i < _src_len; i++) {
         (void)hako_convert_pdu2ros_Vector3(src[i], dst[i]);
     }
-    return ret;
+    return 0;
 }
 
 /***************************

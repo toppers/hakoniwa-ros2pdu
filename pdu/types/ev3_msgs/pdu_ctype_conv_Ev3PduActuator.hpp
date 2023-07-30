@@ -57,17 +57,11 @@ int hako_convert_pdu2ros_array_Ev3PduActuator(Hako_Ev3PduActuator src[], std::ar
 template<int _src_len, int _dst_len>
 int hako_convert_pdu2ros_array_Ev3PduActuator(Hako_Ev3PduActuator src[], std::vector<ev3_msgs::msg::Ev3PduActuator> &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    dst.resize(len);
-    for (int i = 0; i < len; i++) {
+    dst.resize(_src_len);
+    for (int i = 0; i < _src_len; i++) {
         (void)hako_convert_pdu2ros_Ev3PduActuator(src[i], dst[i]);
     }
-    return ret;
+    return 0;
 }
 
 /***************************

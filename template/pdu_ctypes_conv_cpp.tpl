@@ -72,17 +72,11 @@ int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_
 template<int _src_len, int _dst_len>
 int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} src[], std::vector<{{container.pkg_name}}::msg::{{container.msg_type_name}}> &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    dst.resize(len);
-    for (int i = 0; i < len; i++) {
+    dst.resize(_src_len);
+    for (int i = 0; i < _src_len; i++) {
         (void)hako_convert_pdu2ros_{{container.msg_type_name}}(src[i], dst[i]);
     }
-    return ret;
+    return 0;
 }
 
 /***************************

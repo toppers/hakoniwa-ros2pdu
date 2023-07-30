@@ -46,17 +46,11 @@ int hako_convert_pdu2ros_array_String(Hako_String src[], std::array<std_msgs::ms
 template<int _src_len, int _dst_len>
 int hako_convert_pdu2ros_array_String(Hako_String src[], std::vector<std_msgs::msg::String> &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    dst.resize(len);
-    for (int i = 0; i < len; i++) {
+    dst.resize(_src_len);
+    for (int i = 0; i < _src_len; i++) {
         (void)hako_convert_pdu2ros_String(src[i], dst[i]);
     }
-    return ret;
+    return 0;
 }
 
 /***************************

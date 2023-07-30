@@ -53,17 +53,11 @@ int hako_convert_pdu2ros_array_TFMessage(Hako_TFMessage src[], std::array<tf2_ms
 template<int _src_len, int _dst_len>
 int hako_convert_pdu2ros_array_TFMessage(Hako_TFMessage src[], std::vector<tf2_msgs::msg::TFMessage> &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    dst.resize(len);
-    for (int i = 0; i < len; i++) {
+    dst.resize(_src_len);
+    for (int i = 0; i < _src_len; i++) {
         (void)hako_convert_pdu2ros_TFMessage(src[i], dst[i]);
     }
-    return ret;
+    return 0;
 }
 
 /***************************

@@ -29,6 +29,18 @@ int hako_convert_pdu2ros_array(PduPrimitiveType src[], int src_len, RosPrimitive
     return ret;
 }
 
+template <class PduPrimitiveType, class RosPrimitiveType> 
+int hako_convert_pdu2ros_array(PduPrimitiveType src[], int src_len, std::vector<RosPrimitiveType> &dst, int dst_len)
+{
+    if (dst_len < src_len) {
+        dst.resize(src_len);
+    }
+    for (int i = 0; i < src_len; i++) {
+        dst[i] = src[i];
+    }
+    return 0;
+}
+
 template <class RosPrimitiveType, class PduPrimitiveType> 
 void hako_convert_ros2pdu(RosPrimitiveType &src, PduPrimitiveType &dst)
 {

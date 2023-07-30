@@ -68,17 +68,11 @@ int hako_convert_pdu2ros_array_Imu(Hako_Imu src[], std::array<sensor_msgs::msg::
 template<int _src_len, int _dst_len>
 int hako_convert_pdu2ros_array_Imu(Hako_Imu src[], std::vector<sensor_msgs::msg::Imu> &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    dst.resize(len);
-    for (int i = 0; i < len; i++) {
+    dst.resize(_src_len);
+    for (int i = 0; i < _src_len; i++) {
         (void)hako_convert_pdu2ros_Imu(src[i], dst[i]);
     }
-    return ret;
+    return 0;
 }
 
 /***************************

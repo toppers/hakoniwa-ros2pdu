@@ -54,17 +54,11 @@ int hako_convert_pdu2ros_array_RegionOfInterest(Hako_RegionOfInterest src[], std
 template<int _src_len, int _dst_len>
 int hako_convert_pdu2ros_array_RegionOfInterest(Hako_RegionOfInterest src[], std::vector<sensor_msgs::msg::RegionOfInterest> &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    dst.resize(len);
-    for (int i = 0; i < len; i++) {
+    dst.resize(_src_len);
+    for (int i = 0; i < _src_len; i++) {
         (void)hako_convert_pdu2ros_RegionOfInterest(src[i], dst[i]);
     }
-    return ret;
+    return 0;
 }
 
 /***************************
