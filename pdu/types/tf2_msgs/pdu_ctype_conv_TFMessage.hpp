@@ -59,6 +59,7 @@ int hako_convert_pdu2ros_array_TFMessage(Hako_TFMessage src[], std::vector<tf2_m
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_TFMessage(src[i], dst[i]);
     }

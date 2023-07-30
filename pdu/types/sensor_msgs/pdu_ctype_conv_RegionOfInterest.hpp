@@ -60,6 +60,7 @@ int hako_convert_pdu2ros_array_RegionOfInterest(Hako_RegionOfInterest src[], std
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_RegionOfInterest(src[i], dst[i]);
     }

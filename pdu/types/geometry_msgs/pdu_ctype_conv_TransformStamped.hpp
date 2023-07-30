@@ -61,6 +61,7 @@ int hako_convert_pdu2ros_array_TransformStamped(Hako_TransformStamped src[], std
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_TransformStamped(src[i], dst[i]);
     }

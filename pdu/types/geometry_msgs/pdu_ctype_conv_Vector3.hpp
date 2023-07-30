@@ -56,6 +56,7 @@ int hako_convert_pdu2ros_array_Vector3(Hako_Vector3 src[], std::vector<geometry_
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_Vector3(src[i], dst[i]);
     }

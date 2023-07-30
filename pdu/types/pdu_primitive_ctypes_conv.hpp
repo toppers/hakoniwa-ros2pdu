@@ -73,6 +73,7 @@ int hako_convert_pdu2ros_array_string(Hako_cstring src[], std::vector<std::strin
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         dst[i] = std::string(src[i].data);
     }

@@ -67,6 +67,7 @@ int hako_convert_pdu2ros_array_Odometry(Hako_Odometry src[], std::vector<nav_msg
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_Odometry(src[i], dst[i]);
     }

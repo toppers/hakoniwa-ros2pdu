@@ -54,6 +54,7 @@ int hako_convert_pdu2ros_array_HakoCanBody(Hako_HakoCanBody src[], std::vector<c
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_HakoCanBody(src[i], dst[i]);
     }

@@ -54,6 +54,7 @@ int hako_convert_pdu2ros_array_Time(Hako_Time src[], std::vector<builtin_interfa
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_Time(src[i], dst[i]);
     }

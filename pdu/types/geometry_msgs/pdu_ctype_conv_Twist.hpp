@@ -55,6 +55,7 @@ int hako_convert_pdu2ros_array_Twist(Hako_Twist src[], std::vector<geometry_msgs
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_Twist(src[i], dst[i]);
     }

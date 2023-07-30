@@ -60,6 +60,7 @@ int hako_convert_pdu2ros_array_Ev3PduActuatorHeader(Hako_Ev3PduActuatorHeader sr
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_Ev3PduActuatorHeader(src[i], dst[i]);
     }

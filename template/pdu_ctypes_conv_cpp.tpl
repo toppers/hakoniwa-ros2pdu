@@ -78,6 +78,7 @@ int hako_convert_pdu2ros_array_{{container.msg_type_name}}(Hako_{{container.msg_
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_{{container.msg_type_name}}(src[i], dst[i]);
     }

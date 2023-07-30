@@ -56,6 +56,7 @@ int hako_convert_pdu2ros_array_HakoCan(Hako_HakoCan src[], std::vector<can_msgs:
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_HakoCan(src[i], dst[i]);
     }

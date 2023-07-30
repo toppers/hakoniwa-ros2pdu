@@ -52,6 +52,7 @@ int hako_convert_pdu2ros_array_String(Hako_String src[], std::vector<std_msgs::m
         len = _src_len;
         ret = -1;
     }
+    dst.resize(len);
     for (int i = 0; i < len; i++) {
         (void)hako_convert_pdu2ros_String(src[i], dst[i]);
     }
