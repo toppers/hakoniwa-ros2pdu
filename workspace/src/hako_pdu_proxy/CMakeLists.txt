@@ -51,6 +51,7 @@ endif()
 target_link_directories(hako_pdu_proxy_node
   PRIVATE
   ${HAKO_SOURCE_DIR}/cmake-build/core/src
+  /usr/local/lib/hakoniwa
 )
 MESSAGE(STATUS  "env hako dir:  $ENV{ENV_HAKO_SOURCE_DIR}")
 MESSAGE(STATUS  "hako dir: " ${HAKO_SOURCE_DIR})
