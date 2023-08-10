@@ -4,122 +4,23 @@
       "name": "TB3RoboModel",
       "rpc_pdu_readers": [
         {
-          "type": "geometry_msgs/Twist",
-          "org_name": "cmd_vel",
-          "name": "TB3RoboModel_cmd_vel",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduReader",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduReaderConverter",
-          "conv_class_path": "",
+          "type": "std_msgs/String",
+          "org_name": "sensor_message",
+          "name": "TB3RoboModel_sensor_message",
           "channel_id": 0,
-          "pdu_size": 48,
-          "method_type": "UDP"
+          "pdu_size": 256,
+          "method_type": "SHM"
         }
       ],
       "rpc_pdu_writers": [
         {
-          "type": "sensor_msgs/JointState",
-          "org_name": "joint_states",
-          "name": "TB3RoboModel_joint_states",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
-          "conv_class_path": "",
+          "type": "std_msgs/String",
+          "org_name": "actuator_message",
+          "name": "TB3RoboModel_actuator_message",
           "channel_id": 1,
-          "pdu_size": 440,
+          "pdu_size": 256,
           "write_cycle": 1,
-          "method_type": "UDP"
-        },
-        {
-          "type": "sensor_msgs/Imu",
-          "org_name": "imu",
-          "name": "TB3RoboModel_imu",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
-          "conv_class_path": "",
-          "channel_id": 2,
-          "pdu_size": 432,
-          "write_cycle": 1,
-          "method_type": "UDP"
-        },
-        {
-          "type": "nav_msgs/Odometry",
-          "org_name": "odom",
-          "name": "TB3RoboModel_odom",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
-          "conv_class_path": "",
-          "channel_id": 3,
-          "pdu_size": 944,
-          "write_cycle": 1,
-          "method_type": "UDP"
-        },
-        {
-          "type": "tf2_msgs/TFMessage",
-          "org_name": "tf",
-          "name": "TB3RoboModel_tf",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
-          "conv_class_path": "",
-          "channel_id": 4,
-          "pdu_size": 320,
-          "write_cycle": 1,
-          "method_type": "UDP"
-        },
-        {
-          "type": "sensor_msgs/Image",
-          "org_name": "image",
-          "name": "TB3RoboModel_image",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
-          "conv_class_path": "",
-          "channel_id": 5,
-          "pdu_size": 1024280,
-          "write_cycle": 1000,
-          "method_type": "MQTT"
-        },
-        {
-          "type": "sensor_msgs/CompressedImage",
-          "org_name": "image/compressed",
-          "name": "TB3RoboModel_image/compressed",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
-          "conv_class_path": "",
-          "channel_id": 6,
-          "pdu_size": 102664,
-          "write_cycle": 25,
-          "method_type": "MQTT"
-        },
-        {
-          "type": "sensor_msgs/CameraInfo",
-          "org_name": "camera_info",
-          "name": "TB3RoboModel_camera_info",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
-          "conv_class_path": "",
-          "channel_id": 7,
-          "pdu_size": 580,
-          "write_cycle": 1,
-          "method_type": "UDP"
-        },
-        {
-          "type": "sensor_msgs/LaserScan",
-          "org_name": "scan",
-          "name": "TB3RoboModel_scan",
-          "class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriter",
-          "class_path": "",
-          "conv_class_name": "Hakoniwa.PluggableAsset.Communication.Pdu.Raw.RawPduWriterConverter",
-          "conv_class_path": "",
-          "channel_id": 8,
-          "pdu_size": 3044,
-          "write_cycle": 1,
-          "method_type": "MQTT"
+          "method_type": "SHM"
         }
       ]
     }

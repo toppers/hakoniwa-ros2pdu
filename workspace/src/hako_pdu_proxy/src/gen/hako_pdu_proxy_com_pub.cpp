@@ -3,7 +3,6 @@
 #include "std_msgs/pdu_ctype_conv_String.hpp"
 
 static ROS_NODE_TYPE my_node;
-
 DECLARE_PUBLISHER(std_msgs::msg::String, TB3RoboModel_actuator_message);
 
 void hako_pdu_proxy_com_pub_init(ROS_NODE_TYPE node)

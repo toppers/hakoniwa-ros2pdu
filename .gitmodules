@@ -1,0 +1,3 @@
+[submodule "mros2-posix"]
+	path = mros2-posix
+	url = https://github.com/mROS-base/mros2-posix.git
