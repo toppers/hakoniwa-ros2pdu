@@ -10,7 +10,7 @@
 {%-     endfor %}
 {%- endfor %}
 
-static std::shared_ptr<rclcpp::Node> my_node;
+static ROS_NODE_TYPE my_node;
 
 {%- for robo in container.json_data["robots"]: %}
 {%-     for item in robo["rpc_pdu_writers"]: %}
@@ -21,7 +21,7 @@ DECLARE_PUBLISHER({{container.get_pkg(item)}}::msg::{{container.get_type(item)}}
 {%-     endfor %}
 {%- endfor %}
 
-void hako_pdu_proxy_com_pub_init(std::shared_ptr<rclcpp::Node> node)
+void hako_pdu_proxy_com_pub_init(ROS_NODE_TYPE node)
 {
     my_node = node;
 
