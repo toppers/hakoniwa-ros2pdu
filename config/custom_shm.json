@@ -1,0 +1,28 @@
+{
+  "robots": [
+    {
+      "name": "TB3RoboModel",
+      "shm_pdu_readers": [
+        {
+          "type": "std_msgs/String",
+          "org_name": "sensor_message",
+          "name": "TB3RoboModel_sensor_message",
+          "channel_id": 0,
+          "pdu_size": 256,
+          "method_type": "SHM"
+        }
+      ],
+      "shm_pdu_writers": [
+        {
+          "type": "std_msgs/String",
+          "org_name": "actuator_message",
+          "name": "TB3RoboModel_actuator_message",
+          "channel_id": 1,
+          "pdu_size": 256,
+          "write_cycle": 1,
+          "method_type": "SHM"
+        }
+      ]
+    }
+  ]
+}
