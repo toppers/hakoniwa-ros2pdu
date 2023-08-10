@@ -5,18 +5,14 @@
 #include "hako_pdu_proxy_com.hpp"
 #include <iostream>
 #include <string.h>
-
-using namespace std::chrono_literals;
-
+#include <unistd.h>
 
 int main(int argc, char **argv) 
 {
     const char *node_name = "hako_pdu_proxy_node";
     std::cout << "START:" << node_name << std::endl;
     hako_pdu_proxy_init(node_name, 100 * 1000);
-    rclcpp::init(argc, argv);
-    auto node = rclcpp::Node::make_shared(node_name);
-
+    ROS_NODE_TYPE node = hako_pdu_proxy_ros_init(argc, argv, node_name);
     /*
      * create publishers
      */
@@ -27,8 +23,9 @@ int main(int argc, char **argv)
      */
     hako_pdu_proxy_com_sub_init(node);
 
-    rclcpp::WallRate rate(100ms);
-    while (rclcpp::ok()) {
+    HAKO_PDU_PROXY_ROS_WALL_RATE(rate, 100ms)
+
+    while (hako_pdu_proxy_ros_ok()) {
         bool can_step = false;
         if (hako_pdu_proxy_run(can_step) == false) {
             break;
@@ -40,13 +37,13 @@ int main(int argc, char **argv)
             hako_pdu_proxy_com_publish();
         }
 
-        rclcpp::spin_some(node);
-        rate.sleep();
+        hako_pdu_proxy_ros_spin(node);
+        HAKO_PDU_PROXY_ROS_WALL_RATE_sleep(rate);
     }
     hako_pdu_proxy_fin();
     std::cout << "EXIT" << std::endl;
 
-    rclcpp::shutdown();
+    hako_pdu_proxy_ros_shutdown();
     return 0;
 }
 

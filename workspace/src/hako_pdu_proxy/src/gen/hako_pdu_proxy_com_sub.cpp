@@ -1,15 +1,16 @@
 #include "../hako_pdu_proxy_com.hpp"
 #include "../hako_pdu_proxy_libs.hpp"
-#include "geometry_msgs/pdu_ctype_conv_Twist.hpp"
+#include "std_msgs/pdu_ctype_conv_String.hpp"
 
-static std::shared_ptr<rclcpp::Node> my_node;
-DECLARE_SUBSCRIBER(geometry_msgs::msg::Twist, TB3RoboModel_cmd_vel);
-DEFINE_SUB_CALLBACK(geometry_msgs, Twist, "TB3RoboModel", 0, TB3RoboModel_cmd_vel)
+static ROS_NODE_TYPE my_node;
 
-void hako_pdu_proxy_com_sub_init(std::shared_ptr<rclcpp::Node> node)
+DECLARE_SUBSCRIBER(std_msgs::msg::String, TB3RoboModel_sensor_message);
+DEFINE_SUB_CALLBACK(std_msgs, String, "TB3RoboModel", 0, TB3RoboModel_sensor_message)
+
+void hako_pdu_proxy_com_sub_init(ROS_NODE_TYPE node)
 {
     my_node = node;
-    CREATE_SUBSCRIBER(geometry_msgs, Twist, "TB3RoboModel", 0, TB3RoboModel_cmd_vel);
+    CREATE_SUBSCRIBER(std_msgs, String, "TB3RoboModel", 0, TB3RoboModel_sensor_message);
 
     return;
 }
