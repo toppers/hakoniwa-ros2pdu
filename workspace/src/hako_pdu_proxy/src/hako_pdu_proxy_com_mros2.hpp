@@ -38,7 +38,7 @@ static inline ROS_NODE_TYPE hako_pdu_proxy_ros_init(int argc, char** argv, const
     osKernelStart();
 
     printf("mros2-posix start!\r\n");
-    printf("app name: echoback_string\r\n");
+    printf("app name: hako_pdu_proxy(mros2-posix)\r\n");
     mros2::init(0, NULL);
     MROS2_DEBUG("mROS 2 initialization is completed\r\n");
 
@@ -61,7 +61,8 @@ static inline void hako_pdu_proxy_ros_shutdown()
 
 static inline void hako_pdu_proxy_ros_spin(ROS_NODE_TYPE node)
 {
-    mros2::spin();
+    //mros2::spin();
+    usleep(10*1000); //sleep 10msec
 }
 
 #endif /* _CAN_PROXY_COM_MROS2_HPP_ */

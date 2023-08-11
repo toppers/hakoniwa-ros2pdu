@@ -21,8 +21,8 @@ bool hako_pdu_proxy_init(const char *asset_name, HakoTimeType delta_usec)
 {
     hako_delta_usec = delta_usec;
 
-    signal(SIGINT, hako_asset_signal_handler);
-    signal(SIGTERM, hako_asset_signal_handler);
+    //signal(SIGINT, hako_asset_signal_handler);
+    //signal(SIGTERM, hako_asset_signal_handler);
 
     hako_asset_name = new std::string(asset_name);
 
@@ -61,6 +61,10 @@ bool hako_pdu_proxy_run(bool &can_step)
     }
     else if (hako_asset->is_pdu_sync_mode(*hako_asset_name)) {
         hako_asset->notify_write_pdu_done(*hako_asset_name);
+        //std::cout << "WRITE PDU_DONE " << std::endl;
+    }
+    else {
+        //std::cout << "WHAT?? " << hako_asset_is_end << std::endl;
     }
     return (hako_asset_is_end == false);
 }
