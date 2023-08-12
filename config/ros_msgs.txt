@@ -1,3 +1,4 @@
+pico_msgs/PicoSensor
 can_msgs/HakoCan
 ev3_msgs/Ev3PduSensor
 ev3_msgs/Ev3PduActuator
