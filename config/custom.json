@@ -2,21 +2,21 @@
   "robots": [
     {
       "name": "TB3RoboModel",
-      "rpc_pdu_readers": [
+      "shm_pdu_readers": [
         {
-          "type": "std_msgs/String",
-          "org_name": "sensor_message",
-          "name": "TB3RoboModel_sensor_message",
+          "type": "geometry_msgs/Twist",
+          "org_name": "actuator_message",
+          "name": "TB3RoboModel_actuator_message",
           "channel_id": 0,
           "pdu_size": 256,
           "method_type": "SHM"
         }
       ],
-      "rpc_pdu_writers": [
+      "shm_pdu_writers": [
         {
-          "type": "std_msgs/String",
-          "org_name": "actuator_message",
-          "name": "TB3RoboModel_actuator_message",
+          "type": "pico_msgs/LightSensor",
+          "org_name": "sensor_message",
+          "name": "TB3RoboModel_sensor_message",
           "channel_id": 1,
           "pdu_size": 256,
           "write_cycle": 1,

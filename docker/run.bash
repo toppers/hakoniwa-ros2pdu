@@ -5,7 +5,7 @@ IMAGE_NAME=`cat docker/image_name.txt`
 IMAGE_TAG=`cat appendix/latest_version.txt`
 DOCKER_IMAGE=${IMAGE_NAME}:${IMAGE_TAG}
 
-
+ARCH=`arch`
 OS_TYPE=`bash utils/detect_os_type.bash`
 
 if [ ${OS_TYPE} != "Mac" ]
@@ -37,18 +37,28 @@ fi
 
 if [ ${OS_TYPE} != "Mac" ]
 then
-docker run -v ${HAKONIWA_TOP_DIR}:/root/workspace/hakoniwa-ros2pdu \
-	-it --rm \
-	--net host \
-	-e CORE_IPADDR=${IPADDR} \
-	-e OS_TYPE=${OS_TYPE} \
-	--name hakoniwa-ros2pdu ${DOCKER_IMAGE} 
+	docker run -v ${HAKONIWA_TOP_DIR}:/root/workspace/hakoniwa-ros2pdu \
+		-it --rm \
+		--net host \
+		-e CORE_IPADDR=${IPADDR} \
+		-e OS_TYPE=${OS_TYPE} \
+		--name hakoniwa-ros2pdu ${DOCKER_IMAGE} 
 else
-docker run -v ${HAKONIWA_TOP_DIR}:/root/workspace/hakoniwa-ros2pdu \
-	-it --rm \
-	--ip ${IPADDR} -p 10000:10000 \
-	-e CORE_IPADDR=${IPADDR} \
-	-e ROS_UNITY_IPADDR=${IPADDR} \
-	-e OS_TYPE=${OS_TYPE} \
-	--name hakoniwa-ros-sim ${DOCKER_IMAGE} 
+	if [ $ARCH = "arm64" ]
+	then
+		docker run -v ${HAKONIWA_TOP_DIR}:/root/workspace/hakoniwa-ros2pdu \
+            --platform linux/amd64 \
+			-it --rm \
+			-e CORE_IPADDR=${IPADDR} \
+			-e ROS_UNITY_IPADDR=${IPADDR} \
+			-e OS_TYPE=${OS_TYPE} \
+			--name hakoniwa-ros-sim ${DOCKER_IMAGE} 
+	else
+		docker run -v ${HAKONIWA_TOP_DIR}:/root/workspace/hakoniwa-ros2pdu \
+			-it --rm \
+			-e CORE_IPADDR=${IPADDR} \
+			-e ROS_UNITY_IPADDR=${IPADDR} \
+			-e OS_TYPE=${OS_TYPE} \
+			--name hakoniwa-ros-sim ${DOCKER_IMAGE} 
+	fi
 fi
