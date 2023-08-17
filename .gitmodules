@@ -1,3 +1,6 @@
 [submodule "mros2-posix"]
 	path = mros2-posix
 	url = https://github.com/mROS-base/mros2-posix.git
+[submodule "third-party/pico_msgs"]
+	path = third-party/pico_msgs
+	url = https://github.com/rt-net/pico_msgs.git
