@@ -1,0 +1,16 @@
+uint64 time_usec
+float32 xacc
+float32 yacc
+float32 zacc
+float32 xgyro
+float32 ygyro
+float32 zgyro
+float32 xmag
+float32 ymag
+float32 zmag
+float32 abs_pressure
+float32 diff_pressure
+float32 pressure_alt
+float32 temperature
+uint32 fields_updated
+uint8 id
