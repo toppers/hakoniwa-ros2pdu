@@ -27,7 +27,7 @@ static inline int hako_convert_pdu2mavlink_{{container.msg_type_name}}(Hako_{{co
     dst.{{item["name"]}} = src.{{item["name"]}};
 {%-	    elif (container.is_primitive_array(item["type"])): %}
     //primitive array convertor
-    for (int i = 0; i < M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}); i++) {
+    for (int i = 0; i < (int)M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}); i++) {
         dst.{{item["name"]}}[i] = src.{{item["name"]}}[i];
     }
 {%-	    else: %}
@@ -50,7 +50,7 @@ static inline int hako_convert_mavlink2pdu_{{container.msg_type_name}}(mavlink_{
     dst.{{item["name"]}} = src.{{item["name"]}};
 {%-	    elif (container.is_primitive_array(item["type"])): %}
     //primitive array convertor
-    for (int i = 0; i < M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}); i++) {
+    for (int i = 0; i < (int)M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}); i++) {
         dst.{{item["name"]}}[i] = src.{{item["name"]}}[i];
     }
 {%-	    else: %}

@@ -9,7 +9,7 @@ int16 vn
 int16 ve
 int16 vd
 uint16 cog
-uint8 satelites_visible
+uint8 satellites_visible
 uint8 id
 uint8 yaw
 uint8 fix_type

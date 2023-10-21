@@ -15,7 +15,7 @@ typedef struct {
         Hako_int16 ve;
         Hako_int16 vd;
         Hako_uint16 cog;
-        Hako_uint8 satelites_visible;
+        Hako_uint8 satellites_visible;
         Hako_uint8 id;
         Hako_uint8 yaw;
         Hako_uint8 fix_type;

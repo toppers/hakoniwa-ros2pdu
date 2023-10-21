@@ -47,7 +47,7 @@ static inline int hako_convert_pdu2ros_HakoHilGps(Hako_HakoHilGps &src,  hako_ma
     //primitive convert
     hako_convert_pdu2ros(src.cog, dst.cog);
     //primitive convert
-    hako_convert_pdu2ros(src.satelites_visible, dst.satelites_visible);
+    hako_convert_pdu2ros(src.satellites_visible, dst.satellites_visible);
     //primitive convert
     hako_convert_pdu2ros(src.id, dst.id);
     //primitive convert
@@ -111,7 +111,7 @@ static inline int hako_convert_ros2pdu_HakoHilGps(hako_mavlink_msgs::msg::HakoHi
     //primitive convert
     hako_convert_ros2pdu(src.cog, dst.cog);
     //primitive convert
-    hako_convert_ros2pdu(src.satelites_visible, dst.satelites_visible);
+    hako_convert_ros2pdu(src.satellites_visible, dst.satellites_visible);
     //primitive convert
     hako_convert_ros2pdu(src.id, dst.id);
     //primitive convert

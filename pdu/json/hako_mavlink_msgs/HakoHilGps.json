@@ -45,7 +45,7 @@
       "type": "uint16"
     },
     {
-      "name": "satelites_visible",
+      "name": "satellites_visible",
       "type": "uint8"
     },
     {
