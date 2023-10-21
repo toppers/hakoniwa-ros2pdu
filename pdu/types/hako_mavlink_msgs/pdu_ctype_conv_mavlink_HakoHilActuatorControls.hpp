@@ -24,7 +24,7 @@ static inline int hako_convert_pdu2mavlink_HakoHilActuatorControls(Hako_HakoHilA
     //primitive convert
     dst.time_usec = src.time_usec;
     //primitive array convertor
-    for (int i = 0; i < M_ARRAY_SIZE(Hako_HakoHilActuatorControls, Hako_float32, controls); i++) {
+    for (int i = 0; i < (int)M_ARRAY_SIZE(Hako_HakoHilActuatorControls, Hako_float32, controls); i++) {
         dst.controls[i] = src.controls[i];
     }
     //primitive convert
@@ -44,7 +44,7 @@ static inline int hako_convert_mavlink2pdu_HakoHilActuatorControls(mavlink_hil_a
     //primitive convert
     dst.time_usec = src.time_usec;
     //primitive array convertor
-    for (int i = 0; i < M_ARRAY_SIZE(Hako_HakoHilActuatorControls, Hako_float32, controls); i++) {
+    for (int i = 0; i < (int)M_ARRAY_SIZE(Hako_HakoHilActuatorControls, Hako_float32, controls); i++) {
         dst.controls[i] = src.controls[i];
     }
     //primitive convert

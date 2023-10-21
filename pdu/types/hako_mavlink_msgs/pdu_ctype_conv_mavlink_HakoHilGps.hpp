@@ -44,7 +44,7 @@ static inline int hako_convert_pdu2mavlink_HakoHilGps(Hako_HakoHilGps &src,  mav
     //primitive convert
     dst.cog = src.cog;
     //primitive convert
-    dst.satelites_visible = src.satelites_visible;
+    dst.satellites_visible = src.satellites_visible;
     //primitive convert
     dst.id = src.id;
     //primitive convert
@@ -84,7 +84,7 @@ static inline int hako_convert_mavlink2pdu_HakoHilGps(mavlink_hil_gps_t &src, Ha
     //primitive convert
     dst.cog = src.cog;
     //primitive convert
-    dst.satelites_visible = src.satelites_visible;
+    dst.satellites_visible = src.satellites_visible;
     //primitive convert
     dst.id = src.id;
     //primitive convert

@@ -24,7 +24,7 @@ static inline int hako_convert_pdu2mavlink_HakoHilStateQuaternion(Hako_HakoHilSt
     //primitive convert
     dst.time_usec = src.time_usec;
     //primitive array convertor
-    for (int i = 0; i < M_ARRAY_SIZE(Hako_HakoHilStateQuaternion, Hako_float32, attitude_quaternion); i++) {
+    for (int i = 0; i < (int)M_ARRAY_SIZE(Hako_HakoHilStateQuaternion, Hako_float32, attitude_quaternion); i++) {
         dst.attitude_quaternion[i] = src.attitude_quaternion[i];
     }
     //primitive convert
@@ -68,7 +68,7 @@ static inline int hako_convert_mavlink2pdu_HakoHilStateQuaternion(mavlink_hil_st
     //primitive convert
     dst.time_usec = src.time_usec;
     //primitive array convertor
-    for (int i = 0; i < M_ARRAY_SIZE(Hako_HakoHilStateQuaternion, Hako_float32, attitude_quaternion); i++) {
+    for (int i = 0; i < (int)M_ARRAY_SIZE(Hako_HakoHilStateQuaternion, Hako_float32, attitude_quaternion); i++) {
         dst.attitude_quaternion[i] = src.attitude_quaternion[i];
     }
     //primitive convert
