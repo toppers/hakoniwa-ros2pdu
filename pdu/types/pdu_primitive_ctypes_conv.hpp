@@ -4,6 +4,8 @@
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
 #include <string>
+#include <array>
+#include <vector>
 
 #define M_SIZE(type, mem)   sizeof(((type *)0)->mem)
 #define M_ARRAY_SIZE(type, mem_type, mem)       (M_SIZE(type, mem) / sizeof(mem_type))
