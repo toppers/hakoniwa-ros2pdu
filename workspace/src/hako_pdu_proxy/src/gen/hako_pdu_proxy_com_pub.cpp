@@ -1,14 +1,26 @@
 #include "../hako_pdu_proxy_com.hpp"
 #include "../hako_pdu_proxy_libs.hpp"
-#include "pico_msgs/pdu_ctype_conv_LightSensor.hpp"
+#include "sensor_msgs/pdu_ctype_conv_JointState.hpp"
+#include "sensor_msgs/pdu_ctype_conv_Imu.hpp"
+#include "nav_msgs/pdu_ctype_conv_Odometry.hpp"
+#include "tf2_msgs/pdu_ctype_conv_TFMessage.hpp"
+#include "sensor_msgs/pdu_ctype_conv_LaserScan.hpp"
 
 static ROS_NODE_TYPE my_node;
-DECLARE_PUBLISHER(pico_msgs::msg::LightSensor, TB3RoboModel_sensor_message);
+DECLARE_PUBLISHER(sensor_msgs::msg::JointState, TB3RoboModel_joint_states);
+DECLARE_PUBLISHER(sensor_msgs::msg::Imu, TB3RoboModel_imu);
+DECLARE_PUBLISHER(nav_msgs::msg::Odometry, TB3RoboModel_odom);
+DECLARE_PUBLISHER(tf2_msgs::msg::TFMessage, TB3RoboModel_tf);
+DECLARE_PUBLISHER(sensor_msgs::msg::LaserScan, TB3RoboModel_scan);
 
 void hako_pdu_proxy_com_pub_init(ROS_NODE_TYPE node)
 {
     my_node = node;
-    CREATE_PUBLISHER(pico_msgs, LightSensor, "TB3RoboModel", 1, TB3RoboModel_sensor_message);
+    CREATE_PUBLISHER(sensor_msgs, JointState, "TB3RoboModel", 1, TB3RoboModel_joint_states);
+    CREATE_PUBLISHER(sensor_msgs, Imu, "TB3RoboModel", 2, TB3RoboModel_imu);
+    CREATE_PUBLISHER(nav_msgs, Odometry, "TB3RoboModel", 3, TB3RoboModel_odom);
+    CREATE_PUBLISHER(tf2_msgs, TFMessage, "TB3RoboModel", 4, TB3RoboModel_tf);
+    CREATE_PUBLISHER(sensor_msgs, LaserScan, "TB3RoboModel", 5, TB3RoboModel_scan);
 
     return;
 }
@@ -16,7 +28,11 @@ void hako_pdu_proxy_com_pub_init(ROS_NODE_TYPE node)
 void hako_pdu_proxy_com_publish(void)
 {
     static unsigned long long count = 0;
-    PUBLISH_PDU_TOPIC(pico_msgs, LightSensor, "TB3RoboModel", 1, TB3RoboModel_sensor_message, count, 1);
+    PUBLISH_PDU_TOPIC(sensor_msgs, JointState, "TB3RoboModel", 1, TB3RoboModel_joint_states, count, 1);
+    PUBLISH_PDU_TOPIC(sensor_msgs, Imu, "TB3RoboModel", 2, TB3RoboModel_imu, count, 1);
+    PUBLISH_PDU_TOPIC(nav_msgs, Odometry, "TB3RoboModel", 3, TB3RoboModel_odom, count, 1);
+    PUBLISH_PDU_TOPIC(tf2_msgs, TFMessage, "TB3RoboModel", 4, TB3RoboModel_tf, count, 1);
+    PUBLISH_PDU_TOPIC(sensor_msgs, LaserScan, "TB3RoboModel", 5, TB3RoboModel_scan, count, 1);
     count++;
     return;
 }
