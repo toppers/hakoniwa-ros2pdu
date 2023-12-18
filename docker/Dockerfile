@@ -1,4 +1,4 @@
-FROM ros:foxy as hakoniwa-ros2pdu-dev
+FROM ros:humble as hakoniwa-ros2pdu-dev
 
 ARG DEBIAN_FRONTEND=noninteractive
 

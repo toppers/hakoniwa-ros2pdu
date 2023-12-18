@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source /opt/ros/foxy/setup.bash
+source /opt/ros/humble/setup.bash
 
 colcon build --packages-select can_msgs
 #colcon build --packages-select can_proxy

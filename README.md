@@ -32,7 +32,7 @@ ev3_msgs/EV3PduActuator
 ### 設定例(config/search_path.txt)
 
 ```
-/opt/ros/foxy/share
+/opt/ros/humble/share
 /root/workspace/hakoniwa-ros2pdu/workspace/src
 ```
 
