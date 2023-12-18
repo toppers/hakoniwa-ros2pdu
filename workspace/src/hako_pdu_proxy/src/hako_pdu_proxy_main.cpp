@@ -23,7 +23,9 @@ int main(int argc, char **argv)
      */
     hako_pdu_proxy_com_sub_init(node);
 
-    HAKO_PDU_PROXY_ROS_WALL_RATE(rate, 100ms)
+#ifndef MROS2
+    rclcpp::WallRate rate(100);
+#endif
 
     while (hako_pdu_proxy_ros_ok()) {
         bool can_step = false;
@@ -38,7 +40,9 @@ int main(int argc, char **argv)
         }
 
         hako_pdu_proxy_ros_spin(node);
-        HAKO_PDU_PROXY_ROS_WALL_RATE_sleep(rate);
+#ifndef MROS2
+        rate.sleep();
+#endif
     }
     hako_pdu_proxy_fin();
     std::cout << "EXIT" << std::endl;

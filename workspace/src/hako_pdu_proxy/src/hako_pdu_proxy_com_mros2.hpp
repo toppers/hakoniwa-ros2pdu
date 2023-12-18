@@ -46,9 +46,6 @@ static inline ROS_NODE_TYPE hako_pdu_proxy_ros_init(int argc, char** argv, const
     return &node_;
 }
 
-#define HAKO_PDU_PROXY_ROS_WALL_RATE(var, rate) 
-#define HAKO_PDU_PROXY_ROS_WALL_RATE_sleep(rate) 
-
 static inline bool hako_pdu_proxy_ros_ok()
 {
     return true;

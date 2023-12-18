@@ -35,13 +35,6 @@ static inline ROS_NODE_TYPE hako_pdu_proxy_ros_init(int argc, char** argv, const
     rclcpp::init(argc, argv);
     return rclcpp::Node::make_shared(node_name);
 }
-#define HAKO_PDU_PROXY_ROS_WALL_RATE(var, rate) do { ¥
-    rclcpp::WallRate var(rate); ¥
-} while (0)
-
-#define HAKO_PDU_PROXY_ROS_WALL_RATE_sleep(var) do { ¥
-    var.sleep();
-} while (0)
 
 static inline bool hako_pdu_proxy_ros_ok()
 {
