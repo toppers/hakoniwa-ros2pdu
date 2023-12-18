@@ -88,4 +88,10 @@ target_include_directories(
   PRIVATE ${PROJECT_SOURCE_DIR}/workspace/custom_msgs
 )
 
-target_link_libraries(mros2-posix /usr/local/lib/hakoniwa/libshakoc.dylib mros2 lwip cmsis pthread)
+if(APPLE)
+  target_link_libraries(mros2-posix /usr/local/lib/hakoniwa/libshakoc.dylib mros2 lwip cmsis pthread)
+elseif(UNIX)
+  target_link_libraries(mros2-posix /usr/local/lib/hakoniwa/libshakoc.so mros2 lwip cmsis pthread)
+else()
+  # not support
+endif(APPLE)
