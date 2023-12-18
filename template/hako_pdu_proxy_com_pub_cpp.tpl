@@ -42,10 +42,10 @@ void hako_pdu_proxy_com_publish(void)
     static unsigned long long count = 0;
 {%- for robo in container.json_data["robots"]: %}
 {%-     for item in robo["rpc_pdu_writers"]: %}
-    PUBLISH_PDU_TOPIC({{container.get_pkg(item)}}, {{container.get_type(item)}}, "{{robo["name"]}}", {{container.get_channel(item)}}, {{container.get_topic_name(item)}}, count, {{item["write_cycle"]}});
+    PUBLISH_PDU_TOPIC({{container.get_pkg(item)}}, {{container.get_type(item)}}, "{{robo["name"]}}", {{container.get_channel(item)}}, {{container.get_topic_name(item)}}, count, {{container.get_write_cycle(item)}});
 {%-     endfor %}
 {%-     for item in robo["shm_pdu_writers"]: %}
-    PUBLISH_PDU_TOPIC({{container.get_pkg(item)}}, {{container.get_type(item)}}, "{{robo["name"]}}", {{container.get_channel(item)}}, {{container.get_topic_name(item)}}, count, {{item["write_cycle"]}});
+    PUBLISH_PDU_TOPIC({{container.get_pkg(item)}}, {{container.get_type(item)}}, "{{robo["name"]}}", {{container.get_channel(item)}}, {{container.get_topic_name(item)}}, count, {{container.get_write_cycle(item)}});
 {%-     endfor %}
 {%- endfor %}
     count++;

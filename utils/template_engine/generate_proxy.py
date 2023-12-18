@@ -34,11 +34,15 @@ def get_channel(item):
 def get_topic_name(item):
 	return item["name"].replace('/', '_')
 
+def get_write_cycle(item):
+	return item.get("write_cycle", 1)
+
 tmp_file = open(custom_json_file)
 container.get_pkg = get_pkg
 container.get_type = get_type
 container.get_channel = get_channel
 container.get_topic_name = get_topic_name
+container.get_write_cycle = get_write_cycle
 container.json_data = json.load(tmp_file)
 
 tpl = env.get_template(tpl_file)
