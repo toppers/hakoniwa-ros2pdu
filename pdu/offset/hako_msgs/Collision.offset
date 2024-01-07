@@ -1,4 +1,4 @@
 single:primitive:collision:bool:0:4
 single:primitive:contact_num:uint32:4:4
-array:struct:contact_position:Point:8:240:10
+array:struct:contact_position:geometry_msgs/Point:8:240:10
 single:primitive:restitution_coefficient:float64:248:8

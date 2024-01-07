@@ -88,6 +88,14 @@ def get_array_type(name):
 	tmp = name.split('[')
 	return get_msg_type(tmp[0].strip())
 
+def get_struct_array_type(name):
+    """
+    配列型の構造体要素の型を返しますが、パッケージ名を保持します。
+    """
+    # 配列型の基本型を抽出
+    base_type = name.split('[')[0].strip()
+    return base_type
+
 def get_array_size(mem_name, name):
 	global container
 	pkg = container.pkg_name
@@ -151,6 +159,7 @@ container.get_msg_pkg = get_msg_pkg
 container.pkg_name = pkg_name
 container.msg_type_name = msg_type_name
 container.get_array_size = get_array_size
+container.get_struct_array_type = get_struct_array_type
 container.is_string = is_string
 
 container.includes = []
