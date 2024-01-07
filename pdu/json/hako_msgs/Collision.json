@@ -9,6 +9,10 @@
       "type": "uint32"
     },
     {
+      "name": "relative_velocity",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
       "name": "contact_position",
       "type": "geometry_msgs/Point[10]"
     },

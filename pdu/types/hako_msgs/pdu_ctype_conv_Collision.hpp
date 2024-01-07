@@ -17,6 +17,7 @@
  * Dependent Convertors
  */
 #include "geometry_msgs/pdu_ctype_conv_Point.hpp"
+#include "geometry_msgs/pdu_ctype_conv_Vector3.hpp"
 
 /***************************
  *
@@ -29,6 +30,8 @@ static inline int hako_convert_pdu2ros_Collision(Hako_Collision &src,  hako_msgs
     hako_convert_pdu2ros(src.collision, dst.collision);
     //primitive convert
     hako_convert_pdu2ros(src.contact_num, dst.contact_num);
+    //struct convert
+    hako_convert_pdu2ros_Vector3(src.relative_velocity, dst.relative_velocity);
     //struct array convertor
     (void)hako_convert_pdu2ros_array_Point<M_ARRAY_SIZE(Hako_Collision, Hako_Point, contact_position), 10>(
         src.contact_position, dst.contact_position);
@@ -72,6 +75,8 @@ static inline int hako_convert_ros2pdu_Collision(hako_msgs::msg::Collision &src,
     hako_convert_ros2pdu(src.collision, dst.collision);
     //primitive convert
     hako_convert_ros2pdu(src.contact_num, dst.contact_num);
+    //struct convert
+    hako_convert_ros2pdu_Vector3(src.relative_velocity, dst.relative_velocity);
     //struct array convertor
     (void)hako_convert_ros2pdu_array_Point<10, M_ARRAY_SIZE(Hako_Collision, Hako_Point, contact_position)>(
         src.contact_position, dst.contact_position);
