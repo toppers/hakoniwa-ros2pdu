@@ -1,6 +1,7 @@
 pico_msgs/LightSensor
 hako_msgs/Collision
 hako_msgs/ManualPosAttControl
+hako_msgs/Disturbance
 can_msgs/HakoCan
 ev3_msgs/Ev3PduSensor
 ev3_msgs/Ev3PduActuator

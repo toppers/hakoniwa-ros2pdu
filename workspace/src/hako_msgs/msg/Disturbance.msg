@@ -1,0 +1,1 @@
+hako_msgs/DisturbanceTemperature d_temp
