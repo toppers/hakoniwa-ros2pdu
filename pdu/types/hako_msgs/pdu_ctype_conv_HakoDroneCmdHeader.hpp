@@ -25,7 +25,9 @@
 static inline int hako_convert_pdu2ros_HakoDroneCmdHeader(Hako_HakoDroneCmdHeader &src,  hako_msgs::msg::HakoDroneCmdHeader &dst)
 {
     //primitive convert
-    hako_convert_pdu2ros(src.has_result, dst.has_result);
+    hako_convert_pdu2ros(src.request, dst.request);
+    //primitive convert
+    hako_convert_pdu2ros(src.result, dst.result);
     //primitive convert
     hako_convert_pdu2ros(src.result_code, dst.result_code);
     return 0;
@@ -63,7 +65,9 @@ int hako_convert_pdu2ros_array_HakoDroneCmdHeader(Hako_HakoDroneCmdHeader src[],
 static inline int hako_convert_ros2pdu_HakoDroneCmdHeader(hako_msgs::msg::HakoDroneCmdHeader &src, Hako_HakoDroneCmdHeader &dst)
 {
     //primitive convert
-    hako_convert_ros2pdu(src.has_result, dst.has_result);
+    hako_convert_ros2pdu(src.request, dst.request);
+    //primitive convert
+    hako_convert_ros2pdu(src.result, dst.result);
     //primitive convert
     hako_convert_ros2pdu(src.result_code, dst.result_code);
     return 0;

@@ -4,7 +4,8 @@
 #include "pdu_primitive_ctypes.h"
 
 typedef struct {
-        Hako_bool has_result;
+        Hako_bool request;
+        Hako_bool result;
         Hako_int32 result_code;
 } Hako_HakoDroneCmdHeader;
 

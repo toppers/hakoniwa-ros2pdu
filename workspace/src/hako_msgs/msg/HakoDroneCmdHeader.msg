@@ -1,2 +1,3 @@
-bool has_result
+bool request
+bool result
 int32 result_code
