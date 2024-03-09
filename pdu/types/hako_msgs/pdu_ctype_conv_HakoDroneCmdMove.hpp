@@ -32,6 +32,8 @@ static inline int hako_convert_pdu2ros_HakoDroneCmdMove(Hako_HakoDroneCmdMove &s
     //primitive convert
     hako_convert_pdu2ros(src.y, dst.y);
     //primitive convert
+    hako_convert_pdu2ros(src.z, dst.z);
+    //primitive convert
     hako_convert_pdu2ros(src.speed, dst.speed);
     return 0;
 }
@@ -73,6 +75,8 @@ static inline int hako_convert_ros2pdu_HakoDroneCmdMove(hako_msgs::msg::HakoDron
     hako_convert_ros2pdu(src.x, dst.x);
     //primitive convert
     hako_convert_ros2pdu(src.y, dst.y);
+    //primitive convert
+    hako_convert_ros2pdu(src.z, dst.z);
     //primitive convert
     hako_convert_ros2pdu(src.speed, dst.speed);
     return 0;

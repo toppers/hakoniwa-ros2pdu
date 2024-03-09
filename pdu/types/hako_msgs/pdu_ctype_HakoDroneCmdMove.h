@@ -8,6 +8,7 @@ typedef struct {
         Hako_HakoDroneCmdHeader    header;
         Hako_float64 x;
         Hako_float64 y;
+        Hako_float64 z;
         Hako_float64 speed;
 } Hako_HakoDroneCmdMove;
 
