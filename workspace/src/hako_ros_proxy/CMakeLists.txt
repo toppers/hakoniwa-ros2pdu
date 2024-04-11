@@ -26,9 +26,9 @@ find_package(tf2_msgs REQUIRED)
 
 add_executable(hako_ros_proxy_node 
   src/hako_ros_proxy_main.cpp
-#  src/gen/hako_pdu_proxy_com_pub.cpp
-#  src/gen/hako_pdu_proxy_com_sub.cpp
-#  src/hako_pdu_proxy_libs.cpp
+  src/gen/hako_ros_proxy_com_pub.cpp
+  src/gen/hako_ros_proxy_com_sub.cpp
+  src/hako_ros_proxy_libs.cpp
 )
 ament_target_dependencies(hako_ros_proxy_node 
   rclcpp 
