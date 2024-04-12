@@ -25,11 +25,5 @@ do {    \
 } while (0)
 
 
-#ifdef MROS2
-#include "hako_ros_proxy_com_mros2.hpp"
-#else
-#include "ros2/hako_ros_proxy_com_ros2_pub.hpp"
-#include "ros2/hako_ros_proxy_com_ros2_sub.hpp"
-#endif
 
 #endif /* _HAKO_ROS_PROXY_COM_HPP_ */

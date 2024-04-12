@@ -7,6 +7,12 @@
 #include <string.h>
 #include <unistd.h>
 
+#ifdef MROS2
+#include "hako_ros_proxy_com_mros2.hpp"
+#else
+#include "com_ros2/ros2/hako_ros_proxy_com_ros2.hpp"
+#endif
+
 int main(int argc, char *argv[]) 
 {
     const char *node_name = "hako_ros_proxy_node";

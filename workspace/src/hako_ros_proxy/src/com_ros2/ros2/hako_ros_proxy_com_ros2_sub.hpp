@@ -1,7 +1,9 @@
 #ifndef _HAKO_ROS_PROXY_COM_ROS2_SUB_HPP_
 #define _HAKO_ROS_PROXY_COM_ROS2_SUB_HPP_
 
+#include "../hako_ros_proxy_com.hpp"
 #include "hako_ros_proxy_com_ros2.hpp"
+#include "../../com_zenoh/hako_ros_proxy_com_zenoh_pub.hpp"
 
 #define ROS_PROXY_DECLARE_SUBSCRIBER(type, topic_name) \
     static std::shared_ptr<rclcpp::Subscription<type>> subscriber_ ##topic_name
@@ -11,6 +13,7 @@ static void ROS_PROXY_SUB_CALLBACK_NAME(topic_name)(const pkg::msg::ros_type::Sh
 {   \
     Hako_ ##ros_type pdu_msg;   \
     hako_convert_ros2pdu_ ##ros_type (*ros_msg, pdu_msg); \
+    ZENOH_PUBLISH_TOPIC(topic_name, (const uint8_t*)&pdu_msg, sizeof(pdu_msg));  \
 }
 
 
