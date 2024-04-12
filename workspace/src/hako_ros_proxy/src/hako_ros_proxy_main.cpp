@@ -1,17 +1,11 @@
-#include <stdio.h>
-
-#include "hako_ros_proxy_libs.hpp"
-#include "com_ros2/hako_ros_proxy_com.hpp"
-#include "com_zenoh/hako_ros_proxy_com_zenoh.hpp"
 #include <iostream>
-#include <string.h>
-#include <unistd.h>
 
 #ifdef MROS2
 #include "hako_ros_proxy_com_mros2.hpp"
 #else
 #include "com_ros2/ros2/hako_ros_proxy_com_ros2.hpp"
 #endif
+#include "com_zenoh/hako_ros_proxy_com_zenoh.hpp"
 
 int main(int argc, char *argv[]) 
 {
@@ -35,13 +29,9 @@ int main(int argc, char *argv[])
     hako_ros_proxy_com_sub_init(node);
 
     while (hako_ros_proxy_ok()) {
-        if (hako_ros_proxy_run() == false) {
-            break;
-        }
         hako_ros_proxy_spin(node);
     }
     hako_ros_proxy_zenoh_finalize();
-    hako_ros_proxy_fin();
     std::cout << "EXIT" << std::endl;
 
     hako_ros_proxy_shutdown();

@@ -1,7 +1,7 @@
 #ifndef _HAKO_ROS_PROXY_COM_ROS2_SUB_HPP_
 #define _HAKO_ROS_PROXY_COM_ROS2_SUB_HPP_
 
-#include "../hako_ros_proxy_com.hpp"
+#include "../hako_ros_proxy_ros2_common.hpp"
 #include "hako_ros_proxy_com_ros2.hpp"
 #include "../../com_zenoh/hako_ros_proxy_com_zenoh_pub.hpp"
 

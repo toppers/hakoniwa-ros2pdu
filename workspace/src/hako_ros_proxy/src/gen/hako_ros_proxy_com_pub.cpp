@@ -1,4 +1,3 @@
-#include "../hako_ros_proxy_libs.hpp"
 #include "../com_ros2/ros2/hako_ros_proxy_com_ros2_pub.hpp"
 #include "../com_zenoh/hako_ros_proxy_com_zenoh_sub.hpp"
 #include "geometry_msgs/pdu_ctype_conv_Twist.hpp"

@@ -1,5 +1,5 @@
-#ifndef _HAKO_ROS_PROXY_COM_HPP_
-#define _HAKO_ROS_PROXY_COM_HPP_
+#ifndef _HAKO_ROS_PROXY_ROS2_COMMON_HPP_
+#define _HAKO_ROS_PROXY_ROS2_COMMON_HPP_
 
 /*
  * internal apis
@@ -26,4 +26,4 @@ do {    \
 
 
 
-#endif /* _HAKO_ROS_PROXY_COM_HPP_ */
+#endif /* _HAKO_ROS_PROXY_ROS2_COMMON_HPP_ */

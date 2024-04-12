@@ -1,22 +1,10 @@
-#include "hako_ros_proxy_libs.hpp"
-#include "com_zenoh/hako_ros_proxy_com_zenoh.hpp"
+#include "hako_ros_proxy_com_zenoh.hpp"
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 
 HakoZenohSessionType hako_ros_proxy_zenoh_session;
-
-bool hako_ros_proxy_run()
-{
-    return true;
-}
-
-void hako_ros_proxy_fin()
-{
-    return;
-}
-
 
 bool hako_ros_proxy_zenoh_initialize()
 {
