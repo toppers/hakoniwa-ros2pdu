@@ -18,16 +18,10 @@ int main(int argc, char *argv[])
 
     ROS_NODE_TYPE node = hako_ros_proxy_init(argc, argv, node_name);
 
-    /*
-     * create publishers
-     */
-    hako_ros_proxy_com_pub_init(node);
+    hako_ros_proxy_com_ros2_init(node);
+    hako_ros_proxy_com_zenoh_init(node);
 
-    /*
-     * create subscriptions
-     */
-    hako_ros_proxy_com_sub_init(node);
-
+    std::cout << "HELLO" << std::endl;
     while (hako_ros_proxy_ok()) {
         hako_ros_proxy_spin(node);
     }

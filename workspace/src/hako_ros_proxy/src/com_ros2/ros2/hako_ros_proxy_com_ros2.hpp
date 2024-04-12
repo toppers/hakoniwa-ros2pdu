@@ -3,8 +3,8 @@
 
 #include "rclcpp/rclcpp.hpp"
 
-extern void hako_ros_proxy_com_pub_init(std::shared_ptr<rclcpp::Node> node);
-extern void hako_ros_proxy_com_sub_init(std::shared_ptr<rclcpp::Node> node);
+extern void hako_ros_proxy_com_ros2_init(std::shared_ptr<rclcpp::Node> node);
+extern void hako_ros_proxy_com_zenoh_init(std::shared_ptr<rclcpp::Node> node);
 
 #define ROS_NODE_TYPE std::shared_ptr<rclcpp::Node>
 
