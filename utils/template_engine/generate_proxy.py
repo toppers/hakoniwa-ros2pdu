@@ -31,12 +31,16 @@ def get_type(item):
 def get_channel(item):
 	return item["channel_id"]
 
+def get_pdu_size(item):
+	return item["pdu_size"]
+
 def get_topic_name(item):
 	return item["name"].replace('/', '_')
 
 tmp_file = open(custom_json_file)
 container.get_pkg = get_pkg
 container.get_type = get_type
+container.get_pdu_size = get_pdu_size
 container.get_channel = get_channel
 container.get_topic_name = get_topic_name
 container.json_data = json.load(tmp_file)
