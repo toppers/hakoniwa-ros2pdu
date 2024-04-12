@@ -16,11 +16,10 @@ static inline ROS_NODE_TYPE hako_ros_proxy_init(int argc, char** argv, const cha
     rclcpp::init(argc, argv);
     return rclcpp::Node::make_shared(node_name);
 }
-#define hako_ros_PROXY_ROS_WALL_RATE(var, rate) do { \
-    rclcpp::WallRate var(rate); \
-} while (0)
+#define HAKO_ROS_PROXY_WALL_RATE(var, rate) \
+    rclcpp::WallRate var(rate); 
 
-#define hako_ros_PROXY_ROS_WALL_RATE_sleep(var) do { \
+#define HAKO_ROS_PROXY_WALL_RATE_sleep(var) do { \
     var.sleep(); \
 } while (0)
 

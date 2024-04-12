@@ -22,8 +22,10 @@ int main(int argc, char *argv[])
     hako_ros_proxy_com_zenoh_init(node);
 
     std::cout << "HELLO" << std::endl;
+    HAKO_ROS_PROXY_WALL_RATE(rate, 100ms);
     while (hako_ros_proxy_ok()) {
         hako_ros_proxy_spin(node);
+        HAKO_ROS_PROXY_WALL_RATE_sleep(rate);
     }
     hako_ros_proxy_zenoh_finalize();
     std::cout << "EXIT" << std::endl;
