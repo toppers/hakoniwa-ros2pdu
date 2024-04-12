@@ -1,8 +1,8 @@
 #include <stdio.h>
 
 #include "hako_ros_proxy_libs.hpp"
-#include "hako_ros_proxy_com.hpp"
-#include "hako_ros_proxy_com_zenoh.hpp"
+#include "com_ros2/hako_ros_proxy_com.hpp"
+#include "com_zenoh/hako_ros_proxy_com_zenoh.hpp"
 #include <iostream>
 #include <string.h>
 #include <unistd.h>
