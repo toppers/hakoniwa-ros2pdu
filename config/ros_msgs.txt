@@ -29,3 +29,4 @@ sensor_msgs/CameraInfo
 builtin_interfaces/Time
 std_msgs/String
 std_msgs/Bool
+sensor_msgs/PointCloud2

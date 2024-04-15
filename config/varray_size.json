@@ -9,6 +9,10 @@
             "ranges": 360,
             "intensities": 360
         },
+        "PointCloud2": {
+            "fields": 4,
+            "data": 176656
+        },
         "JointState": {
             "name": 2,
             "position": 2,

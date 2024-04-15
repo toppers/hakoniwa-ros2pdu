@@ -18,7 +18,7 @@ else
     exit 1
 fi
 
-cat ${ROS_INSTALL_DIR}/${PKG_NAME}/msg/${MSG_NAME}.msg | grep -v "^#" | egrep -v  "^[\ \t]+\#" | grep -v "^$" | awk '{print $1}' | sort |uniq > .tmp
+cat ${ROS_INSTALL_DIR}/${PKG_NAME}/msg/${MSG_NAME}.msg | grep -v "^#" | egrep -v  "^[\ \t]+\#" | grep -v "^$" | grep -v "=" | awk '{print $1}' | sort | uniq > .tmp
 
 for i in `cat .tmp`
 do
