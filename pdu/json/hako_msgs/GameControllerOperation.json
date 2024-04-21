@@ -1,0 +1,12 @@
+{
+  "fields": [
+    {
+      "name": "axis[3]",
+      "type": "float64"
+    },
+    {
+      "name": "button[4]",
+      "type": "bool"
+    }
+  ]
+}

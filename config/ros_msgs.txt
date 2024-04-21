@@ -1,4 +1,4 @@
-hako_msgs/HakoCmdHeader
+hako_msgs/GameControllerOperaton
 hako_msgs/HakoCmdCamera
 hako_msgs/HakoCameraData
 hako_msgs/HakoCmdMagnetHolder
@@ -30,3 +30,4 @@ builtin_interfaces/Time
 std_msgs/String
 std_msgs/Bool
 sensor_msgs/PointCloud2
+hako_msgs/GameControllerOperation
