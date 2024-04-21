@@ -1,4 +1,3 @@
-hako_msgs/GameControllerOperaton
 hako_msgs/HakoCmdCamera
 hako_msgs/HakoCameraData
 hako_msgs/HakoCmdMagnetHolder
