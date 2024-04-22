@@ -1,2 +1,2 @@
-float64 axis[3]
+float64 axis[4]
 bool button[4]

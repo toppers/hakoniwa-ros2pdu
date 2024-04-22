@@ -25,7 +25,7 @@
 static inline int hako_convert_pdu2ros_GameControllerOperation(Hako_GameControllerOperation &src,  hako_msgs::msg::GameControllerOperation &dst)
 {
     //primitive convert
-    hako_convert_pdu2ros(src.axis[3], dst.axis[3]);
+    hako_convert_pdu2ros(src.axis[4], dst.axis[4]);
     //primitive convert
     hako_convert_pdu2ros(src.button[4], dst.button[4]);
     return 0;
@@ -63,7 +63,7 @@ int hako_convert_pdu2ros_array_GameControllerOperation(Hako_GameControllerOperat
 static inline int hako_convert_ros2pdu_GameControllerOperation(hako_msgs::msg::GameControllerOperation &src, Hako_GameControllerOperation &dst)
 {
     //primitive convert
-    hako_convert_ros2pdu(src.axis[3], dst.axis[3]);
+    hako_convert_ros2pdu(src.axis[4], dst.axis[4]);
     //primitive convert
     hako_convert_ros2pdu(src.button[4], dst.button[4]);
     return 0;

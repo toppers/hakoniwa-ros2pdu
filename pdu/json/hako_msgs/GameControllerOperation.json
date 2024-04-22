@@ -1,7 +1,7 @@
 {
   "fields": [
     {
-      "name": "axis[3]",
+      "name": "axis[4]",
       "type": "float64"
     },
     {

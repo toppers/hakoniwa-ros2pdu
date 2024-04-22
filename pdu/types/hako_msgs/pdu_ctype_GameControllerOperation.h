@@ -4,7 +4,7 @@
 #include "pdu_primitive_ctypes.h"
 
 typedef struct {
-        Hako_float64 axis[3];
+        Hako_float64 axis[4];
         Hako_bool button[4];
 } Hako_GameControllerOperation;
 
