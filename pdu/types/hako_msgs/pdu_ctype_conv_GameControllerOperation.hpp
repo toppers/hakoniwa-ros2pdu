@@ -24,10 +24,14 @@
  ***************************/
 static inline int hako_convert_pdu2ros_GameControllerOperation(Hako_GameControllerOperation &src,  hako_msgs::msg::GameControllerOperation &dst)
 {
-    //primitive convert
-    hako_convert_pdu2ros(src.axis[4], dst.axis[4]);
-    //primitive convert
-    hako_convert_pdu2ros(src.button[4], dst.button[4]);
+    //primitive array convertor
+    (void)hako_convert_pdu2ros_array(
+        src.axis, M_ARRAY_SIZE(Hako_GameControllerOperation, Hako_float64, axis),
+        dst.axis, dst.axis.size());
+    //primitive array convertor
+    (void)hako_convert_pdu2ros_array(
+        src.button, M_ARRAY_SIZE(Hako_GameControllerOperation, Hako_bool, button),
+        dst.button, dst.button.size());
     return 0;
 }
 
@@ -62,10 +66,14 @@ int hako_convert_pdu2ros_array_GameControllerOperation(Hako_GameControllerOperat
  ***************************/
 static inline int hako_convert_ros2pdu_GameControllerOperation(hako_msgs::msg::GameControllerOperation &src, Hako_GameControllerOperation &dst)
 {
-    //primitive convert
-    hako_convert_ros2pdu(src.axis[4], dst.axis[4]);
-    //primitive convert
-    hako_convert_ros2pdu(src.button[4], dst.button[4]);
+    //primitive array convertor
+    (void)hako_convert_ros2pdu_array(
+        src.axis, src.axis.size(),
+        dst.axis, M_ARRAY_SIZE(Hako_GameControllerOperation, Hako_float64, axis));
+    //primitive array convertor
+    (void)hako_convert_ros2pdu_array(
+        src.button, src.button.size(),
+        dst.button, M_ARRAY_SIZE(Hako_GameControllerOperation, Hako_bool, button));
     return 0;
 }
 
