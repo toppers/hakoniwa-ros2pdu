@@ -8,6 +8,7 @@ typedef struct {
         Hako_HakoDroneCmdHeader    header;
         Hako_float64 height;
         Hako_float64 speed;
+        Hako_float64 yaw_deg;
 } Hako_HakoDroneCmdLand;
 
 #endif /* _pdu_ctype_hako_msgs_HakoDroneCmdLand_H_ */

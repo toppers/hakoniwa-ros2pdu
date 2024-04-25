@@ -31,6 +31,8 @@ static inline int hako_convert_pdu2ros_HakoDroneCmdTakeoff(Hako_HakoDroneCmdTake
     hako_convert_pdu2ros(src.height, dst.height);
     //primitive convert
     hako_convert_pdu2ros(src.speed, dst.speed);
+    //primitive convert
+    hako_convert_pdu2ros(src.yaw_deg, dst.yaw_deg);
     return 0;
 }
 
@@ -71,6 +73,8 @@ static inline int hako_convert_ros2pdu_HakoDroneCmdTakeoff(hako_msgs::msg::HakoD
     hako_convert_ros2pdu(src.height, dst.height);
     //primitive convert
     hako_convert_ros2pdu(src.speed, dst.speed);
+    //primitive convert
+    hako_convert_ros2pdu(src.yaw_deg, dst.yaw_deg);
     return 0;
 }
 

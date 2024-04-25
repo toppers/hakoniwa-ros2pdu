@@ -10,6 +10,7 @@ typedef struct {
         Hako_float64 y;
         Hako_float64 z;
         Hako_float64 speed;
+        Hako_float64 yaw_deg;
 } Hako_HakoDroneCmdMove;
 
 #endif /* _pdu_ctype_hako_msgs_HakoDroneCmdMove_H_ */
