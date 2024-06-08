@@ -41,8 +41,10 @@ static inline int _pdu2ros_{{container.msg_type_name}}(char* varray_ptr, Hako_{{
     // Convert using len and off
     int offset = src._{{item["name"]}}_off;
     int length = src._{{item["name"]}}_len;
-    dst.{{item["name"]}}.resize(length);
-    memcpy(dst.{{item["name"]}}.data(), varray_ptr + offset, length * sizeof(src.{{item["name"]}}[0]));
+    if (length > 0) {
+        dst.{{item["name"]}}.resize(length);
+        memcpy(dst.{{item["name"]}}.data(), varray_ptr + offset, length * sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}});
+    }
 {%-         else %}
     // Fixed size array convertor
     for (int i = 0; i < {{array_size}}; ++i) {
@@ -64,7 +66,7 @@ static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(int total_siz
         HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + total_size - sizeof(HakoPduMetaDataType));
 
         // Validate magic number and version
-        if (meta->magicno != HAKO_PDU_META_DATA_MAGICNO || meta->version != HAKO_PDU_META_DATA_VERSION) {
+        if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
             return -1; // Invalid PDU metadata
         }
 
@@ -93,11 +95,16 @@ static inline bool _ros2pdu_{{container.msg_type_name}}({{container.pkg_name}}::
 {%-     elif (container.is_primitive_array(item["type"]) or container.is_string_array(item["type"]) or container.is_array(item["type"])) %}
 {%-         set array_size = container.get_array_size(item["name"], item["type"]) %}
 {%-         if array_size is none %}
-        // Phase 1: Allocate memory and set length
+        //Copy varray 
         dst._{{item["name"]}}_len = src.{{item["name"]}}.size();
-        void* temp_ptr = dynamic_memory.allocate(dst._{{item["name"]}}_len, sizeof(src.{{item["name"]}}[0]));
-        memcpy(temp_ptr, src.{{item["name"]}}.data(), dst._{{item["name"]}}_len * sizeof(src.{{item["name"]}}[0]));
-        dst._{{item["name"]}}_off = dynamic_memory.get_offset(temp_ptr);
+        if (dst._{{item["name"]}}_len > 0) {
+            void* temp_ptr = dynamic_memory.allocate(dst._{{item["name"]}}_len, sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}));
+            memcpy(temp_ptr, src.{{item["name"]}}.data(), dst._{{item["name"]}}_len * sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}));
+            dst._{{item["name"]}}_off = dynamic_memory.get_offset(temp_ptr);
+        }
+        else {
+            dst._{{item["name"]}}_off = dynamic_memory.get_total_size();
+        }
 {%-         else %}
         // Fixed size array convertor
         for (int i = 0; i < {{array_size}}; ++i) {
