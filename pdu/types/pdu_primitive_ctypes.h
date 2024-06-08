@@ -25,4 +25,14 @@ typedef struct {
         char data[HAKO_STRING_SIZE];
 } Hako_cstring;
 
+#define HAKO_PDU_META_DATA_MAGICNO      0x12345678
+#define HAKO_PDU_META_DATA_VERSION      0x00000001
+typedef struct {
+    uint32_t magicno;
+    uint32_t version;
+    uint32_t top_off;
+    uint32_t total_size;
+    uint32_t varray_off;
+} HakoPduMetaDataType;
+
 #endif /* _pdu_primitive_ctypes_H_ */
