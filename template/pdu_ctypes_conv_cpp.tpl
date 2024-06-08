@@ -26,10 +26,8 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{container.msg_type_name}} &src, {{container.pkg_name}}::msg::{{container.msg_type_name}} &dst)
+static inline int _pdu2ros_{{container.msg_type_name}}(char* varray_ptr, Hako_{{container.msg_type_name}} &src, {{container.pkg_name}}::msg::{{container.msg_type_name}} &dst)
 {
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)((char*)&src + src.total_size - sizeof(HakoPduMetaDataType));
-    char* base_ptr = (char*)&src;
 {%- for item in container.json_data["fields"] %}
 {%-     if (container.is_primitive(item["type"])) %}
     // primitive convert
@@ -44,7 +42,7 @@ static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{contai
     int offset = src._{{item["name"]}}_off;
     int length = src._{{item["name"]}}_len;
     dst.{{item["name"]}}.resize(length);
-    memcpy(dst.{{item["name"]}}.data(), base_ptr + offset, length * sizeof(src.{{item["name"]}}[0]));
+    memcpy(dst.{{item["name"]}}.data(), varray_ptr + offset, length * sizeof(src.{{item["name"]}}[0]));
 {%-         else %}
     // Fixed size array convertor
     for (int i = 0; i < {{array_size}}; ++i) {
@@ -53,10 +51,28 @@ static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(Hako_{{contai
 {%-         endif %}
 {%-     else %}
     // Struct convert
-    hako_convert_pdu2ros_{{container.get_msg_type(item["type"])}}(src.{{item["name"]}}, dst.{{item["name"]}});
+    _pdu2ros_{{container.get_msg_type(item["type"])}}(base_ptr, src.{{item["name"]}}, dst.{{item["name"]}});
 {%-     endif %}
 {%- endfor %}
     return 0;
+}
+
+static inline int hako_convert_pdu2ros_{{container.msg_type_name}}(int total_size, Hako_{{container.msg_type_name}} &src, {{container.pkg_name}}::msg::{{container.msg_type_name}} &dst)
+{
+    if (total_size > 0) {
+        char* base_ptr = (char*)&src;
+        HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + total_size - sizeof(HakoPduMetaDataType));
+
+        // Validate magic number and version
+        if (meta->magicno != HAKO_PDU_META_DATA_MAGICNO || meta->version != HAKO_PDU_META_DATA_VERSION) {
+            return -1; // Invalid PDU metadata
+        }
+
+        return _pdu2ros_{{container.msg_type_name}}(base_ptr + sizeof(Hako_{{container.msg_type_name}}), src, dst);
+    }
+    else {
+        return -1; // Invalid total size
+    }
 }
 
 /***************************
@@ -90,7 +106,7 @@ static inline bool _ros2pdu_{{container.msg_type_name}}({{container.pkg_name}}::
 {%-         endif %}
 {%-     else %}
         // Struct convert
-        phase1_ros2pdu_{{container.get_msg_type(item["type"])}}(src.{{item["name"]}}, dst.{{item["name"]}}, dynamic_memory);
+        hako_convert_ros2pdu{{container.get_msg_type(item["type"])}}(false, src.{{item["name"]}}, dst.{{item["name"]}}, dynamic_memory);
 {%-     endif %}
 {%- endfor %}
     } catch (const std::runtime_error& e) {
@@ -101,22 +117,21 @@ static inline bool _ros2pdu_{{container.msg_type_name}}({{container.pkg_name}}::
 }
 
 
-static inline bool hako_convert_ros2pdu_{{container.msg_type_name}}(bool root, {{container.pkg_name}}::msg::{{container.msg_type_name}} &src, Hako_{{container.msg_type_name}}* &dst, PduDynamicMemory &dynamic_memory)
+static inline int hako_convert_ros2pdu_{{container.msg_type_name}}(bool root, {{container.pkg_name}}::msg::{{container.msg_type_name}} &src, Hako_{{container.msg_type_name}}** dst, PduDynamicMemory &dynamic_memory)
 {
     if (!_ros2pdu_{{container.msg_type_name}}(src, *dst, dynamic_memory)) {
-        return false;
+        return -1;
     }
     if (root) {
         int total_size = sizeof(Hako_{{container.msg_type_name}}) + dynamic_memory.get_total_size() + sizeof(HakoPduMetaDataType);
 
         // Allocate PDU memory
-        dst = (Hako_{{container.msg_type_name}}*)malloc(total_size);
-        if (dst == nullptr) {
-            return false;
+        char* base_ptr = (Hako_{{container.msg_type_name}}*)malloc(total_size);
+        if (base_ptr == nullptr) {
+            return -1;
         }
         // Copy dynamic part and set offsets
-        char* base_ptr = (char*)dst;
-        dynamic_memory.copy_to_pdu(base_ptr);
+        dynamic_memory.copy_to_pdu(base_ptr + sizeof(Hako_{{container.msg_type_name}}));
 
         // Set metadata at the end
         HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + total_size - sizeof(HakoPduMetaDataType));
@@ -125,9 +140,12 @@ static inline bool hako_convert_ros2pdu_{{container.msg_type_name}}(bool root, {
         meta->top_off = 0;
         meta->total_size = total_size;
         meta->varray_off = sizeof(Hako_{{container.msg_type_name}});
+
+        *dst = base_ptr;
+        return total_size;
     }
 
-    return true;
+    return 0;
 }
 
 #endif /* _PDU_CTYPE_CONV_HAKO_{{container.pkg_name}}_{{container.msg_type_name}}_HPP_ */
