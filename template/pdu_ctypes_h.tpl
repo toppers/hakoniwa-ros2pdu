@@ -15,6 +15,7 @@ typedef struct {
 {%-     elif container.is_primitive_array(item["type"]) %}
 {%-         set array_size = container.get_array_size(item["name"], item["type"]) %}
 {%-         if array_size is none %}
+        // {{container.get_array_type(item["type"])}} {{item["name"]}}[]
         int _{{item["name"]}}_len;
         int _{{item["name"]}}_off;
 {%-         else %}
@@ -23,6 +24,7 @@ typedef struct {
 {%-     elif container.is_string_array(item["type"]) %}
 {%-         set array_size = container.get_array_size(item["name"], item["type"]) %}
 {%-         if array_size is none %}
+        // {{container.get_array_type(item["type"])}} {{item["name"]}}[]
         int _{{item["name"]}}_len;
         int _{{item["name"]}}_off;
 {%-         else %}
@@ -31,6 +33,7 @@ typedef struct {
 {%-     elif container.is_array(item["type"]) %}
 {%-         set array_size = container.get_array_size(item["name"], item["type"]) %}
 {%-         if array_size is none %}
+        // {{container.get_array_type(item["type"])}} {{item["name"]}}[]
         int _{{item["name"]}}_len;
         int _{{item["name"]}}_off;
 {%-         else %}
