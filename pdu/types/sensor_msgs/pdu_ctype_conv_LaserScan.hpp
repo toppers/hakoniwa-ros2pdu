@@ -25,29 +25,29 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int _pdu2ros_primitive_array_LaserScan_ranges(const char* varray_ptr, Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
+static inline int _pdu2ros_primitive_array_LaserScan_ranges(const char* heap_ptr, Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
 {
     // Fixed size array convertor
-    (void)varray_ptr;
+    (void)heap_ptr;
     for (int i = 0; i < 360; ++i) {
         hako_convert_pdu2ros(src.ranges[i], dst.ranges[i]);
     }
     return 0;
 }
-static inline int _pdu2ros_primitive_array_LaserScan_intensities(const char* varray_ptr, Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
+static inline int _pdu2ros_primitive_array_LaserScan_intensities(const char* heap_ptr, Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
 {
     // Fixed size array convertor
-    (void)varray_ptr;
+    (void)heap_ptr;
     for (int i = 0; i < 360; ++i) {
         hako_convert_pdu2ros(src.intensities[i], dst.intensities[i]);
     }
     return 0;
 }
 
-static inline int _pdu2ros_LaserScan(const char* varray_ptr, Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
+static inline int _pdu2ros_LaserScan(const char* heap_ptr, Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
 {
     // Struct convert
-    _pdu2ros_Header(varray_ptr, src.header, dst.header);
+    _pdu2ros_Header(heap_ptr, src.header, dst.header);
     // primitive convert
     hako_convert_pdu2ros(src.angle_min, dst.angle_min);
     // primitive convert
@@ -63,25 +63,23 @@ static inline int _pdu2ros_LaserScan(const char* varray_ptr, Hako_LaserScan &src
     // primitive convert
     hako_convert_pdu2ros(src.range_max, dst.range_max);
     // primitive array convertor
-    _pdu2ros_primitive_array_LaserScan_ranges(varray_ptr, src, dst);
+    _pdu2ros_primitive_array_LaserScan_ranges(heap_ptr, src, dst);
     // primitive array convertor
-    _pdu2ros_primitive_array_LaserScan_intensities(varray_ptr, src, dst);
-    (void)varray_ptr;
+    _pdu2ros_primitive_array_LaserScan_intensities(heap_ptr, src, dst);
+    (void)heap_ptr;
     return 0;
 }
 
 static inline int hako_convert_pdu2ros_LaserScan(Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
 {
-    char* base_ptr = (char*)&src;
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_LaserScan));
-
+    void* base_ptr = (void*)&src;
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
     // Validate magic number and version
-    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+    if (heap_ptr == nullptr) {
         return -1; // Invalid PDU metadata
     }
     else {
-        char *varray_ptr = base_ptr + sizeof(Hako_LaserScan) + sizeof(HakoPduMetaDataType);
-        return _pdu2ros_LaserScan(varray_ptr, src, dst);
+        return _pdu2ros_LaserScan((char*)heap_ptr, src, dst);
     }
 }
 
@@ -147,47 +145,29 @@ static inline int hako_convert_ros2pdu_LaserScan(sensor_msgs::msg::LaserScan &sr
     if (!_ros2pdu_LaserScan(src, out, dynamic_memory)) {
         return -1;
     }
-    int total_size = sizeof(Hako_LaserScan) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
-
-    // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    int heap_size = dynamic_memory.get_total_size();
+    void* base_ptr = hako_create_empty_pdu(sizeof(Hako_LaserScan), heap_size);
     if (base_ptr == nullptr) {
         return -1;
     }
-    // Copy out on top
+    // Copy out on base data
     memcpy(base_ptr, (void*)&out, sizeof(Hako_LaserScan));
 
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_LaserScan));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_LaserScan) + sizeof(HakoPduMetaDataType);
-
     // Copy dynamic part and set offsets
-    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    dynamic_memory.copy_to_pdu((char*)heap_ptr);
 
     *dst = (Hako_LaserScan*)base_ptr;
-    return total_size;
+    return hako_get_pdu_meta_data(base_ptr)->total_size;
 }
+
 static inline Hako_LaserScan* hako_create_empty_pdu_LaserScan(int heap_size)
 {
-    int total_size = sizeof(Hako_LaserScan) + sizeof(HakoPduMetaDataType) + heap_size;
-
     // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    char* base_ptr = (char*)hako_create_empty_pdu(sizeof(Hako_LaserScan), heap_size);
     if (base_ptr == nullptr) {
         return nullptr;
     }
-    memset(base_ptr, 0, total_size);
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_LaserScan));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_LaserScan) + sizeof(HakoPduMetaDataType);
     return (Hako_LaserScan*)base_ptr;
 }
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_LaserScan_HPP_ */

@@ -25,28 +25,26 @@
  *
  ***************************/
 
-static inline int _pdu2ros_Header(const char* varray_ptr, Hako_Header &src, std_msgs::msg::Header &dst)
+static inline int _pdu2ros_Header(const char* heap_ptr, Hako_Header &src, std_msgs::msg::Header &dst)
 {
     // Struct convert
-    _pdu2ros_Time(varray_ptr, src.stamp, dst.stamp);
+    _pdu2ros_Time(heap_ptr, src.stamp, dst.stamp);
     // string convertor
     dst.frame_id = (const char*)src.frame_id;
-    (void)varray_ptr;
+    (void)heap_ptr;
     return 0;
 }
 
 static inline int hako_convert_pdu2ros_Header(Hako_Header &src, std_msgs::msg::Header &dst)
 {
-    char* base_ptr = (char*)&src;
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Header));
-
+    void* base_ptr = (void*)&src;
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
     // Validate magic number and version
-    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+    if (heap_ptr == nullptr) {
         return -1; // Invalid PDU metadata
     }
     else {
-        char *varray_ptr = base_ptr + sizeof(Hako_Header) + sizeof(HakoPduMetaDataType);
-        return _pdu2ros_Header(varray_ptr, src, dst);
+        return _pdu2ros_Header((char*)heap_ptr, src, dst);
     }
 }
 
@@ -80,47 +78,29 @@ static inline int hako_convert_ros2pdu_Header(std_msgs::msg::Header &src, Hako_H
     if (!_ros2pdu_Header(src, out, dynamic_memory)) {
         return -1;
     }
-    int total_size = sizeof(Hako_Header) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
-
-    // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    int heap_size = dynamic_memory.get_total_size();
+    void* base_ptr = hako_create_empty_pdu(sizeof(Hako_Header), heap_size);
     if (base_ptr == nullptr) {
         return -1;
     }
-    // Copy out on top
+    // Copy out on base data
     memcpy(base_ptr, (void*)&out, sizeof(Hako_Header));
 
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Header));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_Header) + sizeof(HakoPduMetaDataType);
-
     // Copy dynamic part and set offsets
-    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    dynamic_memory.copy_to_pdu((char*)heap_ptr);
 
     *dst = (Hako_Header*)base_ptr;
-    return total_size;
+    return hako_get_pdu_meta_data(base_ptr)->total_size;
 }
+
 static inline Hako_Header* hako_create_empty_pdu_Header(int heap_size)
 {
-    int total_size = sizeof(Hako_Header) + sizeof(HakoPduMetaDataType) + heap_size;
-
     // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    char* base_ptr = (char*)hako_create_empty_pdu(sizeof(Hako_Header), heap_size);
     if (base_ptr == nullptr) {
         return nullptr;
     }
-    memset(base_ptr, 0, total_size);
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Header));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_Header) + sizeof(HakoPduMetaDataType);
     return (Hako_Header*)base_ptr;
 }
 #endif /* _PDU_CTYPE_CONV_HAKO_std_msgs_Header_HPP_ */

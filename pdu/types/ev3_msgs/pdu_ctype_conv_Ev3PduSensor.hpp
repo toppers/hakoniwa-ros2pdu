@@ -26,53 +26,53 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int _pdu2ros_primitive_array_Ev3PduSensor_buttons(const char* varray_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
+static inline int _pdu2ros_primitive_array_Ev3PduSensor_buttons(const char* heap_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
 {
     // Fixed size array convertor
-    (void)varray_ptr;
+    (void)heap_ptr;
     for (int i = 0; i < 1; ++i) {
         hako_convert_pdu2ros(src.buttons[i], dst.buttons[i]);
     }
     return 0;
 }
-static inline int _pdu2ros_struct_array_Ev3PduSensor_color_sensors(const char* varray_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
+static inline int _pdu2ros_struct_array_Ev3PduSensor_color_sensors(const char* heap_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
 {
     // Fixed size array convertor
     for (int i = 0; i < 2; ++i) {
-        _pdu2ros_Ev3PduColorSensor(varray_ptr, src.color_sensors[i], dst.color_sensors[i]);
+        _pdu2ros_Ev3PduColorSensor(heap_ptr, src.color_sensors[i], dst.color_sensors[i]);
     }
     return 0;
 }
-static inline int _pdu2ros_struct_array_Ev3PduSensor_touch_sensors(const char* varray_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
+static inline int _pdu2ros_struct_array_Ev3PduSensor_touch_sensors(const char* heap_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
 {
     // Fixed size array convertor
     for (int i = 0; i < 2; ++i) {
-        _pdu2ros_Ev3PduTouchSensor(varray_ptr, src.touch_sensors[i], dst.touch_sensors[i]);
+        _pdu2ros_Ev3PduTouchSensor(heap_ptr, src.touch_sensors[i], dst.touch_sensors[i]);
     }
     return 0;
 }
-static inline int _pdu2ros_primitive_array_Ev3PduSensor_motor_angle(const char* varray_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
+static inline int _pdu2ros_primitive_array_Ev3PduSensor_motor_angle(const char* heap_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
 {
     // Fixed size array convertor
-    (void)varray_ptr;
+    (void)heap_ptr;
     for (int i = 0; i < 3; ++i) {
         hako_convert_pdu2ros(src.motor_angle[i], dst.motor_angle[i]);
     }
     return 0;
 }
 
-static inline int _pdu2ros_Ev3PduSensor(const char* varray_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
+static inline int _pdu2ros_Ev3PduSensor(const char* heap_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
 {
     // Struct convert
-    _pdu2ros_Ev3PduSensorHeader(varray_ptr, src.head, dst.head);
+    _pdu2ros_Ev3PduSensorHeader(heap_ptr, src.head, dst.head);
     // primitive array convertor
-    _pdu2ros_primitive_array_Ev3PduSensor_buttons(varray_ptr, src, dst);
+    _pdu2ros_primitive_array_Ev3PduSensor_buttons(heap_ptr, src, dst);
     // struct array convertor
-    _pdu2ros_struct_array_Ev3PduSensor_color_sensors(varray_ptr, src, dst);
+    _pdu2ros_struct_array_Ev3PduSensor_color_sensors(heap_ptr, src, dst);
     // struct array convertor
-    _pdu2ros_struct_array_Ev3PduSensor_touch_sensors(varray_ptr, src, dst);
+    _pdu2ros_struct_array_Ev3PduSensor_touch_sensors(heap_ptr, src, dst);
     // primitive array convertor
-    _pdu2ros_primitive_array_Ev3PduSensor_motor_angle(varray_ptr, src, dst);
+    _pdu2ros_primitive_array_Ev3PduSensor_motor_angle(heap_ptr, src, dst);
     // primitive convert
     hako_convert_pdu2ros(src.gyro_degree, dst.gyro_degree);
     // primitive convert
@@ -83,22 +83,20 @@ static inline int _pdu2ros_Ev3PduSensor(const char* varray_ptr, Hako_Ev3PduSenso
     hako_convert_pdu2ros(src.gps_lat, dst.gps_lat);
     // primitive convert
     hako_convert_pdu2ros(src.gps_lon, dst.gps_lon);
-    (void)varray_ptr;
+    (void)heap_ptr;
     return 0;
 }
 
 static inline int hako_convert_pdu2ros_Ev3PduSensor(Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
 {
-    char* base_ptr = (char*)&src;
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Ev3PduSensor));
-
+    void* base_ptr = (void*)&src;
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
     // Validate magic number and version
-    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+    if (heap_ptr == nullptr) {
         return -1; // Invalid PDU metadata
     }
     else {
-        char *varray_ptr = base_ptr + sizeof(Hako_Ev3PduSensor) + sizeof(HakoPduMetaDataType);
-        return _pdu2ros_Ev3PduSensor(varray_ptr, src, dst);
+        return _pdu2ros_Ev3PduSensor((char*)heap_ptr, src, dst);
     }
 }
 
@@ -182,47 +180,29 @@ static inline int hako_convert_ros2pdu_Ev3PduSensor(ev3_msgs::msg::Ev3PduSensor 
     if (!_ros2pdu_Ev3PduSensor(src, out, dynamic_memory)) {
         return -1;
     }
-    int total_size = sizeof(Hako_Ev3PduSensor) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
-
-    // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    int heap_size = dynamic_memory.get_total_size();
+    void* base_ptr = hako_create_empty_pdu(sizeof(Hako_Ev3PduSensor), heap_size);
     if (base_ptr == nullptr) {
         return -1;
     }
-    // Copy out on top
+    // Copy out on base data
     memcpy(base_ptr, (void*)&out, sizeof(Hako_Ev3PduSensor));
 
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Ev3PduSensor));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_Ev3PduSensor) + sizeof(HakoPduMetaDataType);
-
     // Copy dynamic part and set offsets
-    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    dynamic_memory.copy_to_pdu((char*)heap_ptr);
 
     *dst = (Hako_Ev3PduSensor*)base_ptr;
-    return total_size;
+    return hako_get_pdu_meta_data(base_ptr)->total_size;
 }
+
 static inline Hako_Ev3PduSensor* hako_create_empty_pdu_Ev3PduSensor(int heap_size)
 {
-    int total_size = sizeof(Hako_Ev3PduSensor) + sizeof(HakoPduMetaDataType) + heap_size;
-
     // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    char* base_ptr = (char*)hako_create_empty_pdu(sizeof(Hako_Ev3PduSensor), heap_size);
     if (base_ptr == nullptr) {
         return nullptr;
     }
-    memset(base_ptr, 0, total_size);
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Ev3PduSensor));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_Ev3PduSensor) + sizeof(HakoPduMetaDataType);
     return (Hako_Ev3PduSensor*)base_ptr;
 }
 #endif /* _PDU_CTYPE_CONV_HAKO_ev3_msgs_Ev3PduSensor_HPP_ */

@@ -14,7 +14,7 @@ static void ROS_PROXY_SUB_CALLBACK_NAME(topic_name)(const pkg::msg::ros_type::Sh
     Hako_ ##ros_type *pdu_msg;   \
     int total_size = hako_convert_ros2pdu_ ##ros_type (*ros_msg, &pdu_msg); \
     ZENOH_PUBLISH_TOPIC(topic_name, (const uint8_t*)&pdu_msg, total_size);  \
-    free(pdu_msg); \
+    hako_destroy_pdu(pdu_msg); \
 }
 
 

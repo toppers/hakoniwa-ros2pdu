@@ -51,7 +51,7 @@ static void can_pdu2ros_test()
    for (int i = 0; i < 8; i++) {
       HAKO_ASSERT(can_msg.body.data[i] == 10 + i);
    }
-   free(can_pdu_ptr);
+   hako_destroy_pdu(can_pdu_ptr);
    return;
 }
 #include <string.h>
@@ -95,7 +95,7 @@ static void ev3actuator_pdu2ros_test()
       HAKO_ASSERT(ev3_actuator_msg.motors[i].stop == (i * 10) + 2);
       HAKO_ASSERT(ev3_actuator_msg.motors[i].reset_angle == (i * 10) + 3);
    }
-   free(ev3_actuator_pdu_ptr);
+   hako_destroy_pdu((void*)ev3_actuator_pdu_ptr);
 }
 static void ev3sensor_pdu2ros_test()
 {
@@ -160,7 +160,7 @@ static void ev3sensor_pdu2ros_test()
    for (unsigned int i = 0; i < 3; i++) {
       HAKO_ASSERT(ev3_sensor_msg.motor_angle[i] == ((i * 10) + 7));
    }
-   free(ev3_sensor_pdu_ptr);
+   hako_destroy_pdu(ev3_sensor_pdu_ptr);
 }
 
 
@@ -192,7 +192,7 @@ static void svarray_ros2pdu_test1()
    HAKO_ASSERT((int)dst1.data.size() == (int)src.data.size());
    HAKO_ASSERT(dst1.data[0] == 3);
    HAKO_ASSERT(dst1.data[1] == 4);
-   free(dst);
+   hako_destroy_pdu(dst);
 }
 
 static void svarray_ros2pdu_test2()
@@ -255,7 +255,7 @@ typedef struct {
    HAKO_ASSERT(dst1.data[0].p_mem1 == 99);
    HAKO_ASSERT(dst1.data[0].fixed_array[0] == 111);
    HAKO_ASSERT(dst1.data[0].fixed_array[1] == 127);
-   free(dst);
+   hako_destroy_pdu(dst);
 }
 
 int main(int argc, char **argv) 

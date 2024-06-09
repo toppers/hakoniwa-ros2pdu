@@ -5,6 +5,8 @@
 #define HAKO_STRING_SIZE    128
 
 #include <stdint.h>
+#include <stdlib.h>
+#include <string.h>
 
 typedef int8_t Hako_int8;
 typedef uint8_t Hako_uint8;
@@ -27,12 +29,109 @@ typedef struct {
 
 #define HAKO_PDU_META_DATA_MAGICNO      0x12345678
 #define HAKO_PDU_META_DATA_VERSION      0x00000001
+
 typedef struct {
     uint32_t magicno;
     uint32_t version;
-    uint32_t top_off;
+    uint32_t base_off;
+    uint32_t heap_off;
     uint32_t total_size;
-    uint32_t varray_off;
 } HakoPduMetaDataType;
+
+#define HAKO_ALIGNMENT_SIZE sizeof(void*)
+#define HAKO_ALIGN_UP(addr, alignment) (((addr) + ((alignment) - 1)) & ~((alignment) - 1))
+#define HAKO_ALIGN_SIZE(size, alignment) (((size) + ((alignment) - 1)) & ~((alignment) - 1))
+
+#define HAKO_PDU_META_DATA_SIZE()   HAKO_ALIGN_SIZE(sizeof(HakoPduMetaDataType), HAKO_ALIGNMENT_SIZE)
+
+/*
+ * Memory Alignment
+ * 
+ *  _____________ 
+ * | PduMetaData |
+ *  _____________  <--- base_off
+ * | BaseData    |
+ *  _____________  <--- heap_off
+ * | HeapData    |
+ *  -------------
+ */
+
+#define HAKO_PDU_METADATA_IS_VALID(meta) \
+    (((meta)->magicno != HAKO_PDU_META_DATA_MAGICNO) || ((meta)->version != HAKO_PDU_META_DATA_VERSION))
+
+#define HAKO_GET_BASE_PTR(top_ptr, meta) (((char*)(top_ptr)) + (meta)->base_off)
+#define HAKO_GET_HEAP_PTR(top_ptr, meta) (((char*)(top_ptr)) + (meta)->heap_off)
+#define HAKO_GET_TOP_PTR(base_ptr) (((char*)(base_ptr)) - HAKO_PDU_META_DATA_SIZE())
+
+static inline void* hako_create_empty_pdu(int base_size, int heap_size)
+{
+    int total_size = HAKO_PDU_META_DATA_SIZE() + HAKO_ALIGN_SIZE(base_size, HAKO_ALIGNMENT_SIZE) + HAKO_ALIGN_SIZE(heap_size, HAKO_ALIGNMENT_SIZE);
+
+    // Allocate PDU memory
+    char* top_ptr = (char*)malloc(total_size);
+    if (top_ptr == NULL) {
+        return NULL;
+    }
+    memset(top_ptr, 0, total_size);
+    // Set metadata at the top
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(top_ptr);
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->base_off = HAKO_PDU_META_DATA_SIZE();
+    meta->heap_off = HAKO_PDU_META_DATA_SIZE() + HAKO_ALIGN_SIZE(base_size, HAKO_ALIGNMENT_SIZE);
+    meta->total_size = total_size;
+    return HAKO_GET_BASE_PTR(top_ptr, meta);
+}
+
+static inline void* hako_get_top_ptr_pdu(void *base_ptr)
+{
+    char* top_ptr = (char*)HAKO_GET_TOP_PTR(base_ptr);
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(top_ptr);
+
+    // Validate magic number and version
+    if (HAKO_PDU_METADATA_IS_VALID(meta)) {
+        return NULL; // Invalid PDU metadata
+    }
+    return top_ptr;
+}
+static inline HakoPduMetaDataType* hako_get_pdu_meta_data(void *base_ptr)
+{
+    void* top_ptr = hako_get_top_ptr_pdu(base_ptr);
+    if (top_ptr == NULL) {
+        return NULL;
+    }
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(top_ptr);
+    return meta;
+}
+static inline void* hako_get_heap_ptr_pdu(void *base_ptr)
+{
+    void* top_ptr = HAKO_GET_TOP_PTR(base_ptr);
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(top_ptr);
+
+    // Validate magic number and version
+    if (HAKO_PDU_METADATA_IS_VALID(meta)) {
+        return NULL; // Invalid PDU metadata
+    }
+    return HAKO_GET_HEAP_PTR(top_ptr, meta);
+}
+
+static inline void* hako_get_base_ptr_pdu(void *top_ptr)
+{
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(top_ptr);
+    // Validate magic number and version
+    if (HAKO_PDU_METADATA_IS_VALID(meta)) {
+        return NULL; // Invalid PDU metadata
+    }
+    return HAKO_GET_BASE_PTR(top_ptr, meta);
+}
+static inline int hako_destroy_pdu(void *base_ptr)
+{
+    void* top_ptr = hako_get_top_ptr_pdu(base_ptr);
+    if (top_ptr == NULL) {
+        return -1;
+    }
+    free(top_ptr);
+    return 0;
+}
 
 #endif /* _pdu_primitive_ctypes_H_ */

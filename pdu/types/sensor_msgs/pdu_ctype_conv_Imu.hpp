@@ -27,66 +27,64 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int _pdu2ros_primitive_array_Imu_orientation_covariance(const char* varray_ptr, Hako_Imu &src, sensor_msgs::msg::Imu &dst)
+static inline int _pdu2ros_primitive_array_Imu_orientation_covariance(const char* heap_ptr, Hako_Imu &src, sensor_msgs::msg::Imu &dst)
 {
     // Fixed size array convertor
-    (void)varray_ptr;
+    (void)heap_ptr;
     for (int i = 0; i < 9; ++i) {
         hako_convert_pdu2ros(src.orientation_covariance[i], dst.orientation_covariance[i]);
     }
     return 0;
 }
-static inline int _pdu2ros_primitive_array_Imu_angular_velocity_covariance(const char* varray_ptr, Hako_Imu &src, sensor_msgs::msg::Imu &dst)
+static inline int _pdu2ros_primitive_array_Imu_angular_velocity_covariance(const char* heap_ptr, Hako_Imu &src, sensor_msgs::msg::Imu &dst)
 {
     // Fixed size array convertor
-    (void)varray_ptr;
+    (void)heap_ptr;
     for (int i = 0; i < 9; ++i) {
         hako_convert_pdu2ros(src.angular_velocity_covariance[i], dst.angular_velocity_covariance[i]);
     }
     return 0;
 }
-static inline int _pdu2ros_primitive_array_Imu_linear_acceleration_covariance(const char* varray_ptr, Hako_Imu &src, sensor_msgs::msg::Imu &dst)
+static inline int _pdu2ros_primitive_array_Imu_linear_acceleration_covariance(const char* heap_ptr, Hako_Imu &src, sensor_msgs::msg::Imu &dst)
 {
     // Fixed size array convertor
-    (void)varray_ptr;
+    (void)heap_ptr;
     for (int i = 0; i < 9; ++i) {
         hako_convert_pdu2ros(src.linear_acceleration_covariance[i], dst.linear_acceleration_covariance[i]);
     }
     return 0;
 }
 
-static inline int _pdu2ros_Imu(const char* varray_ptr, Hako_Imu &src, sensor_msgs::msg::Imu &dst)
+static inline int _pdu2ros_Imu(const char* heap_ptr, Hako_Imu &src, sensor_msgs::msg::Imu &dst)
 {
     // Struct convert
-    _pdu2ros_Header(varray_ptr, src.header, dst.header);
+    _pdu2ros_Header(heap_ptr, src.header, dst.header);
     // Struct convert
-    _pdu2ros_Quaternion(varray_ptr, src.orientation, dst.orientation);
+    _pdu2ros_Quaternion(heap_ptr, src.orientation, dst.orientation);
     // primitive array convertor
-    _pdu2ros_primitive_array_Imu_orientation_covariance(varray_ptr, src, dst);
+    _pdu2ros_primitive_array_Imu_orientation_covariance(heap_ptr, src, dst);
     // Struct convert
-    _pdu2ros_Vector3(varray_ptr, src.angular_velocity, dst.angular_velocity);
+    _pdu2ros_Vector3(heap_ptr, src.angular_velocity, dst.angular_velocity);
     // primitive array convertor
-    _pdu2ros_primitive_array_Imu_angular_velocity_covariance(varray_ptr, src, dst);
+    _pdu2ros_primitive_array_Imu_angular_velocity_covariance(heap_ptr, src, dst);
     // Struct convert
-    _pdu2ros_Vector3(varray_ptr, src.linear_acceleration, dst.linear_acceleration);
+    _pdu2ros_Vector3(heap_ptr, src.linear_acceleration, dst.linear_acceleration);
     // primitive array convertor
-    _pdu2ros_primitive_array_Imu_linear_acceleration_covariance(varray_ptr, src, dst);
-    (void)varray_ptr;
+    _pdu2ros_primitive_array_Imu_linear_acceleration_covariance(heap_ptr, src, dst);
+    (void)heap_ptr;
     return 0;
 }
 
 static inline int hako_convert_pdu2ros_Imu(Hako_Imu &src, sensor_msgs::msg::Imu &dst)
 {
-    char* base_ptr = (char*)&src;
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Imu));
-
+    void* base_ptr = (void*)&src;
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
     // Validate magic number and version
-    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+    if (heap_ptr == nullptr) {
         return -1; // Invalid PDU metadata
     }
     else {
-        char *varray_ptr = base_ptr + sizeof(Hako_Imu) + sizeof(HakoPduMetaDataType);
-        return _pdu2ros_Imu(varray_ptr, src, dst);
+        return _pdu2ros_Imu((char*)heap_ptr, src, dst);
     }
 }
 
@@ -155,47 +153,29 @@ static inline int hako_convert_ros2pdu_Imu(sensor_msgs::msg::Imu &src, Hako_Imu*
     if (!_ros2pdu_Imu(src, out, dynamic_memory)) {
         return -1;
     }
-    int total_size = sizeof(Hako_Imu) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
-
-    // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    int heap_size = dynamic_memory.get_total_size();
+    void* base_ptr = hako_create_empty_pdu(sizeof(Hako_Imu), heap_size);
     if (base_ptr == nullptr) {
         return -1;
     }
-    // Copy out on top
+    // Copy out on base data
     memcpy(base_ptr, (void*)&out, sizeof(Hako_Imu));
 
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Imu));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_Imu) + sizeof(HakoPduMetaDataType);
-
     // Copy dynamic part and set offsets
-    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    dynamic_memory.copy_to_pdu((char*)heap_ptr);
 
     *dst = (Hako_Imu*)base_ptr;
-    return total_size;
+    return hako_get_pdu_meta_data(base_ptr)->total_size;
 }
+
 static inline Hako_Imu* hako_create_empty_pdu_Imu(int heap_size)
 {
-    int total_size = sizeof(Hako_Imu) + sizeof(HakoPduMetaDataType) + heap_size;
-
     // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    char* base_ptr = (char*)hako_create_empty_pdu(sizeof(Hako_Imu), heap_size);
     if (base_ptr == nullptr) {
         return nullptr;
     }
-    memset(base_ptr, 0, total_size);
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Imu));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_Imu) + sizeof(HakoPduMetaDataType);
     return (Hako_Imu*)base_ptr;
 }
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_Imu_HPP_ */

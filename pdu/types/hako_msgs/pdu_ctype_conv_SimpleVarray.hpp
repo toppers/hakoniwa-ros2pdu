@@ -23,51 +23,49 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int _pdu2ros_primitive_array_SimpleVarray_data(const char* varray_ptr, Hako_SimpleVarray &src, hako_msgs::msg::SimpleVarray &dst)
+static inline int _pdu2ros_primitive_array_SimpleVarray_data(const char* heap_ptr, Hako_SimpleVarray &src, hako_msgs::msg::SimpleVarray &dst)
 {
     // Convert using len and off
     int offset = src._data_off;
     int length = src._data_len;
     if (length > 0) {
         dst.data.resize(length);
-        memcpy(dst.data.data(), varray_ptr + offset, length * sizeof(Hako_int8));
+        memcpy(dst.data.data(), heap_ptr + offset, length * sizeof(Hako_int8));
     }
     return 0;
 }
-static inline int _pdu2ros_primitive_array_SimpleVarray_fixed_array(const char* varray_ptr, Hako_SimpleVarray &src, hako_msgs::msg::SimpleVarray &dst)
+static inline int _pdu2ros_primitive_array_SimpleVarray_fixed_array(const char* heap_ptr, Hako_SimpleVarray &src, hako_msgs::msg::SimpleVarray &dst)
 {
     // Fixed size array convertor
-    (void)varray_ptr;
+    (void)heap_ptr;
     for (int i = 0; i < 10; ++i) {
         hako_convert_pdu2ros(src.fixed_array[i], dst.fixed_array[i]);
     }
     return 0;
 }
 
-static inline int _pdu2ros_SimpleVarray(const char* varray_ptr, Hako_SimpleVarray &src, hako_msgs::msg::SimpleVarray &dst)
+static inline int _pdu2ros_SimpleVarray(const char* heap_ptr, Hako_SimpleVarray &src, hako_msgs::msg::SimpleVarray &dst)
 {
     // primitive array convertor
-    _pdu2ros_primitive_array_SimpleVarray_data(varray_ptr, src, dst);
+    _pdu2ros_primitive_array_SimpleVarray_data(heap_ptr, src, dst);
     // primitive array convertor
-    _pdu2ros_primitive_array_SimpleVarray_fixed_array(varray_ptr, src, dst);
+    _pdu2ros_primitive_array_SimpleVarray_fixed_array(heap_ptr, src, dst);
     // primitive convert
     hako_convert_pdu2ros(src.p_mem1, dst.p_mem1);
-    (void)varray_ptr;
+    (void)heap_ptr;
     return 0;
 }
 
 static inline int hako_convert_pdu2ros_SimpleVarray(Hako_SimpleVarray &src, hako_msgs::msg::SimpleVarray &dst)
 {
-    char* base_ptr = (char*)&src;
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_SimpleVarray));
-
+    void* base_ptr = (void*)&src;
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
     // Validate magic number and version
-    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+    if (heap_ptr == nullptr) {
         return -1; // Invalid PDU metadata
     }
     else {
-        char *varray_ptr = base_ptr + sizeof(Hako_SimpleVarray) + sizeof(HakoPduMetaDataType);
-        return _pdu2ros_SimpleVarray(varray_ptr, src, dst);
+        return _pdu2ros_SimpleVarray((char*)heap_ptr, src, dst);
     }
 }
 
@@ -124,47 +122,29 @@ static inline int hako_convert_ros2pdu_SimpleVarray(hako_msgs::msg::SimpleVarray
     if (!_ros2pdu_SimpleVarray(src, out, dynamic_memory)) {
         return -1;
     }
-    int total_size = sizeof(Hako_SimpleVarray) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
-
-    // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    int heap_size = dynamic_memory.get_total_size();
+    void* base_ptr = hako_create_empty_pdu(sizeof(Hako_SimpleVarray), heap_size);
     if (base_ptr == nullptr) {
         return -1;
     }
-    // Copy out on top
+    // Copy out on base data
     memcpy(base_ptr, (void*)&out, sizeof(Hako_SimpleVarray));
 
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_SimpleVarray));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_SimpleVarray) + sizeof(HakoPduMetaDataType);
-
     // Copy dynamic part and set offsets
-    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    dynamic_memory.copy_to_pdu((char*)heap_ptr);
 
     *dst = (Hako_SimpleVarray*)base_ptr;
-    return total_size;
+    return hako_get_pdu_meta_data(base_ptr)->total_size;
 }
+
 static inline Hako_SimpleVarray* hako_create_empty_pdu_SimpleVarray(int heap_size)
 {
-    int total_size = sizeof(Hako_SimpleVarray) + sizeof(HakoPduMetaDataType) + heap_size;
-
     // Allocate PDU memory
-    char* base_ptr = (char*)malloc(total_size);
+    char* base_ptr = (char*)hako_create_empty_pdu(sizeof(Hako_SimpleVarray), heap_size);
     if (base_ptr == nullptr) {
         return nullptr;
     }
-    memset(base_ptr, 0, total_size);
-    // Set metadata at the end
-    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_SimpleVarray));
-    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
-    meta->version = HAKO_PDU_META_DATA_VERSION;
-    meta->top_off = 0;
-    meta->total_size = total_size;
-    meta->varray_off = sizeof(Hako_SimpleVarray) + sizeof(HakoPduMetaDataType);
     return (Hako_SimpleVarray*)base_ptr;
 }
 #endif /* _PDU_CTYPE_CONV_HAKO_hako_msgs_SimpleVarray_HPP_ */
