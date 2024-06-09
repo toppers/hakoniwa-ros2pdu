@@ -32,7 +32,7 @@ public:
         if (ptr == nullptr) {
             throw std::runtime_error("Memory allocation failed");
         }
-        allocations.emplace_back(length, current_offset, ptr);
+        allocations.emplace_back(length * elem_size, current_offset, ptr);
         current_offset += length * elem_size;
         return ptr;
     }
@@ -44,8 +44,11 @@ public:
 
     // Copy data to a destination buffer and set offsets
     void copy_to_pdu(char* dest) const {
+        //std::cout << "dest addr: " << (long long)dest << std::endl;
         for (const auto& alloc : allocations) {
-            memcpy(dest + alloc.offset, alloc.data, alloc.length * sizeof(char));
+            //std::cout << "dest addr + off: " << (long long)(dest + alloc.offset) << std::endl;
+            //std::cout << "length: " << alloc.length << std::endl;
+            memcpy(dest + alloc.offset, alloc.data, alloc.length);
         }
     }
 
