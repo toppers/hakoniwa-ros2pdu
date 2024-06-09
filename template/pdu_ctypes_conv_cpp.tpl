@@ -116,9 +116,8 @@ static inline bool _ros2pdu_struct_array_{{container.msg_type_name}}_{{item["nam
 {%-     if array_size is none %}
     dst._{{item["name"]}}_len = src.{{item["name"]}}.size();
     if (dst._{{item["name"]}}_len > 0) {
-        void* temp_ptr = dynamic_memory.allocate(dst._{{item["name"]}}_len, sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}));
-        dst._{{item["name"]}}_off = dynamic_memory.get_offset(temp_ptr);
         Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}* temp_struct_ptr = dynamic_memory.allocate(dst._{{item["name"]}}_len, sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}));
+        dst._{{item["name"]}}_off = dynamic_memory.get_offset(temp_struct_ptr);
         for (int i = 0; i < dst._{{item["name"]}}_len; ++i) {
             _ros2pdu_{{container.get_msg_type(container.get_array_type(item["type"]))}}(src.{{item["name"]}}[i], *temp_struct_ptr, dynamic_memory);
             temp_struct_ptr++;
