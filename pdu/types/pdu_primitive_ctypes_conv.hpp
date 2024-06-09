@@ -93,7 +93,7 @@ int hako_convert_pdu2ros_array_string(Hako_cstring src[], std::vector<std::strin
     }
     return ret;
 }
-static inline int hako_convert_pdu2ros_array_string_varray(const Hako_cstring src[], std::vector<std::string> &dst, int len)
+static inline int hako_convert_pdu2ros_array_string_varray(const Hako_cstring* src, std::vector<std::string> &dst, int len)
 {
     int ret = 0;
     dst.resize(len);
@@ -128,7 +128,7 @@ int hako_convert_ros2pdu_array_string(std::array<std::string, _src_len> &src, Ha
     return ret;
 }
 
-static inline int hako_convert_ros2pdu_array_string_varray(const std::vector<std::string> &src, Hako_cstring dst[])
+static inline int hako_convert_ros2pdu_array_string_varray(const std::vector<std::string> &src, Hako_cstring *dst)
 {
     int ret = 0;
     int len = src.size();

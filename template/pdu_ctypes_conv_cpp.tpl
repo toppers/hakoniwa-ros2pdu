@@ -37,10 +37,11 @@ static inline int _pdu2ros_primitive_array_{{container.msg_type_name}}_{{item["n
     int length = src._{{item["name"]}}_len;
     if (length > 0) {
         dst.{{item["name"]}}.resize(length);
-        memcpy(dst.{{item["name"]}}.data(), varray_ptr + offset, length * sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}});
+        memcpy(dst.{{item["name"]}}.data(), varray_ptr + offset, length * sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}));
     }
 {%-         else %}
     // Fixed size array convertor
+    (void)varray_ptr;
     for (int i = 0; i < {{array_size}}; ++i) {
         hako_convert_pdu2ros(src.{{item["name"]}}[i], dst.{{item["name"]}}[i]);
     }
@@ -56,11 +57,12 @@ static inline int _pdu2ros_string_array_{{container.msg_type_name}}_{{item["name
     int offset = src._{{item["name"]}}_off;
     int length = src._{{item["name"]}}_len;
     if (length > 0) {
-        Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}} *temp_struct_ptr = (Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}} *)(varray_ptr + offset);
-        hako_convert_pdu2ros_array_string_varray(*temp_struct_ptr, dst.{{item["name"]}}, length);
+        Hako_cstring *temp_struct_ptr = (Hako_cstring *)(varray_ptr + offset);
+        hako_convert_pdu2ros_array_string_varray(temp_struct_ptr, dst.{{item["name"]}}, length);
     }
 {%-         else %}
     // Fixed size array convertor
+    (void)varray_ptr;
     (void)hako_convert_pdu2ros_array_string<M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_cstring, {{item["name"]}}), {{container.get_array_size(item["name"], item["type"])}}>(
         src.{{item["name"]}}, dst.{{item["name"]}});
 {%-         endif %}
@@ -157,6 +159,7 @@ static inline bool _ros2pdu_primitive_array_{{container.msg_type_name}}_{{item["
     }
 {%-     else %}
     //Copy fixed array {{array_size}}
+    (void)dynamic_memory;
     (void)hako_convert_ros2pdu_array(
         src.{{item["name"]}}, src.{{item["name"]}}.size(),
         dst.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_{{container.get_array_type(item["type"])}}, {{item["name"]}}));
@@ -172,7 +175,7 @@ static inline bool _ros2pdu_string_array_{{container.msg_type_name}}_{{item["nam
     dst._{{item["name"]}}_len = src.{{item["name"]}}.size();
     if (dst._{{item["name"]}}_len > 0) {
         Hako_cstring* temp_ptr = (Hako_cstring*)dynamic_memory.allocate(dst._{{item["name"]}}_len, sizeof(Hako_cstring));
-        (void)hako_convert_ros2pdu_array_string_varray(src.{{item["name"]}}, (Hako_cstring[])temp_ptr);
+        (void)hako_convert_ros2pdu_array_string_varray(src.{{item["name"]}}, temp_ptr);
         dst._{{item["name"]}}_off = dynamic_memory.get_offset(temp_ptr);
     }
     else {
@@ -180,6 +183,7 @@ static inline bool _ros2pdu_string_array_{{container.msg_type_name}}_{{item["nam
     }
 {%-     else %}
     //Copy fixed string {{array_size}}
+    (void)dynamic_memory;
     (void)hako_convert_ros2pdu_array_string<{{container.get_array_size(item["name"], item["type"])}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, Hako_cstring, {{item["name"]}})>(
         src.{{item["name"]}}, dst.{{item["name"]}});
 {%-     endif %}
@@ -194,7 +198,7 @@ static inline bool _ros2pdu_struct_array_{{container.msg_type_name}}_{{item["nam
 {%-     if array_size is none %}
     dst._{{item["name"]}}_len = src.{{item["name"]}}.size();
     if (dst._{{item["name"]}}_len > 0) {
-        Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}* temp_struct_ptr = dynamic_memory.allocate(dst._{{item["name"]}}_len, sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}));
+        Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}* temp_struct_ptr = (Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}*)dynamic_memory.allocate(dst._{{item["name"]}}_len, sizeof(Hako_{{container.get_msg_type(container.get_array_type(item["type"]))}}));
         dst._{{item["name"]}}_off = dynamic_memory.get_offset(temp_struct_ptr);
         for (int i = 0; i < dst._{{item["name"]}}_len; ++i) {
             _ros2pdu_{{container.get_msg_type(container.get_array_type(item["type"]))}}(src.{{item["name"]}}[i], *temp_struct_ptr, dynamic_memory);
@@ -258,7 +262,7 @@ static inline int hako_convert_ros2pdu_{{container.msg_type_name}}({{container.p
     int total_size = sizeof(Hako_{{container.msg_type_name}}) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
 
     // Allocate PDU memory
-    char* base_ptr = (Hako_{{container.msg_type_name}}*)malloc(total_size);
+    char* base_ptr = (char*)malloc(total_size);
     if (base_ptr == nullptr) {
         return -1;
     }
@@ -276,7 +280,7 @@ static inline int hako_convert_ros2pdu_{{container.msg_type_name}}({{container.p
     // Copy dynamic part and set offsets
     dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
 
-    *dst = base_ptr;
+    *dst = (Hako_{{container.msg_type_name}}*)base_ptr;
     return total_size;
 }
 
