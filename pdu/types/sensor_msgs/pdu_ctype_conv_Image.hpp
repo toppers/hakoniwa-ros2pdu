@@ -38,7 +38,7 @@ static inline int _pdu2ros_primitive_array_Image_data(const char* varray_ptr, Ha
 static inline int _pdu2ros_Image(const char* varray_ptr, Hako_Image &src, sensor_msgs::msg::Image &dst)
 {
     // Struct convert
-    _pdu2ros_Header(base_ptr, src.header, dst.header);
+    _pdu2ros_Header(varray_ptr, src.header, dst.header);
     // primitive convert
     hako_convert_pdu2ros(src.height, dst.height);
     // primitive convert
@@ -141,5 +141,23 @@ static inline int hako_convert_ros2pdu_Image(sensor_msgs::msg::Image &src, Hako_
     *dst = (Hako_Image*)base_ptr;
     return total_size;
 }
+static inline Hako_Image* hako_create_empty_pdu_Image(int heap_size)
+{
+    int total_size = sizeof(Hako_Image) + sizeof(HakoPduMetaDataType) + heap_size;
 
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    memset(base_ptr, 0, total_size);
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Image));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_Image) + sizeof(HakoPduMetaDataType);
+    return (Hako_Image*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_Image_HPP_ */

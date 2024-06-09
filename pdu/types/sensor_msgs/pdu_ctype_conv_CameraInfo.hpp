@@ -66,7 +66,7 @@ static inline int _pdu2ros_primitive_array_CameraInfo_p(const char* varray_ptr, 
 static inline int _pdu2ros_CameraInfo(const char* varray_ptr, Hako_CameraInfo &src, sensor_msgs::msg::CameraInfo &dst)
 {
     // Struct convert
-    _pdu2ros_Header(base_ptr, src.header, dst.header);
+    _pdu2ros_Header(varray_ptr, src.header, dst.header);
     // primitive convert
     hako_convert_pdu2ros(src.height, dst.height);
     // primitive convert
@@ -86,7 +86,7 @@ static inline int _pdu2ros_CameraInfo(const char* varray_ptr, Hako_CameraInfo &s
     // primitive convert
     hako_convert_pdu2ros(src.binning_y, dst.binning_y);
     // Struct convert
-    _pdu2ros_RegionOfInterest(base_ptr, src.roi, dst.roi);
+    _pdu2ros_RegionOfInterest(varray_ptr, src.roi, dst.roi);
     return 0;
 }
 
@@ -212,5 +212,23 @@ static inline int hako_convert_ros2pdu_CameraInfo(sensor_msgs::msg::CameraInfo &
     *dst = (Hako_CameraInfo*)base_ptr;
     return total_size;
 }
+static inline Hako_CameraInfo* hako_create_empty_pdu_CameraInfo(int heap_size)
+{
+    int total_size = sizeof(Hako_CameraInfo) + sizeof(HakoPduMetaDataType) + heap_size;
 
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    memset(base_ptr, 0, total_size);
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_CameraInfo));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_CameraInfo) + sizeof(HakoPduMetaDataType);
+    return (Hako_CameraInfo*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_CameraInfo_HPP_ */

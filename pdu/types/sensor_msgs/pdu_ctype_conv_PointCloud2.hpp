@@ -47,7 +47,7 @@ static inline int _pdu2ros_primitive_array_PointCloud2_data(const char* varray_p
 static inline int _pdu2ros_PointCloud2(const char* varray_ptr, Hako_PointCloud2 &src, sensor_msgs::msg::PointCloud2 &dst)
 {
     // Struct convert
-    _pdu2ros_Header(base_ptr, src.header, dst.header);
+    _pdu2ros_Header(varray_ptr, src.header, dst.header);
     // primitive convert
     hako_convert_pdu2ros(src.height, dst.height);
     // primitive convert
@@ -165,5 +165,23 @@ static inline int hako_convert_ros2pdu_PointCloud2(sensor_msgs::msg::PointCloud2
     *dst = (Hako_PointCloud2*)base_ptr;
     return total_size;
 }
+static inline Hako_PointCloud2* hako_create_empty_pdu_PointCloud2(int heap_size)
+{
+    int total_size = sizeof(Hako_PointCloud2) + sizeof(HakoPduMetaDataType) + heap_size;
 
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    memset(base_ptr, 0, total_size);
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_PointCloud2));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_PointCloud2) + sizeof(HakoPduMetaDataType);
+    return (Hako_PointCloud2*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_PointCloud2_HPP_ */

@@ -177,5 +177,23 @@ static inline int hako_convert_ros2pdu_Imu(sensor_msgs::msg::Imu &src, Hako_Imu*
     *dst = (Hako_Imu*)base_ptr;
     return total_size;
 }
+static inline Hako_Imu* hako_create_empty_pdu_Imu(int heap_size)
+{
+    int total_size = sizeof(Hako_Imu) + sizeof(HakoPduMetaDataType) + heap_size;
 
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    memset(base_ptr, 0, total_size);
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Imu));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_Imu) + sizeof(HakoPduMetaDataType);
+    return (Hako_Imu*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_sensor_msgs_Imu_HPP_ */

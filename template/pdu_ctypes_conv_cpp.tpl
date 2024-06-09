@@ -283,5 +283,23 @@ static inline int hako_convert_ros2pdu_{{container.msg_type_name}}({{container.p
     *dst = (Hako_{{container.msg_type_name}}*)base_ptr;
     return total_size;
 }
+static inline Hako_{{container.msg_type_name}}* hako_create_empty_pdu_{{container.msg_type_name}}(int heap_size)
+{
+    int total_size = sizeof(Hako_{{container.msg_type_name}}) + sizeof(HakoPduMetaDataType) + heap_size;
 
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    memset(base_ptr, 0, total_size);
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_{{container.msg_type_name}}));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_{{container.msg_type_name}}) + sizeof(HakoPduMetaDataType);
+    return (Hako_{{container.msg_type_name}}*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_{{container.pkg_name}}_{{container.msg_type_name}}_HPP_ */

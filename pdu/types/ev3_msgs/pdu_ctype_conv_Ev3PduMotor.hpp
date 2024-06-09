@@ -103,5 +103,23 @@ static inline int hako_convert_ros2pdu_Ev3PduMotor(ev3_msgs::msg::Ev3PduMotor &s
     *dst = (Hako_Ev3PduMotor*)base_ptr;
     return total_size;
 }
+static inline Hako_Ev3PduMotor* hako_create_empty_pdu_Ev3PduMotor(int heap_size)
+{
+    int total_size = sizeof(Hako_Ev3PduMotor) + sizeof(HakoPduMetaDataType) + heap_size;
 
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    memset(base_ptr, 0, total_size);
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Ev3PduMotor));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_Ev3PduMotor) + sizeof(HakoPduMetaDataType);
+    return (Hako_Ev3PduMotor*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_ev3_msgs_Ev3PduMotor_HPP_ */
