@@ -119,6 +119,26 @@ int hako_convert_ros2pdu_array_string(std::array<std::string, _src_len> &src, Ha
     return ret;
 }
 
+static inline int hako_convert_ros2pdu_array_string_varray(const std::vector<std::string> &src, Hako_cstring dst[])
+{
+    int ret = 0;
+    int len = src.size();
+    for (int i = 0; i < len; i++) {
+        int cplen = src[i].length();
+        if (cplen >= (HAKO_STRING_SIZE - 1)) {
+            cplen = HAKO_STRING_SIZE - 2;
+        }
+        else {
+            cplen = src[i].length();
+        }
+        for (int j = 0; j < cplen; j++) {
+            dst[i].data[j] = src[i][j];
+        }
+        dst[i].data[cplen] = '\0';
+    }
+    return ret;
+}
+
 template<int _src_len, int _dst_len>
 int hako_convert_ros2pdu_array_string(std::vector<std::string> &src, Hako_cstring dst[])
 {
