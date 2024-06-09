@@ -79,6 +79,7 @@ static inline int _pdu2ros_SimpleStructVarray(const char* varray_ptr, Hako_Simpl
     _pdu2ros_struct_array_SimpleStructVarray_fixed_array(varray_ptr, src, dst);
     // struct array convertor
     _pdu2ros_struct_array_SimpleStructVarray_data(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -168,6 +169,7 @@ static inline bool _ros2pdu_SimpleStructVarray(hako_msgs::msg::SimpleStructVarra
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

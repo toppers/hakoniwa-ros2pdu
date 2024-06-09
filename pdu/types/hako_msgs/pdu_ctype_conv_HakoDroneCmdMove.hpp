@@ -39,6 +39,7 @@ static inline int _pdu2ros_HakoDroneCmdMove(const char* varray_ptr, Hako_HakoDro
     hako_convert_pdu2ros(src.speed, dst.speed);
     // primitive convert
     hako_convert_pdu2ros(src.yaw_deg, dst.yaw_deg);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -82,6 +83,7 @@ static inline bool _ros2pdu_HakoDroneCmdMove(hako_msgs::msg::HakoDroneCmdMove &s
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

@@ -73,6 +73,7 @@ static inline int _pdu2ros_JointState(const char* varray_ptr, Hako_JointState &s
     _pdu2ros_primitive_array_JointState_velocity(varray_ptr, src, dst);
     // primitive array convertor
     _pdu2ros_primitive_array_JointState_effort(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -149,6 +150,7 @@ static inline bool _ros2pdu_JointState(sensor_msgs::msg::JointState &src, Hako_J
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

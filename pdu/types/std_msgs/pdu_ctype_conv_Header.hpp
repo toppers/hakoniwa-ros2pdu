@@ -31,6 +31,7 @@ static inline int _pdu2ros_Header(const char* varray_ptr, Hako_Header &src, std_
     _pdu2ros_Time(varray_ptr, src.stamp, dst.stamp);
     // string convertor
     dst.frame_id = (const char*)src.frame_id;
+    (void)varray_ptr;
     return 0;
 }
 
@@ -68,6 +69,7 @@ static inline bool _ros2pdu_Header(std_msgs::msg::Header &src, Hako_Header &dst,
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

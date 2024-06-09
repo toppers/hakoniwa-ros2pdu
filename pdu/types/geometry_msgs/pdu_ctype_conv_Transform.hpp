@@ -32,6 +32,7 @@ static inline int _pdu2ros_Transform(const char* varray_ptr, Hako_Transform &src
     _pdu2ros_Vector3(varray_ptr, src.translation, dst.translation);
     // Struct convert
     _pdu2ros_Quaternion(varray_ptr, src.rotation, dst.rotation);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -67,6 +68,7 @@ static inline bool _ros2pdu_Transform(geometry_msgs::msg::Transform &src, Hako_T
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

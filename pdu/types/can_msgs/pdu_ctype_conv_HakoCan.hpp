@@ -32,6 +32,7 @@ static inline int _pdu2ros_HakoCan(const char* varray_ptr, Hako_HakoCan &src, ca
     _pdu2ros_HakoCanHead(varray_ptr, src.head, dst.head);
     // Struct convert
     _pdu2ros_HakoCanBody(varray_ptr, src.body, dst.body);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -67,6 +68,7 @@ static inline bool _ros2pdu_HakoCan(can_msgs::msg::HakoCan &src, Hako_HakoCan &d
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

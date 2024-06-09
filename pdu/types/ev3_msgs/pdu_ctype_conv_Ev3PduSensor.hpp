@@ -83,6 +83,7 @@ static inline int _pdu2ros_Ev3PduSensor(const char* varray_ptr, Hako_Ev3PduSenso
     hako_convert_pdu2ros(src.gps_lat, dst.gps_lat);
     // primitive convert
     hako_convert_pdu2ros(src.gps_lon, dst.gps_lon);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -170,6 +171,7 @@ static inline bool _ros2pdu_Ev3PduSensor(ev3_msgs::msg::Ev3PduSensor &src, Hako_
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

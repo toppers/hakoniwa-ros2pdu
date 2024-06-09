@@ -33,6 +33,7 @@ static inline int _pdu2ros_HakoCmdCamera(const char* varray_ptr, Hako_HakoCmdCam
     hako_convert_pdu2ros(src.request_id, dst.request_id);
     // primitive convert
     hako_convert_pdu2ros(src.encode_type, dst.encode_type);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -70,6 +71,7 @@ static inline bool _ros2pdu_HakoCmdCamera(hako_msgs::msg::HakoCmdCamera &src, Ha
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

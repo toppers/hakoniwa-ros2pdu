@@ -33,6 +33,7 @@ static inline int _pdu2ros_HakoCameraData(const char* varray_ptr, Hako_HakoCamer
     hako_convert_pdu2ros(src.request_id, dst.request_id);
     // Struct convert
     _pdu2ros_CompressedImage(varray_ptr, src.image, dst.image);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -68,6 +69,7 @@ static inline bool _ros2pdu_HakoCameraData(hako_msgs::msg::HakoCameraData &src, 
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

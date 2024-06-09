@@ -28,6 +28,7 @@ static inline int _pdu2ros_DisturbanceTemperature(const char* varray_ptr, Hako_D
 {
     // primitive convert
     hako_convert_pdu2ros(src.value, dst.value);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -61,6 +62,7 @@ static inline bool _ros2pdu_DisturbanceTemperature(hako_msgs::msg::DisturbanceTe
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

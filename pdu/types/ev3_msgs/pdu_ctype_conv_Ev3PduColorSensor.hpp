@@ -36,6 +36,7 @@ static inline int _pdu2ros_Ev3PduColorSensor(const char* varray_ptr, Hako_Ev3Pdu
     hako_convert_pdu2ros(src.rgb_g, dst.rgb_g);
     // primitive convert
     hako_convert_pdu2ros(src.rgb_b, dst.rgb_b);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -77,6 +78,7 @@ static inline bool _ros2pdu_Ev3PduColorSensor(ev3_msgs::msg::Ev3PduColorSensor &
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

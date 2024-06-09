@@ -31,6 +31,7 @@ static inline int _pdu2ros_Twist(const char* varray_ptr, Hako_Twist &src, geomet
     _pdu2ros_Vector3(varray_ptr, src.linear, dst.linear);
     // Struct convert
     _pdu2ros_Vector3(varray_ptr, src.angular, dst.angular);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -66,6 +67,7 @@ static inline bool _ros2pdu_Twist(geometry_msgs::msg::Twist &src, Hako_Twist &ds
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

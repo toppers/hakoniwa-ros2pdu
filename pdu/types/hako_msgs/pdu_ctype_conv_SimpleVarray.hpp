@@ -52,6 +52,7 @@ static inline int _pdu2ros_SimpleVarray(const char* varray_ptr, Hako_SimpleVarra
     _pdu2ros_primitive_array_SimpleVarray_fixed_array(varray_ptr, src, dst);
     // primitive convert
     hako_convert_pdu2ros(src.p_mem1, dst.p_mem1);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -112,6 +113,7 @@ static inline bool _ros2pdu_SimpleVarray(hako_msgs::msg::SimpleVarray &src, Hako
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

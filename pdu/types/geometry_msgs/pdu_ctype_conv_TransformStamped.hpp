@@ -37,6 +37,7 @@ static inline int _pdu2ros_TransformStamped(const char* varray_ptr, Hako_Transfo
     dst.child_frame_id = (const char*)src.child_frame_id;
     // Struct convert
     _pdu2ros_Transform(varray_ptr, src.transform, dst.transform);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -76,6 +77,7 @@ static inline bool _ros2pdu_TransformStamped(geometry_msgs::msg::TransformStampe
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

@@ -37,6 +37,7 @@ static inline int _pdu2ros_HakoCanBody(const char* varray_ptr, Hako_HakoCanBody 
 {
     // primitive array convertor
     _pdu2ros_primitive_array_HakoCanBody_data(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -79,6 +80,7 @@ static inline bool _ros2pdu_HakoCanBody(can_msgs::msg::HakoCanBody &src, Hako_Ha
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

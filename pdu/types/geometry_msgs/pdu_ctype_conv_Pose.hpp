@@ -32,6 +32,7 @@ static inline int _pdu2ros_Pose(const char* varray_ptr, Hako_Pose &src, geometry
     _pdu2ros_Point(varray_ptr, src.position, dst.position);
     // Struct convert
     _pdu2ros_Quaternion(varray_ptr, src.orientation, dst.orientation);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -67,6 +68,7 @@ static inline bool _ros2pdu_Pose(geometry_msgs::msg::Pose &src, Hako_Pose &dst, 
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

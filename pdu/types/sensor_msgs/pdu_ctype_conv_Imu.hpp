@@ -71,6 +71,7 @@ static inline int _pdu2ros_Imu(const char* varray_ptr, Hako_Imu &src, sensor_msg
     _pdu2ros_Vector3(varray_ptr, src.linear_acceleration, dst.linear_acceleration);
     // primitive array convertor
     _pdu2ros_primitive_array_Imu_linear_acceleration_covariance(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -143,6 +144,7 @@ static inline bool _ros2pdu_Imu(sensor_msgs::msg::Imu &src, Hako_Imu &dst, PduDy
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

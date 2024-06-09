@@ -64,6 +64,7 @@ static inline int _pdu2ros_PointCloud2(const char* varray_ptr, Hako_PointCloud2 
     _pdu2ros_primitive_array_PointCloud2_data(varray_ptr, src, dst);
     // primitive convert
     hako_convert_pdu2ros(src.is_dense, dst.is_dense);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -131,6 +132,7 @@ static inline bool _ros2pdu_PointCloud2(sensor_msgs::msg::PointCloud2 &src, Hako
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

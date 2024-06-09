@@ -42,6 +42,7 @@ static inline int _pdu2ros_PoseWithCovariance(const char* varray_ptr, Hako_PoseW
     _pdu2ros_Pose(varray_ptr, src.pose, dst.pose);
     // primitive array convertor
     _pdu2ros_primitive_array_PoseWithCovariance_covariance(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -86,6 +87,7 @@ static inline bool _ros2pdu_PoseWithCovariance(geometry_msgs::msg::PoseWithCovar
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

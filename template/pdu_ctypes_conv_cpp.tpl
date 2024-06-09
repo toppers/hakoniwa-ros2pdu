@@ -118,6 +118,7 @@ static inline int _pdu2ros_{{container.msg_type_name}}(const char* varray_ptr, H
     _pdu2ros_{{container.get_msg_type(item["type"])}}(varray_ptr, src.{{item["name"]}}, dst.{{item["name"]}});
 {%-     endif %}
 {%- endfor %}
+    (void)varray_ptr;
     return 0;
 }
 
@@ -249,6 +250,7 @@ static inline bool _ros2pdu_{{container.msg_type_name}}({{container.pkg_name}}::
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

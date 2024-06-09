@@ -32,6 +32,7 @@ static inline int _pdu2ros_Point(const char* varray_ptr, Hako_Point &src, geomet
     hako_convert_pdu2ros(src.y, dst.y);
     // primitive convert
     hako_convert_pdu2ros(src.z, dst.z);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -69,6 +70,7 @@ static inline bool _ros2pdu_Point(geometry_msgs::msg::Point &src, Hako_Point &ds
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

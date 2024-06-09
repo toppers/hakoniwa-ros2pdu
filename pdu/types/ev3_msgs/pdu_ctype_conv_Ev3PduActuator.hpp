@@ -53,6 +53,7 @@ static inline int _pdu2ros_Ev3PduActuator(const char* varray_ptr, Hako_Ev3PduAct
     _pdu2ros_struct_array_Ev3PduActuator_motors(varray_ptr, src, dst);
     // primitive convert
     hako_convert_pdu2ros(src.gyro_reset, dst.gyro_reset);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -110,6 +111,7 @@ static inline bool _ros2pdu_Ev3PduActuator(ev3_msgs::msg::Ev3PduActuator &src, H
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

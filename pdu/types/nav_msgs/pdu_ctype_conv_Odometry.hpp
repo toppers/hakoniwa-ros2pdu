@@ -43,6 +43,7 @@ static inline int _pdu2ros_Odometry(const char* varray_ptr, Hako_Odometry &src, 
     _pdu2ros_PoseWithCovariance(varray_ptr, src.pose, dst.pose);
     // Struct convert
     _pdu2ros_TwistWithCovariance(varray_ptr, src.twist, dst.twist);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -84,6 +85,7 @@ static inline bool _ros2pdu_Odometry(nav_msgs::msg::Odometry &src, Hako_Odometry
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

@@ -34,6 +34,7 @@ static inline int _pdu2ros_Quaternion(const char* varray_ptr, Hako_Quaternion &s
     hako_convert_pdu2ros(src.z, dst.z);
     // primitive convert
     hako_convert_pdu2ros(src.w, dst.w);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -73,6 +74,7 @@ static inline bool _ros2pdu_Quaternion(geometry_msgs::msg::Quaternion &src, Hako
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

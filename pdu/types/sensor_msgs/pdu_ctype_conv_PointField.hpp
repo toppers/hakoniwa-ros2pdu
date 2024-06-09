@@ -34,6 +34,7 @@ static inline int _pdu2ros_PointField(const char* varray_ptr, Hako_PointField &s
     hako_convert_pdu2ros(src.datatype, dst.datatype);
     // primitive convert
     hako_convert_pdu2ros(src.count, dst.count);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -75,6 +76,7 @@ static inline bool _ros2pdu_PointField(sensor_msgs::msg::PointField &src, Hako_P
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

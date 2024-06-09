@@ -41,6 +41,7 @@ static inline int _pdu2ros_TwistWithCovariance(const char* varray_ptr, Hako_Twis
     _pdu2ros_Twist(varray_ptr, src.twist, dst.twist);
     // primitive array convertor
     _pdu2ros_primitive_array_TwistWithCovariance_covariance(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -85,6 +86,7 @@ static inline bool _ros2pdu_TwistWithCovariance(geometry_msgs::msg::TwistWithCov
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

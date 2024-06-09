@@ -46,6 +46,7 @@ static inline int _pdu2ros_Collision(const char* varray_ptr, Hako_Collision &src
     _pdu2ros_struct_array_Collision_contact_position(varray_ptr, src, dst);
     // primitive convert
     hako_convert_pdu2ros(src.restitution_coefficient, dst.restitution_coefficient);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -96,6 +97,7 @@ static inline bool _ros2pdu_Collision(hako_msgs::msg::Collision &src, Hako_Colli
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

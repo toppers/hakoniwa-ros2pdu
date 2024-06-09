@@ -48,6 +48,7 @@ static inline int _pdu2ros_GameControllerOperation(const char* varray_ptr, Hako_
     _pdu2ros_primitive_array_GameControllerOperation_axis(varray_ptr, src, dst);
     // primitive array convertor
     _pdu2ros_primitive_array_GameControllerOperation_button(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -101,6 +102,7 @@ static inline bool _ros2pdu_GameControllerOperation(hako_msgs::msg::GameControll
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

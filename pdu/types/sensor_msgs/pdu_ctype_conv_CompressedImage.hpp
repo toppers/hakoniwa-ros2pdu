@@ -43,6 +43,7 @@ static inline int _pdu2ros_CompressedImage(const char* varray_ptr, Hako_Compress
     dst.format = (const char*)src.format;
     // primitive array convertor
     _pdu2ros_primitive_array_CompressedImage_data(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -91,6 +92,7 @@ static inline bool _ros2pdu_CompressedImage(sensor_msgs::msg::CompressedImage &s
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

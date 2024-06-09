@@ -36,6 +36,7 @@ static inline int _pdu2ros_RegionOfInterest(const char* varray_ptr, Hako_RegionO
     hako_convert_pdu2ros(src.width, dst.width);
     // primitive convert
     hako_convert_pdu2ros(src.do_rectify, dst.do_rectify);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -77,6 +78,7 @@ static inline bool _ros2pdu_RegionOfInterest(sensor_msgs::msg::RegionOfInterest 
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

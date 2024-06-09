@@ -51,6 +51,7 @@ static inline int _pdu2ros_Image(const char* varray_ptr, Hako_Image &src, sensor
     hako_convert_pdu2ros(src.step, dst.step);
     // primitive array convertor
     _pdu2ros_primitive_array_Image_data(varray_ptr, src, dst);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -107,6 +108,7 @@ static inline bool _ros2pdu_Image(sensor_msgs::msg::Image &src, Hako_Image &dst,
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

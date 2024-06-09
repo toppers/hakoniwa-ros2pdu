@@ -28,6 +28,7 @@ static inline int _pdu2ros_Bool(const char* varray_ptr, Hako_Bool &src, std_msgs
 {
     // primitive convert
     hako_convert_pdu2ros(src.data, dst.data);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -61,6 +62,7 @@ static inline bool _ros2pdu_Bool(std_msgs::msg::Bool &src, Hako_Bool &dst, PduDy
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

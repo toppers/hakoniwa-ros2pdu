@@ -28,6 +28,7 @@ static inline int _pdu2ros_String(const char* varray_ptr, Hako_String &src, std_
 {
     // string convertor
     dst.data = (const char*)src.data;
+    (void)varray_ptr;
     return 0;
 }
 
@@ -63,6 +64,7 @@ static inline bool _ros2pdu_String(std_msgs::msg::String &src, Hako_String &dst,
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

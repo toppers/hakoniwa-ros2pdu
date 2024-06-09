@@ -32,6 +32,7 @@ static inline int _pdu2ros_ManualPosAttControl(const char* varray_ptr, Hako_Manu
     hako_convert_pdu2ros(src.do_operation, dst.do_operation);
     // Struct convert
     _pdu2ros_Twist(varray_ptr, src.posatt, dst.posatt);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -67,6 +68,7 @@ static inline bool _ros2pdu_ManualPosAttControl(hako_msgs::msg::ManualPosAttCont
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

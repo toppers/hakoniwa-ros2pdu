@@ -87,6 +87,7 @@ static inline int _pdu2ros_CameraInfo(const char* varray_ptr, Hako_CameraInfo &s
     hako_convert_pdu2ros(src.binning_y, dst.binning_y);
     // Struct convert
     _pdu2ros_RegionOfInterest(varray_ptr, src.roi, dst.roi);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -178,6 +179,7 @@ static inline bool _ros2pdu_CameraInfo(sensor_msgs::msg::CameraInfo &src, Hako_C
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 

@@ -32,6 +32,7 @@ static inline int _pdu2ros_HakoDroneCmdHeader(const char* varray_ptr, Hako_HakoD
     hako_convert_pdu2ros(src.result, dst.result);
     // primitive convert
     hako_convert_pdu2ros(src.result_code, dst.result_code);
+    (void)varray_ptr;
     return 0;
 }
 
@@ -69,6 +70,7 @@ static inline bool _ros2pdu_HakoDroneCmdHeader(hako_msgs::msg::HakoDroneCmdHeade
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
     }
+    (void)dynamic_memory;
     return true;
 }
 
