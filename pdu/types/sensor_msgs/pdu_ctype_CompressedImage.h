@@ -6,7 +6,7 @@
 #include "std_msgs/pdu_ctype_Header.h"
 
 typedef struct {
-        Hako_Header    header;
+        Hako_Header header;
         char format[HAKO_STRING_SIZE];
         Hako_uint8 data[102400];
 } Hako_CompressedImage;

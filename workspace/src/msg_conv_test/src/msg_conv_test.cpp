@@ -7,6 +7,8 @@
 #include "can_msgs/pdu_ctype_conv_HakoCan.hpp"
 #include "ev3_msgs/pdu_ctype_conv_EV3PduActuator.hpp"
 #include "ev3_msgs/pdu_ctype_conv_EV3PduSensor.hpp"
+#include "hako_msgs/pdu_ctype_conv_SimpleVarray.hpp"
+#include "hako_msgs/pdu_ctype_conv_SimpleStructVarray.hpp"
 
 using namespace std::chrono_literals;
 
@@ -140,13 +142,119 @@ static void ev3sensor_pdu2ros_test()
       printf("motor_angle[%d]=%d\n", i, ev3_sensor_msg.motor_angle[i]);
    }
 }
+#define HAKO_ASSERT(condition) \
+    do { \
+        if (!(condition)) { \
+            std::cerr << "Assertion failed: (" #condition "), function " << __FUNCTION__ \
+                      << ", file " << __FILE__ << ", line " << __LINE__ << ".\n" \
+                      << std::endl; \
+            std::exit(EXIT_FAILURE); \
+        } \
+        else { std::cout << "PASSED: " << #condition << std::endl; } \
+    } while (false)
+
+static void svarray_ros2pdu_test1()
+{
+   hako_msgs::msg::SimpleVarray src;
+
+   src.p_mem1 = 324;
+   src.fixed_array[0] = 1;
+   src.fixed_array[1] = 2;
+   src.data.resize(2);
+   src.data[0] = 3;
+   src.data[1] = 4;
+   Hako_SimpleVarray *dst;
+   hako_convert_ros2pdu_SimpleVarray(src, &dst);
+   //std::cout << "len: " << len << std::endl;
+   HAKO_ASSERT(dst->p_mem1 == src.p_mem1);
+   HAKO_ASSERT(dst->fixed_array[0] == src.fixed_array[0]);
+   HAKO_ASSERT(dst->fixed_array[1] == src.fixed_array[1]);
+   HAKO_ASSERT(dst->_data_len == (int)src.data.size());
+   //std::cout << "data_off: " << dst->_data_off << std::endl;
+
+   hako_msgs::msg::SimpleVarray dst1;
+   hako_convert_pdu2ros_SimpleVarray(*dst, dst1);
+   //std::cout << "dst1.p_mem1: " << dst1.p_mem1 << std::endl;
+   HAKO_ASSERT(dst1.p_mem1 == src.p_mem1);
+   HAKO_ASSERT(dst1.fixed_array[0] == src.fixed_array[0]);
+   HAKO_ASSERT(dst1.fixed_array[1] == src.fixed_array[1]);
+   HAKO_ASSERT((int)dst1.data.size() == (int)src.data.size());
+   HAKO_ASSERT(dst1.data[0] == 3);
+   HAKO_ASSERT(dst1.data[1] == 4);
+   free(dst);
+}
+
+static void svarray_ros2pdu_test2()
+{
+   /*
+typedef struct {
+        Hako_int32 aaa;
+        Hako_cstring fixed_str[2];
+        // string varray_str[]
+        int _varray_str_len;
+        int _varray_str_off;
+        Hako_SimpleVarray fixed_array[5];
+        // SimpleVarray data[]
+        int _data_len;
+        int _data_off;
+} Hako_SimpleStructVarray;   
+   */
+   hako_msgs::msg::SimpleStructVarray src;
+   Hako_SimpleStructVarray *dst;
+   src.aaa = 1;
+   src.fixed_str[0] = "Takashi";
+   src.fixed_str[1] = "Mori";
+   src.varray_str.resize(1);
+   src.varray_str[0] = "Takashi Mori";
+   hako_msgs::msg::SimpleVarray child;
+   for (int i = 0; i < 5; i++) {
+      child.p_mem1 = 10 + i;
+      child.fixed_array[0] = 10 + i;
+      child.fixed_array[1] = 100 + i;
+      src.fixed_array[i] = child;
+   }
+   src.data.resize(1);
+   child.p_mem1 = 99;
+   child.fixed_array[0] = 111;
+   child.fixed_array[1] = 127;
+   src.data[0] = child;
+   hako_convert_ros2pdu_SimpleStructVarray(src, &dst);
+   //std::cout << "len: " << len << std::endl;
+   HAKO_ASSERT(dst->_varray_str_len == 1);
+   HAKO_ASSERT(dst->_varray_str_off == 0);
+   HAKO_ASSERT(dst->fixed_array[0].p_mem1 == 10);
+   HAKO_ASSERT(dst->fixed_array[4].p_mem1 == 14);
+   HAKO_ASSERT(dst->fixed_array[0].fixed_array[0] == 10);
+   HAKO_ASSERT(dst->fixed_array[4].fixed_array[1] == 104);
+   HAKO_ASSERT(dst->_data_len == 1);
+   hako_msgs::msg::SimpleStructVarray dst1;
+   hako_convert_pdu2ros_SimpleStructVarray(*dst, dst1);
+   HAKO_ASSERT(dst1.aaa == 1);
+   HAKO_ASSERT(dst1.fixed_str[0]  == "Takashi");
+   HAKO_ASSERT(dst1.fixed_str[1]  == "Mori");
+   HAKO_ASSERT(dst1.varray_str.size()  == 1);
+
+   HAKO_ASSERT(dst1.varray_str[0]  == "Takashi Mori");
+   HAKO_ASSERT(dst1.fixed_array[0].p_mem1 == 10);
+   HAKO_ASSERT(dst1.fixed_array[4].p_mem1 == 14);
+   HAKO_ASSERT(dst1.fixed_array[0].fixed_array[0] == 10);
+   HAKO_ASSERT(dst1.fixed_array[4].fixed_array[1] == 104);
+   //std::cout << "dst1.data.size(): " << dst1.data.size() << std::endl;
+   //std::cout << "dst1.data[0].p_mem1: " << dst1.data[0].p_mem1 << std::endl;
+   HAKO_ASSERT(dst1.data[0].p_mem1 == 99);
+   HAKO_ASSERT(dst1.data[0].fixed_array[0] == 111);
+   HAKO_ASSERT(dst1.data[0].fixed_array[1] == 127);
+   free(dst);
+}
+
 int main(int argc, char **argv) 
 {
    rclcpp::init(argc, argv);
    can_pdu2ros_test();
    ev3actuator_pdu2ros_test();
    ev3sensor_pdu2ros_test();
-
+   svarray_ros2pdu_test1();
+   svarray_ros2pdu_test2();
    return 0;
 }
 

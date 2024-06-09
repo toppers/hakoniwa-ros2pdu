@@ -4,6 +4,7 @@
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
 #include "pdu_primitive_ctypes_conv.hpp"
+#include "pdu_dynamic_memory.hpp"
 /*
  * Dependent pdu data
  */
@@ -22,37 +23,36 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int hako_convert_pdu2ros_HakoCanBody(Hako_HakoCanBody &src,  can_msgs::msg::HakoCanBody &dst)
+static inline int _pdu2ros_primitive_array_HakoCanBody_data(const char* varray_ptr, Hako_HakoCanBody &src, can_msgs::msg::HakoCanBody &dst)
 {
-    //primitive array convertor
-    (void)hako_convert_pdu2ros_array(
-        src.data, M_ARRAY_SIZE(Hako_HakoCanBody, Hako_uint8, data),
-        dst.data, dst.data.size());
+    // Fixed size array convertor
+    (void)varray_ptr;
+    for (int i = 0; i < 8; ++i) {
+        hako_convert_pdu2ros(src.data[i], dst.data[i]);
+    }
     return 0;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_HakoCanBody(Hako_HakoCanBody src[], std::array<can_msgs::msg::HakoCanBody, _dst_len> &dst)
+static inline int _pdu2ros_HakoCanBody(const char* varray_ptr, Hako_HakoCanBody &src, can_msgs::msg::HakoCanBody &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_pdu2ros_HakoCanBody(src[i], dst[i]);
-    }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_HakoCanBody(Hako_HakoCanBody src[], std::vector<can_msgs::msg::HakoCanBody> &dst)
-{
-    dst.resize(_src_len);
-    for (int i = 0; i < _src_len; i++) {
-        (void)hako_convert_pdu2ros_HakoCanBody(src[i], dst[i]);
-    }
+    // primitive array convertor
+    _pdu2ros_primitive_array_HakoCanBody_data(varray_ptr, src, dst);
     return 0;
+}
+
+static inline int hako_convert_pdu2ros_HakoCanBody(Hako_HakoCanBody &src, can_msgs::msg::HakoCanBody &dst)
+{
+    char* base_ptr = (char*)&src;
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_HakoCanBody));
+
+    // Validate magic number and version
+    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+        return -1; // Invalid PDU metadata
+    }
+    else {
+        char *varray_ptr = base_ptr + sizeof(Hako_HakoCanBody) + sizeof(HakoPduMetaDataType);
+        return _pdu2ros_HakoCanBody(varray_ptr, src, dst);
+    }
 }
 
 /***************************
@@ -60,42 +60,58 @@ int hako_convert_pdu2ros_array_HakoCanBody(Hako_HakoCanBody src[], std::vector<c
  * ROS2 ==> PDU
  *
  ***************************/
-static inline int hako_convert_ros2pdu_HakoCanBody(can_msgs::msg::HakoCanBody &src, Hako_HakoCanBody &dst)
+static inline bool _ros2pdu_primitive_array_HakoCanBody_data(can_msgs::msg::HakoCanBody &src, Hako_HakoCanBody &dst, PduDynamicMemory &dynamic_memory)
 {
-    //primitive array convertor
+    //Copy fixed array 8
+    (void)dynamic_memory;
     (void)hako_convert_ros2pdu_array(
         src.data, src.data.size(),
         dst.data, M_ARRAY_SIZE(Hako_HakoCanBody, Hako_uint8, data));
-    return 0;
+    return true;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_HakoCanBody(std::array<can_msgs::msg::HakoCanBody, _src_len> &src, Hako_HakoCanBody dst[])
+static inline bool _ros2pdu_HakoCanBody(can_msgs::msg::HakoCanBody &src, Hako_HakoCanBody &dst, PduDynamicMemory &dynamic_memory)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    try {
+        //primitive array copy
+        _ros2pdu_primitive_array_HakoCanBody_data(src, dst, dynamic_memory);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "convertor error: " << e.what() << std::endl;
+        return false;
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_HakoCanBody(src[i], dst[i]);
-    }
-    return ret;
+    return true;
 }
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_HakoCanBody(std::vector<can_msgs::msg::HakoCanBody> &src, Hako_HakoCanBody dst[])
+
+static inline int hako_convert_ros2pdu_HakoCanBody(can_msgs::msg::HakoCanBody &src, Hako_HakoCanBody** dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    PduDynamicMemory dynamic_memory;
+    Hako_HakoCanBody out;
+    if (!_ros2pdu_HakoCanBody(src, out, dynamic_memory)) {
+        return -1;
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_HakoCanBody(src[i], dst[i]);
+    int total_size = sizeof(Hako_HakoCanBody) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
+
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return -1;
     }
-    return ret;
+    // Copy out on top
+    memcpy(base_ptr, (void*)&out, sizeof(Hako_HakoCanBody));
+
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_HakoCanBody));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_HakoCanBody) + sizeof(HakoPduMetaDataType);
+
+    // Copy dynamic part and set offsets
+    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+
+    *dst = (Hako_HakoCanBody*)base_ptr;
+    return total_size;
 }
 
 #endif /* _PDU_CTYPE_CONV_HAKO_can_msgs_HakoCanBody_HPP_ */

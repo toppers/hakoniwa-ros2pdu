@@ -6,7 +6,7 @@
 #include "std_msgs/pdu_ctype_Header.h"
 
 typedef struct {
-        Hako_Header    header;
+        Hako_Header header;
         Hako_uint32 height;
         Hako_uint32 width;
         char encoding[HAKO_STRING_SIZE];

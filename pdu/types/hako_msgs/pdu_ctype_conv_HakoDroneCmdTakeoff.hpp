@@ -4,6 +4,7 @@
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
 #include "pdu_primitive_ctypes_conv.hpp"
+#include "pdu_dynamic_memory.hpp"
 /*
  * Dependent pdu data
  */
@@ -23,41 +24,33 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int hako_convert_pdu2ros_HakoDroneCmdTakeoff(Hako_HakoDroneCmdTakeoff &src,  hako_msgs::msg::HakoDroneCmdTakeoff &dst)
+
+static inline int _pdu2ros_HakoDroneCmdTakeoff(const char* varray_ptr, Hako_HakoDroneCmdTakeoff &src, hako_msgs::msg::HakoDroneCmdTakeoff &dst)
 {
-    //struct convert
-    hako_convert_pdu2ros_HakoDroneCmdHeader(src.header, dst.header);
-    //primitive convert
+    // Struct convert
+    _pdu2ros_HakoDroneCmdHeader(varray_ptr, src.header, dst.header);
+    // primitive convert
     hako_convert_pdu2ros(src.height, dst.height);
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.speed, dst.speed);
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.yaw_deg, dst.yaw_deg);
     return 0;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_HakoDroneCmdTakeoff(Hako_HakoDroneCmdTakeoff src[], std::array<hako_msgs::msg::HakoDroneCmdTakeoff, _dst_len> &dst)
+static inline int hako_convert_pdu2ros_HakoDroneCmdTakeoff(Hako_HakoDroneCmdTakeoff &src, hako_msgs::msg::HakoDroneCmdTakeoff &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    char* base_ptr = (char*)&src;
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_HakoDroneCmdTakeoff));
+
+    // Validate magic number and version
+    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+        return -1; // Invalid PDU metadata
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_pdu2ros_HakoDroneCmdTakeoff(src[i], dst[i]);
+    else {
+        char *varray_ptr = base_ptr + sizeof(Hako_HakoDroneCmdTakeoff) + sizeof(HakoPduMetaDataType);
+        return _pdu2ros_HakoDroneCmdTakeoff(varray_ptr, src, dst);
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_HakoDroneCmdTakeoff(Hako_HakoDroneCmdTakeoff src[], std::vector<hako_msgs::msg::HakoDroneCmdTakeoff> &dst)
-{
-    dst.resize(_src_len);
-    for (int i = 0; i < _src_len; i++) {
-        (void)hako_convert_pdu2ros_HakoDroneCmdTakeoff(src[i], dst[i]);
-    }
-    return 0;
 }
 
 /***************************
@@ -65,46 +58,55 @@ int hako_convert_pdu2ros_array_HakoDroneCmdTakeoff(Hako_HakoDroneCmdTakeoff src[
  * ROS2 ==> PDU
  *
  ***************************/
-static inline int hako_convert_ros2pdu_HakoDroneCmdTakeoff(hako_msgs::msg::HakoDroneCmdTakeoff &src, Hako_HakoDroneCmdTakeoff &dst)
+
+static inline bool _ros2pdu_HakoDroneCmdTakeoff(hako_msgs::msg::HakoDroneCmdTakeoff &src, Hako_HakoDroneCmdTakeoff &dst, PduDynamicMemory &dynamic_memory)
 {
-    //struct convert
-    hako_convert_ros2pdu_HakoDroneCmdHeader(src.header, dst.header);
-    //primitive convert
-    hako_convert_ros2pdu(src.height, dst.height);
-    //primitive convert
-    hako_convert_ros2pdu(src.speed, dst.speed);
-    //primitive convert
-    hako_convert_ros2pdu(src.yaw_deg, dst.yaw_deg);
-    return 0;
+    try {
+        // struct convert
+        _ros2pdu_HakoDroneCmdHeader(src.header, dst.header, dynamic_memory);
+        // primitive convert
+        hako_convert_ros2pdu(src.height, dst.height);
+        // primitive convert
+        hako_convert_ros2pdu(src.speed, dst.speed);
+        // primitive convert
+        hako_convert_ros2pdu(src.yaw_deg, dst.yaw_deg);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "convertor error: " << e.what() << std::endl;
+        return false;
+    }
+    return true;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_HakoDroneCmdTakeoff(std::array<hako_msgs::msg::HakoDroneCmdTakeoff, _src_len> &src, Hako_HakoDroneCmdTakeoff dst[])
+static inline int hako_convert_ros2pdu_HakoDroneCmdTakeoff(hako_msgs::msg::HakoDroneCmdTakeoff &src, Hako_HakoDroneCmdTakeoff** dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    PduDynamicMemory dynamic_memory;
+    Hako_HakoDroneCmdTakeoff out;
+    if (!_ros2pdu_HakoDroneCmdTakeoff(src, out, dynamic_memory)) {
+        return -1;
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_HakoDroneCmdTakeoff(src[i], dst[i]);
+    int total_size = sizeof(Hako_HakoDroneCmdTakeoff) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
+
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return -1;
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_HakoDroneCmdTakeoff(std::vector<hako_msgs::msg::HakoDroneCmdTakeoff> &src, Hako_HakoDroneCmdTakeoff dst[])
-{
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_HakoDroneCmdTakeoff(src[i], dst[i]);
-    }
-    return ret;
+    // Copy out on top
+    memcpy(base_ptr, (void*)&out, sizeof(Hako_HakoDroneCmdTakeoff));
+
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_HakoDroneCmdTakeoff));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_HakoDroneCmdTakeoff) + sizeof(HakoPduMetaDataType);
+
+    // Copy dynamic part and set offsets
+    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+
+    *dst = (Hako_HakoDroneCmdTakeoff*)base_ptr;
+    return total_size;
 }
 
 #endif /* _PDU_CTYPE_CONV_HAKO_hako_msgs_HakoDroneCmdTakeoff_HPP_ */

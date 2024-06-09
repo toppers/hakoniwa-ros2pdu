@@ -6,7 +6,7 @@
 #include "std_msgs/pdu_ctype_Header.h"
 
 typedef struct {
-        Hako_Header    header;
+        Hako_Header header;
         Hako_float32 angle_min;
         Hako_float32 angle_max;
         Hako_float32 angle_increment;

@@ -6,7 +6,7 @@
 #include "ev3_msgs/pdu_ctype_Ev3PduMotor.h"
 
 typedef struct {
-        Hako_Ev3PduActuatorHeader    head;
+        Hako_Ev3PduActuatorHeader head;
         Hako_uint8 leds[1];
         Hako_Ev3PduMotor motors[3];
         Hako_uint32 gyro_reset;

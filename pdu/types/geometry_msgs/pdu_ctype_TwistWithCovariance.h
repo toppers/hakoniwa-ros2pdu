@@ -6,7 +6,7 @@
 #include "geometry_msgs/pdu_ctype_Vector3.h"
 
 typedef struct {
-        Hako_Twist    twist;
+        Hako_Twist twist;
         Hako_float64 covariance[36];
 } Hako_TwistWithCovariance;
 

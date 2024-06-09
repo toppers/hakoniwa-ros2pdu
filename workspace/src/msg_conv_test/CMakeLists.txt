@@ -21,6 +21,7 @@ find_package(rclcpp REQUIRED)
 find_package(can_msgs REQUIRED)
 find_package(ev3_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(hako_msgs REQUIRED)
 
 add_executable(msg_conv_test_node 
   src/msg_conv_test.cpp
@@ -30,6 +31,7 @@ ament_target_dependencies(msg_conv_test_node
   std_msgs 
   can_msgs
   ev3_msgs
+  hako_msgs
 )
 
 if (DEFINED ENV{ENV_HAKO_SOURCE_DIR})

@@ -6,8 +6,8 @@
 #include "can_msgs/pdu_ctype_HakoCanHead.h"
 
 typedef struct {
-        Hako_HakoCanHead    head;
-        Hako_HakoCanBody    body;
+        Hako_HakoCanHead head;
+        Hako_HakoCanBody body;
 } Hako_HakoCan;
 
 #endif /* _pdu_ctype_can_msgs_HakoCan_H_ */

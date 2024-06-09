@@ -115,7 +115,7 @@ static inline int _pdu2ros_{{container.msg_type_name}}(const char* varray_ptr, H
     _pdu2ros_struct_array_{{container.msg_type_name}}_{{item["name"]}}(varray_ptr, src, dst);
 {%-     else %}
     // Struct convert
-    _pdu2ros_{{container.get_msg_type(item["type"])}}(base_ptr, src.{{item["name"]}}, dst.{{item["name"]}});
+    _pdu2ros_{{container.get_msg_type(item["type"])}}(varray_ptr, src.{{item["name"]}}, dst.{{item["name"]}});
 {%-     endif %}
 {%- endfor %}
     return 0;

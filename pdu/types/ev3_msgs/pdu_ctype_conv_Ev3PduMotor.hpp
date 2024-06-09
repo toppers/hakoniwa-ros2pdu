@@ -4,6 +4,7 @@
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
 #include "pdu_primitive_ctypes_conv.hpp"
+#include "pdu_dynamic_memory.hpp"
 /*
  * Dependent pdu data
  */
@@ -22,39 +23,31 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int hako_convert_pdu2ros_Ev3PduMotor(Hako_Ev3PduMotor &src,  ev3_msgs::msg::Ev3PduMotor &dst)
+
+static inline int _pdu2ros_Ev3PduMotor(const char* varray_ptr, Hako_Ev3PduMotor &src, ev3_msgs::msg::Ev3PduMotor &dst)
 {
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.power, dst.power);
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.stop, dst.stop);
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.reset_angle, dst.reset_angle);
     return 0;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_Ev3PduMotor(Hako_Ev3PduMotor src[], std::array<ev3_msgs::msg::Ev3PduMotor, _dst_len> &dst)
+static inline int hako_convert_pdu2ros_Ev3PduMotor(Hako_Ev3PduMotor &src, ev3_msgs::msg::Ev3PduMotor &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    char* base_ptr = (char*)&src;
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Ev3PduMotor));
+
+    // Validate magic number and version
+    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+        return -1; // Invalid PDU metadata
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_pdu2ros_Ev3PduMotor(src[i], dst[i]);
+    else {
+        char *varray_ptr = base_ptr + sizeof(Hako_Ev3PduMotor) + sizeof(HakoPduMetaDataType);
+        return _pdu2ros_Ev3PduMotor(varray_ptr, src, dst);
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_Ev3PduMotor(Hako_Ev3PduMotor src[], std::vector<ev3_msgs::msg::Ev3PduMotor> &dst)
-{
-    dst.resize(_src_len);
-    for (int i = 0; i < _src_len; i++) {
-        (void)hako_convert_pdu2ros_Ev3PduMotor(src[i], dst[i]);
-    }
-    return 0;
 }
 
 /***************************
@@ -62,44 +55,53 @@ int hako_convert_pdu2ros_array_Ev3PduMotor(Hako_Ev3PduMotor src[], std::vector<e
  * ROS2 ==> PDU
  *
  ***************************/
-static inline int hako_convert_ros2pdu_Ev3PduMotor(ev3_msgs::msg::Ev3PduMotor &src, Hako_Ev3PduMotor &dst)
+
+static inline bool _ros2pdu_Ev3PduMotor(ev3_msgs::msg::Ev3PduMotor &src, Hako_Ev3PduMotor &dst, PduDynamicMemory &dynamic_memory)
 {
-    //primitive convert
-    hako_convert_ros2pdu(src.power, dst.power);
-    //primitive convert
-    hako_convert_ros2pdu(src.stop, dst.stop);
-    //primitive convert
-    hako_convert_ros2pdu(src.reset_angle, dst.reset_angle);
-    return 0;
+    try {
+        // primitive convert
+        hako_convert_ros2pdu(src.power, dst.power);
+        // primitive convert
+        hako_convert_ros2pdu(src.stop, dst.stop);
+        // primitive convert
+        hako_convert_ros2pdu(src.reset_angle, dst.reset_angle);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "convertor error: " << e.what() << std::endl;
+        return false;
+    }
+    return true;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_Ev3PduMotor(std::array<ev3_msgs::msg::Ev3PduMotor, _src_len> &src, Hako_Ev3PduMotor dst[])
+static inline int hako_convert_ros2pdu_Ev3PduMotor(ev3_msgs::msg::Ev3PduMotor &src, Hako_Ev3PduMotor** dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    PduDynamicMemory dynamic_memory;
+    Hako_Ev3PduMotor out;
+    if (!_ros2pdu_Ev3PduMotor(src, out, dynamic_memory)) {
+        return -1;
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_Ev3PduMotor(src[i], dst[i]);
+    int total_size = sizeof(Hako_Ev3PduMotor) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
+
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return -1;
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_Ev3PduMotor(std::vector<ev3_msgs::msg::Ev3PduMotor> &src, Hako_Ev3PduMotor dst[])
-{
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_Ev3PduMotor(src[i], dst[i]);
-    }
-    return ret;
+    // Copy out on top
+    memcpy(base_ptr, (void*)&out, sizeof(Hako_Ev3PduMotor));
+
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Ev3PduMotor));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_Ev3PduMotor) + sizeof(HakoPduMetaDataType);
+
+    // Copy dynamic part and set offsets
+    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+
+    *dst = (Hako_Ev3PduMotor*)base_ptr;
+    return total_size;
 }
 
 #endif /* _PDU_CTYPE_CONV_HAKO_ev3_msgs_Ev3PduMotor_HPP_ */

@@ -8,7 +8,7 @@
 typedef struct {
         Hako_bool collision;
         Hako_uint32 contact_num;
-        Hako_Vector3    relative_velocity;
+        Hako_Vector3 relative_velocity;
         Hako_Point contact_position[10];
         Hako_float64 restitution_coefficient;
 } Hako_Collision;

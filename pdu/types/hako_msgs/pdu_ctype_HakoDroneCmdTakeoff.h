@@ -5,7 +5,7 @@
 #include "hako_msgs/pdu_ctype_HakoDroneCmdHeader.h"
 
 typedef struct {
-        Hako_HakoDroneCmdHeader    header;
+        Hako_HakoDroneCmdHeader header;
         Hako_float64 height;
         Hako_float64 speed;
         Hako_float64 yaw_deg;

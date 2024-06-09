@@ -4,6 +4,7 @@
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
 #include "pdu_primitive_ctypes_conv.hpp"
+#include "pdu_dynamic_memory.hpp"
 /*
  * Dependent pdu data
  */
@@ -22,43 +23,35 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int hako_convert_pdu2ros_Ev3PduActuatorHeader(Hako_Ev3PduActuatorHeader &src,  ev3_msgs::msg::Ev3PduActuatorHeader &dst)
+
+static inline int _pdu2ros_Ev3PduActuatorHeader(const char* varray_ptr, Hako_Ev3PduActuatorHeader &src, ev3_msgs::msg::Ev3PduActuatorHeader &dst)
 {
-    //string convertor
+    // string convertor
     dst.name = (const char*)src.name;
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.version, dst.version);
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.asset_time, dst.asset_time);
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.ext_off, dst.ext_off);
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.ext_size, dst.ext_size);
     return 0;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_Ev3PduActuatorHeader(Hako_Ev3PduActuatorHeader src[], std::array<ev3_msgs::msg::Ev3PduActuatorHeader, _dst_len> &dst)
+static inline int hako_convert_pdu2ros_Ev3PduActuatorHeader(Hako_Ev3PduActuatorHeader &src, ev3_msgs::msg::Ev3PduActuatorHeader &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    char* base_ptr = (char*)&src;
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Ev3PduActuatorHeader));
+
+    // Validate magic number and version
+    if ((meta->magicno != HAKO_PDU_META_DATA_MAGICNO) || (meta->version != HAKO_PDU_META_DATA_VERSION)) {
+        return -1; // Invalid PDU metadata
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_pdu2ros_Ev3PduActuatorHeader(src[i], dst[i]);
+    else {
+        char *varray_ptr = base_ptr + sizeof(Hako_Ev3PduActuatorHeader) + sizeof(HakoPduMetaDataType);
+        return _pdu2ros_Ev3PduActuatorHeader(varray_ptr, src, dst);
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_Ev3PduActuatorHeader(Hako_Ev3PduActuatorHeader src[], std::vector<ev3_msgs::msg::Ev3PduActuatorHeader> &dst)
-{
-    dst.resize(_src_len);
-    for (int i = 0; i < _src_len; i++) {
-        (void)hako_convert_pdu2ros_Ev3PduActuatorHeader(src[i], dst[i]);
-    }
-    return 0;
 }
 
 /***************************
@@ -66,50 +59,59 @@ int hako_convert_pdu2ros_array_Ev3PduActuatorHeader(Hako_Ev3PduActuatorHeader sr
  * ROS2 ==> PDU
  *
  ***************************/
-static inline int hako_convert_ros2pdu_Ev3PduActuatorHeader(ev3_msgs::msg::Ev3PduActuatorHeader &src, Hako_Ev3PduActuatorHeader &dst)
+
+static inline bool _ros2pdu_Ev3PduActuatorHeader(ev3_msgs::msg::Ev3PduActuatorHeader &src, Hako_Ev3PduActuatorHeader &dst, PduDynamicMemory &dynamic_memory)
 {
-    //string convertor
-    (void)hako_convert_ros2pdu_array(
-        src.name, src.name.length(),
-        dst.name, M_ARRAY_SIZE(Hako_Ev3PduActuatorHeader, char, name));
-    //primitive convert
-    hako_convert_ros2pdu(src.version, dst.version);
-    //primitive convert
-    hako_convert_ros2pdu(src.asset_time, dst.asset_time);
-    //primitive convert
-    hako_convert_ros2pdu(src.ext_off, dst.ext_off);
-    //primitive convert
-    hako_convert_ros2pdu(src.ext_size, dst.ext_size);
-    return 0;
+    try {
+        // string convertor
+        (void)hako_convert_ros2pdu_array(
+            src.name, src.name.length(),
+            dst.name, M_ARRAY_SIZE(Hako_Ev3PduActuatorHeader, char, name));
+        // primitive convert
+        hako_convert_ros2pdu(src.version, dst.version);
+        // primitive convert
+        hako_convert_ros2pdu(src.asset_time, dst.asset_time);
+        // primitive convert
+        hako_convert_ros2pdu(src.ext_off, dst.ext_off);
+        // primitive convert
+        hako_convert_ros2pdu(src.ext_size, dst.ext_size);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "convertor error: " << e.what() << std::endl;
+        return false;
+    }
+    return true;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_Ev3PduActuatorHeader(std::array<ev3_msgs::msg::Ev3PduActuatorHeader, _src_len> &src, Hako_Ev3PduActuatorHeader dst[])
+static inline int hako_convert_ros2pdu_Ev3PduActuatorHeader(ev3_msgs::msg::Ev3PduActuatorHeader &src, Hako_Ev3PduActuatorHeader** dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    PduDynamicMemory dynamic_memory;
+    Hako_Ev3PduActuatorHeader out;
+    if (!_ros2pdu_Ev3PduActuatorHeader(src, out, dynamic_memory)) {
+        return -1;
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_Ev3PduActuatorHeader(src[i], dst[i]);
+    int total_size = sizeof(Hako_Ev3PduActuatorHeader) + sizeof(HakoPduMetaDataType) + dynamic_memory.get_total_size();
+
+    // Allocate PDU memory
+    char* base_ptr = (char*)malloc(total_size);
+    if (base_ptr == nullptr) {
+        return -1;
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_Ev3PduActuatorHeader(std::vector<ev3_msgs::msg::Ev3PduActuatorHeader> &src, Hako_Ev3PduActuatorHeader dst[])
-{
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_Ev3PduActuatorHeader(src[i], dst[i]);
-    }
-    return ret;
+    // Copy out on top
+    memcpy(base_ptr, (void*)&out, sizeof(Hako_Ev3PduActuatorHeader));
+
+    // Set metadata at the end
+    HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(base_ptr + sizeof(Hako_Ev3PduActuatorHeader));
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->top_off = 0;
+    meta->total_size = total_size;
+    meta->varray_off = sizeof(Hako_Ev3PduActuatorHeader) + sizeof(HakoPduMetaDataType);
+
+    // Copy dynamic part and set offsets
+    dynamic_memory.copy_to_pdu(base_ptr + meta->varray_off);
+
+    *dst = (Hako_Ev3PduActuatorHeader*)base_ptr;
+    return total_size;
 }
 
 #endif /* _PDU_CTYPE_CONV_HAKO_ev3_msgs_Ev3PduActuatorHeader_HPP_ */

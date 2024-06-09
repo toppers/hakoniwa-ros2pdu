@@ -7,7 +7,7 @@
 #include "ev3_msgs/pdu_ctype_Ev3PduTouchSensor.h"
 
 typedef struct {
-        Hako_Ev3PduSensorHeader    head;
+        Hako_Ev3PduSensorHeader head;
         Hako_uint8 buttons[1];
         Hako_Ev3PduColorSensor color_sensors[2];
         Hako_Ev3PduTouchSensor touch_sensors[2];
