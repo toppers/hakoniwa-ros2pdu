@@ -256,6 +256,8 @@ typedef struct {
    HAKO_ASSERT(dst1.data[0].fixed_array[0] == 111);
    HAKO_ASSERT(dst1.data[0].fixed_array[1] == 127);
    hako_destroy_pdu(dst);
+
+   std::cout << "PduMetaDataSize: " << HAKO_PDU_META_DATA_SIZE() << std::endl;
 }
 
 int main(int argc, char **argv) 
