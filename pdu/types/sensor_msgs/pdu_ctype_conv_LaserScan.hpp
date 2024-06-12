@@ -27,19 +27,23 @@
  ***************************/
 static inline int _pdu2ros_primitive_array_LaserScan_ranges(const char* heap_ptr, Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    for (int i = 0; i < 360; ++i) {
-        hako_convert_pdu2ros(src.ranges[i], dst.ranges[i]);
+    // Convert using len and off
+    int offset = src._ranges_off;
+    int length = src._ranges_len;
+    if (length > 0) {
+        dst.ranges.resize(length);
+        memcpy(dst.ranges.data(), heap_ptr + offset, length * sizeof(Hako_float32));
     }
     return 0;
 }
 static inline int _pdu2ros_primitive_array_LaserScan_intensities(const char* heap_ptr, Hako_LaserScan &src, sensor_msgs::msg::LaserScan &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    for (int i = 0; i < 360; ++i) {
-        hako_convert_pdu2ros(src.intensities[i], dst.intensities[i]);
+    // Convert using len and off
+    int offset = src._intensities_off;
+    int length = src._intensities_len;
+    if (length > 0) {
+        dst.intensities.resize(length);
+        memcpy(dst.intensities.data(), heap_ptr + offset, length * sizeof(Hako_float32));
     }
     return 0;
 }
@@ -90,20 +94,30 @@ static inline int hako_convert_pdu2ros_LaserScan(Hako_LaserScan &src, sensor_msg
  ***************************/
 static inline bool _ros2pdu_primitive_array_LaserScan_ranges(sensor_msgs::msg::LaserScan &src, Hako_LaserScan &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 360
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array(
-        src.ranges, src.ranges.size(),
-        dst.ranges, M_ARRAY_SIZE(Hako_LaserScan, Hako_float32, ranges));
+    //Copy varray
+    dst._ranges_len = src.ranges.size();
+    if (dst._ranges_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._ranges_len, sizeof(Hako_float32));
+        memcpy(temp_ptr, src.ranges.data(), dst._ranges_len * sizeof(Hako_float32));
+        dst._ranges_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._ranges_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 static inline bool _ros2pdu_primitive_array_LaserScan_intensities(sensor_msgs::msg::LaserScan &src, Hako_LaserScan &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 360
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array(
-        src.intensities, src.intensities.size(),
-        dst.intensities, M_ARRAY_SIZE(Hako_LaserScan, Hako_float32, intensities));
+    //Copy varray
+    dst._intensities_len = src.intensities.size();
+    if (dst._intensities_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._intensities_len, sizeof(Hako_float32));
+        memcpy(temp_ptr, src.intensities.data(), dst._intensities_len * sizeof(Hako_float32));
+        dst._intensities_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._intensities_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 

@@ -14,8 +14,12 @@ typedef struct {
         Hako_float32 scan_time;
         Hako_float32 range_min;
         Hako_float32 range_max;
-        Hako_float32 ranges[360];
-        Hako_float32 intensities[360];
+        // float32 ranges[]
+        int _ranges_len;
+        int _ranges_off;
+        // float32 intensities[]
+        int _intensities_len;
+        int _intensities_off;
 } Hako_LaserScan;
 
 #endif /* _pdu_ctype_sensor_msgs_LaserScan_H_ */
