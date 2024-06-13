@@ -62,6 +62,8 @@ typedef struct {
 #define HAKO_GET_BASE_PTR(top_ptr, meta) (((char*)(top_ptr)) + (meta)->base_off)
 #define HAKO_GET_HEAP_PTR(top_ptr, meta) (((char*)(top_ptr)) + (meta)->heap_off)
 #define HAKO_GET_TOP_PTR(base_ptr) (((char*)(base_ptr)) - HAKO_PDU_META_DATA_SIZE())
+#define HAKO_PDU_FIXED_DATA_SIZE(base_size) (HAKO_PDU_META_DATA_SIZE() + (base_size))
+#define HAKO_PDU_FIXED_DATA_SIZE_BY_TYPE(base_type) (HAKO_PDU_META_DATA_SIZE() + sizeof(base_type))
 
 
 static inline int hako_pdu_get_fixed_data(const char* buffer, char* base_ptr, int base_size, int buffer_size)
