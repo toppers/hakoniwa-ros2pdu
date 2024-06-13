@@ -56,13 +56,42 @@ typedef struct {
  *  -------------
  */
 
-#define HAKO_PDU_METADATA_IS_VALID(meta) \
+#define HAKO_PDU_METADATA_IS_INVALID(meta) \
     (((meta)->magicno != HAKO_PDU_META_DATA_MAGICNO) || ((meta)->version != HAKO_PDU_META_DATA_VERSION))
 
 #define HAKO_GET_BASE_PTR(top_ptr, meta) (((char*)(top_ptr)) + (meta)->base_off)
 #define HAKO_GET_HEAP_PTR(top_ptr, meta) (((char*)(top_ptr)) + (meta)->heap_off)
 #define HAKO_GET_TOP_PTR(base_ptr) (((char*)(base_ptr)) - HAKO_PDU_META_DATA_SIZE())
 
+
+static inline int hako_pdu_get_fixed_data(const char* buffer, char* base_ptr, int base_size, int buffer_size)
+{
+    HakoPduMetaDataType *meta = (HakoPduMetaDataType*)buffer;
+    if (HAKO_PDU_METADATA_IS_INVALID(meta)) {
+        return -1;
+    }
+    if (buffer_size < meta->base_off + base_size) {
+        // バッファサイズが不足している場合のエラー処理
+        return -1;
+    }
+    memcpy(base_ptr, &buffer[meta->base_off], base_size);
+    return 0;
+}
+
+static inline int hako_pdu_put_fixed_data(char* buffer, const char* base_ptr, int base_size, int buffer_size)
+{
+    HakoPduMetaDataType *meta = (HakoPduMetaDataType*)buffer;
+    meta->magicno = HAKO_PDU_META_DATA_MAGICNO;
+    meta->version = HAKO_PDU_META_DATA_VERSION;
+    meta->base_off = HAKO_PDU_META_DATA_SIZE();
+    meta->heap_off = meta->base_off + base_size;
+    if (buffer_size < meta->heap_off) {
+        // バッファサイズが不足している場合のエラー処理
+        return -1;
+    }
+    memcpy(&buffer[meta->base_off], base_ptr, base_size);
+    return 0;
+}
 static inline void* hako_create_empty_pdu(int base_size, int heap_size)
 {
     int total_size = HAKO_PDU_META_DATA_SIZE() + HAKO_ALIGN_SIZE(base_size, HAKO_ALIGNMENT_SIZE) + HAKO_ALIGN_SIZE(heap_size, HAKO_ALIGNMENT_SIZE);
@@ -89,7 +118,7 @@ static inline void* hako_get_top_ptr_pdu(void *base_ptr)
     HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(top_ptr);
 
     // Validate magic number and version
-    if (HAKO_PDU_METADATA_IS_VALID(meta)) {
+    if (HAKO_PDU_METADATA_IS_INVALID(meta)) {
         return NULL; // Invalid PDU metadata
     }
     return top_ptr;
@@ -109,7 +138,7 @@ static inline void* hako_get_heap_ptr_pdu(void *base_ptr)
     HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(top_ptr);
 
     // Validate magic number and version
-    if (HAKO_PDU_METADATA_IS_VALID(meta)) {
+    if (HAKO_PDU_METADATA_IS_INVALID(meta)) {
         return NULL; // Invalid PDU metadata
     }
     return HAKO_GET_HEAP_PTR(top_ptr, meta);
@@ -119,7 +148,7 @@ static inline void* hako_get_base_ptr_pdu(void *top_ptr)
 {
     HakoPduMetaDataType* meta = (HakoPduMetaDataType*)(top_ptr);
     // Validate magic number and version
-    if (HAKO_PDU_METADATA_IS_VALID(meta)) {
+    if (HAKO_PDU_METADATA_IS_INVALID(meta)) {
         return NULL; // Invalid PDU metadata
     }
     return HAKO_GET_BASE_PTR(top_ptr, meta);
