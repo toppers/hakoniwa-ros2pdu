@@ -7,7 +7,7 @@
 #include "std_msgs/pdu_ctype_Header.h"
 
 typedef struct {
-        Hako_Header    header;
+        Hako_Header header;
         Hako_uint32 height;
         Hako_uint32 width;
         char distortion_model[HAKO_STRING_SIZE];
@@ -17,7 +17,7 @@ typedef struct {
         Hako_float64 p[12];
         Hako_uint32 binning_x;
         Hako_uint32 binning_y;
-        Hako_RegionOfInterest    roi;
+        Hako_RegionOfInterest roi;
 } Hako_CameraInfo;
 
 #endif /* _pdu_ctype_sensor_msgs_CameraInfo_H_ */

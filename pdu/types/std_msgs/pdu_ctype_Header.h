@@ -5,7 +5,7 @@
 #include "builtin_interfaces/pdu_ctype_Time.h"
 
 typedef struct {
-        Hako_Time    stamp;
+        Hako_Time stamp;
         char frame_id[HAKO_STRING_SIZE];
 } Hako_Header;
 

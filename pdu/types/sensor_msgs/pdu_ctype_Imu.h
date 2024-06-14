@@ -8,12 +8,12 @@
 #include "std_msgs/pdu_ctype_Header.h"
 
 typedef struct {
-        Hako_Header    header;
-        Hako_Quaternion    orientation;
+        Hako_Header header;
+        Hako_Quaternion orientation;
         Hako_float64 orientation_covariance[9];
-        Hako_Vector3    angular_velocity;
+        Hako_Vector3 angular_velocity;
         Hako_float64 angular_velocity_covariance[9];
-        Hako_Vector3    linear_acceleration;
+        Hako_Vector3 linear_acceleration;
         Hako_float64 linear_acceleration_covariance[9];
 } Hako_Imu;
 

@@ -8,7 +8,7 @@
 
 typedef struct {
         Hako_int32 request_id;
-        Hako_CompressedImage    image;
+        Hako_CompressedImage image;
 } Hako_HakoCameraData;
 
 #endif /* _pdu_ctype_hako_msgs_HakoCameraData_H_ */

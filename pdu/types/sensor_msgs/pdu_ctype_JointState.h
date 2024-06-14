@@ -6,7 +6,7 @@
 #include "std_msgs/pdu_ctype_Header.h"
 
 typedef struct {
-        Hako_Header    header;
+        Hako_Header header;
         Hako_cstring name[2];
         Hako_float64 position[2];
         Hako_float64 velocity[2];

@@ -21,16 +21,26 @@ do {    \
     PUBLISHER(topic_name) = my_node->create_publisher<pkg::msg::ros_type>(#topic_name, 1);    \
 } while (0)
 
-
 #define PUBLISH_PDU_TOPIC(pkg, ros_type, robo_name, channel_id, topic_name, count, write_cycle) \
 do {    \
     if (((count) % (write_cycle)) == 0) {   \
-        auto ros_msg = pkg::msg::ros_type();  \
-        Hako_ ##ros_type pdu_msg;   \
-        if (hako_pdu_proxy_rx_data(robo_name, (channel_id), (char*)&pdu_msg, sizeof(Hako_ ##ros_type))) {    \
-            hako_convert_pdu2ros_ ##ros_type (pdu_msg, ros_msg); \
-            PUBLISH_TOPIC(topic_name, ros_msg);   \
-        }   \
+        HakoPduMetaDataType meta; \
+        if (hako_pdu_proxy_rx_data(robo_name, (channel_id), (char*)&meta, sizeof(meta))) {    \
+            char* buffer = (char*)malloc(meta.total_size); \
+            if ((buffer != NULL) && hako_pdu_proxy_rx_data(robo_name, (channel_id), buffer, meta.total_size)) {    \
+                auto ros_msg = pkg::msg::ros_type();  \
+                Hako_ ##ros_type *pdu_msg = (Hako_ ##ros_type *)hako_get_base_ptr_pdu((void*)buffer);   \
+                if (pdu_msg != NULL) { \
+                    hako_convert_pdu2ros_ ##ros_type (pdu_msg, ros_msg); \
+                    PUBLISH_TOPIC(topic_name, ros_msg);   \
+                } \
+                free(buffer); \
+            } else { \
+                if (buffer != NULL) { \
+                    free(buffer); \
+                } \
+            } \
+        } \
     }   \
 } while (0)
 

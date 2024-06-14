@@ -4,6 +4,7 @@
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
 #include "pdu_primitive_ctypes_conv.hpp"
+#include "pdu_dynamic_memory.hpp"
 /*
  * Dependent pdu data
  */
@@ -22,35 +23,26 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int hako_convert_pdu2ros_String(Hako_String &src,  std_msgs::msg::String &dst)
+
+static inline int _pdu2ros_String(const char* heap_ptr, Hako_String &src, std_msgs::msg::String &dst)
 {
-    //string convertor
+    // string convertor
     dst.data = (const char*)src.data;
+    (void)heap_ptr;
     return 0;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_String(Hako_String src[], std::array<std_msgs::msg::String, _dst_len> &dst)
+static inline int hako_convert_pdu2ros_String(Hako_String &src, std_msgs::msg::String &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    void* base_ptr = (void*)&src;
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    // Validate magic number and version
+    if (heap_ptr == nullptr) {
+        return -1; // Invalid PDU metadata
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_pdu2ros_String(src[i], dst[i]);
+    else {
+        return _pdu2ros_String((char*)heap_ptr, src, dst);
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_String(Hako_String src[], std::vector<std_msgs::msg::String> &dst)
-{
-    dst.resize(_src_len);
-    for (int i = 0; i < _src_len; i++) {
-        (void)hako_convert_pdu2ros_String(src[i], dst[i]);
-    }
-    return 0;
 }
 
 /***************************
@@ -58,42 +50,52 @@ int hako_convert_pdu2ros_array_String(Hako_String src[], std::vector<std_msgs::m
  * ROS2 ==> PDU
  *
  ***************************/
-static inline int hako_convert_ros2pdu_String(std_msgs::msg::String &src, Hako_String &dst)
+
+static inline bool _ros2pdu_String(std_msgs::msg::String &src, Hako_String &dst, PduDynamicMemory &dynamic_memory)
 {
-    //string convertor
-    (void)hako_convert_ros2pdu_array(
-        src.data, src.data.length(),
-        dst.data, M_ARRAY_SIZE(Hako_String, char, data));
-    return 0;
+    try {
+        // string convertor
+        (void)hako_convert_ros2pdu_array(
+            src.data, src.data.length(),
+            dst.data, M_ARRAY_SIZE(Hako_String, char, data));
+    } catch (const std::runtime_error& e) {
+        std::cerr << "convertor error: " << e.what() << std::endl;
+        return false;
+    }
+    (void)dynamic_memory;
+    return true;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_String(std::array<std_msgs::msg::String, _src_len> &src, Hako_String dst[])
+static inline int hako_convert_ros2pdu_String(std_msgs::msg::String &src, Hako_String** dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    PduDynamicMemory dynamic_memory;
+    Hako_String out;
+    if (!_ros2pdu_String(src, out, dynamic_memory)) {
+        return -1;
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_String(src[i], dst[i]);
+    int heap_size = dynamic_memory.get_total_size();
+    void* base_ptr = hako_create_empty_pdu(sizeof(Hako_String), heap_size);
+    if (base_ptr == nullptr) {
+        return -1;
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_String(std::vector<std_msgs::msg::String> &src, Hako_String dst[])
-{
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_String(src[i], dst[i]);
-    }
-    return ret;
+    // Copy out on base data
+    memcpy(base_ptr, (void*)&out, sizeof(Hako_String));
+
+    // Copy dynamic part and set offsets
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    dynamic_memory.copy_to_pdu((char*)heap_ptr);
+
+    *dst = (Hako_String*)base_ptr;
+    return hako_get_pdu_meta_data(base_ptr)->total_size;
 }
 
+static inline Hako_String* hako_create_empty_pdu_String(int heap_size)
+{
+    // Allocate PDU memory
+    char* base_ptr = (char*)hako_create_empty_pdu(sizeof(Hako_String), heap_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    return (Hako_String*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_std_msgs_String_HPP_ */

@@ -97,21 +97,27 @@ def get_struct_array_type(name):
     return base_type
 
 def get_array_size(mem_name, name):
-	global container
-	pkg = container.pkg_name
-	type = container.msg_type_name
-	tmp = name.split('[')[1]
-	if (tmp.split(']')[0] != ''):
-		return tmp.split(']')[0]
-	else:
-		if container.varry_json_data[pkg] == None:
-			return "HAKO_PDU_MAX_ARRAY_SIZE"
-		if container.varry_json_data[pkg][type] == None:
-			return "HAKO_PDU_MAX_ARRAY_SIZE"
-		if container.varry_json_data[pkg][type][mem_name] == None:
-			return "HAKO_PDU_MAX_ARRAY_SIZE"
-		else:
-			return container.varry_json_data[pkg][type][mem_name]
+    global container
+    pkg = container.pkg_name
+    type = container.msg_type_name
+    tmp = name.split('[')[1]
+    
+    if tmp.split(']')[0] != '':
+        return tmp.split(']')[0]
+    else:
+        # pkgが存在しない場合
+        if pkg not in container.varry_json_data or container.varry_json_data[pkg] is None:
+            return None
+        
+        # typeが存在しない場合
+        if type not in container.varry_json_data[pkg] or container.varry_json_data[pkg][type] is None:
+            return None
+        
+        # mem_nameが存在しない場合
+        if mem_name not in container.varry_json_data[pkg][type] or container.varry_json_data[pkg][type][mem_name] is None:
+            return None
+        else:
+            return container.varry_json_data[pkg][type][mem_name]
 
 def get_type(name):
 	if (is_array(name)):

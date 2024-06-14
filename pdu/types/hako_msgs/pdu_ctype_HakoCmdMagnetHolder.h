@@ -5,7 +5,7 @@
 #include "hako_msgs/pdu_ctype_HakoCmdHeader.h"
 
 typedef struct {
-        Hako_HakoCmdHeader    header;
+        Hako_HakoCmdHeader header;
         Hako_bool magnet_on;
 } Hako_HakoCmdMagnetHolder;
 

@@ -4,6 +4,7 @@
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
 #include "pdu_primitive_ctypes_conv.hpp"
+#include "pdu_dynamic_memory.hpp"
 /*
  * Dependent pdu data
  */
@@ -22,35 +23,26 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int hako_convert_pdu2ros_Bool(Hako_Bool &src,  std_msgs::msg::Bool &dst)
+
+static inline int _pdu2ros_Bool(const char* heap_ptr, Hako_Bool &src, std_msgs::msg::Bool &dst)
 {
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.data, dst.data);
+    (void)heap_ptr;
     return 0;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_Bool(Hako_Bool src[], std::array<std_msgs::msg::Bool, _dst_len> &dst)
+static inline int hako_convert_pdu2ros_Bool(Hako_Bool &src, std_msgs::msg::Bool &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    void* base_ptr = (void*)&src;
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    // Validate magic number and version
+    if (heap_ptr == nullptr) {
+        return -1; // Invalid PDU metadata
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_pdu2ros_Bool(src[i], dst[i]);
+    else {
+        return _pdu2ros_Bool((char*)heap_ptr, src, dst);
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_Bool(Hako_Bool src[], std::vector<std_msgs::msg::Bool> &dst)
-{
-    dst.resize(_src_len);
-    for (int i = 0; i < _src_len; i++) {
-        (void)hako_convert_pdu2ros_Bool(src[i], dst[i]);
-    }
-    return 0;
 }
 
 /***************************
@@ -58,40 +50,50 @@ int hako_convert_pdu2ros_array_Bool(Hako_Bool src[], std::vector<std_msgs::msg::
  * ROS2 ==> PDU
  *
  ***************************/
-static inline int hako_convert_ros2pdu_Bool(std_msgs::msg::Bool &src, Hako_Bool &dst)
+
+static inline bool _ros2pdu_Bool(std_msgs::msg::Bool &src, Hako_Bool &dst, PduDynamicMemory &dynamic_memory)
 {
-    //primitive convert
-    hako_convert_ros2pdu(src.data, dst.data);
-    return 0;
+    try {
+        // primitive convert
+        hako_convert_ros2pdu(src.data, dst.data);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "convertor error: " << e.what() << std::endl;
+        return false;
+    }
+    (void)dynamic_memory;
+    return true;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_Bool(std::array<std_msgs::msg::Bool, _src_len> &src, Hako_Bool dst[])
+static inline int hako_convert_ros2pdu_Bool(std_msgs::msg::Bool &src, Hako_Bool** dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    PduDynamicMemory dynamic_memory;
+    Hako_Bool out;
+    if (!_ros2pdu_Bool(src, out, dynamic_memory)) {
+        return -1;
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_Bool(src[i], dst[i]);
+    int heap_size = dynamic_memory.get_total_size();
+    void* base_ptr = hako_create_empty_pdu(sizeof(Hako_Bool), heap_size);
+    if (base_ptr == nullptr) {
+        return -1;
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_Bool(std::vector<std_msgs::msg::Bool> &src, Hako_Bool dst[])
-{
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_Bool(src[i], dst[i]);
-    }
-    return ret;
+    // Copy out on base data
+    memcpy(base_ptr, (void*)&out, sizeof(Hako_Bool));
+
+    // Copy dynamic part and set offsets
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    dynamic_memory.copy_to_pdu((char*)heap_ptr);
+
+    *dst = (Hako_Bool*)base_ptr;
+    return hako_get_pdu_meta_data(base_ptr)->total_size;
 }
 
+static inline Hako_Bool* hako_create_empty_pdu_Bool(int heap_size)
+{
+    // Allocate PDU memory
+    char* base_ptr = (char*)hako_create_empty_pdu(sizeof(Hako_Bool), heap_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    return (Hako_Bool*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_std_msgs_Bool_HPP_ */

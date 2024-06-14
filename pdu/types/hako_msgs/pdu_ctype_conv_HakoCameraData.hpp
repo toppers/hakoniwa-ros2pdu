@@ -4,6 +4,7 @@
 #include "pdu_primitive_ctypes.h"
 #include "ros_primitive_types.hpp"
 #include "pdu_primitive_ctypes_conv.hpp"
+#include "pdu_dynamic_memory.hpp"
 /*
  * Dependent pdu data
  */
@@ -25,37 +26,28 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int hako_convert_pdu2ros_HakoCameraData(Hako_HakoCameraData &src,  hako_msgs::msg::HakoCameraData &dst)
+
+static inline int _pdu2ros_HakoCameraData(const char* heap_ptr, Hako_HakoCameraData &src, hako_msgs::msg::HakoCameraData &dst)
 {
-    //primitive convert
+    // primitive convert
     hako_convert_pdu2ros(src.request_id, dst.request_id);
-    //struct convert
-    hako_convert_pdu2ros_CompressedImage(src.image, dst.image);
+    // Struct convert
+    _pdu2ros_CompressedImage(heap_ptr, src.image, dst.image);
+    (void)heap_ptr;
     return 0;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_HakoCameraData(Hako_HakoCameraData src[], std::array<hako_msgs::msg::HakoCameraData, _dst_len> &dst)
+static inline int hako_convert_pdu2ros_HakoCameraData(Hako_HakoCameraData &src, hako_msgs::msg::HakoCameraData &dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    void* base_ptr = (void*)&src;
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    // Validate magic number and version
+    if (heap_ptr == nullptr) {
+        return -1; // Invalid PDU metadata
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_pdu2ros_HakoCameraData(src[i], dst[i]);
+    else {
+        return _pdu2ros_HakoCameraData((char*)heap_ptr, src, dst);
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_pdu2ros_array_HakoCameraData(Hako_HakoCameraData src[], std::vector<hako_msgs::msg::HakoCameraData> &dst)
-{
-    dst.resize(_src_len);
-    for (int i = 0; i < _src_len; i++) {
-        (void)hako_convert_pdu2ros_HakoCameraData(src[i], dst[i]);
-    }
-    return 0;
 }
 
 /***************************
@@ -63,42 +55,52 @@ int hako_convert_pdu2ros_array_HakoCameraData(Hako_HakoCameraData src[], std::ve
  * ROS2 ==> PDU
  *
  ***************************/
-static inline int hako_convert_ros2pdu_HakoCameraData(hako_msgs::msg::HakoCameraData &src, Hako_HakoCameraData &dst)
+
+static inline bool _ros2pdu_HakoCameraData(hako_msgs::msg::HakoCameraData &src, Hako_HakoCameraData &dst, PduDynamicMemory &dynamic_memory)
 {
-    //primitive convert
-    hako_convert_ros2pdu(src.request_id, dst.request_id);
-    //struct convert
-    hako_convert_ros2pdu_CompressedImage(src.image, dst.image);
-    return 0;
+    try {
+        // primitive convert
+        hako_convert_ros2pdu(src.request_id, dst.request_id);
+        // struct convert
+        _ros2pdu_CompressedImage(src.image, dst.image, dynamic_memory);
+    } catch (const std::runtime_error& e) {
+        std::cerr << "convertor error: " << e.what() << std::endl;
+        return false;
+    }
+    (void)dynamic_memory;
+    return true;
 }
 
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_HakoCameraData(std::array<hako_msgs::msg::HakoCameraData, _src_len> &src, Hako_HakoCameraData dst[])
+static inline int hako_convert_ros2pdu_HakoCameraData(hako_msgs::msg::HakoCameraData &src, Hako_HakoCameraData** dst)
 {
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
+    PduDynamicMemory dynamic_memory;
+    Hako_HakoCameraData out;
+    if (!_ros2pdu_HakoCameraData(src, out, dynamic_memory)) {
+        return -1;
     }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_HakoCameraData(src[i], dst[i]);
+    int heap_size = dynamic_memory.get_total_size();
+    void* base_ptr = hako_create_empty_pdu(sizeof(Hako_HakoCameraData), heap_size);
+    if (base_ptr == nullptr) {
+        return -1;
     }
-    return ret;
-}
-template<int _src_len, int _dst_len>
-int hako_convert_ros2pdu_array_HakoCameraData(std::vector<hako_msgs::msg::HakoCameraData> &src, Hako_HakoCameraData dst[])
-{
-    int ret = 0;
-    int len = _dst_len;
-    if (_dst_len > _src_len) {
-        len = _src_len;
-        ret = -1;
-    }
-    for (int i = 0; i < len; i++) {
-        (void)hako_convert_ros2pdu_HakoCameraData(src[i], dst[i]);
-    }
-    return ret;
+    // Copy out on base data
+    memcpy(base_ptr, (void*)&out, sizeof(Hako_HakoCameraData));
+
+    // Copy dynamic part and set offsets
+    void* heap_ptr = hako_get_heap_ptr_pdu(base_ptr);
+    dynamic_memory.copy_to_pdu((char*)heap_ptr);
+
+    *dst = (Hako_HakoCameraData*)base_ptr;
+    return hako_get_pdu_meta_data(base_ptr)->total_size;
 }
 
+static inline Hako_HakoCameraData* hako_create_empty_pdu_HakoCameraData(int heap_size)
+{
+    // Allocate PDU memory
+    char* base_ptr = (char*)hako_create_empty_pdu(sizeof(Hako_HakoCameraData), heap_size);
+    if (base_ptr == nullptr) {
+        return nullptr;
+    }
+    return (Hako_HakoCameraData*)base_ptr;
+}
 #endif /* _PDU_CTYPE_CONV_HAKO_hako_msgs_HakoCameraData_HPP_ */

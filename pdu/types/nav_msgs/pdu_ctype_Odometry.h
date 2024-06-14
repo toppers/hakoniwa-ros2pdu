@@ -13,10 +13,10 @@
 #include "std_msgs/pdu_ctype_Header.h"
 
 typedef struct {
-        Hako_Header    header;
+        Hako_Header header;
         char child_frame_id[HAKO_STRING_SIZE];
-        Hako_PoseWithCovariance    pose;
-        Hako_TwistWithCovariance    twist;
+        Hako_PoseWithCovariance pose;
+        Hako_TwistWithCovariance twist;
 } Hako_Odometry;
 
 #endif /* _pdu_ctype_nav_msgs_Odometry_H_ */

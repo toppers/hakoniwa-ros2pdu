@@ -30,3 +30,4 @@ std_msgs/String
 std_msgs/Bool
 sensor_msgs/PointCloud2
 hako_msgs/GameControllerOperation
+hako_msgs/SimpleStructVarray

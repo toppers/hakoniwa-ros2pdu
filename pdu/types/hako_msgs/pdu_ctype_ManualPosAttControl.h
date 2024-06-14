@@ -7,7 +7,7 @@
 
 typedef struct {
         Hako_bool do_operation;
-        Hako_Twist    posatt;
+        Hako_Twist posatt;
 } Hako_ManualPosAttControl;
 
 #endif /* _pdu_ctype_hako_msgs_ManualPosAttControl_H_ */

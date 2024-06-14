@@ -20,9 +20,10 @@ do {    \
 #define DEFINE_SUB_CALLBACK(pkg, ros_type, robo_name, channel_id, topic_name) \
 static void SUB_CALLBACK_NAME(topic_name)(const pkg::msg::ros_type::SharedPtr ros_msg) \
 {   \
-    Hako_ ##ros_type pdu_msg;   \
-    hako_convert_ros2pdu_ ##ros_type (*ros_msg, pdu_msg); \
-    hako_pdu_proxy_tx_data(robo_name, (channel_id), (char*)&pdu_msg, sizeof(Hako_ ##ros_type));    \
+    Hako_ ##ros_type *pdu_msg;   \
+    int total_size = hako_convert_ros2pdu_ ##ros_type (*ros_msg, &pdu_msg); \
+    hako_pdu_proxy_tx_data(robo_name, (channel_id), (char*)pdu_msg, total_size);    \
+    hako_destroy_pdu(pdu_msg); \
 }
 
 #define ROS_NODE_TYPE std::shared_ptr<rclcpp::Node>

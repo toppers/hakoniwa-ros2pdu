@@ -7,7 +7,7 @@
 #include "geometry_msgs/pdu_ctype_Quaternion.h"
 
 typedef struct {
-        Hako_Pose    pose;
+        Hako_Pose pose;
         Hako_float64 covariance[36];
 } Hako_PoseWithCovariance;
 
