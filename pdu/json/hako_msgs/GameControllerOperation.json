@@ -2,11 +2,11 @@
   "fields": [
     {
       "name": "axis",
-      "type": "float64[4]"
+      "type": "float64[6]"
     },
     {
       "name": "button",
-      "type": "bool[4]"
+      "type": "bool[14]"
     }
   ]
 }

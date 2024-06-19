@@ -27,7 +27,7 @@ static inline int _pdu2ros_primitive_array_GameControllerOperation_axis(const ch
 {
     // Fixed size array convertor
     (void)heap_ptr;
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 6; ++i) {
         hako_convert_pdu2ros(src.axis[i], dst.axis[i]);
     }
     return 0;
@@ -36,7 +36,7 @@ static inline int _pdu2ros_primitive_array_GameControllerOperation_button(const 
 {
     // Fixed size array convertor
     (void)heap_ptr;
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 14; ++i) {
         hako_convert_pdu2ros(src.button[i], dst.button[i]);
     }
     return 0;
@@ -72,7 +72,7 @@ static inline int hako_convert_pdu2ros_GameControllerOperation(Hako_GameControll
  ***************************/
 static inline bool _ros2pdu_primitive_array_GameControllerOperation_axis(hako_msgs::msg::GameControllerOperation &src, Hako_GameControllerOperation &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 4
+    //Copy fixed array 6
     (void)dynamic_memory;
     (void)hako_convert_ros2pdu_array(
         src.axis, src.axis.size(),
@@ -81,7 +81,7 @@ static inline bool _ros2pdu_primitive_array_GameControllerOperation_axis(hako_ms
 }
 static inline bool _ros2pdu_primitive_array_GameControllerOperation_button(hako_msgs::msg::GameControllerOperation &src, Hako_GameControllerOperation &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 4
+    //Copy fixed array 14
     (void)dynamic_memory;
     (void)hako_convert_ros2pdu_array(
         src.button, src.button.size(),
