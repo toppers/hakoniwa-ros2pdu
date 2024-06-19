@@ -6,7 +6,7 @@
     },
     {
       "name": "button",
-      "type": "bool[14]"
+      "type": "bool[15]"
     }
   ]
 }
