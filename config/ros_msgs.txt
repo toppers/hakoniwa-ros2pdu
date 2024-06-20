@@ -1,6 +1,7 @@
 hako_msgs/HakoCmdCamera
 hako_msgs/HakoCmdCameraMove
 hako_msgs/HakoCameraData
+hako_msgs/HakoCameraInfo
 hako_msgs/HakoCmdMagnetHolder
 hako_msgs/HakoStatusMagnetHolder
 pico_msgs/LightSensor
