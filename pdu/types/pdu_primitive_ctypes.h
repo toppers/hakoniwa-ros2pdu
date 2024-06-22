@@ -164,5 +164,17 @@ static inline int hako_destroy_pdu(void *base_ptr)
     free(top_ptr);
     return 0;
 }
+static inline void hako_pdu_mem_dump(const void* addr, size_t len) 
+{
+    const unsigned char* p = static_cast<const unsigned char*>(addr);
+    std::cout << "Memory Dump (" << len << " bytes):" << std::endl;
+    for (size_t i = 0; i < len; ++i) {
+        std::cout << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(p[i]) << " ";
+        if ((i + 1) % 16 == 0) {
+            std::cout << std::endl;
+        }
+    }
+    std::cout << std::dec << std::endl;
+}
 
 #endif /* _pdu_primitive_ctypes_H_ */
