@@ -164,6 +164,7 @@ static inline int hako_destroy_pdu(void *base_ptr)
     free(top_ptr);
     return 0;
 }
+#include <iomanip>
 static inline void hako_pdu_mem_dump(const void* addr, size_t len) 
 {
     const unsigned char* p = static_cast<const unsigned char*>(addr);
