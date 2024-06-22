@@ -20,7 +20,7 @@ static void hako_pdu_offset_{{container.msg_type_name}}(void)
 {%-         if array_size is none %}
         //printf("varray:primitive:_{{item["name"]}}_len:int32:%ld:%ld\n", offsetof(Hako_{{container.msg_type_name}}, _{{item["name"]}}_len), sizeof(int));
         //printf("single:primitive:_{{item["name"]}}_off:int32:%ld:%ld\n", offsetof(Hako_{{container.msg_type_name}}, _{{item["name"]}}_off), sizeof(int));
-        printf("varray:primitive:{{item["name"]}}:{{container.get_msg_type(container.get_array_type(item["type"]))}}:%ld:%ld:%d\n", offsetof(Hako_{{container.msg_type_name}}, _{{item["name"]}}_len), sizeof(Hako_{{container.get_type(container.get_struct_array_type(item["type"]))}}), 8);
+        printf("varray:primitive:{{item["name"]}}:{{container.get_msg_type(container.get_array_type(item["type"]))}}:%ld:%ld:%d\n", offsetof(Hako_{{container.msg_type_name}}, _{{item["name"]}}_len), sizeof(Hako_{{container.get_msg_type(container.get_struct_array_type(item["type"]))}}), 8);
 {%-         else %}
         printf("array:primitive:{{item["name"]}}:{{container.get_msg_type(container.get_array_type(item["type"]))}}:%ld:%ld:%d\n", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}), sizeof(((Hako_{{container.msg_type_name}} *)0)->{{item["name"]}}), {{array_size}});
 {%-         endif %}
@@ -38,7 +38,7 @@ static void hako_pdu_offset_{{container.msg_type_name}}(void)
 {%-         if array_size is none %}
         //printf("single:struct:_{{item["name"]}}_len:int32:%ld:%ld\n", offsetof(Hako_{{container.msg_type_name}}, _{{item["name"]}}_len), sizeof(int));
         //printf("single:struct:_{{item["name"]}}_off:int32:%ld:%ld\n", offsetof(Hako_{{container.msg_type_name}}, _{{item["name"]}}_off), sizeof(int));
-        printf("varray:struct:{{item["name"]}}:{{container.get_type(container.get_struct_array_type(item["type"]))}}:%ld:%ld:%d\n", offsetof(Hako_{{container.msg_type_name}}, _{{item["name"]}}_len), sizeof(Hako_{{container.get_type(container.get_struct_array_type(item["type"]))}}), 8);
+        printf("varray:struct:{{item["name"]}}:{{container.get_type(container.get_struct_array_type(item["type"]))}}:%ld:%ld:%d\n", offsetof(Hako_{{container.msg_type_name}}, _{{item["name"]}}_len), sizeof(Hako_{{container.get_msg_type(container.get_struct_array_type(item["type"]))}}), 8);
 {%-         else %}
         printf("array:struct:{{item["name"]}}:{{container.get_type(container.get_struct_array_type(item["type"]))}}:%ld:%ld:%d\n", offsetof(Hako_{{container.msg_type_name}}, {{item["name"]}}), sizeof(((Hako_{{container.msg_type_name}} *)0)->{{item["name"]}}), {{array_size}});
 {%-         endif %}
