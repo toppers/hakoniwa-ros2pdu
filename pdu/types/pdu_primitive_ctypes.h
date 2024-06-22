@@ -164,7 +164,10 @@ static inline int hako_destroy_pdu(void *base_ptr)
     free(top_ptr);
     return 0;
 }
+#ifdef __cplusplus
+#include <iostream>
 #include <iomanip>
+
 static inline void hako_pdu_mem_dump(const void* addr, size_t len) 
 {
     const unsigned char* p = static_cast<const unsigned char*>(addr);
@@ -177,5 +180,6 @@ static inline void hako_pdu_mem_dump(const void* addr, size_t len)
     }
     std::cout << std::dec << std::endl;
 }
+#endif
 
 #endif /* _pdu_primitive_ctypes_H_ */
