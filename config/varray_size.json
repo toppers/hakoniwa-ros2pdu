@@ -1,28 +1,8 @@
 {
-    "tf2_msgs": {
-        "TFMessage": {
-            "transforms": 1
-        }
-    },
     "sensor_msgs": {
         "PointCloud2": {
             "fields": 4,
             "data": 176656
-        },
-        "JointState": {
-            "name": 2,
-            "position": 2,
-            "velocity": 2,
-            "effort": 2
-        },
-        "Image": {
-            "data": 1024000
-        },
-        "CompressedImage": {
-            "data": 102400
-        },
-        "CameraInfo": {
-            "d": 5
         }
     }
 }
