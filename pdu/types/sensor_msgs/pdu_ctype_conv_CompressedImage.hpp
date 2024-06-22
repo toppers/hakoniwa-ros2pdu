@@ -25,12 +25,15 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_primitive_array_CompressedImage_data(const char* heap_ptr, Hako_CompressedImage &src, sensor_msgs::msg::CompressedImage &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    for (int i = 0; i < 102400; ++i) {
-        hako_convert_pdu2ros(src.data[i], dst.data[i]);
+    // Convert using len and off
+    int offset = src._data_off;
+    int length = src._data_len;
+    if (length > 0) {
+        dst.data.resize(length);
+        memcpy(dst.data.data(), heap_ptr + offset, length * sizeof(Hako_uint8));
     }
     return 0;
 }
@@ -67,11 +70,16 @@ static inline int hako_convert_pdu2ros_CompressedImage(Hako_CompressedImage &src
  ***************************/
 static inline bool _ros2pdu_primitive_array_CompressedImage_data(sensor_msgs::msg::CompressedImage &src, Hako_CompressedImage &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 102400
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array(
-        src.data, src.data.size(),
-        dst.data, M_ARRAY_SIZE(Hako_CompressedImage, Hako_uint8, data));
+    //Copy varray
+    dst._data_len = src.data.size();
+    if (dst._data_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._data_len, sizeof(Hako_uint8));
+        memcpy(temp_ptr, src.data.data(), dst._data_len * sizeof(Hako_uint8));
+        dst._data_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._data_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 

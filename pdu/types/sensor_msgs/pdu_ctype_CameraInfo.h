@@ -11,7 +11,9 @@ typedef struct {
         Hako_uint32 height;
         Hako_uint32 width;
         char distortion_model[HAKO_STRING_SIZE];
-        Hako_float64 d[5];
+        // float64 d[]
+        int _d_len;
+        int _d_off;
         Hako_float64 k[9];
         Hako_float64 r[9];
         Hako_float64 p[12];

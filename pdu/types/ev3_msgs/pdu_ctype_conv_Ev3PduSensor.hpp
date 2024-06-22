@@ -26,6 +26,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_primitive_array_Ev3PduSensor_buttons(const char* heap_ptr, Hako_Ev3PduSensor &src, ev3_msgs::msg::Ev3PduSensor &dst)
 {
     // Fixed size array convertor

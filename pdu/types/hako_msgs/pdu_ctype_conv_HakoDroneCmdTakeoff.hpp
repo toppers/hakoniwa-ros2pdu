@@ -24,6 +24,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_HakoDroneCmdTakeoff(const char* heap_ptr, Hako_HakoDroneCmdTakeoff &src, hako_msgs::msg::HakoDroneCmdTakeoff &dst)
 {

@@ -25,38 +25,48 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_string_array_JointState_name(const char* heap_ptr, Hako_JointState &src, sensor_msgs::msg::JointState &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    (void)hako_convert_pdu2ros_array_string<M_ARRAY_SIZE(Hako_JointState, Hako_cstring, name), 2>(
-        src.name, dst.name);
+    // Convert using len and off
+    int offset = src._name_off;
+    int length = src._name_len;
+    if (length > 0) {
+        Hako_cstring *temp_struct_ptr = (Hako_cstring *)(heap_ptr + offset);
+        hako_convert_pdu2ros_array_string_varray(temp_struct_ptr, dst.name, length);
+    }
     return 0;
 }
 static inline int _pdu2ros_primitive_array_JointState_position(const char* heap_ptr, Hako_JointState &src, sensor_msgs::msg::JointState &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    for (int i = 0; i < 2; ++i) {
-        hako_convert_pdu2ros(src.position[i], dst.position[i]);
+    // Convert using len and off
+    int offset = src._position_off;
+    int length = src._position_len;
+    if (length > 0) {
+        dst.position.resize(length);
+        memcpy(dst.position.data(), heap_ptr + offset, length * sizeof(Hako_float64));
     }
     return 0;
 }
 static inline int _pdu2ros_primitive_array_JointState_velocity(const char* heap_ptr, Hako_JointState &src, sensor_msgs::msg::JointState &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    for (int i = 0; i < 2; ++i) {
-        hako_convert_pdu2ros(src.velocity[i], dst.velocity[i]);
+    // Convert using len and off
+    int offset = src._velocity_off;
+    int length = src._velocity_len;
+    if (length > 0) {
+        dst.velocity.resize(length);
+        memcpy(dst.velocity.data(), heap_ptr + offset, length * sizeof(Hako_float64));
     }
     return 0;
 }
 static inline int _pdu2ros_primitive_array_JointState_effort(const char* heap_ptr, Hako_JointState &src, sensor_msgs::msg::JointState &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    for (int i = 0; i < 2; ++i) {
-        hako_convert_pdu2ros(src.effort[i], dst.effort[i]);
+    // Convert using len and off
+    int offset = src._effort_off;
+    int length = src._effort_len;
+    if (length > 0) {
+        dst.effort.resize(length);
+        memcpy(dst.effort.data(), heap_ptr + offset, length * sizeof(Hako_float64));
     }
     return 0;
 }
@@ -97,37 +107,58 @@ static inline int hako_convert_pdu2ros_JointState(Hako_JointState &src, sensor_m
  ***************************/
 static inline bool _ros2pdu_string_array_JointState_name(sensor_msgs::msg::JointState &src, Hako_JointState &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed string 2
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array_string<2, M_ARRAY_SIZE(Hako_JointState, Hako_cstring, name)>(
-        src.name, dst.name);
+    //Copy varray string
+    dst._name_len = src.name.size();
+    if (dst._name_len > 0) {
+        Hako_cstring* temp_ptr = (Hako_cstring*)dynamic_memory.allocate(dst._name_len, sizeof(Hako_cstring));
+        (void)hako_convert_ros2pdu_array_string_varray(src.name, temp_ptr);
+        dst._name_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._name_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 static inline bool _ros2pdu_primitive_array_JointState_position(sensor_msgs::msg::JointState &src, Hako_JointState &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 2
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array(
-        src.position, src.position.size(),
-        dst.position, M_ARRAY_SIZE(Hako_JointState, Hako_float64, position));
+    //Copy varray
+    dst._position_len = src.position.size();
+    if (dst._position_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._position_len, sizeof(Hako_float64));
+        memcpy(temp_ptr, src.position.data(), dst._position_len * sizeof(Hako_float64));
+        dst._position_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._position_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 static inline bool _ros2pdu_primitive_array_JointState_velocity(sensor_msgs::msg::JointState &src, Hako_JointState &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 2
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array(
-        src.velocity, src.velocity.size(),
-        dst.velocity, M_ARRAY_SIZE(Hako_JointState, Hako_float64, velocity));
+    //Copy varray
+    dst._velocity_len = src.velocity.size();
+    if (dst._velocity_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._velocity_len, sizeof(Hako_float64));
+        memcpy(temp_ptr, src.velocity.data(), dst._velocity_len * sizeof(Hako_float64));
+        dst._velocity_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._velocity_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 static inline bool _ros2pdu_primitive_array_JointState_effort(sensor_msgs::msg::JointState &src, Hako_JointState &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 2
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array(
-        src.effort, src.effort.size(),
-        dst.effort, M_ARRAY_SIZE(Hako_JointState, Hako_float64, effort));
+    //Copy varray
+    dst._effort_len = src.effort.size();
+    if (dst._effort_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._effort_len, sizeof(Hako_float64));
+        memcpy(temp_ptr, src.effort.data(), dst._effort_len * sizeof(Hako_float64));
+        dst._effort_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._effort_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 

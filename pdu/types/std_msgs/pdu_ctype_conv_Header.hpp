@@ -24,6 +24,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_Header(const char* heap_ptr, Hako_Header &src, std_msgs::msg::Header &dst)
 {

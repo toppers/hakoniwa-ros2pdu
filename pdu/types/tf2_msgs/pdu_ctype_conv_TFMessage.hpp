@@ -29,11 +29,19 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_struct_array_TFMessage_transforms(const char* heap_ptr, Hako_TFMessage &src, tf2_msgs::msg::TFMessage &dst)
 {
-    // Fixed size array convertor
-    for (int i = 0; i < 1; ++i) {
-        _pdu2ros_TransformStamped(heap_ptr, src.transforms[i], dst.transforms[i]);
+    // Convert using len and off
+    int offset = src._transforms_off;
+    int length = src._transforms_len;
+    if (length > 0) {
+        dst.transforms.resize(length);
+        Hako_TransformStamped *temp_struct_ptr = (Hako_TransformStamped *)(heap_ptr + offset);
+        for (int i = 0; i < length; ++i) {
+            _pdu2ros_TransformStamped(heap_ptr, *temp_struct_ptr, dst.transforms[i]);
+            temp_struct_ptr++;
+        }
     }
     return 0;
 }
@@ -67,9 +75,17 @@ static inline int hako_convert_pdu2ros_TFMessage(Hako_TFMessage &src, tf2_msgs::
 static inline bool _ros2pdu_struct_array_TFMessage_transforms(tf2_msgs::msg::TFMessage &src, Hako_TFMessage &dst, PduDynamicMemory &dynamic_memory)
 {
     // array struct
-    //array size is fixed
-    for (int i = 0; i < 1; ++i) {
-        _ros2pdu_TransformStamped(src.transforms[i], dst.transforms[i], dynamic_memory);
+    dst._transforms_len = src.transforms.size();
+    if (dst._transforms_len > 0) {
+        Hako_TransformStamped* temp_struct_ptr = (Hako_TransformStamped*)dynamic_memory.allocate(dst._transforms_len, sizeof(Hako_TransformStamped));
+        dst._transforms_off = dynamic_memory.get_offset(temp_struct_ptr);
+        for (int i = 0; i < dst._transforms_len; ++i) {
+            _ros2pdu_TransformStamped(src.transforms[i], *temp_struct_ptr, dynamic_memory);
+            temp_struct_ptr++;
+        }
+    }
+    else {
+        dst._transforms_off = dynamic_memory.get_total_size();
     }
     return true;
 }

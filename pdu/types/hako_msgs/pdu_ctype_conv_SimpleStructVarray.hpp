@@ -24,6 +24,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_string_array_SimpleStructVarray_fixed_str(const char* heap_ptr, Hako_SimpleStructVarray &src, hako_msgs::msg::SimpleStructVarray &dst)
 {
     // Fixed size array convertor

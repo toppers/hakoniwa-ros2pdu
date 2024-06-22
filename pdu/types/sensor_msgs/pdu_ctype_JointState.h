@@ -7,10 +7,18 @@
 
 typedef struct {
         Hako_Header header;
-        Hako_cstring name[2];
-        Hako_float64 position[2];
-        Hako_float64 velocity[2];
-        Hako_float64 effort[2];
+        // string name[]
+        int _name_len;
+        int _name_off;
+        // float64 position[]
+        int _position_len;
+        int _position_off;
+        // float64 velocity[]
+        int _velocity_len;
+        int _velocity_off;
+        // float64 effort[]
+        int _effort_len;
+        int _effort_off;
 } Hako_JointState;
 
 #endif /* _pdu_ctype_sensor_msgs_JointState_H_ */

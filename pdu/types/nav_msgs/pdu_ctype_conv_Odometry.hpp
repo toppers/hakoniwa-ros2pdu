@@ -32,6 +32,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_Odometry(const char* heap_ptr, Hako_Odometry &src, nav_msgs::msg::Odometry &dst)
 {

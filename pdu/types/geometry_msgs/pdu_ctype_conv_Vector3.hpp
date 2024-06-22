@@ -23,6 +23,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_Vector3(const char* heap_ptr, Hako_Vector3 &src, geometry_msgs::msg::Vector3 &dst)
 {

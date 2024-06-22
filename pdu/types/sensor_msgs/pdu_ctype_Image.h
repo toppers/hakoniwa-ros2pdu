@@ -12,7 +12,9 @@ typedef struct {
         char encoding[HAKO_STRING_SIZE];
         Hako_uint8 is_bigendian;
         Hako_uint32 step;
-        Hako_uint8 data[1024000];
+        // uint8 data[]
+        int _data_len;
+        int _data_off;
 } Hako_Image;
 
 #endif /* _pdu_ctype_sensor_msgs_Image_H_ */

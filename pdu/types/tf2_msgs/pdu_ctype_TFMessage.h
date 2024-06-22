@@ -10,7 +10,9 @@
 #include "std_msgs/pdu_ctype_Header.h"
 
 typedef struct {
-        Hako_TransformStamped transforms[1];
+        // TransformStamped transforms[]
+        int _transforms_len;
+        int _transforms_off;
 } Hako_TFMessage;
 
 #endif /* _pdu_ctype_tf2_msgs_TFMessage_H_ */

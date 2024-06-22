@@ -23,6 +23,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_LightSensor(const char* heap_ptr, Hako_LightSensor &src, pico_msgs::msg::LightSensor &dst)
 {

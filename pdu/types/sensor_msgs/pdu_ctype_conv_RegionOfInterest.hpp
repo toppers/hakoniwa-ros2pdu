@@ -23,6 +23,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_RegionOfInterest(const char* heap_ptr, Hako_RegionOfInterest &src, sensor_msgs::msg::RegionOfInterest &dst)
 {

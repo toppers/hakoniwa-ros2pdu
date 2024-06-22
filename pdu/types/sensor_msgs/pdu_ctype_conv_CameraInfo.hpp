@@ -26,12 +26,15 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_primitive_array_CameraInfo_d(const char* heap_ptr, Hako_CameraInfo &src, sensor_msgs::msg::CameraInfo &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    for (int i = 0; i < 5; ++i) {
-        hako_convert_pdu2ros(src.d[i], dst.d[i]);
+    // Convert using len and off
+    int offset = src._d_off;
+    int length = src._d_len;
+    if (length > 0) {
+        dst.d.resize(length);
+        memcpy(dst.d.data(), heap_ptr + offset, length * sizeof(Hako_float64));
     }
     return 0;
 }
@@ -111,11 +114,16 @@ static inline int hako_convert_pdu2ros_CameraInfo(Hako_CameraInfo &src, sensor_m
  ***************************/
 static inline bool _ros2pdu_primitive_array_CameraInfo_d(sensor_msgs::msg::CameraInfo &src, Hako_CameraInfo &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 5
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array(
-        src.d, src.d.size(),
-        dst.d, M_ARRAY_SIZE(Hako_CameraInfo, Hako_float64, d));
+    //Copy varray
+    dst._d_len = src.d.size();
+    if (dst._d_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._d_len, sizeof(Hako_float64));
+        memcpy(temp_ptr, src.d.data(), dst._d_len * sizeof(Hako_float64));
+        dst._d_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._d_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 static inline bool _ros2pdu_primitive_array_CameraInfo_k(sensor_msgs::msg::CameraInfo &src, Hako_CameraInfo &dst, PduDynamicMemory &dynamic_memory)

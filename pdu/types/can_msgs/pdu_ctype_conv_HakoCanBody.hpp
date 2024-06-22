@@ -23,6 +23,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_primitive_array_HakoCanBody_data(const char* heap_ptr, Hako_HakoCanBody &src, can_msgs::msg::HakoCanBody &dst)
 {
     // Fixed size array convertor

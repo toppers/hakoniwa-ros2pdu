@@ -8,7 +8,9 @@
 typedef struct {
         Hako_Header header;
         char format[HAKO_STRING_SIZE];
-        Hako_uint8 data[102400];
+        // uint8 data[]
+        int _data_len;
+        int _data_off;
 } Hako_CompressedImage;
 
 #endif /* _pdu_ctype_sensor_msgs_CompressedImage_H_ */

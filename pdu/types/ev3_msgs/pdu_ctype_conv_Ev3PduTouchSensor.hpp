@@ -23,6 +23,7 @@
  * PDU ==> ROS2
  *
  ***************************/
+ #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_Ev3PduTouchSensor(const char* heap_ptr, Hako_Ev3PduTouchSensor &src, ev3_msgs::msg::Ev3PduTouchSensor &dst)
 {
