@@ -23,7 +23,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_Bool(const char* heap_ptr, Hako_Bool &src, std_msgs::msg::Bool &dst)
 {

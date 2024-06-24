@@ -23,7 +23,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_HakoCanHead(const char* heap_ptr, Hako_HakoCanHead &src, can_msgs::msg::HakoCanHead &dst)
 {

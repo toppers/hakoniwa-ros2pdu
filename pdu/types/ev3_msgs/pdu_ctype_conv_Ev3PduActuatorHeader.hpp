@@ -23,7 +23,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 
 static inline int _pdu2ros_Ev3PduActuatorHeader(const char* heap_ptr, Hako_Ev3PduActuatorHeader &src, ev3_msgs::msg::Ev3PduActuatorHeader &dst)
 {

@@ -26,7 +26,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_primitive_array_CameraInfo_d(const char* heap_ptr, Hako_CameraInfo &src, sensor_msgs::msg::CameraInfo &dst)
 {
     // Convert using len and off

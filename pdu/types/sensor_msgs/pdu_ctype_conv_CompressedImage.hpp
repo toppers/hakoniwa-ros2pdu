@@ -25,7 +25,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_primitive_array_CompressedImage_data(const char* heap_ptr, Hako_CompressedImage &src, sensor_msgs::msg::CompressedImage &dst)
 {
     // Convert using len and off

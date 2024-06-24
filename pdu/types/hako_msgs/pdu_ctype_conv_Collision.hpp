@@ -25,7 +25,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_struct_array_Collision_contact_position(const char* heap_ptr, Hako_Collision &src, hako_msgs::msg::Collision &dst)
 {
     // Fixed size array convertor

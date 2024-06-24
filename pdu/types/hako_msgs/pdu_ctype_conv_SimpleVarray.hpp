@@ -23,7 +23,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_primitive_array_SimpleVarray_data(const char* heap_ptr, Hako_SimpleVarray &src, hako_msgs::msg::SimpleVarray &dst)
 {
     // Convert using len and off

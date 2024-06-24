@@ -26,7 +26,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_primitive_array_PoseWithCovariance_covariance(const char* heap_ptr, Hako_PoseWithCovariance &src, geometry_msgs::msg::PoseWithCovariance &dst)
 {
     // Fixed size array convertor

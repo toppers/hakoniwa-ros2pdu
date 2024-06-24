@@ -29,7 +29,6 @@
  * PDU ==> ROS2
  *
  ***************************/
- #define PDU2ROS_RESIZE_ARRAY()
 static inline int _pdu2ros_struct_array_TFMessage_transforms(const char* heap_ptr, Hako_TFMessage &src, tf2_msgs::msg::TFMessage &dst)
 {
     // Convert using len and off
