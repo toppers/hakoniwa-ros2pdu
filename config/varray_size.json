@@ -1,8 +1,2 @@
 {
-    "sensor_msgs": {
-        "PointCloud2": {
-            "fields": 4,
-            "data": 176656
-        }
-    }
 }

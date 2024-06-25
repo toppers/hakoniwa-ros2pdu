@@ -28,18 +28,27 @@
  ***************************/
 static inline int _pdu2ros_struct_array_PointCloud2_fields(const char* heap_ptr, Hako_PointCloud2 &src, sensor_msgs::msg::PointCloud2 &dst)
 {
-    // Fixed size array convertor
-    for (int i = 0; i < 4; ++i) {
-        _pdu2ros_PointField(heap_ptr, src.fields[i], dst.fields[i]);
+    // Convert using len and off
+    int offset = src._fields_off;
+    int length = src._fields_len;
+    if (length > 0) {
+        dst.fields.resize(length);
+        Hako_PointField *temp_struct_ptr = (Hako_PointField *)(heap_ptr + offset);
+        for (int i = 0; i < length; ++i) {
+            _pdu2ros_PointField(heap_ptr, *temp_struct_ptr, dst.fields[i]);
+            temp_struct_ptr++;
+        }
     }
     return 0;
 }
 static inline int _pdu2ros_primitive_array_PointCloud2_data(const char* heap_ptr, Hako_PointCloud2 &src, sensor_msgs::msg::PointCloud2 &dst)
 {
-    // Fixed size array convertor
-    (void)heap_ptr;
-    for (int i = 0; i < 176656; ++i) {
-        hako_convert_pdu2ros(src.data[i], dst.data[i]);
+    // Convert using len and off
+    int offset = src._data_off;
+    int length = src._data_len;
+    if (length > 0) {
+        dst.data.resize(length);
+        memcpy(dst.data.data(), heap_ptr + offset, length * sizeof(Hako_uint8));
     }
     return 0;
 }
@@ -89,19 +98,32 @@ static inline int hako_convert_pdu2ros_PointCloud2(Hako_PointCloud2 &src, sensor
 static inline bool _ros2pdu_struct_array_PointCloud2_fields(sensor_msgs::msg::PointCloud2 &src, Hako_PointCloud2 &dst, PduDynamicMemory &dynamic_memory)
 {
     // array struct
-    //array size is fixed
-    for (int i = 0; i < 4; ++i) {
-        _ros2pdu_PointField(src.fields[i], dst.fields[i], dynamic_memory);
+    dst._fields_len = src.fields.size();
+    if (dst._fields_len > 0) {
+        Hako_PointField* temp_struct_ptr = (Hako_PointField*)dynamic_memory.allocate(dst._fields_len, sizeof(Hako_PointField));
+        dst._fields_off = dynamic_memory.get_offset(temp_struct_ptr);
+        for (int i = 0; i < dst._fields_len; ++i) {
+            _ros2pdu_PointField(src.fields[i], *temp_struct_ptr, dynamic_memory);
+            temp_struct_ptr++;
+        }
+    }
+    else {
+        dst._fields_off = dynamic_memory.get_total_size();
     }
     return true;
 }
 static inline bool _ros2pdu_primitive_array_PointCloud2_data(sensor_msgs::msg::PointCloud2 &src, Hako_PointCloud2 &dst, PduDynamicMemory &dynamic_memory)
 {
-    //Copy fixed array 176656
-    (void)dynamic_memory;
-    (void)hako_convert_ros2pdu_array(
-        src.data, src.data.size(),
-        dst.data, M_ARRAY_SIZE(Hako_PointCloud2, Hako_uint8, data));
+    //Copy varray
+    dst._data_len = src.data.size();
+    if (dst._data_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._data_len, sizeof(Hako_uint8));
+        memcpy(temp_ptr, src.data.data(), dst._data_len * sizeof(Hako_uint8));
+        dst._data_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._data_off = dynamic_memory.get_total_size();
+    }
     return true;
 }
 

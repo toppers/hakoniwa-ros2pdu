@@ -10,11 +10,15 @@ typedef struct {
         Hako_Header header;
         Hako_uint32 height;
         Hako_uint32 width;
-        Hako_PointField fields[4];
+        // PointField fields[]
+        int _fields_len;
+        int _fields_off;
         Hako_bool is_bigendian;
         Hako_uint32 point_step;
         Hako_uint32 row_step;
-        Hako_uint8 data[176656];
+        // uint8 data[]
+        int _data_len;
+        int _data_off;
         Hako_bool is_dense;
 } Hako_PointCloud2;
 
