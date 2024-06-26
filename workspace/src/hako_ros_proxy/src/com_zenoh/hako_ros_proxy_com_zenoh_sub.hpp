@@ -29,6 +29,7 @@ static void ZENOH_SUB_CALLBACK_NAME(topic_name)(const z_sample_t *sample, void *
 do {    \
     z_owned_closure_sample_t callback = z_closure(ZENOH_SUB_CALLBACK_NAME(topic_name), NULL); \
     ZENOH_SUBSCRIBER(topic_name) = z_declare_subscriber(z_loan(hako_ros_proxy_zenoh_session.s), z_keyexpr( #topic_name ), z_move(callback), NULL);    \
+    std::cout << "INFO: HakoRosProxy zenoh subscriber: " << #topic_name << std::endl; \
 } while (0)
 
 #endif /* _HAKO_ROS_PROXY_ZENOH_HPP_ */

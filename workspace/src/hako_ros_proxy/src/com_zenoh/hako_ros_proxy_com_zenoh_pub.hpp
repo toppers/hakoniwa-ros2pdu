@@ -13,6 +13,7 @@ do {    \
     if (!z_check(ZENOH_PUBLISHER(topic_name))) {  \
         std::cerr << "Unable to declare zenoh Publisher for key expression!" << std::endl;    \
     }   \
+    std::cout << "INFO: HakoRosProxy zenoh publisher: " << #topic_name << std::endl; \
 } while (0)
 
 #define ZENOH_PUBLISH_TOPIC(topic_name, binary_data, size) \
