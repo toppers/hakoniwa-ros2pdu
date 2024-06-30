@@ -9,7 +9,9 @@
 #include <string.h>
 
 typedef int8_t Hako_int8;
+typedef uint8_t Hako_char;
 typedef uint8_t Hako_uint8;
+typedef uint8_t Hako_byte;
 typedef int16_t Hako_int16;
 typedef uint16_t Hako_uint16;
 typedef int32_t Hako_int32;
