@@ -172,4 +172,9 @@ int hako_convert_ros2pdu_array_string(std::vector<std::string> &src, Hako_cstrin
     }
     return ret;
 }
+
+#define hako_convert_pdu2cpp hako_convert_pdu2ros
+#define hako_convert_cpp2pdu hako_convert_ros2pdu
+#define hako_convert_cpp2pdu_array hako_convert_ros2pdu_array
+
 #endif /* _PDU_PRIMITIVE_CTYPES_CONV_HPP_ */

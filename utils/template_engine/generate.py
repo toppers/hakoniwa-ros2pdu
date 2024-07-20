@@ -174,11 +174,23 @@ for line in open(dep_lists, 'r'):
 	msg_name = line.split("/")[1].strip()
 	container.includes.append(pkg_name + "/pdu_ctype_" + msg_name + ".h")
 
+container.cpp_includes = []
+for line in open(dep_lists, 'r'):
+	pkg_name = line.split("/")[0]
+	msg_name = line.split("/")[1].strip()
+	container.cpp_includes.append(pkg_name + "/pdu_cpptype_" + msg_name + ".hpp")
+
 container.conv_includes = []
 for line in open(dep_lists, 'r'):
 	pkg_name = line.split("/")[0]
 	msg_name = line.split("/")[1].strip()
 	container.conv_includes.append(pkg_name + "/pdu_ctype_conv_" + msg_name + ".hpp")
+
+container.conv_cpp_includes = []
+for line in open(dep_lists, 'r'):
+	pkg_name = line.split("/")[0]
+	msg_name = line.split("/")[1].strip()
+	container.conv_cpp_includes.append(pkg_name + "/pdu_cpptype_conv_" + msg_name + ".hpp")
 
 tmp_file = open(ros_json_file)
 container.json_data = json.load(tmp_file)

@@ -42,6 +42,14 @@ qtcreator-*
 /planning/docs
 /planning/src
 
+.vscode
+.DS_Store
+pdu/.DS_Store
+pdu/types/.DS_Store
+workspace/install
+workspace/log
+dep_types.txt
+
 *~
 
 # Emacs

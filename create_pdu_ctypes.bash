@@ -32,6 +32,8 @@ cd ${CURR_DIR}
 #convert json file to c type header
 python3 utils/template_engine/generate.py ./template/pdu_ctypes_h.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt ./config/varray_size.json > tmp_header.txt
 python3 utils/template_engine/generate.py ./template/pdu_ctypes_conv_cpp.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt ./config/varray_size.json > tmp_cpp.txt
+python3 utils/template_engine/generate.py ./template/pdu_cpptypes_hpp.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt ./config/varray_size.json > tmp_cpp_header.txt
+python3 utils/template_engine/generate.py ./template/pdu_cpptypes_conv_cpp.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt ./config/varray_size.json > tmp_cpp_cpp.txt
 
 # for mavlink only
 #python3 utils/template_engine/generate.py ./template/pdu_ctypes_conv_mavlink_cpp.tpl ./${OUT_JSON_DIR}/${PKG_MSG}.json  ${CURR_DIR}/dep_types.txt ./config/varray_size.json > tmp_mavlink_cpp.txt
@@ -43,7 +45,9 @@ else
     mkdir -p ${OUT_DIR}/${PKG_NAME}
 fi
 mv tmp_header.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_${MSG_NAME}.h 
+mv tmp_cpp_header.txt ${OUT_DIR}/${PKG_NAME}/pdu_cpptype_${MSG_NAME}.hpp 
 mv tmp_cpp.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_conv_${MSG_NAME}.hpp
+mv tmp_cpp_cpp.txt ${OUT_DIR}/${PKG_NAME}/pdu_cpptype_conv_${MSG_NAME}.hpp
 
 # for mavlink only 
 #mv tmp_mavlink_cpp.txt ${OUT_DIR}/${PKG_NAME}/pdu_ctype_conv_mavlink_${MSG_NAME}.hpp
