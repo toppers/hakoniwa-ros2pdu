@@ -16,7 +16,9 @@
 /*
  * Dependent Convertors
  */
+#include "geometry_msgs/pdu_cpptype_conv_Vector3.hpp"
 #include "hako_msgs/pdu_cpptype_conv_DisturbanceTemperature.hpp"
+#include "hako_msgs/pdu_cpptype_conv_DisturbanceWind.hpp"
 
 /***************************
  *
@@ -28,6 +30,8 @@ static inline int cpp_pdu2cpp_Disturbance(const char* heap_ptr, Hako_Disturbance
 {
     // Struct convert
     cpp_pdu2cpp_DisturbanceTemperature(heap_ptr, src.d_temp, dst.d_temp);
+    // Struct convert
+    cpp_pdu2cpp_DisturbanceWind(heap_ptr, src.d_wind, dst.d_wind);
     (void)heap_ptr;
     return 0;
 }
@@ -56,6 +60,8 @@ static inline bool cpp_cpp2pdu_Disturbance(HakoCpp_Disturbance &src, Hako_Distur
     try {
         // struct convert
         cpp_cpp2pdu_DisturbanceTemperature(src.d_temp, dst.d_temp, dynamic_memory);
+        // struct convert
+        cpp_cpp2pdu_DisturbanceWind(src.d_wind, dst.d_wind, dynamic_memory);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

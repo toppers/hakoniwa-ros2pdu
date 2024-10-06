@@ -7,6 +7,8 @@ hako_msgs/HakoStatusMagnetHolder
 pico_msgs/LightSensor
 hako_msgs/Collision
 hako_msgs/ManualPosAttControl
+hako_msgs/DisturbanceWind
+hako_msgs/DisturbanceTemperature
 hako_msgs/Disturbance
 hako_msgs/HakoDroneCmdHeader
 hako_msgs/HakoDroneCmdTakeoff
