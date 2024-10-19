@@ -10,7 +10,7 @@ git clone https://github.com/toppers/hakoniwa-ros2pdu.git
 ```
 
 ```
-bash docker/create_image.bash
+bash docker/pull_image.bash
 ```
 
 ## 前準備
@@ -80,6 +80,33 @@ pdu/types
 └── pdu_primitive_ctypes.h
 ```
 
+## ROSメッセージの作成方法
+
+
+dockerコンテナを起動します。
+
+```bash
+bash docker/run.bash
+```
+
+ROSメッセージを作成するワークスペースに移動します。
+
+```bash
+cd hakoniwa-ros2pdu/workspace
+```
+
+ROS2メッセージの作成方法は、こちらを参照ください。
+
+https://docs.ros.org/en/crystal/Tutorials/Custom-ROS2-Interfaces.html
+
+
+作成したROSメッセージをビルドします。(例：`hako_msgs`の場合)
+
+```bash
+colcon build --packages-select hako_msgs
+```
+
+補足：箱庭PDUを作成するだけならビルドは不要ですが、整合性確認のためにもビルドすることをお勧めします。
 
 ## 設計情報
 
