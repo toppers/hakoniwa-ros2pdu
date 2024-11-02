@@ -8,7 +8,7 @@ fi
 
 TARGET_DIR="$1"
 
-# .offsetファイルを再帰的に検索し、.textにリネーム
+# .offsetファイルを再帰的に検索し、.txtにリネーム
 find "$TARGET_DIR" -type f -name "*.offset" | while read file; do
   new_file="${file%.offset}.txt"
   mv "$file" "$new_file"
