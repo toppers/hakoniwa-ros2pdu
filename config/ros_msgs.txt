@@ -1,3 +1,4 @@
+hako_msgs/HakoBatteryStatus
 hako_msgs/HakoCmdCamera
 hako_msgs/HakoCmdCameraMove
 hako_msgs/HakoCameraData
