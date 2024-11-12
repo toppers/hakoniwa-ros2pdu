@@ -1,0 +1,20 @@
+{
+  "fields": [
+    {
+      "name": "full_voltage",
+      "type": "float64"
+    },
+    {
+      "name": "curr_voltage",
+      "type": "float64"
+    },
+    {
+      "name": "status",
+      "type": "uint32"
+    },
+    {
+      "name": "cycles",
+      "type": "uint32"
+    }
+  ]
+}

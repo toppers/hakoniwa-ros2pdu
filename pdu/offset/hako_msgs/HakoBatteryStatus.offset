@@ -1,0 +1,4 @@
+single:primitive:full_voltage:float64:0:8
+single:primitive:curr_voltage:float64:8:8
+single:primitive:status:uint32:16:4
+single:primitive:cycles:uint32:20:4
