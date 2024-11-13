@@ -30,6 +30,8 @@ static inline int cpp_pdu2cpp_HakoBatteryStatus(const char* heap_ptr, Hako_HakoB
     // primitive convert
     hako_convert_pdu2cpp(src.curr_voltage, dst.curr_voltage);
     // primitive convert
+    hako_convert_pdu2cpp(src.curr_temp, dst.curr_temp);
+    // primitive convert
     hako_convert_pdu2cpp(src.status, dst.status);
     // primitive convert
     hako_convert_pdu2cpp(src.cycles, dst.cycles);
@@ -63,6 +65,8 @@ static inline bool cpp_cpp2pdu_HakoBatteryStatus(HakoCpp_HakoBatteryStatus &src,
         hako_convert_cpp2pdu(src.full_voltage, dst.full_voltage);
         // primitive convert
         hako_convert_cpp2pdu(src.curr_voltage, dst.curr_voltage);
+        // primitive convert
+        hako_convert_cpp2pdu(src.curr_temp, dst.curr_temp);
         // primitive convert
         hako_convert_cpp2pdu(src.status, dst.status);
         // primitive convert

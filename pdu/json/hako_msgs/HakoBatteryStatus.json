@@ -9,6 +9,10 @@
       "type": "float64"
     },
     {
+      "name": "curr_temp",
+      "type": "float64"
+    },
+    {
       "name": "status",
       "type": "uint32"
     },

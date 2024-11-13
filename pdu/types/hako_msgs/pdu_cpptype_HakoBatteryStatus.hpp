@@ -8,6 +8,7 @@
 typedef struct {
         Hako_float64 full_voltage;
         Hako_float64 curr_voltage;
+        Hako_float64 curr_temp;
         Hako_uint32 status;
         Hako_uint32 cycles;
 } HakoCpp_HakoBatteryStatus;
