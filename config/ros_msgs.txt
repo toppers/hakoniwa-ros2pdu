@@ -65,3 +65,5 @@ std_msgs/UInt64
 std_msgs/UInt64MultiArray
 std_msgs/UInt8
 std_msgs/UInt8MultiArray
+mavros_msgs/GlobalPositionTarget
+mavros_msgs/AttitudeTarget

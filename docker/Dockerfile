@@ -62,3 +62,12 @@ WORKDIR /root/workspace
 
 RUN apt-get update && apt-get install -y jq
 RUN pip3 --no-cache-dir install yq
+
+
+# MAVROS
+RUN apt-get update && apt-get install -y \
+    ros-foxy-mavros \
+    ros-foxy-mavros-extras \
+    geographiclib-tools \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*

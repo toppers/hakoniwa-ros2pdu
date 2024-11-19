@@ -1,0 +1,44 @@
+{
+  "fields": [
+    {
+      "name": "header",
+      "type": "std_msgs/Header"
+    },
+    {
+      "name": "coordinate_frame",
+      "type": "uint8"
+    },
+    {
+      "name": "type_mask",
+      "type": "uint16"
+    },
+    {
+      "name": "latitude",
+      "type": "float64"
+    },
+    {
+      "name": "longitude",
+      "type": "float64"
+    },
+    {
+      "name": "altitude",
+      "type": "float32"
+    },
+    {
+      "name": "velocity",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
+      "name": "acceleration_or_force",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
+      "name": "yaw",
+      "type": "float32"
+    },
+    {
+      "name": "yaw_rate",
+      "type": "float32"
+    }
+  ]
+}

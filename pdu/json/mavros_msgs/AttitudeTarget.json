@@ -1,0 +1,24 @@
+{
+  "fields": [
+    {
+      "name": "header",
+      "type": "std_msgs/Header"
+    },
+    {
+      "name": "type_mask",
+      "type": "uint8"
+    },
+    {
+      "name": "orientation",
+      "type": "geometry_msgs/Quaternion"
+    },
+    {
+      "name": "body_rate",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
+      "name": "thrust",
+      "type": "float32"
+    }
+  ]
+}
