@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(hako_mavlink_msgs)
+project(hako_mavlink2_msgs)
 
 # Default to C99
 if(NOT CMAKE_C_STANDARD)
@@ -14,13 +14,6 @@ endif()
 find_package(rosidl_default_generators REQUIRED)
 
 rosidl_generate_interfaces(${PROJECT_NAME}
-	"msg/HakoHilSensor.msg"
-	"msg/HakoHilGps.msg"
-	"msg/HakoHilStateQuaternion.msg"
-	"msg/HakoHilActuatorControls.msg"
-  "msg/HakoGLOBAL_POSITION_INT.msg"
-  "msg/HakoATTITUDE.msg"
-  "msg/HakoAHRS2.msg"
   "msg/HakoSERVO_OUTPUT_RAW.msg"
 )
 

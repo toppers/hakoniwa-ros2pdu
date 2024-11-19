@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "name": "time_boot_ms",
+      "type": "uint32"
+    },
+    {
+      "name": "lat",
+      "type": "int32"
+    },
+    {
+      "name": "lon",
+      "type": "int32"
+    },
+    {
+      "name": "alt",
+      "type": "int32"
+    },
+    {
+      "name": "relative_alt",
+      "type": "int32"
+    },
+    {
+      "name": "vx",
+      "type": "int16"
+    },
+    {
+      "name": "vy",
+      "type": "int16"
+    },
+    {
+      "name": "vz",
+      "type": "int16"
+    },
+    {
+      "name": "hdg",
+      "type": "uint16"
+    }
+  ]
+}

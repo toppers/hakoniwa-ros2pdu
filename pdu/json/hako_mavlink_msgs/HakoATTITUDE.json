@@ -1,0 +1,32 @@
+{
+  "fields": [
+    {
+      "name": "time_boot_ms",
+      "type": "uint32"
+    },
+    {
+      "name": "roll",
+      "type": "float32"
+    },
+    {
+      "name": "pitch",
+      "type": "float32"
+    },
+    {
+      "name": "yaw",
+      "type": "float32"
+    },
+    {
+      "name": "rollspeed",
+      "type": "float32"
+    },
+    {
+      "name": "pitchspeed",
+      "type": "float32"
+    },
+    {
+      "name": "yawspeed",
+      "type": "float32"
+    }
+  ]
+}

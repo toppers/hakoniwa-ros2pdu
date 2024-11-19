@@ -1,0 +1,76 @@
+{
+  "fields": [
+    {
+      "name": "time_usec",
+      "type": "uint32"
+    },
+    {
+      "name": "port",
+      "type": "uint8"
+    },
+    {
+      "name": "servo1_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo2_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo3_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo4_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo5_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo6_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo7_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo8_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo9_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo10_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo11_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo12_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo13_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo14_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo15_raw",
+      "type": "uint16"
+    },
+    {
+      "name": "servo16_raw",
+      "type": "uint16"
+    }
+  ]
+}

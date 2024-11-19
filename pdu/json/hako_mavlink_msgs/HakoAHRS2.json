@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "name": "roll",
+      "type": "float32"
+    },
+    {
+      "name": "pitch",
+      "type": "float32"
+    },
+    {
+      "name": "yaw",
+      "type": "float32"
+    },
+    {
+      "name": "altitude",
+      "type": "float32"
+    },
+    {
+      "name": "lat",
+      "type": "int32"
+    },
+    {
+      "name": "lng",
+      "type": "int32"
+    }
+  ]
+}

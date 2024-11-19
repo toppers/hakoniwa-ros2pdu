@@ -67,3 +67,8 @@ std_msgs/UInt8
 std_msgs/UInt8MultiArray
 mavros_msgs/GlobalPositionTarget
 mavros_msgs/AttitudeTarget
+hako_mavlink_msgs/HakoAHRS2
+hako_mavlink_msgs/HakoATTITUDE
+hako_mavlink_msgs/HakoGLOBAL_POSITION_INT
+hako_mavlink_msgs/HakoSERVO_OUTPUT_RAW
+hako_mavlink2_msgs/HakoSERVO_OUTPUT_RAW
