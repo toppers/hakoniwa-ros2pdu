@@ -6,7 +6,7 @@
 #include <array>
 
 typedef struct {
-        HakoCpp_byte data;
+        Hako_byte data;
 } HakoCpp_Byte;
 
 #endif /* _pdu_cpptype_std_msgs_Byte_HPP_ */

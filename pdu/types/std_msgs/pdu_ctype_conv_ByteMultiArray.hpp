@@ -25,18 +25,14 @@
  * PDU ==> ROS2
  *
  ***************************/
-static inline int _pdu2ros_struct_array_ByteMultiArray_data(const char* heap_ptr, Hako_ByteMultiArray &src, std_msgs::msg::ByteMultiArray &dst)
+static inline int _pdu2ros_primitive_array_ByteMultiArray_data(const char* heap_ptr, Hako_ByteMultiArray &src, std_msgs::msg::ByteMultiArray &dst)
 {
     // Convert using len and off
     int offset = src._data_off;
     int length = src._data_len;
     if (length > 0) {
         dst.data.resize(length);
-        Hako_byte *temp_struct_ptr = (Hako_byte *)(heap_ptr + offset);
-        for (int i = 0; i < length; ++i) {
-            _pdu2ros_byte(heap_ptr, *temp_struct_ptr, dst.data[i]);
-            temp_struct_ptr++;
-        }
+        memcpy(dst.data.data(), heap_ptr + offset, length * sizeof(Hako_byte));
     }
     return 0;
 }
@@ -45,8 +41,8 @@ static inline int _pdu2ros_ByteMultiArray(const char* heap_ptr, Hako_ByteMultiAr
 {
     // Struct convert
     _pdu2ros_MultiArrayLayout(heap_ptr, src.layout, dst.layout);
-    // struct array convertor
-    _pdu2ros_struct_array_ByteMultiArray_data(heap_ptr, src, dst);
+    // primitive array convertor
+    _pdu2ros_primitive_array_ByteMultiArray_data(heap_ptr, src, dst);
     (void)heap_ptr;
     return 0;
 }
@@ -69,17 +65,14 @@ static inline int hako_convert_pdu2ros_ByteMultiArray(Hako_ByteMultiArray &src, 
  * ROS2 ==> PDU
  *
  ***************************/
-static inline bool _ros2pdu_struct_array_ByteMultiArray_data(std_msgs::msg::ByteMultiArray &src, Hako_ByteMultiArray &dst, PduDynamicMemory &dynamic_memory)
+static inline bool _ros2pdu_primitive_array_ByteMultiArray_data(std_msgs::msg::ByteMultiArray &src, Hako_ByteMultiArray &dst, PduDynamicMemory &dynamic_memory)
 {
-    // array struct
+    //Copy varray
     dst._data_len = src.data.size();
     if (dst._data_len > 0) {
-        Hako_byte* temp_struct_ptr = (Hako_byte*)dynamic_memory.allocate(dst._data_len, sizeof(Hako_byte));
-        dst._data_off = dynamic_memory.get_offset(temp_struct_ptr);
-        for (int i = 0; i < dst._data_len; ++i) {
-            _ros2pdu_byte(src.data[i], *temp_struct_ptr, dynamic_memory);
-            temp_struct_ptr++;
-        }
+        void* temp_ptr = dynamic_memory.allocate(dst._data_len, sizeof(Hako_byte));
+        memcpy(temp_ptr, src.data.data(), dst._data_len * sizeof(Hako_byte));
+        dst._data_off = dynamic_memory.get_offset(temp_ptr);
     }
     else {
         dst._data_off = dynamic_memory.get_total_size();
@@ -92,8 +85,8 @@ static inline bool _ros2pdu_ByteMultiArray(std_msgs::msg::ByteMultiArray &src, H
     try {
         // struct convert
         _ros2pdu_MultiArrayLayout(src.layout, dst.layout, dynamic_memory);
-        //struct array convert
-        _ros2pdu_struct_array_ByteMultiArray_data(src, dst, dynamic_memory);
+        //primitive array copy
+        _ros2pdu_primitive_array_ByteMultiArray_data(src, dst, dynamic_memory);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

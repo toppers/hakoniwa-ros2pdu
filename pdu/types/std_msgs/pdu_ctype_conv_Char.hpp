@@ -26,8 +26,8 @@
 
 static inline int _pdu2ros_Char(const char* heap_ptr, Hako_Char &src, std_msgs::msg::Char &dst)
 {
-    // Struct convert
-    _pdu2ros_char(heap_ptr, src.data, dst.data);
+    // primitive convert
+    hako_convert_pdu2ros(src.data, dst.data);
     (void)heap_ptr;
     return 0;
 }
@@ -54,8 +54,8 @@ static inline int hako_convert_pdu2ros_Char(Hako_Char &src, std_msgs::msg::Char 
 static inline bool _ros2pdu_Char(std_msgs::msg::Char &src, Hako_Char &dst, PduDynamicMemory &dynamic_memory)
 {
     try {
-        // struct convert
-        _ros2pdu_char(src.data, dst.data, dynamic_memory);
+        // primitive convert
+        hako_convert_ros2pdu(src.data, dst.data);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

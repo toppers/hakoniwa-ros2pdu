@@ -9,7 +9,7 @@
 
 typedef struct {
         HakoCpp_MultiArrayLayout layout;
-        std::vector<HakoCpp_byte> data;
+        std::vector<Hako_byte> data;
 } HakoCpp_ByteMultiArray;
 
 #endif /* _pdu_cpptype_std_msgs_ByteMultiArray_HPP_ */

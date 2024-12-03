@@ -39,6 +39,10 @@ def is_primitive(name):
 		return True
 	elif (name == 'uint8'):
 		return True
+	elif (name == 'byte'):
+		return True
+	elif (name == 'char'):
+		return True
 	elif (name == 'int16'):
 		return True
 	elif (name == 'uint16'):
@@ -150,6 +154,25 @@ def convert_snake(str):
     cs1n = re.sub("([A-Z])", lambda x:"_" + x.group(1).lower(), s1n)
     return s0 + cs1n
 
+def get_csharp_type(name):
+    type_map = {
+		"byte": "byte",
+		"char": "byte",
+        "int8": "sbyte",
+        "uint8": "byte",
+        "int16": "short",
+        "uint16": "ushort",
+        "int32": "int",
+        "uint32": "uint",
+        "int64": "long",
+        "uint64": "ulong",
+        "float32": "float",
+        "float64": "double",
+        "bool": "bool",
+        "string": "string"
+    }
+    return type_map.get(name, name)
+
 global container
 container = RosMessageContainer()
 container.convert_snake = convert_snake
@@ -167,12 +190,20 @@ container.msg_type_name = msg_type_name
 container.get_array_size = get_array_size
 container.get_struct_array_type = get_struct_array_type
 container.is_string = is_string
+container.get_csharp_type = get_csharp_type
 
 container.includes = []
 for line in open(dep_lists, 'r'):
 	pkg_name = line.split("/")[0]
 	msg_name = line.split("/")[1].strip()
 	container.includes.append(pkg_name + "/pdu_ctype_" + msg_name + ".h")
+
+container.csharp_includes = []
+for line in open(dep_lists, 'r'):
+	pkg_name = line.split("/")[0]
+	msg_name = line.split("/")[1].strip()
+	if pkg_name != container.pkg_name and container.csharp_includes.count(pkg_name) == 0:
+		container.csharp_includes.append(pkg_name)
 
 container.cpp_includes = []
 for line in open(dep_lists, 'r'):
