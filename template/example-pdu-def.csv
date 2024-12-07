@@ -1,0 +1,2 @@
+RobotName,package_name,type_name,pdu_name,channel_id,read_or_write,pdu_size,io_cycle
+LiDAR2D,sensor_msgs,LaserScan,scan,0,write,6088,5
