@@ -75,7 +75,6 @@ static inline int hako_pdu_get_fixed_data(const char* buffer, char* base_ptr, in
         return -1;
     }
     if (buffer_size < ((int)meta->base_off + base_size)) {
-        // バッファサイズが不足している場合のエラー処理
         return -1;
     }
     memcpy(base_ptr, &buffer[meta->base_off], base_size);
@@ -90,7 +89,6 @@ static inline int hako_pdu_put_fixed_data(char* buffer, const char* base_ptr, in
     meta->base_off = HAKO_PDU_META_DATA_SIZE();
     meta->heap_off = meta->base_off + base_size;
     if (buffer_size < (int)meta->heap_off) {
-        // バッファサイズが不足している場合のエラー処理
         return -1;
     }
     memcpy(&buffer[meta->base_off], base_ptr, base_size);
