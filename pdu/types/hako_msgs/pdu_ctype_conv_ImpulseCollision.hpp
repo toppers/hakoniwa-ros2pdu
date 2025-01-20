@@ -45,6 +45,8 @@ static inline int _pdu2ros_ImpulseCollision(const char* heap_ptr, Hako_ImpulseCo
     // Struct convert
     _pdu2ros_Vector3(heap_ptr, src.target_angular_velocity, dst.target_angular_velocity);
     // Struct convert
+    _pdu2ros_Vector3(heap_ptr, src.target_euler, dst.target_euler);
+    // Struct convert
     _pdu2ros_Vector3(heap_ptr, src.target_inertia, dst.target_inertia);
     // primitive convert
     hako_convert_pdu2ros(src.target_mass, dst.target_mass);
@@ -90,6 +92,8 @@ static inline bool _ros2pdu_ImpulseCollision(hako_msgs::msg::ImpulseCollision &s
         _ros2pdu_Vector3(src.target_velocity, dst.target_velocity, dynamic_memory);
         // struct convert
         _ros2pdu_Vector3(src.target_angular_velocity, dst.target_angular_velocity, dynamic_memory);
+        // struct convert
+        _ros2pdu_Vector3(src.target_euler, dst.target_euler, dynamic_memory);
         // struct convert
         _ros2pdu_Vector3(src.target_inertia, dst.target_inertia, dynamic_memory);
         // primitive convert

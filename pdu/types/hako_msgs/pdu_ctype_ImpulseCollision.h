@@ -14,6 +14,7 @@ typedef struct {
         Hako_Point target_contact_vector;
         Hako_Vector3 target_velocity;
         Hako_Vector3 target_angular_velocity;
+        Hako_Vector3 target_euler;
         Hako_Vector3 target_inertia;
         Hako_float64 target_mass;
 } Hako_ImpulseCollision;

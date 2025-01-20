@@ -115,6 +115,23 @@ namespace hakoniwa.pdu.msgs.hako_msgs
                 _pdu.SetData("target_angular_velocity", value._pdu);
             }
         }
+        private Vector3 _target_euler;
+        public Vector3 target_euler
+        {
+            get
+            {
+                if (_target_euler == null)
+                {
+                    _target_euler = new Vector3(_pdu.GetData<IPdu>("target_euler"));
+                }
+                return _target_euler;
+            }
+            set
+            {
+                _target_euler = value;
+                _pdu.SetData("target_euler", value._pdu);
+            }
+        }
         private Vector3 _target_inertia;
         public Vector3 target_inertia
         {

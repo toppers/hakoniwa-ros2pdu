@@ -33,6 +33,10 @@
       "type": "geometry_msgs/Vector3"
     },
     {
+      "name": "target_euler",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
       "name": "target_inertia",
       "type": "geometry_msgs/Vector3"
     },

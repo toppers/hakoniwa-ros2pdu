@@ -44,6 +44,8 @@ static inline int cpp_pdu2cpp_ImpulseCollision(const char* heap_ptr, Hako_Impuls
     // Struct convert
     cpp_pdu2cpp_Vector3(heap_ptr, src.target_angular_velocity, dst.target_angular_velocity);
     // Struct convert
+    cpp_pdu2cpp_Vector3(heap_ptr, src.target_euler, dst.target_euler);
+    // Struct convert
     cpp_pdu2cpp_Vector3(heap_ptr, src.target_inertia, dst.target_inertia);
     // primitive convert
     hako_convert_pdu2cpp(src.target_mass, dst.target_mass);
@@ -89,6 +91,8 @@ static inline bool cpp_cpp2pdu_ImpulseCollision(HakoCpp_ImpulseCollision &src, H
         cpp_cpp2pdu_Vector3(src.target_velocity, dst.target_velocity, dynamic_memory);
         // struct convert
         cpp_cpp2pdu_Vector3(src.target_angular_velocity, dst.target_angular_velocity, dynamic_memory);
+        // struct convert
+        cpp_cpp2pdu_Vector3(src.target_euler, dst.target_euler, dynamic_memory);
         // struct convert
         cpp_cpp2pdu_Vector3(src.target_inertia, dst.target_inertia, dynamic_memory);
         // primitive convert
