@@ -7,6 +7,7 @@ hako_msgs/HakoCmdMagnetHolder
 hako_msgs/HakoStatusMagnetHolder
 pico_msgs/LightSensor
 hako_msgs/Collision
+hako_msgs/ImpulseCollision
 hako_msgs/ManualPosAttControl
 hako_msgs/DisturbanceWind
 hako_msgs/DisturbanceTemperature

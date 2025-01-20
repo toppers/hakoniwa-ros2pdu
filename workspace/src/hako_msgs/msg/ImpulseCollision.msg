@@ -1,0 +1,10 @@
+bool                  collision
+bool                  is_target_static
+float64               restitution_coefficient
+geometry_msgs/Point   self_contact_vector
+geometry_msgs/Vector3 normal
+geometry_msgs/Point   target_contact_vector
+geometry_msgs/Vector3 target_velocity
+geometry_msgs/Vector3 target_angular_velocity
+geometry_msgs/Vector3 target_inertia
+float64               target_mass

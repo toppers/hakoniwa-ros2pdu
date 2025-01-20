@@ -1,0 +1,44 @@
+{
+  "fields": [
+    {
+      "name": "collision",
+      "type": "bool"
+    },
+    {
+      "name": "is_target_static",
+      "type": "bool"
+    },
+    {
+      "name": "restitution_coefficient",
+      "type": "float64"
+    },
+    {
+      "name": "self_contact_vector",
+      "type": "geometry_msgs/Point"
+    },
+    {
+      "name": "normal",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
+      "name": "target_contact_vector",
+      "type": "geometry_msgs/Point"
+    },
+    {
+      "name": "target_velocity",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
+      "name": "target_angular_velocity",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
+      "name": "target_inertia",
+      "type": "geometry_msgs/Vector3"
+    },
+    {
+      "name": "target_mass",
+      "type": "float64"
+    }
+  ]
+}
