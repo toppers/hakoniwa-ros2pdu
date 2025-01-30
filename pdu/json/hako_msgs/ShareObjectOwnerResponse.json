@@ -1,0 +1,20 @@
+{
+  "fields": [
+    {
+      "name": "object_name",
+      "type": "string"
+    },
+    {
+      "name": "request_type",
+      "type": "uint32"
+    },
+    {
+      "name": "owner_id",
+      "type": "uint32"
+    },
+    {
+      "name": "accepted",
+      "type": "bool"
+    }
+  ]
+}

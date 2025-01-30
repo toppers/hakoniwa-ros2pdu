@@ -1,4 +1,8 @@
 
+hako_msgs/SimTime
+hako_msgs/ShareObjectOwner
+hako_msgs/ShareObjectOwnerRequest
+hako_msgs/ShareObjectOwnerResponse
 hako_msgs/ImpulseCollision
 hako_msgs/ManualPosAttControl
 hako_msgs/DisturbanceWind

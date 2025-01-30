@@ -1,0 +1,20 @@
+{
+  "fields": [
+    {
+      "name": "object_name",
+      "type": "string"
+    },
+    {
+      "name": "owner_id",
+      "type": "uint32"
+    },
+    {
+      "name": "last_update",
+      "type": "uint64"
+    },
+    {
+      "name": "pos",
+      "type": "geometry_msgs/Twist"
+    }
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "fields": [
+    {
+      "name": "time_usec",
+      "type": "uint64"
+    }
+  ]
+}

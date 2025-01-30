@@ -1,0 +1,4 @@
+string object_name
+uint32 request_type
+uint32 new_owner_id
+uint64 request_time 
