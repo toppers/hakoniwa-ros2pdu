@@ -26,11 +26,13 @@ def validate_csv(df):
     if not df["read_or_write"].str.lower().isin(valid_rw_values).all():
         raise ValueError("Column 'read_or_write' must contain only 'read' or 'write'.")
 
-    # Check for duplicate channel_id
-    duplicate_channel_ids = df[df.duplicated(subset=["channel_id"], keep=False)]
+    # `RobotName` も含めて重複チェック
+    duplicate_channel_ids = df[df.duplicated(subset=["RobotName", "channel_id", "read_or_write"], keep=False)]
+
     if not duplicate_channel_ids.empty:
         duplicate_info = duplicate_channel_ids[["RobotName", "channel_id", "pdu_name"]].to_string(index=False)
-        raise ValueError(f"Duplicate channel_id found:\n{duplicate_info}")
+        raise ValueError(f"Duplicate channel_id found (within the same RobotName):\n{duplicate_info}")
+
 
 def convert_csv_to_json(csv_file_path, output_json_path):
     # Load CSV file
