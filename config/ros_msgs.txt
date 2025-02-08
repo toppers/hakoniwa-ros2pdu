@@ -1,4 +1,3 @@
-
 hako_msgs/SimTime
 hako_msgs/ShareObjectOwner
 hako_msgs/ShareObjectOwnerRequest
@@ -73,3 +72,5 @@ hako_mavlink_msgs/HakoHilActuatorControls
 hako_mavlink_msgs/HakoHilSensor
 hako_mavlink_msgs/HakoHilStateQuaternion
 hako_mavlink_msgs/HakoHilGps
+hako_mavlink_msgs/HakoSystemTime
+

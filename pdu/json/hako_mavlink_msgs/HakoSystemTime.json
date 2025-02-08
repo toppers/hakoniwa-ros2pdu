@@ -1,0 +1,12 @@
+{
+  "fields": [
+    {
+      "name": "time_unix_usec",
+      "type": "uint64"
+    },
+    {
+      "name": "time_boot_ms",
+      "type": "uint64"
+    }
+  ]
+}
