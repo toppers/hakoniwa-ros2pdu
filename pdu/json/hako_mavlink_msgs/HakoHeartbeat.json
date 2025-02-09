@@ -1,0 +1,28 @@
+{
+  "fields": [
+    {
+      "name": "type",
+      "type": "uint8"
+    },
+    {
+      "name": "autopilot",
+      "type": "uint8"
+    },
+    {
+      "name": "base_mode",
+      "type": "uint8"
+    },
+    {
+      "name": "custom_mode",
+      "type": "uint32"
+    },
+    {
+      "name": "system_status",
+      "type": "uint8"
+    },
+    {
+      "name": "mavlink_version",
+      "type": "uint8"
+    }
+  ]
+}
