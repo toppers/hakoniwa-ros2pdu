@@ -19,7 +19,7 @@
  * PDU ==> MAVLINK
  *
  ***************************/
-static inline int hako_convert_pdu2mavlink_HakoSERVO_OUTPUT_RAW(Hako_HakoSERVO_OUTPUT_RAW &src,  mavlink_s_e_r_v_o__o_u_t_p_u_t__r_a_w_t &dst)
+static inline int hako_convert_pdu2mavlink_HakoSERVO_OUTPUT_RAW(Hako_HakoSERVO_OUTPUT_RAW &src,  mavlink_servo_output_raw_t &dst)
 {
     //primitive convert
     dst.time_usec = src.time_usec;
@@ -49,7 +49,7 @@ static inline int hako_convert_pdu2mavlink_HakoSERVO_OUTPUT_RAW(Hako_HakoSERVO_O
  * MAVLINK ==> PDU
  *
  ***************************/
-static inline int hako_convert_mavlink2pdu_HakoSERVO_OUTPUT_RAW(mavlink_s_e_r_v_o__o_u_t_p_u_t__r_a_w_t &src, Hako_HakoSERVO_OUTPUT_RAW &dst)
+static inline int hako_convert_mavlink2pdu_HakoSERVO_OUTPUT_RAW(mavlink_servo_output_raw_t &src, Hako_HakoSERVO_OUTPUT_RAW &dst)
 {
     //primitive convert
     dst.time_usec = src.time_usec;
