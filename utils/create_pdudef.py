@@ -63,7 +63,8 @@ def convert_csv_to_json(csv_file_path, output_json_path):
                 "name": f"{row['RobotName']}_{row['pdu_name']}",
                 "channel_id": int(row["channel_id"]),
                 "pdu_size": int(row["pdu_size"]) + PDU_METDATA_SIZE,
-                "write_cycle": int(row["io_cycle"])
+                "write_cycle": int(row["io_cycle"]),
+                "method_type": "SHM"
             }
 
             # Add to appropriate list based on read_or_write
