@@ -1,0 +1,3 @@
+int32 request_id
+int32 image_data_length
+sensor_msgs/CompressedImage image

@@ -1,0 +1,20 @@
+{
+  "fields": [
+    {
+      "name": "header",
+      "type": "HakoCmdHeader"
+    },
+    {
+      "name": "request_id",
+      "type": "int32"
+    },
+    {
+      "name": "encode_type",
+      "type": "int32"
+    },
+    {
+      "name": "request_type",
+      "type": "int32"
+    }
+  ]
+}

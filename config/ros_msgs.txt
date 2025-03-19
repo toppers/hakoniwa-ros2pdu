@@ -11,6 +11,8 @@ hako_msgs/HakoDroneCmdHeader
 hako_msgs/HakoDroneCmdTakeoff
 hako_msgs/HakoDroneCmdMove
 hako_msgs/HakoDroneCmdLand
+hako_msgs/MonitorCameraCmd
+hako_msgs/MonitorCameraData
 can_msgs/HakoCan
 ev3_msgs/Ev3PduSensor
 ev3_msgs/Ev3PduActuator
