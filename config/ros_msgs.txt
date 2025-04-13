@@ -76,3 +76,7 @@ hako_mavlink_msgs/HakoHilStateQuaternion
 hako_mavlink_msgs/HakoHilGps
 hako_mavlink_msgs/HakoSystemTime
 hako_mavlink_msgs/HakoHeartbeat
+hako_srv_msgs/ServiceRequestHeader
+hako_srv_msgs/ServiceResponseHeader
+hako_srv_msgs/AddTwoIntsRequest
+hako_srv_msgs/AddTwoIntsResponse

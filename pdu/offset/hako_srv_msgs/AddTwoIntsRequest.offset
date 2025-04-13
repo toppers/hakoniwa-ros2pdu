@@ -1,0 +1,3 @@
+single:struct:header:hako_srv_msgs/ServiceRequestHeader:0:260
+single:primitive:a:int64:264:8
+single:primitive:b:int64:272:8

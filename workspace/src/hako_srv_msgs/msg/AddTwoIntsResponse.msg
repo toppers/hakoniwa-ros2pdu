@@ -1,0 +1,2 @@
+hako_srv_msgs/ServiceResponseHeader header
+int64 sum

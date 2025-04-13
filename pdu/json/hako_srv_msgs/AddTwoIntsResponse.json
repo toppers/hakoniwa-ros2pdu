@@ -1,0 +1,12 @@
+{
+  "fields": [
+    {
+      "name": "header",
+      "type": "hako_srv_msgs/ServiceResponseHeader"
+    },
+    {
+      "name": "sum",
+      "type": "int64"
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "fields": [
+    {
+      "name": "request_id",
+      "type": "uint32"
+    },
+    {
+      "name": "service_name",
+      "type": "string"
+    },
+    {
+      "name": "client_name",
+      "type": "string"
+    },
+    {
+      "name": "processing_percentage",
+      "type": "uint8"
+    }
+  ]
+}

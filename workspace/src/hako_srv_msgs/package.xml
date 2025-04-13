@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>hako_msgs</name>
+  <name>hako_srv_msgs</name>
   <version>0.0.0</version>
-  <description>Topic definition package for Hakoniwa PDU</description>
+  <description>Service definition package for Hakoniwa service PDU protocol</description>
   <maintainer email="kanetugu2015@gmail.com">tmori</maintainer>
   <license>MIT</license>
 
