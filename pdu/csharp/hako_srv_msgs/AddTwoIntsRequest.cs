@@ -14,23 +14,6 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
         {
             _pdu = pdu;
         }
-        private ServiceRequestHeader _header;
-        public ServiceRequestHeader header
-        {
-            get
-            {
-                if (_header == null)
-                {
-                    _header = new ServiceRequestHeader(_pdu.GetData<IPdu>("header"));
-                }
-                return _header;
-            }
-            set
-            {
-                _header = value;
-                _pdu.SetData("header", value._pdu);
-            }
-        }
         public long a
         {
             get => _pdu.GetData<long>("a");

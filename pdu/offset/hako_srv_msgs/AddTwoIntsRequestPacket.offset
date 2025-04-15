@@ -1,0 +1,2 @@
+single:struct:header:hako_srv_msgs/ServiceRequestHeader:0:260
+single:struct:body:hako_srv_msgs/AddTwoIntsRequest:264:16

@@ -16,7 +16,6 @@
 /*
  * Dependent Convertors
  */
-#include "hako_srv_msgs/pdu_cpptype_conv_ServiceRequestHeader.hpp"
 
 /***************************
  *
@@ -26,8 +25,6 @@
 
 static inline int cpp_pdu2cpp_AddTwoIntsRequest(const char* heap_ptr, Hako_AddTwoIntsRequest &src, HakoCpp_AddTwoIntsRequest &dst)
 {
-    // Struct convert
-    cpp_pdu2cpp_ServiceRequestHeader(heap_ptr, src.header, dst.header);
     // primitive convert
     hako_convert_pdu2cpp(src.a, dst.a);
     // primitive convert
@@ -58,8 +55,6 @@ static inline int hako_convert_pdu2cpp_AddTwoIntsRequest(Hako_AddTwoIntsRequest 
 static inline bool cpp_cpp2pdu_AddTwoIntsRequest(HakoCpp_AddTwoIntsRequest &src, Hako_AddTwoIntsRequest &dst, PduDynamicMemory &dynamic_memory)
 {
     try {
-        // struct convert
-        cpp_cpp2pdu_ServiceRequestHeader(src.header, dst.header, dynamic_memory);
         // primitive convert
         hako_convert_cpp2pdu(src.a, dst.a);
         // primitive convert

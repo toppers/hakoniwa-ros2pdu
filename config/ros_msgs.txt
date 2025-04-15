@@ -80,3 +80,5 @@ hako_srv_msgs/ServiceRequestHeader
 hako_srv_msgs/ServiceResponseHeader
 hako_srv_msgs/AddTwoIntsRequest
 hako_srv_msgs/AddTwoIntsResponse
+hako_srv_msgs/AddTwoIntsRequestPacket
+hako_srv_msgs/AddTwoIntsResponsePacket

@@ -1,0 +1,12 @@
+{
+  "fields": [
+    {
+      "name": "header",
+      "type": "hako_srv_msgs/ServiceRequestHeader"
+    },
+    {
+      "name": "body",
+      "type": "hako_srv_msgs/AddTwoIntsRequest"
+    }
+  ]
+}

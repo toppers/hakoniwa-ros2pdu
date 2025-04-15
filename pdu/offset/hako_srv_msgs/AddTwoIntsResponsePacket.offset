@@ -1,0 +1,2 @@
+single:struct:header:hako_srv_msgs/ServiceResponseHeader:0:264
+single:struct:body:hako_srv_msgs/AddTwoIntsResponse:264:8

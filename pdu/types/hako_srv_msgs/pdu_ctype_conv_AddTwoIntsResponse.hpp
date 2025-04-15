@@ -17,7 +17,6 @@
 /*
  * Dependent Convertors
  */
-#include "hako_srv_msgs/pdu_ctype_conv_ServiceResponseHeader.hpp"
 
 /***************************
  *
@@ -27,8 +26,6 @@
 
 static inline int _pdu2ros_AddTwoIntsResponse(const char* heap_ptr, Hako_AddTwoIntsResponse &src, hako_srv_msgs::msg::AddTwoIntsResponse &dst)
 {
-    // Struct convert
-    _pdu2ros_ServiceResponseHeader(heap_ptr, src.header, dst.header);
     // primitive convert
     hako_convert_pdu2ros(src.sum, dst.sum);
     (void)heap_ptr;
@@ -57,8 +54,6 @@ static inline int hako_convert_pdu2ros_AddTwoIntsResponse(Hako_AddTwoIntsRespons
 static inline bool _ros2pdu_AddTwoIntsResponse(hako_srv_msgs::msg::AddTwoIntsResponse &src, Hako_AddTwoIntsResponse &dst, PduDynamicMemory &dynamic_memory)
 {
     try {
-        // struct convert
-        _ros2pdu_ServiceResponseHeader(src.header, dst.header, dynamic_memory);
         // primitive convert
         hako_convert_ros2pdu(src.sum, dst.sum);
     } catch (const std::runtime_error& e) {

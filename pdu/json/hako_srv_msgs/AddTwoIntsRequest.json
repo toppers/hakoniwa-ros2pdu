@@ -1,10 +1,6 @@
 {
   "fields": [
     {
-      "name": "header",
-      "type": "hako_srv_msgs/ServiceRequestHeader"
-    },
-    {
       "name": "a",
       "type": "int64"
     },
