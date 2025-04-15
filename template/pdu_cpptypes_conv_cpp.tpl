@@ -283,4 +283,54 @@ static inline Hako_{{container.msg_type_name}}* hako_create_empty_pdu_{{containe
     }
     return (Hako_{{container.msg_type_name}}*)base_ptr;
 }
+namespace hako::pdu::msgs::{{container.pkg_name}}
+{
+class {{container.msg_type_name}}
+{
+public:
+    {{container.msg_type_name}}() = default;
+    ~{{container.msg_type_name}}() = default;
+
+    bool pdu2cpp(char* top_ptr, HakoCpp_{{container.msg_type_name}}& cppData)
+    {
+        char* base_ptr = (char*)hako_get_base_ptr_pdu((void*)top_ptr);
+        if (base_ptr == nullptr) {
+            std::cerr << "[ConvertorError][" << "{{container.msg_type_name}}" << "] hako_get_base_ptr_pdu returned null" << std::endl;
+            return false;
+        } 
+        int ret = hako_convert_pdu2cpp_{{container.msg_type_name}}(*(Hako_Twist*)base_ptr, cppData);
+        if (ret != 0) {
+            std::cerr << "[ConvertorError][" << "{{container.msg_type_name}}" << "] hako_convert_pdu2cpp returned " << ret << std::endl;
+            return false;
+        }
+        return true;
+    }
+
+    int cpp2pdu(HakoCpp_{{container.msg_type_name}}& cppData, char* pdu_buffer, int buffer_len)
+    {
+        char* base_ptr = nullptr;
+        int pdu_size = hako_convert_cpp2pdu_{{container.msg_type_name}}(cppData, (Hako_Twist**)&base_ptr);
+        if (pdu_size < 0) {
+            std::cerr << "[ConvertorError][" << "{{container.msg_type_name}}" << "] hako_convert_cpp2pdu returned error code: " << pdu_size << std::endl;
+            return -1;
+        }
+        if (pdu_size > buffer_len) {
+            std::cerr << "[ConvertorError][" << "{{container.msg_type_name}}" << "] buffer too small. pdu_size=" << pdu_size << " buffer_len=" << buffer_len << std::endl;
+            return -1;
+        }
+        void* top_ptr = hako_get_top_ptr_pdu((void*)base_ptr);
+        if (top_ptr == nullptr) {
+            std::cerr << "[ConvertorError][" << "{{container.msg_type_name}}" << "] hako_get_top_ptr_pdu returned null" << std::endl;
+            return false;
+        }
+        memcpy(pdu_buffer, top_ptr, pdu_size);
+        hako_destroy_pdu((void*)base_ptr);
+        return pdu_size;
+    }
+
+private:
+};
+}
+
+
 #endif /* _PDU_CPPTYPE_CONV_HAKO_{{container.pkg_name}}_{{container.msg_type_name}}_HPP_ */

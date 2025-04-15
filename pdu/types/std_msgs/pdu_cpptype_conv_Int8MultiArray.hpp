@@ -126,4 +126,54 @@ static inline Hako_Int8MultiArray* hako_create_empty_pdu_Int8MultiArray(int heap
     }
     return (Hako_Int8MultiArray*)base_ptr;
 }
+namespace hako::pdu::msgs::std_msgs
+{
+class Int8MultiArray
+{
+public:
+    Int8MultiArray() = default;
+    ~Int8MultiArray() = default;
+
+    bool pdu2cpp(char* top_ptr, HakoCpp_Int8MultiArray& cppData)
+    {
+        char* base_ptr = (char*)hako_get_base_ptr_pdu((void*)top_ptr);
+        if (base_ptr == nullptr) {
+            std::cerr << "[ConvertorError][" << "Int8MultiArray" << "] hako_get_base_ptr_pdu returned null" << std::endl;
+            return false;
+        } 
+        int ret = hako_convert_pdu2cpp_Int8MultiArray(*(Hako_Twist*)base_ptr, cppData);
+        if (ret != 0) {
+            std::cerr << "[ConvertorError][" << "Int8MultiArray" << "] hako_convert_pdu2cpp returned " << ret << std::endl;
+            return false;
+        }
+        return true;
+    }
+
+    int cpp2pdu(HakoCpp_Int8MultiArray& cppData, char* pdu_buffer, int buffer_len)
+    {
+        char* base_ptr = nullptr;
+        int pdu_size = hako_convert_cpp2pdu_Int8MultiArray(cppData, (Hako_Twist**)&base_ptr);
+        if (pdu_size < 0) {
+            std::cerr << "[ConvertorError][" << "Int8MultiArray" << "] hako_convert_cpp2pdu returned error code: " << pdu_size << std::endl;
+            return -1;
+        }
+        if (pdu_size > buffer_len) {
+            std::cerr << "[ConvertorError][" << "Int8MultiArray" << "] buffer too small. pdu_size=" << pdu_size << " buffer_len=" << buffer_len << std::endl;
+            return -1;
+        }
+        void* top_ptr = hako_get_top_ptr_pdu((void*)base_ptr);
+        if (top_ptr == nullptr) {
+            std::cerr << "[ConvertorError][" << "Int8MultiArray" << "] hako_get_top_ptr_pdu returned null" << std::endl;
+            return false;
+        }
+        memcpy(pdu_buffer, top_ptr, pdu_size);
+        hako_destroy_pdu((void*)base_ptr);
+        return pdu_size;
+    }
+
+private:
+};
+}
+
+
 #endif /* _PDU_CPPTYPE_CONV_HAKO_std_msgs_Int8MultiArray_HPP_ */

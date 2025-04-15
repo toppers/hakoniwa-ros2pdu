@@ -12,7 +12,7 @@
 /*
  * Dependent ros data
  */
-#include "hako_mavlink_msgs/msg/hako_servo_output_raw.hpp"
+#include "hako_mavlink_msgs/msg/hako_s_e_r_v_o__o_u_t_p_u_t__r_a_w.hpp"
 
 /*
  * Dependent Convertors

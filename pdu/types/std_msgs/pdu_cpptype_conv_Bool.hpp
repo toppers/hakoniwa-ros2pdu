@@ -95,4 +95,54 @@ static inline Hako_Bool* hako_create_empty_pdu_Bool(int heap_size)
     }
     return (Hako_Bool*)base_ptr;
 }
+namespace hako::pdu::msgs::std_msgs
+{
+class Bool
+{
+public:
+    Bool() = default;
+    ~Bool() = default;
+
+    bool pdu2cpp(char* top_ptr, HakoCpp_Bool& cppData)
+    {
+        char* base_ptr = (char*)hako_get_base_ptr_pdu((void*)top_ptr);
+        if (base_ptr == nullptr) {
+            std::cerr << "[ConvertorError][" << "Bool" << "] hako_get_base_ptr_pdu returned null" << std::endl;
+            return false;
+        } 
+        int ret = hako_convert_pdu2cpp_Bool(*(Hako_Twist*)base_ptr, cppData);
+        if (ret != 0) {
+            std::cerr << "[ConvertorError][" << "Bool" << "] hako_convert_pdu2cpp returned " << ret << std::endl;
+            return false;
+        }
+        return true;
+    }
+
+    int cpp2pdu(HakoCpp_Bool& cppData, char* pdu_buffer, int buffer_len)
+    {
+        char* base_ptr = nullptr;
+        int pdu_size = hako_convert_cpp2pdu_Bool(cppData, (Hako_Twist**)&base_ptr);
+        if (pdu_size < 0) {
+            std::cerr << "[ConvertorError][" << "Bool" << "] hako_convert_cpp2pdu returned error code: " << pdu_size << std::endl;
+            return -1;
+        }
+        if (pdu_size > buffer_len) {
+            std::cerr << "[ConvertorError][" << "Bool" << "] buffer too small. pdu_size=" << pdu_size << " buffer_len=" << buffer_len << std::endl;
+            return -1;
+        }
+        void* top_ptr = hako_get_top_ptr_pdu((void*)base_ptr);
+        if (top_ptr == nullptr) {
+            std::cerr << "[ConvertorError][" << "Bool" << "] hako_get_top_ptr_pdu returned null" << std::endl;
+            return false;
+        }
+        memcpy(pdu_buffer, top_ptr, pdu_size);
+        hako_destroy_pdu((void*)base_ptr);
+        return pdu_size;
+    }
+
+private:
+};
+}
+
+
 #endif /* _PDU_CPPTYPE_CONV_HAKO_std_msgs_Bool_HPP_ */
