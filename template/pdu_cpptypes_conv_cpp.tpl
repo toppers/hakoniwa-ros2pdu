@@ -298,7 +298,7 @@ public:
             std::cerr << "[ConvertorError][" << "{{container.msg_type_name}}" << "] hako_get_base_ptr_pdu returned null" << std::endl;
             return false;
         } 
-        int ret = hako_convert_pdu2cpp_{{container.msg_type_name}}(*(Hako_Twist*)base_ptr, cppData);
+        int ret = hako_convert_pdu2cpp_{{container.msg_type_name}}(*(Hako_{{container.msg_type_name}}*)base_ptr, cppData);
         if (ret != 0) {
             std::cerr << "[ConvertorError][" << "{{container.msg_type_name}}" << "] hako_convert_pdu2cpp returned " << ret << std::endl;
             return false;
@@ -309,7 +309,7 @@ public:
     int cpp2pdu(HakoCpp_{{container.msg_type_name}}& cppData, char* pdu_buffer, int buffer_len)
     {
         char* base_ptr = nullptr;
-        int pdu_size = hako_convert_cpp2pdu_{{container.msg_type_name}}(cppData, (Hako_Twist**)&base_ptr);
+        int pdu_size = hako_convert_cpp2pdu_{{container.msg_type_name}}(cppData, (Hako_{{container.msg_type_name}}**)&base_ptr);
         if (pdu_size < 0) {
             std::cerr << "[ConvertorError][" << "{{container.msg_type_name}}" << "] hako_convert_cpp2pdu returned error code: " << pdu_size << std::endl;
             return -1;

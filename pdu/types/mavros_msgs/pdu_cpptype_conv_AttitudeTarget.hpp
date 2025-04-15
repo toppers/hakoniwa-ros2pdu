@@ -130,7 +130,7 @@ public:
             std::cerr << "[ConvertorError][" << "AttitudeTarget" << "] hako_get_base_ptr_pdu returned null" << std::endl;
             return false;
         } 
-        int ret = hako_convert_pdu2cpp_AttitudeTarget(*(Hako_Twist*)base_ptr, cppData);
+        int ret = hako_convert_pdu2cpp_AttitudeTarget(*(Hako_AttitudeTarget*)base_ptr, cppData);
         if (ret != 0) {
             std::cerr << "[ConvertorError][" << "AttitudeTarget" << "] hako_convert_pdu2cpp returned " << ret << std::endl;
             return false;
@@ -141,7 +141,7 @@ public:
     int cpp2pdu(HakoCpp_AttitudeTarget& cppData, char* pdu_buffer, int buffer_len)
     {
         char* base_ptr = nullptr;
-        int pdu_size = hako_convert_cpp2pdu_AttitudeTarget(cppData, (Hako_Twist**)&base_ptr);
+        int pdu_size = hako_convert_cpp2pdu_AttitudeTarget(cppData, (Hako_AttitudeTarget**)&base_ptr);
         if (pdu_size < 0) {
             std::cerr << "[ConvertorError][" << "AttitudeTarget" << "] hako_convert_cpp2pdu returned error code: " << pdu_size << std::endl;
             return -1;
