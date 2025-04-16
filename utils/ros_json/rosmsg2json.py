@@ -22,14 +22,15 @@ out_data = {'fields': []}
 # ファイルの読み込みとデータの解析
 with open(os.path.join(in_dir, in_file), 'r') as file:
     for line in file:
-        stripped_line = line.strip()
-        # コメント行または空行、または'='を含む行をスキップ
-        if stripped_line and not stripped_line.startswith('#') and '=' not in stripped_line:
-            parts = stripped_line.split()
-            # フィールド名と型を辞書に追加
-            if len(parts) >= 2:  # 配列に少なくとも2つの要素が必要
+        # コメント部分（#以降）を削除してトリム
+        line = line.split('#', 1)[0].strip()
+        # 空行または '=' を含む行をスキップ（定数定義）
+        if line and '=' not in line:
+            parts = line.split()
+            if len(parts) >= 2:
                 entry = {'name': parts[1], 'type': parts[0]}
                 out_data['fields'].append(entry)
+
 
 # JSONファイルとしてデータを書き出し
 out_path = os.path.join(out_dir, out_file)

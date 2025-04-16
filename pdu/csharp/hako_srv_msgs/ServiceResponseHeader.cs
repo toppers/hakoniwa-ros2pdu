@@ -29,10 +29,20 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
             get => _pdu.GetData<string>("client_name");
             set => _pdu.SetData("client_name", value);
         }
+        public byte status
+        {
+            get => _pdu.GetData<byte>("status");
+            set => _pdu.SetData("status", value);
+        }
         public byte processing_percentage
         {
             get => _pdu.GetData<byte>("processing_percentage");
             set => _pdu.SetData("processing_percentage", value);
+        }
+        public int result_code
+        {
+            get => _pdu.GetData<int>("result_code");
+            set => _pdu.SetData("result_code", value);
         }
     }
 }

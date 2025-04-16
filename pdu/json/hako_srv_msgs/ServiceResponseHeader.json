@@ -13,8 +13,16 @@
       "type": "string"
     },
     {
+      "name": "status",
+      "type": "uint8"
+    },
+    {
       "name": "processing_percentage",
       "type": "uint8"
+    },
+    {
+      "name": "result_code",
+      "type": "int32"
     }
   ]
 }

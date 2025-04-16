@@ -32,6 +32,10 @@ static inline int _pdu2ros_ServiceRequestHeader(const char* heap_ptr, Hako_Servi
     dst.service_name = (const char*)src.service_name;
     // string convertor
     dst.client_name = (const char*)src.client_name;
+    // primitive convert
+    hako_convert_pdu2ros(src.opcode, dst.opcode);
+    // primitive convert
+    hako_convert_pdu2ros(src.status_poll_interval_msec, dst.status_poll_interval_msec);
     (void)heap_ptr;
     return 0;
 }
@@ -68,6 +72,10 @@ static inline bool _ros2pdu_ServiceRequestHeader(hako_srv_msgs::msg::ServiceRequ
         (void)hako_convert_ros2pdu_array(
             src.client_name, src.client_name.length(),
             dst.client_name, M_ARRAY_SIZE(Hako_ServiceRequestHeader, char, client_name));
+        // primitive convert
+        hako_convert_ros2pdu(src.opcode, dst.opcode);
+        // primitive convert
+        hako_convert_ros2pdu(src.status_poll_interval_msec, dst.status_poll_interval_msec);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

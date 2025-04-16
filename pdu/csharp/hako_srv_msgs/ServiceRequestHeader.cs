@@ -29,5 +29,15 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
             get => _pdu.GetData<string>("client_name");
             set => _pdu.SetData("client_name", value);
         }
+        public byte opcode
+        {
+            get => _pdu.GetData<byte>("opcode");
+            set => _pdu.SetData("opcode", value);
+        }
+        public int status_poll_interval_msec
+        {
+            get => _pdu.GetData<int>("status_poll_interval_msec");
+            set => _pdu.SetData("status_poll_interval_msec", value);
+        }
     }
 }

@@ -11,6 +11,14 @@
     {
       "name": "client_name",
       "type": "string"
+    },
+    {
+      "name": "opcode",
+      "type": "uint8"
+    },
+    {
+      "name": "status_poll_interval_msec",
+      "type": "int32"
     }
   ]
 }

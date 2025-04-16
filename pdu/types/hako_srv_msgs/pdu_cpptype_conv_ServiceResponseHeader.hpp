@@ -32,7 +32,11 @@ static inline int cpp_pdu2cpp_ServiceResponseHeader(const char* heap_ptr, Hako_S
     // string convertor
     dst.client_name = (const char*)src.client_name;
     // primitive convert
+    hako_convert_pdu2cpp(src.status, dst.status);
+    // primitive convert
     hako_convert_pdu2cpp(src.processing_percentage, dst.processing_percentage);
+    // primitive convert
+    hako_convert_pdu2cpp(src.result_code, dst.result_code);
     (void)heap_ptr;
     return 0;
 }
@@ -70,7 +74,11 @@ static inline bool cpp_cpp2pdu_ServiceResponseHeader(HakoCpp_ServiceResponseHead
             src.client_name, src.client_name.length(),
             dst.client_name, M_ARRAY_SIZE(Hako_ServiceResponseHeader, char, client_name));
         // primitive convert
+        hako_convert_cpp2pdu(src.status, dst.status);
+        // primitive convert
         hako_convert_cpp2pdu(src.processing_percentage, dst.processing_percentage);
+        // primitive convert
+        hako_convert_cpp2pdu(src.result_code, dst.result_code);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
