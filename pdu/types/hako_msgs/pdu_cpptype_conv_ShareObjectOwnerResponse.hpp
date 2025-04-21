@@ -63,6 +63,7 @@ static inline bool cpp_cpp2pdu_ShareObjectOwnerResponse(HakoCpp_ShareObjectOwner
         (void)hako_convert_cpp2pdu_array(
             src.object_name, src.object_name.length(),
             dst.object_name, M_ARRAY_SIZE(Hako_ShareObjectOwnerResponse, char, object_name));
+        dst.object_name[src.object_name.length()] = '\0';
         // primitive convert
         hako_convert_cpp2pdu(src.request_type, dst.request_type);
         // primitive convert

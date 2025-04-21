@@ -67,10 +67,12 @@ static inline bool cpp_cpp2pdu_ServiceRequestHeader(HakoCpp_ServiceRequestHeader
         (void)hako_convert_cpp2pdu_array(
             src.service_name, src.service_name.length(),
             dst.service_name, M_ARRAY_SIZE(Hako_ServiceRequestHeader, char, service_name));
+        dst.service_name[src.service_name.length()] = '\0';
         // string convertor
         (void)hako_convert_cpp2pdu_array(
             src.client_name, src.client_name.length(),
             dst.client_name, M_ARRAY_SIZE(Hako_ServiceRequestHeader, char, client_name));
+        dst.client_name[src.client_name.length()] = '\0';
         // primitive convert
         hako_convert_cpp2pdu(src.opcode, dst.opcode);
         // primitive convert

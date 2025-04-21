@@ -69,6 +69,7 @@ static inline bool _ros2pdu_TransformStamped(geometry_msgs::msg::TransformStampe
         (void)hako_convert_ros2pdu_array(
             src.child_frame_id, src.child_frame_id.length(),
             dst.child_frame_id, M_ARRAY_SIZE(Hako_TransformStamped, char, child_frame_id));
+        dst.child_frame_id[src.child_frame_id.length()] = '\0';
         // struct convert
         _ros2pdu_Transform(src.transform, dst.transform, dynamic_memory);
     } catch (const std::runtime_error& e) {

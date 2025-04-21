@@ -62,6 +62,7 @@ static inline bool _ros2pdu_MultiArrayDimension(std_msgs::msg::MultiArrayDimensi
         (void)hako_convert_ros2pdu_array(
             src.label, src.label.length(),
             dst.label, M_ARRAY_SIZE(Hako_MultiArrayDimension, char, label));
+        dst.label[src.label.length()] = '\0';
         // primitive convert
         hako_convert_ros2pdu(src.size, dst.size);
         // primitive convert

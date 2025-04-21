@@ -66,6 +66,7 @@ static inline bool _ros2pdu_Ev3PduActuatorHeader(ev3_msgs::msg::Ev3PduActuatorHe
         (void)hako_convert_ros2pdu_array(
             src.name, src.name.length(),
             dst.name, M_ARRAY_SIZE(Hako_Ev3PduActuatorHeader, char, name));
+        dst.name[src.name.length()] = '\0';
         // primitive convert
         hako_convert_ros2pdu(src.version, dst.version);
         // primitive convert

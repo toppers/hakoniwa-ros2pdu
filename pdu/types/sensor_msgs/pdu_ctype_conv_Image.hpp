@@ -103,6 +103,7 @@ static inline bool _ros2pdu_Image(sensor_msgs::msg::Image &src, Hako_Image &dst,
         (void)hako_convert_ros2pdu_array(
             src.encoding, src.encoding.length(),
             dst.encoding, M_ARRAY_SIZE(Hako_Image, char, encoding));
+        dst.encoding[src.encoding.length()] = '\0';
         // primitive convert
         hako_convert_ros2pdu(src.is_bigendian, dst.is_bigendian);
         // primitive convert

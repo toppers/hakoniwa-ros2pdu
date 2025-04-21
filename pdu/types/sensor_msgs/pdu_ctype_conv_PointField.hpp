@@ -64,6 +64,7 @@ static inline bool _ros2pdu_PointField(sensor_msgs::msg::PointField &src, Hako_P
         (void)hako_convert_ros2pdu_array(
             src.name, src.name.length(),
             dst.name, M_ARRAY_SIZE(Hako_PointField, char, name));
+        dst.name[src.name.length()] = '\0';
         // primitive convert
         hako_convert_ros2pdu(src.offset, dst.offset);
         // primitive convert

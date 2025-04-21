@@ -62,6 +62,7 @@ static inline bool cpp_cpp2pdu_Header(HakoCpp_Header &src, Hako_Header &dst, Pdu
         (void)hako_convert_cpp2pdu_array(
             src.frame_id, src.frame_id.length(),
             dst.frame_id, M_ARRAY_SIZE(Hako_Header, char, frame_id));
+        dst.frame_id[src.frame_id.length()] = '\0';
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

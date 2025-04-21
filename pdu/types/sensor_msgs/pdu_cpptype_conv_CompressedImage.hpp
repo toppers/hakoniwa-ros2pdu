@@ -90,6 +90,7 @@ static inline bool cpp_cpp2pdu_CompressedImage(HakoCpp_CompressedImage &src, Hak
         (void)hako_convert_cpp2pdu_array(
             src.format, src.format.length(),
             dst.format, M_ARRAY_SIZE(Hako_CompressedImage, char, format));
+        dst.format[src.format.length()] = '\0';
         //primitive array copy
         cpp_cpp2pdu_primitive_array_CompressedImage_data(src, dst, dynamic_memory);
     } catch (const std::runtime_error& e) {

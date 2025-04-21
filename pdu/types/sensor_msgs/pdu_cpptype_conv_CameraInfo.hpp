@@ -165,6 +165,7 @@ static inline bool cpp_cpp2pdu_CameraInfo(HakoCpp_CameraInfo &src, Hako_CameraIn
         (void)hako_convert_cpp2pdu_array(
             src.distortion_model, src.distortion_model.length(),
             dst.distortion_model, M_ARRAY_SIZE(Hako_CameraInfo, char, distortion_model));
+        dst.distortion_model[src.distortion_model.length()] = '\0';
         //primitive array copy
         cpp_cpp2pdu_primitive_array_CameraInfo_d(src, dst, dynamic_memory);
         //primitive array copy

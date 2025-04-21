@@ -229,7 +229,8 @@ static inline bool _ros2pdu_{{container.msg_type_name}}({{container.pkg_name}}::
         // string convertor
         (void)hako_convert_ros2pdu_array(
             src.{{item["name"]}}, src.{{item["name"]}}.length(),
-            dst.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, char, {{item["name"]}}));        
+            dst.{{item["name"]}}, M_ARRAY_SIZE(Hako_{{container.msg_type_name}}, char, {{item["name"]}}));
+        dst.{{item["name"]}}[src.{{item["name"]}}.length()] = '\0';
 {%-     elif (container.is_primitive_array(item["type"])) %}
         //primitive array copy
         _ros2pdu_primitive_array_{{container.msg_type_name}}_{{item["name"]}}(src, dst, dynamic_memory);

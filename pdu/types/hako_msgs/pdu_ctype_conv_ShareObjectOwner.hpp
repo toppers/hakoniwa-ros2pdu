@@ -66,6 +66,7 @@ static inline bool _ros2pdu_ShareObjectOwner(hako_msgs::msg::ShareObjectOwner &s
         (void)hako_convert_ros2pdu_array(
             src.object_name, src.object_name.length(),
             dst.object_name, M_ARRAY_SIZE(Hako_ShareObjectOwner, char, object_name));
+        dst.object_name[src.object_name.length()] = '\0';
         // primitive convert
         hako_convert_ros2pdu(src.owner_id, dst.owner_id);
         // primitive convert

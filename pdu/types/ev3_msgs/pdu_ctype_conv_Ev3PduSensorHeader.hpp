@@ -66,6 +66,7 @@ static inline bool _ros2pdu_Ev3PduSensorHeader(ev3_msgs::msg::Ev3PduSensorHeader
         (void)hako_convert_ros2pdu_array(
             src.name, src.name.length(),
             dst.name, M_ARRAY_SIZE(Hako_Ev3PduSensorHeader, char, name));
+        dst.name[src.name.length()] = '\0';
         // primitive convert
         hako_convert_ros2pdu(src.version, dst.version);
         // primitive convert

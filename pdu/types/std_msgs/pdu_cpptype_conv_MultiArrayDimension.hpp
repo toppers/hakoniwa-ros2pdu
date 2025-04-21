@@ -61,6 +61,7 @@ static inline bool cpp_cpp2pdu_MultiArrayDimension(HakoCpp_MultiArrayDimension &
         (void)hako_convert_cpp2pdu_array(
             src.label, src.label.length(),
             dst.label, M_ARRAY_SIZE(Hako_MultiArrayDimension, char, label));
+        dst.label[src.label.length()] = '\0';
         // primitive convert
         hako_convert_cpp2pdu(src.size, dst.size);
         // primitive convert

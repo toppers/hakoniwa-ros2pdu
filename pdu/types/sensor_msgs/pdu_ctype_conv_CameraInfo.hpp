@@ -166,6 +166,7 @@ static inline bool _ros2pdu_CameraInfo(sensor_msgs::msg::CameraInfo &src, Hako_C
         (void)hako_convert_ros2pdu_array(
             src.distortion_model, src.distortion_model.length(),
             dst.distortion_model, M_ARRAY_SIZE(Hako_CameraInfo, char, distortion_model));
+        dst.distortion_model[src.distortion_model.length()] = '\0';
         //primitive array copy
         _ros2pdu_primitive_array_CameraInfo_d(src, dst, dynamic_memory);
         //primitive array copy

@@ -65,6 +65,7 @@ static inline bool cpp_cpp2pdu_Ev3PduSensorHeader(HakoCpp_Ev3PduSensorHeader &sr
         (void)hako_convert_cpp2pdu_array(
             src.name, src.name.length(),
             dst.name, M_ARRAY_SIZE(Hako_Ev3PduSensorHeader, char, name));
+        dst.name[src.name.length()] = '\0';
         // primitive convert
         hako_convert_cpp2pdu(src.version, dst.version);
         // primitive convert

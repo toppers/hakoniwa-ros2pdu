@@ -57,6 +57,7 @@ static inline bool cpp_cpp2pdu_String(HakoCpp_String &src, Hako_String &dst, Pdu
         (void)hako_convert_cpp2pdu_array(
             src.data, src.data.length(),
             dst.data, M_ARRAY_SIZE(Hako_String, char, data));
+        dst.data[src.data.length()] = '\0';
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

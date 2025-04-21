@@ -74,6 +74,7 @@ static inline bool cpp_cpp2pdu_Odometry(HakoCpp_Odometry &src, Hako_Odometry &ds
         (void)hako_convert_cpp2pdu_array(
             src.child_frame_id, src.child_frame_id.length(),
             dst.child_frame_id, M_ARRAY_SIZE(Hako_Odometry, char, child_frame_id));
+        dst.child_frame_id[src.child_frame_id.length()] = '\0';
         // struct convert
         cpp_cpp2pdu_PoseWithCovariance(src.pose, dst.pose, dynamic_memory);
         // struct convert

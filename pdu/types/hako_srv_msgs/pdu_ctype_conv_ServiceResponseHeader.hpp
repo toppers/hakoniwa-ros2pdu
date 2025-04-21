@@ -70,10 +70,12 @@ static inline bool _ros2pdu_ServiceResponseHeader(hako_srv_msgs::msg::ServiceRes
         (void)hako_convert_ros2pdu_array(
             src.service_name, src.service_name.length(),
             dst.service_name, M_ARRAY_SIZE(Hako_ServiceResponseHeader, char, service_name));
+        dst.service_name[src.service_name.length()] = '\0';
         // string convertor
         (void)hako_convert_ros2pdu_array(
             src.client_name, src.client_name.length(),
             dst.client_name, M_ARRAY_SIZE(Hako_ServiceResponseHeader, char, client_name));
+        dst.client_name[src.client_name.length()] = '\0';
         // primitive convert
         hako_convert_ros2pdu(src.status, dst.status);
         // primitive convert

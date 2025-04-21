@@ -63,6 +63,7 @@ static inline bool cpp_cpp2pdu_PointField(HakoCpp_PointField &src, Hako_PointFie
         (void)hako_convert_cpp2pdu_array(
             src.name, src.name.length(),
             dst.name, M_ARRAY_SIZE(Hako_PointField, char, name));
+        dst.name[src.name.length()] = '\0';
         // primitive convert
         hako_convert_cpp2pdu(src.offset, dst.offset);
         // primitive convert

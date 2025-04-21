@@ -65,6 +65,7 @@ static inline bool cpp_cpp2pdu_Ev3PduActuatorHeader(HakoCpp_Ev3PduActuatorHeader
         (void)hako_convert_cpp2pdu_array(
             src.name, src.name.length(),
             dst.name, M_ARRAY_SIZE(Hako_Ev3PduActuatorHeader, char, name));
+        dst.name[src.name.length()] = '\0';
         // primitive convert
         hako_convert_cpp2pdu(src.version, dst.version);
         // primitive convert

@@ -102,6 +102,7 @@ static inline bool cpp_cpp2pdu_Image(HakoCpp_Image &src, Hako_Image &dst, PduDyn
         (void)hako_convert_cpp2pdu_array(
             src.encoding, src.encoding.length(),
             dst.encoding, M_ARRAY_SIZE(Hako_Image, char, encoding));
+        dst.encoding[src.encoding.length()] = '\0';
         // primitive convert
         hako_convert_cpp2pdu(src.is_bigendian, dst.is_bigendian);
         // primitive convert
