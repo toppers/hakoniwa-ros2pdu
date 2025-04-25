@@ -11,14 +11,14 @@ class MsgGenerator:
     def generate_request_packet_msg(self):
         lines = [
             "ServiceRequestHeader header",
-            f"{self.context.service_name}Request data"
+            f"{self.context.service_name}Request body"
         ]
         return "\n".join(lines)
 
     def generate_response_packet_msg(self):
         lines = [
             "ServiceResponseHeader header",
-            f"{self.context.service_name}Response data"
+            f"{self.context.service_name}Response body"
         ]
         return "\n".join(lines)
 

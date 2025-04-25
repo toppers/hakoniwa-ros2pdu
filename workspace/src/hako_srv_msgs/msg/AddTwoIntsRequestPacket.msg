@@ -1,2 +1,2 @@
-hako_srv_msgs/ServiceRequestHeader header
-hako_srv_msgs/AddTwoIntsRequest body
+ServiceRequestHeader header
+AddTwoIntsRequest body

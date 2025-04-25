@@ -2,11 +2,11 @@
   "fields": [
     {
       "name": "header",
-      "type": "hako_srv_msgs/ServiceResponseHeader"
+      "type": "ServiceResponseHeader"
     },
     {
       "name": "body",
-      "type": "hako_srv_msgs/AddTwoIntsResponse"
+      "type": "AddTwoIntsResponse"
     }
   ]
 }
