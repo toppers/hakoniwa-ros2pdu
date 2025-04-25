@@ -57,3 +57,5 @@ dep_types.txt
 
 # Catkin custom files
 CATKIN_IGNORE
+
+__pycache__
