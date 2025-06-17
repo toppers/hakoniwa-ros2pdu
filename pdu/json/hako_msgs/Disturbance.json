@@ -7,6 +7,14 @@
     {
       "name": "d_wind",
       "type": "hako_msgs/DisturbanceWind"
+    },
+    {
+      "name": "d_atm",
+      "type": "hako_msgs/DisturbanceAtm"
+    },
+    {
+      "name": "d_wall",
+      "type": "hako_msgs/DisturbanceWall"
     }
   ]
 }

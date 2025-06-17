@@ -6,6 +6,8 @@ hako_msgs/ImpulseCollision
 hako_msgs/ManualPosAttControl
 hako_msgs/DisturbanceWind
 hako_msgs/DisturbanceTemperature
+hako_msgs/DisturbanceAtm
+hako_msgs/DisturbanceWall
 hako_msgs/Disturbance
 hako_msgs/HakoDroneCmdHeader
 hako_msgs/HakoDroneCmdTakeoff

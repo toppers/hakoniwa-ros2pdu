@@ -49,5 +49,39 @@ namespace hakoniwa.pdu.msgs.hako_msgs
                 _pdu.SetData("d_wind", value._pdu);
             }
         }
+        private DisturbanceAtm _d_atm;
+        public DisturbanceAtm d_atm
+        {
+            get
+            {
+                if (_d_atm == null)
+                {
+                    _d_atm = new DisturbanceAtm(_pdu.GetData<IPdu>("d_atm"));
+                }
+                return _d_atm;
+            }
+            set
+            {
+                _d_atm = value;
+                _pdu.SetData("d_atm", value._pdu);
+            }
+        }
+        private DisturbanceWall _d_wall;
+        public DisturbanceWall d_wall
+        {
+            get
+            {
+                if (_d_wall == null)
+                {
+                    _d_wall = new DisturbanceWall(_pdu.GetData<IPdu>("d_wall"));
+                }
+                return _d_wall;
+            }
+            set
+            {
+                _d_wall = value;
+                _pdu.SetData("d_wall", value._pdu);
+            }
+        }
     }
 }

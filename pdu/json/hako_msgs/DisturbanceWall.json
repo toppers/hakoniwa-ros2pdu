@@ -1,0 +1,12 @@
+{
+  "fields": [
+    {
+      "name": "wall_point",
+      "type": "geometry_msgs/Point"
+    },
+    {
+      "name": "wall_normal",
+      "type": "geometry_msgs/Vector3"
+    }
+  ]
+}

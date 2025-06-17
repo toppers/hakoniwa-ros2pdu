@@ -1,0 +1,8 @@
+{
+  "fields": [
+    {
+      "name": "sea_level_atm",
+      "type": "float64"
+    }
+  ]
+}

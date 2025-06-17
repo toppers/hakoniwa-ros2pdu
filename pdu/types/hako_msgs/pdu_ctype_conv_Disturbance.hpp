@@ -17,8 +17,11 @@
 /*
  * Dependent Convertors
  */
+#include "geometry_msgs/pdu_ctype_conv_Point.hpp"
 #include "geometry_msgs/pdu_ctype_conv_Vector3.hpp"
+#include "hako_msgs/pdu_ctype_conv_DisturbanceAtm.hpp"
 #include "hako_msgs/pdu_ctype_conv_DisturbanceTemperature.hpp"
+#include "hako_msgs/pdu_ctype_conv_DisturbanceWall.hpp"
 #include "hako_msgs/pdu_ctype_conv_DisturbanceWind.hpp"
 
 /***************************
@@ -33,6 +36,10 @@ static inline int _pdu2ros_Disturbance(const char* heap_ptr, Hako_Disturbance &s
     _pdu2ros_DisturbanceTemperature(heap_ptr, src.d_temp, dst.d_temp);
     // Struct convert
     _pdu2ros_DisturbanceWind(heap_ptr, src.d_wind, dst.d_wind);
+    // Struct convert
+    _pdu2ros_DisturbanceAtm(heap_ptr, src.d_atm, dst.d_atm);
+    // Struct convert
+    _pdu2ros_DisturbanceWall(heap_ptr, src.d_wall, dst.d_wall);
     (void)heap_ptr;
     return 0;
 }
@@ -63,6 +70,10 @@ static inline bool _ros2pdu_Disturbance(hako_msgs::msg::Disturbance &src, Hako_D
         _ros2pdu_DisturbanceTemperature(src.d_temp, dst.d_temp, dynamic_memory);
         // struct convert
         _ros2pdu_DisturbanceWind(src.d_wind, dst.d_wind, dynamic_memory);
+        // struct convert
+        _ros2pdu_DisturbanceAtm(src.d_atm, dst.d_atm, dynamic_memory);
+        // struct convert
+        _ros2pdu_DisturbanceWall(src.d_wall, dst.d_wall, dynamic_memory);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
