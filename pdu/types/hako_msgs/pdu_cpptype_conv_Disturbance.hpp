@@ -19,8 +19,8 @@
 #include "geometry_msgs/pdu_cpptype_conv_Point.hpp"
 #include "geometry_msgs/pdu_cpptype_conv_Vector3.hpp"
 #include "hako_msgs/pdu_cpptype_conv_DisturbanceAtm.hpp"
+#include "hako_msgs/pdu_cpptype_conv_DisturbanceBoundary.hpp"
 #include "hako_msgs/pdu_cpptype_conv_DisturbanceTemperature.hpp"
-#include "hako_msgs/pdu_cpptype_conv_DisturbanceWall.hpp"
 #include "hako_msgs/pdu_cpptype_conv_DisturbanceWind.hpp"
 
 /***************************
@@ -38,7 +38,7 @@ static inline int cpp_pdu2cpp_Disturbance(const char* heap_ptr, Hako_Disturbance
     // Struct convert
     cpp_pdu2cpp_DisturbanceAtm(heap_ptr, src.d_atm, dst.d_atm);
     // Struct convert
-    cpp_pdu2cpp_DisturbanceWall(heap_ptr, src.d_wall, dst.d_wall);
+    cpp_pdu2cpp_DisturbanceBoundary(heap_ptr, src.d_boundary, dst.d_boundary);
     (void)heap_ptr;
     return 0;
 }
@@ -72,7 +72,7 @@ static inline bool cpp_cpp2pdu_Disturbance(HakoCpp_Disturbance &src, Hako_Distur
         // struct convert
         cpp_cpp2pdu_DisturbanceAtm(src.d_atm, dst.d_atm, dynamic_memory);
         // struct convert
-        cpp_cpp2pdu_DisturbanceWall(src.d_wall, dst.d_wall, dynamic_memory);
+        cpp_cpp2pdu_DisturbanceBoundary(src.d_boundary, dst.d_boundary, dynamic_memory);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

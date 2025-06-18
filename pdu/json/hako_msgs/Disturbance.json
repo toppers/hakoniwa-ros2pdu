@@ -13,8 +13,8 @@
       "type": "hako_msgs/DisturbanceAtm"
     },
     {
-      "name": "d_wall",
-      "type": "hako_msgs/DisturbanceWall"
+      "name": "d_boundary",
+      "type": "hako_msgs/DisturbanceBoundary"
     }
   ]
 }

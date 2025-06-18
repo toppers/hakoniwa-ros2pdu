@@ -66,21 +66,21 @@ namespace hakoniwa.pdu.msgs.hako_msgs
                 _pdu.SetData("d_atm", value._pdu);
             }
         }
-        private DisturbanceWall _d_wall;
-        public DisturbanceWall d_wall
+        private DisturbanceBoundary _d_boundary;
+        public DisturbanceBoundary d_boundary
         {
             get
             {
-                if (_d_wall == null)
+                if (_d_boundary == null)
                 {
-                    _d_wall = new DisturbanceWall(_pdu.GetData<IPdu>("d_wall"));
+                    _d_boundary = new DisturbanceBoundary(_pdu.GetData<IPdu>("d_boundary"));
                 }
-                return _d_wall;
+                return _d_boundary;
             }
             set
             {
-                _d_wall = value;
-                _pdu.SetData("d_wall", value._pdu);
+                _d_boundary = value;
+                _pdu.SetData("d_boundary", value._pdu);
             }
         }
     }
