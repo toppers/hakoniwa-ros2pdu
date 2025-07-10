@@ -1,3 +1,4 @@
+hako_msgs/DroneStatus
 hako_msgs/SimTime
 hako_msgs/ShareObjectOwner
 hako_msgs/ShareObjectOwnerRequest

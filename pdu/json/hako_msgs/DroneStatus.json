@@ -1,0 +1,16 @@
+{
+  "fields": [
+    {
+      "name": "flight_mode",
+      "type": "int32"
+    },
+    {
+      "name": "internal_state",
+      "type": "int32"
+    },
+    {
+      "name": "propeller_wind",
+      "type": "geometry_msgs/Vector3"
+    }
+  ]
+}
