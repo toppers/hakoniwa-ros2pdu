@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
     public class Transform
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Transform(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _translation = value;
-                _pdu.SetData("translation", value._pdu);
+                _pdu.SetData("translation", value.GetPdu());
             }
         }
         private Quaternion _rotation;
@@ -45,7 +46,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _rotation = value;
-                _pdu.SetData("rotation", value._pdu);
+                _pdu.SetData("rotation", value.GetPdu());
             }
         }
     }

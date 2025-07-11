@@ -11,6 +11,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
     public class PointCloud2
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public PointCloud2(IPdu pdu)
         {
@@ -30,7 +31,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public uint height
@@ -66,7 +67,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
                 IPdu[] fieldPdus = new IPdu[value.Length];
                 for (int i = 0; i < value.Length; i++)
                 {
-                    fieldPdus[i] = value[i]._pdu;
+                    fieldPdus[i] = value[i].GetPdu();
                     _fields[i] = value[i];
                 }
                 _pdu.SetData("fields", fieldPdus);

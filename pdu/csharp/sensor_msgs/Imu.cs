@@ -12,6 +12,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
     public class Imu
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Imu(IPdu pdu)
         {
@@ -31,7 +32,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         private Quaternion _orientation;
@@ -48,7 +49,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
             set
             {
                 _orientation = value;
-                _pdu.SetData("orientation", value._pdu);
+                _pdu.SetData("orientation", value.GetPdu());
             }
         }
         public double[] orientation_covariance
@@ -70,7 +71,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
             set
             {
                 _angular_velocity = value;
-                _pdu.SetData("angular_velocity", value._pdu);
+                _pdu.SetData("angular_velocity", value.GetPdu());
             }
         }
         public double[] angular_velocity_covariance
@@ -92,7 +93,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
             set
             {
                 _linear_acceleration = value;
-                _pdu.SetData("linear_acceleration", value._pdu);
+                _pdu.SetData("linear_acceleration", value.GetPdu());
             }
         }
         public double[] linear_acceleration_covariance

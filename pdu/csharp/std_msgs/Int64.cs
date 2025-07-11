@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.std_msgs
     public class Int64
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Int64(IPdu pdu)
         {

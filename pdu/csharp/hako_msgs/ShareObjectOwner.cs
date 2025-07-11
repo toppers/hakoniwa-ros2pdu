@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class ShareObjectOwner
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public ShareObjectOwner(IPdu pdu)
         {
@@ -44,7 +45,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _pos = value;
-                _pdu.SetData("pos", value._pdu);
+                _pdu.SetData("pos", value.GetPdu());
             }
         }
     }

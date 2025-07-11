@@ -11,6 +11,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
     public class CompressedImage
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public CompressedImage(IPdu pdu)
         {
@@ -30,7 +31,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public string format

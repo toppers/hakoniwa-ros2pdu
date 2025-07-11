@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.ev3_msgs
     public class Ev3PduActuator
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Ev3PduActuator(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.ev3_msgs
             set
             {
                 _head = value;
-                _pdu.SetData("head", value._pdu);
+                _pdu.SetData("head", value.GetPdu());
             }
         }
         public byte[] leds
@@ -59,7 +60,7 @@ namespace hakoniwa.pdu.msgs.ev3_msgs
                 IPdu[] fieldPdus = new IPdu[value.Length];
                 for (int i = 0; i < value.Length; i++)
                 {
-                    fieldPdus[i] = value[i]._pdu;
+                    fieldPdus[i] = value[i].GetPdu();
                     _motors[i] = value[i];
                 }
                 _pdu.SetData("motors", fieldPdus);

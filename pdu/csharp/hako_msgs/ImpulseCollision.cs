@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class ImpulseCollision
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public ImpulseCollision(IPdu pdu)
         {
@@ -44,7 +45,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _self_contact_vector = value;
-                _pdu.SetData("self_contact_vector", value._pdu);
+                _pdu.SetData("self_contact_vector", value.GetPdu());
             }
         }
         private Vector3 _normal;
@@ -61,7 +62,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _normal = value;
-                _pdu.SetData("normal", value._pdu);
+                _pdu.SetData("normal", value.GetPdu());
             }
         }
         private Point _target_contact_vector;
@@ -78,7 +79,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _target_contact_vector = value;
-                _pdu.SetData("target_contact_vector", value._pdu);
+                _pdu.SetData("target_contact_vector", value.GetPdu());
             }
         }
         private Vector3 _target_velocity;
@@ -95,7 +96,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _target_velocity = value;
-                _pdu.SetData("target_velocity", value._pdu);
+                _pdu.SetData("target_velocity", value.GetPdu());
             }
         }
         private Vector3 _target_angular_velocity;
@@ -112,7 +113,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _target_angular_velocity = value;
-                _pdu.SetData("target_angular_velocity", value._pdu);
+                _pdu.SetData("target_angular_velocity", value.GetPdu());
             }
         }
         private Vector3 _target_euler;
@@ -129,7 +130,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _target_euler = value;
-                _pdu.SetData("target_euler", value._pdu);
+                _pdu.SetData("target_euler", value.GetPdu());
             }
         }
         private Vector3 _target_inertia;
@@ -146,7 +147,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _target_inertia = value;
-                _pdu.SetData("target_inertia", value._pdu);
+                _pdu.SetData("target_inertia", value.GetPdu());
             }
         }
         public double target_mass

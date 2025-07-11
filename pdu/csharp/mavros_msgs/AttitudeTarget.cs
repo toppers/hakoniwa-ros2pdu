@@ -12,6 +12,7 @@ namespace hakoniwa.pdu.msgs.mavros_msgs
     public class AttitudeTarget
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public AttitudeTarget(IPdu pdu)
         {
@@ -31,7 +32,7 @@ namespace hakoniwa.pdu.msgs.mavros_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public byte type_mask
@@ -53,7 +54,7 @@ namespace hakoniwa.pdu.msgs.mavros_msgs
             set
             {
                 _orientation = value;
-                _pdu.SetData("orientation", value._pdu);
+                _pdu.SetData("orientation", value.GetPdu());
             }
         }
         private Vector3 _body_rate;
@@ -70,7 +71,7 @@ namespace hakoniwa.pdu.msgs.mavros_msgs
             set
             {
                 _body_rate = value;
-                _pdu.SetData("body_rate", value._pdu);
+                _pdu.SetData("body_rate", value.GetPdu());
             }
         }
         public float thrust

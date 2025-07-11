@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.std_msgs
     public class Header
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Header(IPdu pdu)
         {
@@ -29,7 +30,7 @@ namespace hakoniwa.pdu.msgs.std_msgs
             set
             {
                 _stamp = value;
-                _pdu.SetData("stamp", value._pdu);
+                _pdu.SetData("stamp", value.GetPdu());
             }
         }
         public string frame_id

@@ -11,6 +11,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
     public class CameraInfo
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public CameraInfo(IPdu pdu)
         {
@@ -30,7 +31,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public uint height
@@ -92,7 +93,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
             set
             {
                 _roi = value;
-                _pdu.SetData("roi", value._pdu);
+                _pdu.SetData("roi", value.GetPdu());
             }
         }
     }

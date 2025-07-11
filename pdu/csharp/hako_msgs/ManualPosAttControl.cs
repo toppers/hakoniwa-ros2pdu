@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class ManualPosAttControl
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public ManualPosAttControl(IPdu pdu)
         {
@@ -34,7 +35,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _posatt = value;
-                _pdu.SetData("posatt", value._pdu);
+                _pdu.SetData("posatt", value.GetPdu());
             }
         }
     }

@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.builtin_interfaces
     public class Time
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Time(IPdu pdu)
         {

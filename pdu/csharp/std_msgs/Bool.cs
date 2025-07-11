@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.std_msgs
     public class Bool
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Bool(IPdu pdu)
         {

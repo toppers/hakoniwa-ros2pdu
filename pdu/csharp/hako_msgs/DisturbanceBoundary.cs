@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class DisturbanceBoundary
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public DisturbanceBoundary(IPdu pdu)
         {
@@ -29,7 +30,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _boundary_point = value;
-                _pdu.SetData("boundary_point", value._pdu);
+                _pdu.SetData("boundary_point", value.GetPdu());
             }
         }
         private Vector3 _boundary_normal;
@@ -46,7 +47,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _boundary_normal = value;
-                _pdu.SetData("boundary_normal", value._pdu);
+                _pdu.SetData("boundary_normal", value.GetPdu());
             }
         }
     }

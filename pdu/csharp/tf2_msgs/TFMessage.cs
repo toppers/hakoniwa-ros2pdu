@@ -12,6 +12,7 @@ namespace hakoniwa.pdu.msgs.tf2_msgs
     public class TFMessage
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public TFMessage(IPdu pdu)
         {
@@ -40,7 +41,7 @@ namespace hakoniwa.pdu.msgs.tf2_msgs
                 IPdu[] fieldPdus = new IPdu[value.Length];
                 for (int i = 0; i < value.Length; i++)
                 {
-                    fieldPdus[i] = value[i]._pdu;
+                    fieldPdus[i] = value[i].GetPdu();
                     _transforms[i] = value[i];
                 }
                 _pdu.SetData("transforms", fieldPdus);

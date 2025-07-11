@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class GameControllerOperation
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public GameControllerOperation(IPdu pdu)
         {

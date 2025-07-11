@@ -11,6 +11,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
     public class TransformStamped
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public TransformStamped(IPdu pdu)
         {
@@ -30,7 +31,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public string child_frame_id
@@ -52,7 +53,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _transform = value;
-                _pdu.SetData("transform", value._pdu);
+                _pdu.SetData("transform", value.GetPdu());
             }
         }
     }

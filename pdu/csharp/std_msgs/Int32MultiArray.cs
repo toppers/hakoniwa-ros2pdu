@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.std_msgs
     public class Int32MultiArray
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Int32MultiArray(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.std_msgs
             set
             {
                 _layout = value;
-                _pdu.SetData("layout", value._pdu);
+                _pdu.SetData("layout", value.GetPdu());
             }
         }
         public int[] data

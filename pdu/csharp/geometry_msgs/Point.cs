@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
     public class Point
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Point(IPdu pdu)
         {

@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.ev3_msgs
     public class Ev3PduColorSensor
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Ev3PduColorSensor(IPdu pdu)
         {

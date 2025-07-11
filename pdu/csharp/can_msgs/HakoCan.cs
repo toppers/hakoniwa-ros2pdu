@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.can_msgs
     public class HakoCan
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public HakoCan(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.can_msgs
             set
             {
                 _head = value;
-                _pdu.SetData("head", value._pdu);
+                _pdu.SetData("head", value.GetPdu());
             }
         }
         private HakoCanBody _body;
@@ -45,7 +46,7 @@ namespace hakoniwa.pdu.msgs.can_msgs
             set
             {
                 _body = value;
-                _pdu.SetData("body", value._pdu);
+                _pdu.SetData("body", value.GetPdu());
             }
         }
     }

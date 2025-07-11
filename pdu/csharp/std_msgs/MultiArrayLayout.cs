@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.std_msgs
     public class MultiArrayLayout
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public MultiArrayLayout(IPdu pdu)
         {
@@ -37,7 +38,7 @@ namespace hakoniwa.pdu.msgs.std_msgs
                 IPdu[] fieldPdus = new IPdu[value.Length];
                 for (int i = 0; i < value.Length; i++)
                 {
-                    fieldPdus[i] = value[i]._pdu;
+                    fieldPdus[i] = value[i].GetPdu();
                     _dim[i] = value[i];
                 }
                 _pdu.SetData("dim", fieldPdus);

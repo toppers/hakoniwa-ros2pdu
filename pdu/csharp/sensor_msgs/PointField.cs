@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.sensor_msgs
     public class PointField
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public PointField(IPdu pdu)
         {

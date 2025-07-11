@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class DroneStatus
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public DroneStatus(IPdu pdu)
         {
@@ -39,7 +40,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _propeller_wind = value;
-                _pdu.SetData("propeller_wind", value._pdu);
+                _pdu.SetData("propeller_wind", value.GetPdu());
             }
         }
     }

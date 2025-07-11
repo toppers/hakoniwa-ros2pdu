@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
     public class AddTwoIntsRequest
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public AddTwoIntsRequest(IPdu pdu)
         {

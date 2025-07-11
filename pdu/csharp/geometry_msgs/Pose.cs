@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
     public class Pose
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Pose(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _position = value;
-                _pdu.SetData("position", value._pdu);
+                _pdu.SetData("position", value.GetPdu());
             }
         }
         private Quaternion _orientation;
@@ -45,7 +46,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _orientation = value;
-                _pdu.SetData("orientation", value._pdu);
+                _pdu.SetData("orientation", value.GetPdu());
             }
         }
     }

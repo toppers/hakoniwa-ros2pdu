@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class MonitorCameraCmd
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public MonitorCameraCmd(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public int request_id

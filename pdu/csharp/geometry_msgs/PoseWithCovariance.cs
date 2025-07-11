@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
     public class PoseWithCovariance
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public PoseWithCovariance(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _pose = value;
-                _pdu.SetData("pose", value._pdu);
+                _pdu.SetData("pose", value.GetPdu());
             }
         }
         public double[] covariance

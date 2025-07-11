@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.ev3_msgs
     public class Ev3PduActuatorHeader
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Ev3PduActuatorHeader(IPdu pdu)
         {

@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
     public class Vector3
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Vector3(IPdu pdu)
         {

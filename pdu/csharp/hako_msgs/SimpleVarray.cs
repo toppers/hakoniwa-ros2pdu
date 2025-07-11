@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class SimpleVarray
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public SimpleVarray(IPdu pdu)
         {

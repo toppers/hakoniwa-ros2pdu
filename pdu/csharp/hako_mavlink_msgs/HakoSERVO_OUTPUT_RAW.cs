@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_mavlink_msgs
     public class HakoSERVO_OUTPUT_RAW
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public HakoSERVO_OUTPUT_RAW(IPdu pdu)
         {

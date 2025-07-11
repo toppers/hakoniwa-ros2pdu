@@ -13,6 +13,7 @@ namespace hakoniwa.pdu.msgs.{{ container.pkg_name }}
     public class {{ container.msg_type_name }}
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public {{ container.msg_type_name }}(IPdu pdu)
         {
@@ -67,7 +68,7 @@ namespace hakoniwa.pdu.msgs.{{ container.pkg_name }}
                 IPdu[] fieldPdus = new IPdu[value.Length];
                 for (int i = 0; i < value.Length; i++)
                 {
-                    fieldPdus[i] = value[i]._pdu;
+                    fieldPdus[i] = value[i].GetPdu();
                     _{{ item["name"] }}[i] = value[i];
                 }
                 _pdu.SetData("{{ item["name"] }}", fieldPdus);
@@ -88,7 +89,7 @@ namespace hakoniwa.pdu.msgs.{{ container.pkg_name }}
             set
             {
                 _{{ item["name"] }} = value;
-                _pdu.SetData("{{ item["name"] }}", value._pdu);
+                _pdu.SetData("{{ item["name"] }}", value.GetPdu());
             }
         }
             {%- endif %}

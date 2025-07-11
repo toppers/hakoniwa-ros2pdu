@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
     public class Twist
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Twist(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _linear = value;
-                _pdu.SetData("linear", value._pdu);
+                _pdu.SetData("linear", value.GetPdu());
             }
         }
         private Vector3 _angular;
@@ -45,7 +46,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _angular = value;
-                _pdu.SetData("angular", value._pdu);
+                _pdu.SetData("angular", value.GetPdu());
             }
         }
     }

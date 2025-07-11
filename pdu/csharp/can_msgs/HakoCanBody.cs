@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.can_msgs
     public class HakoCanBody
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public HakoCanBody(IPdu pdu)
         {

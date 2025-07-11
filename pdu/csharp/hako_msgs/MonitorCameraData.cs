@@ -12,6 +12,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class MonitorCameraData
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public MonitorCameraData(IPdu pdu)
         {
@@ -41,7 +42,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _image = value;
-                _pdu.SetData("image", value._pdu);
+                _pdu.SetData("image", value.GetPdu());
             }
         }
     }

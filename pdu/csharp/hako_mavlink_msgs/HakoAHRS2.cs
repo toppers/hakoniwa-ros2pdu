@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_mavlink_msgs
     public class HakoAHRS2
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public HakoAHRS2(IPdu pdu)
         {

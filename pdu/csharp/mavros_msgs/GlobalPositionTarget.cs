@@ -12,6 +12,7 @@ namespace hakoniwa.pdu.msgs.mavros_msgs
     public class GlobalPositionTarget
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public GlobalPositionTarget(IPdu pdu)
         {
@@ -31,7 +32,7 @@ namespace hakoniwa.pdu.msgs.mavros_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public byte coordinate_frame
@@ -73,7 +74,7 @@ namespace hakoniwa.pdu.msgs.mavros_msgs
             set
             {
                 _velocity = value;
-                _pdu.SetData("velocity", value._pdu);
+                _pdu.SetData("velocity", value.GetPdu());
             }
         }
         private Vector3 _acceleration_or_force;
@@ -90,7 +91,7 @@ namespace hakoniwa.pdu.msgs.mavros_msgs
             set
             {
                 _acceleration_or_force = value;
-                _pdu.SetData("acceleration_or_force", value._pdu);
+                _pdu.SetData("acceleration_or_force", value.GetPdu());
             }
         }
         public float yaw

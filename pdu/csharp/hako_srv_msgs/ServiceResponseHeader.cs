@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
     public class ServiceResponseHeader
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public ServiceResponseHeader(IPdu pdu)
         {

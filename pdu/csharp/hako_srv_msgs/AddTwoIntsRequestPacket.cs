@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
     public class AddTwoIntsRequestPacket
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public AddTwoIntsRequestPacket(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         private AddTwoIntsRequest _body;
@@ -45,7 +46,7 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
             set
             {
                 _body = value;
-                _pdu.SetData("body", value._pdu);
+                _pdu.SetData("body", value.GetPdu());
             }
         }
     }

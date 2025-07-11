@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class DisturbanceWind
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public DisturbanceWind(IPdu pdu)
         {
@@ -29,7 +30,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _value = value;
-                _pdu.SetData("value", value._pdu);
+                _pdu.SetData("value", value.GetPdu());
             }
         }
     }

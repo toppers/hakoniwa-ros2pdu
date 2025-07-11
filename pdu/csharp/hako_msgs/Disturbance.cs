@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class Disturbance
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Disturbance(IPdu pdu)
         {
@@ -29,7 +30,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _d_temp = value;
-                _pdu.SetData("d_temp", value._pdu);
+                _pdu.SetData("d_temp", value.GetPdu());
             }
         }
         private DisturbanceWind _d_wind;
@@ -46,7 +47,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _d_wind = value;
-                _pdu.SetData("d_wind", value._pdu);
+                _pdu.SetData("d_wind", value.GetPdu());
             }
         }
         private DisturbanceAtm _d_atm;
@@ -63,7 +64,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _d_atm = value;
-                _pdu.SetData("d_atm", value._pdu);
+                _pdu.SetData("d_atm", value.GetPdu());
             }
         }
         private DisturbanceBoundary _d_boundary;
@@ -80,7 +81,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _d_boundary = value;
-                _pdu.SetData("d_boundary", value._pdu);
+                _pdu.SetData("d_boundary", value.GetPdu());
             }
         }
     }

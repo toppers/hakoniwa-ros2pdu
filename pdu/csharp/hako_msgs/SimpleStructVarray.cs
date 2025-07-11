@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class SimpleStructVarray
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public SimpleStructVarray(IPdu pdu)
         {
@@ -52,7 +53,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
                 IPdu[] fieldPdus = new IPdu[value.Length];
                 for (int i = 0; i < value.Length; i++)
                 {
-                    fieldPdus[i] = value[i]._pdu;
+                    fieldPdus[i] = value[i].GetPdu();
                     _fixed_array[i] = value[i];
                 }
                 _pdu.SetData("fixed_array", fieldPdus);
@@ -81,7 +82,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
                 IPdu[] fieldPdus = new IPdu[value.Length];
                 for (int i = 0; i < value.Length; i++)
                 {
-                    fieldPdus[i] = value[i]._pdu;
+                    fieldPdus[i] = value[i].GetPdu();
                     _data[i] = value[i];
                 }
                 _pdu.SetData("data", fieldPdus);

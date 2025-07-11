@@ -12,6 +12,7 @@ namespace hakoniwa.pdu.msgs.nav_msgs
     public class Odometry
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Odometry(IPdu pdu)
         {
@@ -31,7 +32,7 @@ namespace hakoniwa.pdu.msgs.nav_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public string child_frame_id
@@ -53,7 +54,7 @@ namespace hakoniwa.pdu.msgs.nav_msgs
             set
             {
                 _pose = value;
-                _pdu.SetData("pose", value._pdu);
+                _pdu.SetData("pose", value.GetPdu());
             }
         }
         private TwistWithCovariance _twist;
@@ -70,7 +71,7 @@ namespace hakoniwa.pdu.msgs.nav_msgs
             set
             {
                 _twist = value;
-                _pdu.SetData("twist", value._pdu);
+                _pdu.SetData("twist", value.GetPdu());
             }
         }
     }

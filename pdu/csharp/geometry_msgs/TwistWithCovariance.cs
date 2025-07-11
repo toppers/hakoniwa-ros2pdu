@@ -9,6 +9,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
     public class TwistWithCovariance
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public TwistWithCovariance(IPdu pdu)
         {
@@ -28,7 +29,7 @@ namespace hakoniwa.pdu.msgs.geometry_msgs
             set
             {
                 _twist = value;
-                _pdu.SetData("twist", value._pdu);
+                _pdu.SetData("twist", value.GetPdu());
             }
         }
         public double[] covariance
