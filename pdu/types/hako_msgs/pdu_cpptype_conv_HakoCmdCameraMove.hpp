@@ -105,4 +105,54 @@ static inline Hako_HakoCmdCameraMove* hako_create_empty_pdu_HakoCmdCameraMove(in
     }
     return (Hako_HakoCmdCameraMove*)base_ptr;
 }
+namespace hako::pdu::msgs::hako_msgs
+{
+class HakoCmdCameraMove
+{
+public:
+    HakoCmdCameraMove() = default;
+    ~HakoCmdCameraMove() = default;
+
+    bool pdu2cpp(char* top_ptr, HakoCpp_HakoCmdCameraMove& cppData)
+    {
+        char* base_ptr = (char*)hako_get_base_ptr_pdu((void*)top_ptr);
+        if (base_ptr == nullptr) {
+            std::cerr << "[ConvertorError][" << "HakoCmdCameraMove" << "] hako_get_base_ptr_pdu returned null" << std::endl;
+            return false;
+        } 
+        int ret = hako_convert_pdu2cpp_HakoCmdCameraMove(*(Hako_HakoCmdCameraMove*)base_ptr, cppData);
+        if (ret != 0) {
+            std::cerr << "[ConvertorError][" << "HakoCmdCameraMove" << "] hako_convert_pdu2cpp returned " << ret << std::endl;
+            return false;
+        }
+        return true;
+    }
+
+    int cpp2pdu(HakoCpp_HakoCmdCameraMove& cppData, char* pdu_buffer, int buffer_len)
+    {
+        char* base_ptr = nullptr;
+        int pdu_size = hako_convert_cpp2pdu_HakoCmdCameraMove(cppData, (Hako_HakoCmdCameraMove**)&base_ptr);
+        if (pdu_size < 0) {
+            std::cerr << "[ConvertorError][" << "HakoCmdCameraMove" << "] hako_convert_cpp2pdu returned error code: " << pdu_size << std::endl;
+            return -1;
+        }
+        if (pdu_size > buffer_len) {
+            std::cerr << "[ConvertorError][" << "HakoCmdCameraMove" << "] buffer too small. pdu_size=" << pdu_size << " buffer_len=" << buffer_len << std::endl;
+            return -1;
+        }
+        void* top_ptr = hako_get_top_ptr_pdu((void*)base_ptr);
+        if (top_ptr == nullptr) {
+            std::cerr << "[ConvertorError][" << "HakoCmdCameraMove" << "] hako_get_top_ptr_pdu returned null" << std::endl;
+            return false;
+        }
+        memcpy(pdu_buffer, top_ptr, pdu_size);
+        hako_destroy_pdu((void*)base_ptr);
+        return pdu_size;
+    }
+
+private:
+};
+}
+
+
 #endif /* _PDU_CPPTYPE_CONV_HAKO_hako_msgs_HakoCmdCameraMove_HPP_ */

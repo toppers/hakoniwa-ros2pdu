@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class Collision
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public Collision(IPdu pdu)
         {
@@ -39,7 +40,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _relative_velocity = value;
-                _pdu.SetData("relative_velocity", value._pdu);
+                _pdu.SetData("relative_velocity", value.GetPdu());
             }
         }
         private Point[] _contact_position;
@@ -65,7 +66,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
                 IPdu[] fieldPdus = new IPdu[value.Length];
                 for (int i = 0; i < value.Length; i++)
                 {
-                    fieldPdus[i] = value[i]._pdu;
+                    fieldPdus[i] = value[i].GetPdu();
                     _contact_position[i] = value[i];
                 }
                 _pdu.SetData("contact_position", fieldPdus);

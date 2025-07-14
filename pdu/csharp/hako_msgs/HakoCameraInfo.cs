@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class HakoCameraInfo
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public HakoCameraInfo(IPdu pdu)
         {
@@ -34,7 +35,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _angle = value;
-                _pdu.SetData("angle", value._pdu);
+                _pdu.SetData("angle", value.GetPdu());
             }
         }
     }

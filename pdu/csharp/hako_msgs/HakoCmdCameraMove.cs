@@ -10,6 +10,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
     public class HakoCmdCameraMove
     {
         protected internal readonly IPdu _pdu;
+        public IPdu GetPdu() { return _pdu; }
 
         public HakoCmdCameraMove(IPdu pdu)
         {
@@ -29,7 +30,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _header = value;
-                _pdu.SetData("header", value._pdu);
+                _pdu.SetData("header", value.GetPdu());
             }
         }
         public int request_id
@@ -51,7 +52,7 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             set
             {
                 _angle = value;
-                _pdu.SetData("angle", value._pdu);
+                _pdu.SetData("angle", value.GetPdu());
             }
         }
     }
