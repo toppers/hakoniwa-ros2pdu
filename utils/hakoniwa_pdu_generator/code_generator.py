@@ -17,7 +17,10 @@ def is_primitive(name):
     return name in ROS_PRIMITIVE_TYPES_FOR_TEMPLATE
 
 def is_string(name):
-    return get_array_type(name) == 'string'
+	if (name == 'string'):
+		return True
+	else:
+		return False
 
 def is_array(name):
     return '[' in name
