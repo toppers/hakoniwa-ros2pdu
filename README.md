@@ -61,6 +61,31 @@ bash create_all_pdus.bash
 #### Creating ev3_msgs/Ev3PduMotor ####
 ```
 
+## PDUデータ型作成方法（Python版：実験的機能）
+
+従来の`create_all_pdus.bash`に代わり、パフォーマンスとメンテナンス性を向上させたPythonスクリプトも利用可能です。このスクリプトは、既存のbashスクリプト群の処理を単一のPythonアプリケーションに統合したものです。
+
+### 実行方法
+
+以下のコマンドを実行します。引数には、処理対象のメッセージリストが記述されたファイルを指定します。
+
+```bash
+python3 -m utils.hakoniwa_pdu_generator.main config/ros_msgs.txt
+```
+
+### PYTHONPATHの設定について
+
+このスクリプトは、`utils/hakoniwa_pdu_generator/` ディレクトリをPythonのパッケージとして扱います。そのため、スクリプトをリポジトリのルートディレクトリ以外から実行する場合には、`PYTHONPATH` にリポジトリのルートディレクトリを追加する必要があります。
+
+例えば、リポジトリのルートが `/path/to/hakoniwa-ros2pdu` の場合：
+
+```bash
+export PYTHONPATH=$PYTHONPATH:/path/to/hakoniwa-ros2pdu
+python3 /path/to/hakoniwa-ros2pdu/utils/hakoniwa_pdu_generator/main.py /path/to/hakoniwa-ros2pdu/config/ros_msgs.txt
+```
+
+リポジトリのルートディレクトリで実行する場合は、`PYTHONPATH` の設定は不要です。
+
 構造体は、`pdu/types`配下に生成されます。
 
 ```

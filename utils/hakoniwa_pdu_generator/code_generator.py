@@ -2,7 +2,41 @@ import os
 import re
 from pathlib import Path
 import jinja2
+from collections import OrderedDict 
 
+def _collect_dependencies(pkg_msg, message_cache, root_pkg,
+                          visited,  # set[str]
+                          includes, csharp_includes,
+                          cpp_includes, conv_includes, conv_cpp_includes):
+    if pkg_msg in visited:
+        return
+    visited.add(pkg_msg)
+
+    msg_def = message_cache[pkg_msg]
+    for field in msg_def.get('fields', []):
+        ftype = field['type']
+        if is_primitive(ftype) or is_string(ftype):
+            continue
+
+        base = get_array_type(ftype)
+        dep_pkg_msg = f"{msg_def['package']}/{base}" if '/' not in base else base
+        if dep_pkg_msg not in message_cache:
+            continue                        # キャッシュに無ければ無視
+
+        dep_pkg, dep_msg = dep_pkg_msg.split('/')
+
+        # ───── include 群に追加（順序保持したいので OrderedDict を使う）─────
+        includes[f"{dep_pkg}/pdu_ctype_{dep_msg}.h"] = None
+        cpp_includes[f"{dep_pkg}/pdu_cpptype_{dep_msg}.hpp"] = None
+        conv_includes[f"{dep_pkg}/pdu_ctype_conv_{dep_msg}.hpp"] = None
+        conv_cpp_includes[f"{dep_pkg}/pdu_cpptype_conv_{dep_msg}.hpp"] = None
+        if dep_pkg != root_pkg:
+            csharp_includes[dep_pkg] = None
+
+        # ───── さらに再帰 ─────
+        _collect_dependencies(dep_pkg_msg, message_cache, root_pkg,
+                              visited, includes, csharp_includes,
+                              cpp_includes, conv_includes, conv_cpp_includes)
 # --- テンプレートヘルパー関数群 (generate.pyの挙動を完全に模倣) ---
 
 ROS_PRIMITIVE_TYPES_FOR_TEMPLATE = [
@@ -88,33 +122,26 @@ class CodeGenerator:
 
     def _prepare_context(self, package_msg, message_cache, varray_size_def):
         msg_def = message_cache[package_msg]
-        pkg_name = msg_def['package']
+        root_pkg = msg_def['package']
         msg_name = msg_def['message']
 
-        # 既存のgenerate.pyの挙動を模倣し、直接の依存関係のみを収集
-        includes, csharp_includes, cpp_includes, conv_includes, conv_cpp_includes = [], [], [], [], []
-        for field in msg_def.get('fields', []):
-            field_type = field['type']
-            if not is_primitive(field_type) and not is_string(field_type):
-                dep_base_type = get_array_type(field_type)
-                if '/' not in dep_base_type:
-                    dep_pkg_msg = f"{pkg_name}/{dep_base_type}"
-                else:
-                    dep_pkg_msg = dep_base_type
-                
-                # 依存メッセージがキャッシュに存在する場合のみ追加
-                if dep_pkg_msg in message_cache:
-                    dep_pkg, dep_msg_name = dep_pkg_msg.split('/')
-                    includes.append(f"{dep_pkg}/pdu_ctype_{dep_msg_name}.h")
-                    if dep_pkg != pkg_name:
-                        csharp_includes.append(dep_pkg)
-                    cpp_includes.append(f"{dep_pkg}/pdu_cpptype_{dep_msg_name}.hpp")
-                    conv_includes.append(f"{dep_pkg}/pdu_ctype_conv_{dep_msg_name}.hpp")
-                    conv_cpp_includes.append(f"{dep_pkg}/pdu_cpptype_conv_{dep_msg_name}.hpp")
+        includes          = OrderedDict()
+        csharp_includes   = OrderedDict()
+        cpp_includes      = OrderedDict()
+        conv_includes     = OrderedDict()
+        conv_cpp_includes = OrderedDict()
+
+        _collect_dependencies(package_msg, message_cache, root_pkg,
+                          visited=set(),
+                          includes=includes,
+                          csharp_includes=csharp_includes,
+                          cpp_includes=cpp_includes,
+                          conv_includes=conv_includes,
+                          conv_cpp_includes=conv_cpp_includes)
 
         def get_array_size(mem_name, type_name_from_tpl):
             try:
-                return varray_size_def[pkg_name][msg_name][mem_name]
+                return varray_size_def[root_pkg][msg_name][mem_name]
             except KeyError:
                 if '[' in type_name_from_tpl and ']' in type_name_from_tpl:
                     size_str = type_name_from_tpl.split('[', 1)[1].split(']', 1)[0]
@@ -123,14 +150,17 @@ class CodeGenerator:
                 return None
 
         container = {
-            'json_data': msg_def, 'pkg_name': pkg_name, 'msg_type_name': msg_name,
-            'includes': includes, 'csharp_includes': csharp_includes, 'cpp_includes': cpp_includes,
-            'conv_includes': conv_includes, 'conv_cpp_includes': conv_cpp_includes,
+            'json_data': msg_def, 'pkg_name': root_pkg, 'msg_type_name': msg_name,
+            'includes': sorted(includes), 
+            'csharp_includes': sorted(csharp_includes), 
+            'cpp_includes': sorted(cpp_includes),
+            'conv_includes': sorted(conv_includes), 
+            'conv_cpp_includes': sorted(conv_cpp_includes),
             'is_primitive': is_primitive, 'is_string': is_string, 'is_array': is_array,
             'is_primitive_array': is_primitive_array, 'is_string_array': is_string_array,
             'get_array_type': get_array_type, 'get_struct_array_type': get_struct_array_type,
             'get_type': get_type, 'get_msg_type': get_msg_type,
-            'get_msg_pkg': lambda name: get_msg_pkg(name, pkg_name),
+            'get_msg_pkg': lambda name: get_msg_pkg(name, root_pkg),
             'get_array_size': get_array_size, 'convert_snake': convert_snake,
             'get_csharp_type': get_csharp_type
         }
