@@ -1,0 +1,162 @@
+import os
+import re
+from pathlib import Path
+import jinja2
+
+# --- テンプレートヘルパー関数群 (generate.pyの挙動を完全に模倣) ---
+
+ROS_PRIMITIVE_TYPES_FOR_TEMPLATE = [
+    'bool', 'byte', 'char', 'float32', 'float64', 'int8', 'uint8',
+    'int16', 'uint16', 'int32', 'uint32', 'int64', 'uint64'
+]
+
+def get_array_type(name):
+    return name.split('[', 1)[0].strip()
+
+def is_primitive(name):
+    return name in ROS_PRIMITIVE_TYPES_FOR_TEMPLATE
+
+def is_string(name):
+    return get_array_type(name) == 'string'
+
+def is_array(name):
+    return '[' in name
+
+def is_primitive_array(name):
+    return is_array(name) and is_primitive(get_array_type(name))
+
+def is_string_array(name):
+    return is_array(name) and is_string(get_array_type(name))
+
+def get_struct_array_type(name):
+    return name.split('[', 1)[0].strip()
+
+def get_type(name):
+    if is_array(name):
+        return get_array_type(name)
+    return name
+
+def get_msg_type(name):
+    name = get_array_type(name)
+    if '/' in name:
+        tmp = name.split('/')[1]
+    else:
+        tmp = name
+    if tmp == 'time':
+        return 'Time'
+    return tmp
+
+def get_msg_pkg(name, default_pkg):
+    name = get_array_type(name)
+    if '/' in name:
+        return name.split('/')[0]
+    return default_pkg
+
+def convert_snake(name):
+    if name == "TFMessage":
+        return "tf_message"
+    s0 = name[0].lower()
+    s1n = name[1:]
+    cs1n = re.sub("([A-Z])", lambda x: "_" + x.group(1).lower(), s1n)
+    return s0 + cs1n
+
+def get_csharp_type(name):
+    type_map = {
+        "byte": "byte", "char": "byte", "int8": "sbyte", "uint8": "byte",
+        "int16": "short", "uint16": "ushort", "int32": "int", "uint32": "uint",
+        "int64": "long", "uint64": "ulong", "float32": "float",
+        "float64": "double", "bool": "bool", "string": "string"
+    }
+    return type_map.get(get_array_type(name), get_msg_type(name))
+
+# --- CodeGenerator クラス ---
+
+class CodeGenerator:
+    def __init__(self, template_dir):
+        self.template_dir = Path(template_dir)
+
+    def _render_template(self, template_name, context):
+        template_path = self.template_dir / template_name
+        with open(template_path, 'r', encoding='utf-8') as f:
+            template_str = f.read()
+        env = jinja2.Environment(loader=jinja2.FileSystemLoader(self.template_dir, encoding='utf8'))
+        tpl = env.get_template(template_name)
+        return tpl.render(context)
+
+    def _prepare_context(self, package_msg, message_cache, varray_size_def):
+        msg_def = message_cache[package_msg]
+        pkg_name = msg_def['package']
+        msg_name = msg_def['message']
+
+        # 既存のgenerate.pyの挙動を模倣し、直接の依存関係のみを収集
+        includes, csharp_includes, cpp_includes, conv_includes, conv_cpp_includes = [], [], [], [], []
+        for field in msg_def.get('fields', []):
+            field_type = field['type']
+            if not is_primitive(field_type) and not is_string(field_type):
+                dep_base_type = get_array_type(field_type)
+                if '/' not in dep_base_type:
+                    dep_pkg_msg = f"{pkg_name}/{dep_base_type}"
+                else:
+                    dep_pkg_msg = dep_base_type
+                
+                # 依存メッセージがキャッシュに存在する場合のみ追加
+                if dep_pkg_msg in message_cache:
+                    dep_pkg, dep_msg_name = dep_pkg_msg.split('/')
+                    includes.append(f"{dep_pkg}/pdu_ctype_{dep_msg_name}.h")
+                    if dep_pkg != pkg_name:
+                        csharp_includes.append(dep_pkg)
+                    cpp_includes.append(f"{dep_pkg}/pdu_cpptype_{dep_msg_name}.hpp")
+                    conv_includes.append(f"{dep_pkg}/pdu_ctype_conv_{dep_msg_name}.hpp")
+                    conv_cpp_includes.append(f"{dep_pkg}/pdu_cpptype_conv_{dep_msg_name}.hpp")
+
+        def get_array_size(mem_name, type_name_from_tpl):
+            try:
+                return varray_size_def[pkg_name][msg_name][mem_name]
+            except KeyError:
+                if '[' in type_name_from_tpl and ']' in type_name_from_tpl:
+                    size_str = type_name_from_tpl.split('[', 1)[1].split(']', 1)[0]
+                    if size_str:
+                        return size_str
+                return None
+
+        container = {
+            'json_data': msg_def, 'pkg_name': pkg_name, 'msg_type_name': msg_name,
+            'includes': includes, 'csharp_includes': csharp_includes, 'cpp_includes': cpp_includes,
+            'conv_includes': conv_includes, 'conv_cpp_includes': conv_cpp_includes,
+            'is_primitive': is_primitive, 'is_string': is_string, 'is_array': is_array,
+            'is_primitive_array': is_primitive_array, 'is_string_array': is_string_array,
+            'get_array_type': get_array_type, 'get_struct_array_type': get_struct_array_type,
+            'get_type': get_type, 'get_msg_type': get_msg_type,
+            'get_msg_pkg': lambda name: get_msg_pkg(name, pkg_name),
+            'get_array_size': get_array_size, 'convert_snake': convert_snake,
+            'get_csharp_type': get_csharp_type
+        }
+        return {'container': container}
+
+    def _generate_file(self, context, template_name, output_dir, file_pattern, description):
+        content = self._render_template(template_name, context)
+        if not content.strip():
+            return
+        if content.endswith('\n'):
+             content = content[:-1]
+
+        pkg_name = context['container']['pkg_name']
+        msg_name = context['container']['msg_type_name']
+        output_path = Path(output_dir) / pkg_name
+        output_path.mkdir(parents=True, exist_ok=True)
+        file_path = output_path / file_pattern.format(msg_name=msg_name)
+        with open(file_path, 'w', encoding='utf-8', newline='') as f:
+            f.write(content)
+        print(f"Generated {description}: {file_path}")
+
+    def generate_all(self, message_cache, varray_size_def, output_root_dir):
+        types_dir = Path(output_root_dir) / 'types'
+        csharp_dir = Path(output_root_dir) / 'csharp'
+
+        for package_msg in message_cache.keys():
+            context = self._prepare_context(package_msg, message_cache, varray_size_def)
+            self._generate_file(context, 'pdu_ctypes_h.tpl', types_dir, "pdu_ctype_{msg_name}.h", "C header")
+            self._generate_file(context, 'pdu_csharp_class.tpl', csharp_dir, "{msg_name}.cs", "C# class")
+            self._generate_file(context, 'pdu_cpptypes_hpp.tpl', types_dir, "pdu_cpptype_{msg_name}.hpp", "C++ type header")
+            self._generate_file(context, 'pdu_ctypes_conv_cpp.tpl', types_dir, "pdu_ctype_conv_{msg_name}.hpp", "C->C++ conv header")
+            self._generate_file(context, 'pdu_cpptypes_conv_cpp.tpl', types_dir, "pdu_cpptype_conv_{msg_name}.hpp", "C++->C conv header")
