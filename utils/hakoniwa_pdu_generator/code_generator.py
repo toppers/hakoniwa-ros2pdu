@@ -138,17 +138,17 @@ class CodeGenerator:
 
     def _generate_file(self, context, template_name, output_dir, file_pattern, description):
         content = self._render_template(template_name, context)
+        if not content.endswith('\n'):
+            content += '\n'
         if not content.strip():
             return
-        if content.endswith('\n'):
-             content = content[:-1]
 
         pkg_name = context['container']['pkg_name']
         msg_name = context['container']['msg_type_name']
         output_path = Path(output_dir) / pkg_name
         output_path.mkdir(parents=True, exist_ok=True)
         file_path = output_path / file_pattern.format(msg_name=msg_name)
-        with open(file_path, 'w', encoding='utf-8', newline='') as f:
+        with open(file_path, 'w', encoding='utf-8', newline='\n') as f:
             f.write(content)
         print(f"Generated {description}: {file_path}")
 
