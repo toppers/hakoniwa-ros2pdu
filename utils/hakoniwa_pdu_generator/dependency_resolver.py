@@ -28,6 +28,7 @@ class DependencyResolver:
         # メッセージ定義を取得
         msg_def = ros_message_parser.get_ros_message_definition(self.search_paths, base_package_msg)
         if not msg_def:
+            print(f"Warning: Could not resolve dependencies for {package_msg}. Skipping.")
             return # 見つからなかった場合はスキップ
 
         self.message_cache[base_package_msg] = msg_def

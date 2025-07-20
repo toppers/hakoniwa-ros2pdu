@@ -1,8 +1,11 @@
 from typing import List
+
+# dependencies for the generated Python class
 {% for item in container.py_imports %}
 from ..{{ item.dep_pkg }}.{{ item.file }} import {{ item.class_name }}
 {% endfor %}
 
+# class definition for the ROS message
 class {{ container.class_name }}:
     """
     ROS message: {{ container.pkg_name }}/{{ container.msg_type_name }}

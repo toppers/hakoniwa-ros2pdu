@@ -21,7 +21,9 @@ def _collect_dependencies(pkg_msg, message_cache, root_pkg,
         base = get_array_type(ftype)
         dep_pkg_msg = f"{msg_def['package']}/{base}" if '/' not in base else base
         if dep_pkg_msg not in message_cache:
-            raise ValueError(f"Message {dep_pkg_msg} not found in message cache")
+            #print(f"Warning: Dependency {dep_pkg_msg} not found in message cache. Skipping.")
+            #print(f"arguments: {pkg_msg}, {root_pkg}, {visited}, {includes}, {csharp_includes}, {cpp_includes}, {conv_includes}, {conv_cpp_includes}, {py_imports}")
+            continue
 
         dep_pkg, dep_msg = dep_pkg_msg.split('/')
 
@@ -167,7 +169,7 @@ def get_struct_format(ros_type_name):
     }
     # ROSの表現（例: "uint8[3]"）から基本型（"uint8"）を抽出
     base_type = get_array_type(ros_type_name)
-    return '>' + format_map.get(base_type, '') # Big-endianをデフォルトに
+    return '<' + format_map.get(base_type, '') # Little-endianをデフォルトに
 
 def get_base_data_size(offset_data):
     """オフセット情報からBaseDataの合計サイズを計算する"""
@@ -292,10 +294,12 @@ class CodeGenerator:
                 dep_pkg = get_msg_pkg(item.type_name, pkg_name)
                 dep_msg = get_msg_type(item.type_name)
                 py_conv_imports.append({
+                    'dep_pkg': dep_pkg,
                     'file': f"pdu_conv_{dep_msg}",
                     'pdu_to_py_func': f"pdu_to_py_{dep_msg}",
                     'py_to_pdu_func': f"py_to_pdu_{dep_msg}",
                 })
+                #print(f"Adding Python converter import for {dep_pkg}/{dep_msg}")
 
         context = {
             'container': {
