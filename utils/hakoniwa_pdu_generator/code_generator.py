@@ -146,6 +146,37 @@ def get_python_default_value(name):
     # 構造体の場合はクラスのインスタンス化
     return f"{get_python_class_name(name)}()"
 
+def get_struct_format(ros_type_name):
+    """ROSのプリミティブ型名をPythonのstructモジュールのフォーマット文字に変換"""
+    format_map = {
+        'bool': '?',
+        'byte': 'b',
+        'char': 'c',
+        'int8': 'b',
+        'uint8': 'B',
+        'int16': 'h',
+        'uint16': 'H',
+        'int32': 'i',
+        'uint32': 'I',
+        'int64': 'q',
+        'uint64': 'Q',
+        'float32': 'f',
+        'float64': 'd',
+        # stringは特別扱い
+    }
+    # ROSの表現（例: "uint8[3]"）から基本型（"uint8"）を抽出
+    base_type = get_array_type(ros_type_name)
+    return '>' + format_map.get(base_type, '') # Big-endianをデフォルトに
+
+def get_base_data_size(offset_data):
+    """オフセット情報からBaseDataの合計サイズを計算する"""
+    if not offset_data:
+        return 0
+    # 最も大きいオフセットを持つエントリを見つける
+    last_entry = max(offset_data, key=lambda x: x['offset'])
+    # そのエントリの末尾がBaseDataのサイズとなる
+    return last_entry['offset'] + last_entry['size']
+
 
 # --- CodeGenerator クラス ---
 
@@ -210,7 +241,8 @@ class CodeGenerator:
             'get_csharp_type': get_csharp_type,
             'get_python_type_hint': get_python_type_hint,
             'get_python_default_value': get_python_default_value,
-            'get_python_class_name': get_python_class_name
+            'get_python_class_name': get_python_class_name,
+            'get_struct_format': get_struct_format
         }
         return {'container': container}
 
@@ -245,3 +277,35 @@ class CodeGenerator:
             self._generate_file(context, 'pdu_cpptypes_conv_cpp.tpl', types_dir, "pdu_cpptype_conv_{msg_name}.hpp", "C++->C conv header")
             # Python
             self._generate_file(context, 'pdu_pytypes_py.tpl', python_dir, "pdu_pytype_{msg_name}.py", "Python type definition")
+
+    def generate_python_converter(self, msg_def, offset_data, output_root_dir):
+        python_dir = Path(output_root_dir) / 'python'
+        pkg_name = msg_def['package']
+        msg_name = msg_def['message']
+
+        # コンバータテンプレート用のコンテキストを準備
+        # _prepare_context と似ているが、offset_data を直接利用する
+        py_conv_imports = []
+        for item in offset_data:
+            if item.data_type == 'struct':
+                dep_pkg = get_msg_pkg(item.type_name, pkg_name)
+                dep_msg = get_msg_type(item.type_name)
+                py_conv_imports.append({
+                    'file': f"pdu_conv_{dep_msg}",
+                    'pdu_to_py_func': f"pdu_to_py_{dep_msg}",
+                    'py_to_pdu_func': f"py_to_pdu_{dep_msg}",
+                })
+
+        context = {
+            'container': {
+                'pkg_name': pkg_name,
+                'msg_type_name': msg_name,
+                'class_name': get_python_class_name(msg_name),
+                'offset_data': [o.to_dict() for o in offset_data],
+                'py_conv_imports': py_conv_imports,
+                'get_struct_format': get_struct_format,
+                'get_msg_type': get_msg_type,
+                'get_base_data_size': lambda: get_base_data_size(context['container']['offset_data'])
+            }
+        }
+        self._generate_file(context, 'pdu_py_conv_py.tpl', python_dir, f"pdu_conv_{msg_name}.py", "Python converter")

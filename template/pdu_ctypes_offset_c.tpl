@@ -1,11 +1,12 @@
+#include <stdio.h>
+#include <stddef.h>
 #include "pdu_primitive_ctypes.h"
+
 {%- for item in container.includes %}
 #include "{{item}}"
 {%- endfor %}
 
 #include "{{container.pkg_name}}/pdu_ctype_{{container.msg_type_name}}.h"
-#include <stddef.h>
-#include <stdio.h>
 
 static void hako_pdu_offset_{{container.msg_type_name}}(void)
 {
