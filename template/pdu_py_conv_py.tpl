@@ -4,7 +4,7 @@ from .pdu_pytype_{{ container.msg_type_name }} import {{ container.class_name }}
 from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
 
 {% for imp in container.py_conv_imports %}
-from {{ imp.path }}.{{ imp.file }} import pdu_to_py_{{ imp.class_name }}, py_to_pdu_{{ imp.class_name }}
+from ..{{ imp.dep_pkg }}.{{ imp.file }} import pdu_to_py_{{ imp.class_name }}, py_to_pdu_{{ imp.class_name }}
 {% endfor %}
 
 def pdu_to_py_{{ container.msg_type_name }}(pdu_bytes: bytes) -> {{ container.class_name }}:

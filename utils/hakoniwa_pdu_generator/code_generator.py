@@ -21,7 +21,7 @@ def _collect_dependencies(pkg_msg, message_cache, root_pkg,
         base = get_array_type(ftype)
         dep_pkg_msg = f"{msg_def['package']}/{base}" if '/' not in base else base
         if dep_pkg_msg not in message_cache:
-            continue  # キャッシュに無ければ無視
+            raise ValueError(f"Message {dep_pkg_msg} not found in message cache")
 
         dep_pkg, dep_msg = dep_pkg_msg.split('/')
 
@@ -31,6 +31,7 @@ def _collect_dependencies(pkg_msg, message_cache, root_pkg,
         conv_includes[f"{dep_pkg}/pdu_ctype_conv_{dep_msg}.hpp"] = None
         conv_cpp_includes[f"{dep_pkg}/pdu_cpptype_conv_{dep_msg}.hpp"] = None
         py_imports[dep_pkg_msg] = {
+            'dep_pkg': dep_pkg,
             'file': f"pdu_pytype_{dep_msg}",
             'class_name': get_python_class_name(dep_msg)
         }
