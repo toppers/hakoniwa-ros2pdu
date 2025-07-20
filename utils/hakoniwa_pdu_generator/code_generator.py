@@ -2,12 +2,12 @@ import os
 import re
 from pathlib import Path
 import jinja2
-from collections import OrderedDict 
+from collections import OrderedDict
 
 def _collect_dependencies(pkg_msg, message_cache, root_pkg,
                           visited,  # set[str]
                           includes, csharp_includes,
-                          cpp_includes, conv_includes, conv_cpp_includes):
+                          cpp_includes, conv_includes, conv_cpp_includes, py_imports):
     if pkg_msg in visited:
         return
     visited.add(pkg_msg)
@@ -21,22 +21,26 @@ def _collect_dependencies(pkg_msg, message_cache, root_pkg,
         base = get_array_type(ftype)
         dep_pkg_msg = f"{msg_def['package']}/{base}" if '/' not in base else base
         if dep_pkg_msg not in message_cache:
-            continue                        # キャッシュに無ければ無視
+            continue  # キャッシュに無ければ無視
 
         dep_pkg, dep_msg = dep_pkg_msg.split('/')
 
-        # ───── include 群に追加（順序保持したいので OrderedDict を使う）─────
+        # ───── include/import 群に追加（順序保持したいので OrderedDict を使う）─────
         includes[f"{dep_pkg}/pdu_ctype_{dep_msg}.h"] = None
         cpp_includes[f"{dep_pkg}/pdu_cpptype_{dep_msg}.hpp"] = None
         conv_includes[f"{dep_pkg}/pdu_ctype_conv_{dep_msg}.hpp"] = None
         conv_cpp_includes[f"{dep_pkg}/pdu_cpptype_conv_{dep_msg}.hpp"] = None
+        py_imports[dep_pkg_msg] = {
+            'file': f"pdu_pytype_{dep_msg}",
+            'class_name': get_python_class_name(dep_msg)
+        }
         if dep_pkg != root_pkg:
             csharp_includes[dep_pkg] = None
 
         # ───── さらに再帰 ─────
         _collect_dependencies(dep_pkg_msg, message_cache, root_pkg,
                               visited, includes, csharp_includes,
-                              cpp_includes, conv_includes, conv_cpp_includes)
+                              cpp_includes, conv_includes, conv_cpp_includes, py_imports)
 # --- テンプレートヘルパー関数群 (generate.pyの挙動を完全に模倣) ---
 
 ROS_PRIMITIVE_TYPES_FOR_TEMPLATE = [
@@ -106,6 +110,43 @@ def get_csharp_type(name):
     }
     return type_map.get(get_array_type(name), get_msg_type(name))
 
+# --- Python用ヘルパー関数 ---
+def get_python_class_name(name):
+    return get_msg_type(name)
+
+def get_python_type_hint(name):
+    type_map = {
+        "bool": "bool", "byte": "int", "char": "str",
+        "float32": "float", "float64": "float",
+        "int8": "int", "uint8": "int",
+        "int16": "int", "uint16": "int",
+        "int32": "int", "uint32": "int",
+        "int64": "int", "uint64": "int",
+        "string": "str"
+    }
+    base_type = get_array_type(name)
+    py_type = type_map.get(base_type, get_python_class_name(base_type))
+
+    if is_array(name):
+        return f"List[{py_type}]"
+    return py_type
+
+def get_python_default_value(name):
+    if is_array(name):
+        return "[]"
+    if is_primitive(name):
+        if name in ['float32', 'float64']:
+            return "0.0"
+        elif name == 'bool':
+            return "False"
+        else:
+            return "0"
+    if is_string(name):
+        return '""'
+    # 構造体の場合はクラスのインスタンス化
+    return f"{get_python_class_name(name)}()"
+
+
 # --- CodeGenerator クラス ---
 
 class CodeGenerator:
@@ -130,6 +171,7 @@ class CodeGenerator:
         cpp_includes      = OrderedDict()
         conv_includes     = OrderedDict()
         conv_cpp_includes = OrderedDict()
+        py_imports        = OrderedDict()
 
         _collect_dependencies(package_msg, message_cache, root_pkg,
                           visited=set(),
@@ -137,7 +179,8 @@ class CodeGenerator:
                           csharp_includes=csharp_includes,
                           cpp_includes=cpp_includes,
                           conv_includes=conv_includes,
-                          conv_cpp_includes=conv_cpp_includes)
+                          conv_cpp_includes=conv_cpp_includes,
+                          py_imports=py_imports)
 
         def get_array_size(mem_name, type_name_from_tpl):
             try:
@@ -151,18 +194,23 @@ class CodeGenerator:
 
         container = {
             'json_data': msg_def, 'pkg_name': root_pkg, 'msg_type_name': msg_name,
+            'class_name': get_python_class_name(msg_name),
             'includes': sorted(includes), 
             'csharp_includes': sorted(csharp_includes), 
             'cpp_includes': sorted(cpp_includes),
             'conv_includes': sorted(conv_includes), 
             'conv_cpp_includes': sorted(conv_cpp_includes),
+            'py_imports': sorted(py_imports.values(), key=lambda x: x['class_name']),
             'is_primitive': is_primitive, 'is_string': is_string, 'is_array': is_array,
             'is_primitive_array': is_primitive_array, 'is_string_array': is_string_array,
             'get_array_type': get_array_type, 'get_struct_array_type': get_struct_array_type,
             'get_type': get_type, 'get_msg_type': get_msg_type,
             'get_msg_pkg': lambda name: get_msg_pkg(name, root_pkg),
             'get_array_size': get_array_size, 'convert_snake': convert_snake,
-            'get_csharp_type': get_csharp_type
+            'get_csharp_type': get_csharp_type,
+            'get_python_type_hint': get_python_type_hint,
+            'get_python_default_value': get_python_default_value,
+            'get_python_class_name': get_python_class_name
         }
         return {'container': container}
 
@@ -185,11 +233,15 @@ class CodeGenerator:
     def generate_all(self, message_cache, varray_size_def, output_root_dir):
         types_dir = Path(output_root_dir) / 'types'
         csharp_dir = Path(output_root_dir) / 'csharp'
+        python_dir = Path(output_root_dir) / 'python'
 
         for package_msg in message_cache.keys():
             context = self._prepare_context(package_msg, message_cache, varray_size_def)
+            # C/C++ and C#
             self._generate_file(context, 'pdu_ctypes_h.tpl', types_dir, "pdu_ctype_{msg_name}.h", "C header")
             self._generate_file(context, 'pdu_csharp_class.tpl', csharp_dir, "{msg_name}.cs", "C# class")
             self._generate_file(context, 'pdu_cpptypes_hpp.tpl', types_dir, "pdu_cpptype_{msg_name}.hpp", "C++ type header")
             self._generate_file(context, 'pdu_ctypes_conv_cpp.tpl', types_dir, "pdu_ctype_conv_{msg_name}.hpp", "C->C++ conv header")
             self._generate_file(context, 'pdu_cpptypes_conv_cpp.tpl', types_dir, "pdu_cpptype_conv_{msg_name}.hpp", "C++->C conv header")
+            # Python
+            self._generate_file(context, 'pdu_pytypes_py.tpl', python_dir, "pdu_pytype_{msg_name}.py", "Python type definition")

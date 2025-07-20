@@ -80,6 +80,12 @@ def run_generation(ros_msgs_file, search_path_file, varray_size_file, output_dir
             context = code_gen._prepare_context(package_msg, message_cache, varray_size_def)
             offset_calculator.calculate_offsets(context, offset_output_dir)
 
+        print("\n4. Creating __init__.py for Python packages...")
+        python_dir = output_root_dir / 'python'
+        for package_dir in python_dir.iterdir():
+            if package_dir.is_dir():
+                (package_dir / '__init__.py').touch()
+
         print("\n--- Generation Complete! ---")
 
     except FileNotFoundError as e:
