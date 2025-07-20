@@ -94,3 +94,4 @@ hako_srv_msgs/AddTwoIntsRequest
 hako_srv_msgs/AddTwoIntsResponse
 hako_srv_msgs/AddTwoIntsRequestPacket
 hako_srv_msgs/AddTwoIntsResponsePacket
+tf2_msgs/TFMessage

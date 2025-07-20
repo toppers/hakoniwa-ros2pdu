@@ -1,6 +1,6 @@
 from typing import List
 {% for item in container.py_imports %}
-from .{{ item.file }} import {{ item.class_name }}
+from {{ item.path }}.{{ item.file }} import {{ item.class_name }}
 {% endfor %}
 
 class {{ container.class_name }}:

@@ -31,6 +31,7 @@ def _collect_dependencies(pkg_msg, message_cache, root_pkg,
         conv_includes[f"{dep_pkg}/pdu_ctype_conv_{dep_msg}.hpp"] = None
         conv_cpp_includes[f"{dep_pkg}/pdu_cpptype_conv_{dep_msg}.hpp"] = None
         py_imports[dep_pkg_msg] = {
+            'target_pkg': dep_pkg,
             'file': f"pdu_pytype_{dep_msg}",
             'class_name': get_python_class_name(dep_msg)
         }
@@ -166,7 +167,7 @@ def get_struct_format(ros_type_name):
     }
     # ROSの表現（例: "uint8[3]"）から基本型（"uint8"）を抽出
     base_type = get_array_type(ros_type_name)
-    return '>' + format_map.get(base_type, '') # Big-endianをデフォルトに
+    return '<' + format_map.get(base_type, '') # Little-endianをデフォルトに
 
 def get_base_data_size(offset_data):
     """オフセット情報からBaseDataの合計サイズを計算する"""
@@ -177,6 +178,13 @@ def get_base_data_size(offset_data):
     # そのエントリの末尾がBaseDataのサイズとなる
     return last_entry['offset'] + last_entry['size']
 
+def get_python_import_path(current_pkg, target_pkg):
+    """現在のパッケージからターゲットパッケージへの相対インポートパスを計算する"""
+    if current_pkg == target_pkg:
+        return "."
+    
+    # from ..<target_pkg> import ... の形式を生成する
+    return f"..{target_pkg}"
 
 # --- CodeGenerator クラス ---
 
@@ -213,15 +221,11 @@ class CodeGenerator:
                           conv_cpp_includes=conv_cpp_includes,
                           py_imports=py_imports)
 
-        def get_array_size(mem_name, type_name_from_tpl):
-            try:
-                return varray_size_def[root_pkg][msg_name][mem_name]
-            except KeyError:
-                if '[' in type_name_from_tpl and ']' in type_name_from_tpl:
-                    size_str = type_name_from_tpl.split('[', 1)[1].split(']', 1)[0]
-                    if size_str:
-                        return size_str
-                return None
+        # py_imports のパスを相対パスに変換
+        processed_py_imports = []
+        for imp in py_imports.values():
+            imp['path'] = get_python_import_path(root_pkg, imp['target_pkg'])
+            processed_py_imports.append(imp)
 
         container = {
             'json_data': msg_def, 'pkg_name': root_pkg, 'msg_type_name': msg_name,
@@ -231,13 +235,14 @@ class CodeGenerator:
             'cpp_includes': sorted(cpp_includes),
             'conv_includes': sorted(conv_includes), 
             'conv_cpp_includes': sorted(conv_cpp_includes),
-            'py_imports': sorted(py_imports.values(), key=lambda x: x['class_name']),
+            'py_imports': sorted(processed_py_imports, key=lambda x: x['class_name']),
             'is_primitive': is_primitive, 'is_string': is_string, 'is_array': is_array,
             'is_primitive_array': is_primitive_array, 'is_string_array': is_string_array,
             'get_array_type': get_array_type, 'get_struct_array_type': get_struct_array_type,
             'get_type': get_type, 'get_msg_type': get_msg_type,
             'get_msg_pkg': lambda name: get_msg_pkg(name, root_pkg),
-            'get_array_size': get_array_size, 'convert_snake': convert_snake,
+            'get_array_size': lambda name, tpl_type: None, # Obsolete
+            'convert_snake': convert_snake,
             'get_csharp_type': get_csharp_type,
             'get_python_type_hint': get_python_type_hint,
             'get_python_default_value': get_python_default_value,
@@ -283,18 +288,20 @@ class CodeGenerator:
         pkg_name = msg_def['package']
         msg_name = msg_def['message']
 
-        # コンバータテンプレート用のコンテキストを準備
-        # _prepare_context と似ているが、offset_data を直接利用する
         py_conv_imports = []
+        unique_imports = set()
         for item in offset_data:
             if item.data_type == 'struct':
                 dep_pkg = get_msg_pkg(item.type_name, pkg_name)
                 dep_msg = get_msg_type(item.type_name)
-                py_conv_imports.append({
-                    'file': f"pdu_conv_{dep_msg}",
-                    'pdu_to_py_func': f"pdu_to_py_{dep_msg}",
-                    'py_to_pdu_func': f"py_to_pdu_{dep_msg}",
-                })
+                class_name = get_python_class_name(dep_msg)
+                if class_name not in unique_imports:
+                    py_conv_imports.append({
+                        'path': get_python_import_path(pkg_name, dep_pkg),
+                        'file': f"pdu_conv_{dep_msg}",
+                        'class_name': class_name
+                    })
+                    unique_imports.add(class_name)
 
         context = {
             'container': {
@@ -302,10 +309,10 @@ class CodeGenerator:
                 'msg_type_name': msg_name,
                 'class_name': get_python_class_name(msg_name),
                 'offset_data': [o.to_dict() for o in offset_data],
-                'py_conv_imports': py_conv_imports,
+                'py_conv_imports': sorted(py_conv_imports, key=lambda x: x['class_name']),
                 'get_struct_format': get_struct_format,
                 'get_msg_type': get_msg_type,
-                'get_base_data_size': lambda: get_base_data_size(context['container']['offset_data'])
+                'get_base_data_size': lambda: get_base_data_size([o.to_dict() for o in offset_data])
             }
         }
         self._generate_file(context, 'pdu_py_conv_py.tpl', python_dir, f"pdu_conv_{msg_name}.py", "Python converter")
