@@ -1,88 +1,57 @@
 
 import struct
 from .pdu_pytype_TransformStamped import TransformStamped
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
-
-from ..std_msgs.pdu_conv_Header import pdu_to_py_Header, py_to_pdu_Header
-
-from ..geometry_msgs.pdu_conv_Transform import pdu_to_py_Transform, py_to_pdu_Transform
+from ..std_msgs.pdu_conv_Header import *
+from ..geometry_msgs.pdu_conv_Transform import *
 
 
-def pdu_to_py_TransformStamped(pdu_bytes: bytes) -> TransformStamped:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+
+def pdu_to_py_TransformStamped(binary_data: bytes) -> TransformStamped:
     py_obj = TransformStamped()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: header (single)
-    
-    
-    nested_base_data = base_data[0:136]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.header = pdu_to_py_Header(nested_pdu_bytes)
-    
-    
-    
-    # Processing: child_frame_id (single)
-    
-    
-        
-    end = base_data.find(b'\0', 136)
-    py_obj.child_frame_id = base_data[136:end].decode('utf-8')
-        
-    
-    
-    
-    # Processing: transform (single)
-    
-    
-    nested_base_data = base_data[264:320]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.transform = pdu_to_py_Transform(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_TransformStamped(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_TransformStamped(py_obj: TransformStamped) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 320
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_TransformStamped(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: TransformStamped, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: std_msgs/Header 
+    # offset: 0 size: 136 
+    # array_len: 1
+
+    tmp_py_obj = Header()
+    binary_read_recursive_Header(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.header = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: child_frame_id 
+    # type_name: string 
+    # offset: 136 size: 128 
+    # array_len: 1
 
     
-    # Processing: header (single)
+    bin = binary_io.readBinary(binary_data, base_off + 136, 128)
+    py_obj.child_frame_id = binary_io.binTovalue(type, bin)
     
-    
-    nested_pdu_bytes = py_to_pdu_Header(py_obj.header)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:136] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: child_frame_id (single)
-    
-    
-    struct.pack_into('<', base_buffer, 136, py_obj.child_frame_id)
-    
-    
-    
-    # Processing: transform (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Transform(py_obj.transform)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[264:320] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: transform 
+    # type_name: Transform 
+    # offset: 264 size: 56 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    tmp_py_obj = Transform()
+    binary_read_recursive_Transform(meta, binary_data, tmp_py_obj, base_off + 264)
+    py_obj.transform = tmp_py_obj
+    
+    return py_obj

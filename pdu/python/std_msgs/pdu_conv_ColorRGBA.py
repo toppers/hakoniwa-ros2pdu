@@ -1,83 +1,66 @@
 
 import struct
 from .pdu_pytype_ColorRGBA import ColorRGBA
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_ColorRGBA(pdu_bytes: bytes) -> ColorRGBA:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = ColorRGBA()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: r (single)
-    
-    
-    py_obj.r = struct.unpack_from('<f', base_data, 0)[0]
-    
-    
-    
-    # Processing: g (single)
-    
-    
-    py_obj.g = struct.unpack_from('<f', base_data, 4)[0]
-    
-    
-    
-    # Processing: b (single)
-    
-    
-    py_obj.b = struct.unpack_from('<f', base_data, 8)[0]
-    
-    
-    
-    # Processing: a (single)
-    
-    
-    py_obj.a = struct.unpack_from('<f', base_data, 12)[0]
-    
-    
-    
+def pdu_to_py_ColorRGBA(binary_data: bytes) -> ColorRGBA:
+    py_obj = ColorRGBA()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_ColorRGBA(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_ColorRGBA(py_obj: ColorRGBA) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 16
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_ColorRGBA(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: ColorRGBA, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: r 
+    # type_name: float32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: r (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.r = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<f', base_buffer, 0, py_obj.r)
-    
-    
-    
-    # Processing: g (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 4, py_obj.g)
-    
-    
-    
-    # Processing: b (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 8, py_obj.b)
-    
-    
-    
-    # Processing: a (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 12, py_obj.a)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: g 
+    # type_name: float32 
+    # offset: 4 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.g = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: b 
+    # type_name: float32 
+    # offset: 8 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 4)
+    py_obj.b = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: a 
+    # type_name: float32 
+    # offset: 12 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 12, 4)
+    py_obj.a = binary_io.binTovalue(type, bin)
+    
+    return py_obj

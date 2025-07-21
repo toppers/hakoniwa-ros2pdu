@@ -1,111 +1,88 @@
 
 import struct
 from .pdu_pytype_HakoHeartbeat import HakoHeartbeat
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoHeartbeat(pdu_bytes: bytes) -> HakoHeartbeat:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoHeartbeat()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: type (single)
-    
-    
-    py_obj.type = struct.unpack_from('<B', base_data, 0)[0]
-    
-    
-    
-    # Processing: autopilot (single)
-    
-    
-    py_obj.autopilot = struct.unpack_from('<B', base_data, 1)[0]
-    
-    
-    
-    # Processing: base_mode (single)
-    
-    
-    py_obj.base_mode = struct.unpack_from('<B', base_data, 2)[0]
-    
-    
-    
-    # Processing: custom_mode (single)
-    
-    
-    py_obj.custom_mode = struct.unpack_from('<I', base_data, 4)[0]
-    
-    
-    
-    # Processing: system_status (single)
-    
-    
-    py_obj.system_status = struct.unpack_from('<B', base_data, 8)[0]
-    
-    
-    
-    # Processing: mavlink_version (single)
-    
-    
-    py_obj.mavlink_version = struct.unpack_from('<B', base_data, 9)[0]
-    
-    
-    
+def pdu_to_py_HakoHeartbeat(binary_data: bytes) -> HakoHeartbeat:
+    py_obj = HakoHeartbeat()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoHeartbeat(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoHeartbeat(py_obj: HakoHeartbeat) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 10
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoHeartbeat(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoHeartbeat, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: type 
+    # type_name: uint8 
+    # offset: 0 size: 1 
+    # array_len: 1
 
     
-    # Processing: type (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 1)
+    py_obj.type = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<B', base_buffer, 0, py_obj.type)
-    
-    
-    
-    # Processing: autopilot (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 1, py_obj.autopilot)
-    
-    
-    
-    # Processing: base_mode (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 2, py_obj.base_mode)
-    
-    
-    
-    # Processing: custom_mode (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 4, py_obj.custom_mode)
-    
-    
-    
-    # Processing: system_status (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 8, py_obj.system_status)
-    
-    
-    
-    # Processing: mavlink_version (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 9, py_obj.mavlink_version)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: autopilot 
+    # type_name: uint8 
+    # offset: 1 size: 1 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 1, 1)
+    py_obj.autopilot = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: base_mode 
+    # type_name: uint8 
+    # offset: 2 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 2, 1)
+    py_obj.base_mode = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: custom_mode 
+    # type_name: uint32 
+    # offset: 4 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.custom_mode = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: system_status 
+    # type_name: uint8 
+    # offset: 8 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 1)
+    py_obj.system_status = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: mavlink_version 
+    # type_name: uint8 
+    # offset: 9 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 9, 1)
+    py_obj.mavlink_version = binary_io.binTovalue(type, bin)
+    
+    return py_obj

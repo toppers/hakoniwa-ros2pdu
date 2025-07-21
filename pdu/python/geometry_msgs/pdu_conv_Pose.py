@@ -1,71 +1,46 @@
 
 import struct
 from .pdu_pytype_Pose import Pose
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
-
-from ..geometry_msgs.pdu_conv_Point import pdu_to_py_, py_to_pdu_
-
-from ..geometry_msgs.pdu_conv_Quaternion import pdu_to_py_, py_to_pdu_
+from ..geometry_msgs.pdu_conv_Point import *
+from ..geometry_msgs.pdu_conv_Quaternion import *
 
 
-def pdu_to_py_Pose(pdu_bytes: bytes) -> Pose:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+
+def pdu_to_py_Pose(binary_data: bytes) -> Pose:
     py_obj = Pose()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: position (single)
-    
-    
-    nested_base_data = base_data[0:24]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.position = pdu_to_py_Point(nested_pdu_bytes)
-    
-    
-    
-    # Processing: orientation (single)
-    
-    
-    nested_base_data = base_data[24:56]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.orientation = pdu_to_py_Quaternion(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Pose(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Pose(py_obj: Pose) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 56
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
 
-    
-    # Processing: position (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Point(py_obj.position)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:24] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: orientation (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Quaternion(py_obj.orientation)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[24:56] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+def binary_read_recursive_Pose(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Pose, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: position 
+    # type_name: Point 
+    # offset: 0 size: 24 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    tmp_py_obj = Point()
+    binary_read_recursive_Point(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.position = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: orientation 
+    # type_name: Quaternion 
+    # offset: 24 size: 32 
+    # array_len: 1
+
+    tmp_py_obj = Quaternion()
+    binary_read_recursive_Quaternion(meta, binary_data, tmp_py_obj, base_off + 24)
+    py_obj.orientation = tmp_py_obj
+    
+    return py_obj

@@ -1,279 +1,220 @@
 
 import struct
 from .pdu_pytype_HakoSERVO_OUTPUT_RAW import HakoSERVO_OUTPUT_RAW
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoSERVO_OUTPUT_RAW(pdu_bytes: bytes) -> HakoSERVO_OUTPUT_RAW:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoSERVO_OUTPUT_RAW()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: time_usec (single)
-    
-    
-    py_obj.time_usec = struct.unpack_from('<I', base_data, 0)[0]
-    
-    
-    
-    # Processing: port (single)
-    
-    
-    py_obj.port = struct.unpack_from('<B', base_data, 4)[0]
-    
-    
-    
-    # Processing: servo1_raw (single)
-    
-    
-    py_obj.servo1_raw = struct.unpack_from('<H', base_data, 6)[0]
-    
-    
-    
-    # Processing: servo2_raw (single)
-    
-    
-    py_obj.servo2_raw = struct.unpack_from('<H', base_data, 8)[0]
-    
-    
-    
-    # Processing: servo3_raw (single)
-    
-    
-    py_obj.servo3_raw = struct.unpack_from('<H', base_data, 10)[0]
-    
-    
-    
-    # Processing: servo4_raw (single)
-    
-    
-    py_obj.servo4_raw = struct.unpack_from('<H', base_data, 12)[0]
-    
-    
-    
-    # Processing: servo5_raw (single)
-    
-    
-    py_obj.servo5_raw = struct.unpack_from('<H', base_data, 14)[0]
-    
-    
-    
-    # Processing: servo6_raw (single)
-    
-    
-    py_obj.servo6_raw = struct.unpack_from('<H', base_data, 16)[0]
-    
-    
-    
-    # Processing: servo7_raw (single)
-    
-    
-    py_obj.servo7_raw = struct.unpack_from('<H', base_data, 18)[0]
-    
-    
-    
-    # Processing: servo8_raw (single)
-    
-    
-    py_obj.servo8_raw = struct.unpack_from('<H', base_data, 20)[0]
-    
-    
-    
-    # Processing: servo9_raw (single)
-    
-    
-    py_obj.servo9_raw = struct.unpack_from('<H', base_data, 22)[0]
-    
-    
-    
-    # Processing: servo10_raw (single)
-    
-    
-    py_obj.servo10_raw = struct.unpack_from('<H', base_data, 24)[0]
-    
-    
-    
-    # Processing: servo11_raw (single)
-    
-    
-    py_obj.servo11_raw = struct.unpack_from('<H', base_data, 26)[0]
-    
-    
-    
-    # Processing: servo12_raw (single)
-    
-    
-    py_obj.servo12_raw = struct.unpack_from('<H', base_data, 28)[0]
-    
-    
-    
-    # Processing: servo13_raw (single)
-    
-    
-    py_obj.servo13_raw = struct.unpack_from('<H', base_data, 30)[0]
-    
-    
-    
-    # Processing: servo14_raw (single)
-    
-    
-    py_obj.servo14_raw = struct.unpack_from('<H', base_data, 32)[0]
-    
-    
-    
-    # Processing: servo15_raw (single)
-    
-    
-    py_obj.servo15_raw = struct.unpack_from('<H', base_data, 34)[0]
-    
-    
-    
-    # Processing: servo16_raw (single)
-    
-    
-    py_obj.servo16_raw = struct.unpack_from('<H', base_data, 36)[0]
-    
-    
-    
+def pdu_to_py_HakoSERVO_OUTPUT_RAW(binary_data: bytes) -> HakoSERVO_OUTPUT_RAW:
+    py_obj = HakoSERVO_OUTPUT_RAW()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoSERVO_OUTPUT_RAW(py_obj: HakoSERVO_OUTPUT_RAW) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 38
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoSERVO_OUTPUT_RAW, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: time_usec 
+    # type_name: uint32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: time_usec (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 0, py_obj.time_usec)
-    
-    
-    
-    # Processing: port (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 4, py_obj.port)
-    
-    
-    
-    # Processing: servo1_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 6, py_obj.servo1_raw)
-    
-    
-    
-    # Processing: servo2_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 8, py_obj.servo2_raw)
-    
-    
-    
-    # Processing: servo3_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 10, py_obj.servo3_raw)
-    
-    
-    
-    # Processing: servo4_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 12, py_obj.servo4_raw)
-    
-    
-    
-    # Processing: servo5_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 14, py_obj.servo5_raw)
-    
-    
-    
-    # Processing: servo6_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 16, py_obj.servo6_raw)
-    
-    
-    
-    # Processing: servo7_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 18, py_obj.servo7_raw)
-    
-    
-    
-    # Processing: servo8_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 20, py_obj.servo8_raw)
-    
-    
-    
-    # Processing: servo9_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 22, py_obj.servo9_raw)
-    
-    
-    
-    # Processing: servo10_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 24, py_obj.servo10_raw)
-    
-    
-    
-    # Processing: servo11_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 26, py_obj.servo11_raw)
-    
-    
-    
-    # Processing: servo12_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 28, py_obj.servo12_raw)
-    
-    
-    
-    # Processing: servo13_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 30, py_obj.servo13_raw)
-    
-    
-    
-    # Processing: servo14_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 32, py_obj.servo14_raw)
-    
-    
-    
-    # Processing: servo15_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 34, py_obj.servo15_raw)
-    
-    
-    
-    # Processing: servo16_raw (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 36, py_obj.servo16_raw)
-    
-    
-    
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.time_usec = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: port 
+    # type_name: uint8 
+    # offset: 4 size: 1 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 1)
+    py_obj.port = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo1_raw 
+    # type_name: uint16 
+    # offset: 6 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 6, 2)
+    py_obj.servo1_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo2_raw 
+    # type_name: uint16 
+    # offset: 8 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 2)
+    py_obj.servo2_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo3_raw 
+    # type_name: uint16 
+    # offset: 10 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 10, 2)
+    py_obj.servo3_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo4_raw 
+    # type_name: uint16 
+    # offset: 12 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 12, 2)
+    py_obj.servo4_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo5_raw 
+    # type_name: uint16 
+    # offset: 14 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 14, 2)
+    py_obj.servo5_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo6_raw 
+    # type_name: uint16 
+    # offset: 16 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 16, 2)
+    py_obj.servo6_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo7_raw 
+    # type_name: uint16 
+    # offset: 18 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 18, 2)
+    py_obj.servo7_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo8_raw 
+    # type_name: uint16 
+    # offset: 20 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 20, 2)
+    py_obj.servo8_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo9_raw 
+    # type_name: uint16 
+    # offset: 22 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 22, 2)
+    py_obj.servo9_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo10_raw 
+    # type_name: uint16 
+    # offset: 24 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 24, 2)
+    py_obj.servo10_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo11_raw 
+    # type_name: uint16 
+    # offset: 26 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 26, 2)
+    py_obj.servo11_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo12_raw 
+    # type_name: uint16 
+    # offset: 28 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 28, 2)
+    py_obj.servo12_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo13_raw 
+    # type_name: uint16 
+    # offset: 30 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 30, 2)
+    py_obj.servo13_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo14_raw 
+    # type_name: uint16 
+    # offset: 32 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 32, 2)
+    py_obj.servo14_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo15_raw 
+    # type_name: uint16 
+    # offset: 34 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 34, 2)
+    py_obj.servo15_raw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo16_raw 
+    # type_name: uint16 
+    # offset: 36 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 36, 2)
+    py_obj.servo16_raw = binary_io.binTovalue(type, bin)
+    
+    return py_obj

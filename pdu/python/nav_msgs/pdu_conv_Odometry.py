@@ -1,107 +1,69 @@
 
 import struct
 from .pdu_pytype_Odometry import Odometry
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
-
-from ..std_msgs.pdu_conv_Header import pdu_to_py_, py_to_pdu_
-
-from ..geometry_msgs.pdu_conv_PoseWithCovariance import pdu_to_py_, py_to_pdu_
-
-from ..geometry_msgs.pdu_conv_TwistWithCovariance import pdu_to_py_, py_to_pdu_
+from ..std_msgs.pdu_conv_Header import *
+from ..geometry_msgs.pdu_conv_PoseWithCovariance import *
+from ..geometry_msgs.pdu_conv_TwistWithCovariance import *
 
 
-def pdu_to_py_Odometry(pdu_bytes: bytes) -> Odometry:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+
+def pdu_to_py_Odometry(binary_data: bytes) -> Odometry:
     py_obj = Odometry()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: header (single)
-    
-    
-    nested_base_data = base_data[0:136]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.header = pdu_to_py_Header(nested_pdu_bytes)
-    
-    
-    
-    # Processing: child_frame_id (single)
-    
-    
-    py_obj.child_frame_id = struct.unpack_from('<', base_data, 136)[0]
-    
-    
-    
-    # Processing: pose (single)
-    
-    
-    nested_base_data = base_data[264:608]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.pose = pdu_to_py_PoseWithCovariance(nested_pdu_bytes)
-    
-    
-    
-    # Processing: twist (single)
-    
-    
-    nested_base_data = base_data[608:944]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.twist = pdu_to_py_TwistWithCovariance(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Odometry(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Odometry(py_obj: Odometry) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 944
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_Odometry(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Odometry, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: std_msgs/Header 
+    # offset: 0 size: 136 
+    # array_len: 1
+
+    tmp_py_obj = Header()
+    binary_read_recursive_Header(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.header = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: child_frame_id 
+    # type_name: string 
+    # offset: 136 size: 128 
+    # array_len: 1
 
     
-    # Processing: header (single)
+    bin = binary_io.readBinary(binary_data, base_off + 136, 128)
+    py_obj.child_frame_id = binary_io.binTovalue(type, bin)
     
-    
-    nested_pdu_bytes = py_to_pdu_Header(py_obj.header)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:136] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: child_frame_id (single)
-    
-    
-    struct.pack_into('<', base_buffer, 136, py_obj.child_frame_id)
-    
-    
-    
-    # Processing: pose (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_PoseWithCovariance(py_obj.pose)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[264:608] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: twist (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_TwistWithCovariance(py_obj.twist)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[608:944] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: pose 
+    # type_name: geometry_msgs/PoseWithCovariance 
+    # offset: 264 size: 344 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    tmp_py_obj = PoseWithCovariance()
+    binary_read_recursive_PoseWithCovariance(meta, binary_data, tmp_py_obj, base_off + 264)
+    py_obj.pose = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: twist 
+    # type_name: geometry_msgs/TwistWithCovariance 
+    # offset: 608 size: 336 
+    # array_len: 1
+
+    tmp_py_obj = TwistWithCovariance()
+    binary_read_recursive_TwistWithCovariance(meta, binary_data, tmp_py_obj, base_off + 608)
+    py_obj.twist = tmp_py_obj
+    
+    return py_obj

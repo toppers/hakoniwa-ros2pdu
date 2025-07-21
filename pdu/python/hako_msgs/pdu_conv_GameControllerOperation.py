@@ -1,73 +1,44 @@
 
 import struct
 from .pdu_pytype_GameControllerOperation import GameControllerOperation
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_GameControllerOperation(pdu_bytes: bytes) -> GameControllerOperation:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = GameControllerOperation()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: axis (array)
-    
-    py_obj.axis = []
-    element_size = 8
-    for i in range(6):
-        element_offset = 0 + i * element_size
-    
-        val = struct.unpack_from('<d', base_data, element_offset)[0]
-        py_obj.axis.append(val)
-    
-    
-    
-    # Processing: button (array)
-    
-    py_obj.button = []
-    element_size = 4
-    for i in range(15):
-        element_offset = 48 + i * element_size
-    
-        val = struct.unpack_from('<?', base_data, element_offset)[0]
-        py_obj.button.append(val)
-    
-    
-    
+def pdu_to_py_GameControllerOperation(binary_data: bytes) -> GameControllerOperation:
+    py_obj = GameControllerOperation()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_GameControllerOperation(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_GameControllerOperation(py_obj: GameControllerOperation) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 108
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_GameControllerOperation(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: GameControllerOperation, base_off: int):
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: axis 
+    # type_name: float64 
+    # offset: 0 size: 48 
+    # array_len: 6
 
     
-    # Processing: axis (array)
+    array_value = binary_io.readBinary(binary_data, base_off + 0, 48)
+    py_obj.axis = binary_io.binToArrayValues(type, array_value)
     
-    element_size = 8
-    for i, element in enumerate(py_obj.axis):
-        if i >= 6: break
-        element_offset = 0 + i * element_size
-    
-        struct.pack_into('<d', base_buffer, element_offset, element)
-    
-    
-    
-    # Processing: button (array)
-    
-    element_size = 4
-    for i, element in enumerate(py_obj.button):
-        if i >= 15: break
-        element_offset = 48 + i * element_size
-    
-        struct.pack_into('<?', base_buffer, element_offset, element)
-    
-    
-    
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: button 
+    # type_name: bool 
+    # offset: 48 size: 60 
+    # array_len: 15
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    array_value = binary_io.readBinary(binary_data, base_off + 48, 60)
+    py_obj.button = binary_io.binToArrayValues(type, array_value)
+    
+    return py_obj

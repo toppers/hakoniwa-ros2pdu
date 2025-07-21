@@ -1,83 +1,66 @@
 
 import struct
 from .pdu_pytype_PointField import PointField
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_PointField(pdu_bytes: bytes) -> PointField:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = PointField()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: name (single)
-    
-    
-    py_obj.name = struct.unpack_from('<', base_data, 0)[0]
-    
-    
-    
-    # Processing: offset (single)
-    
-    
-    py_obj.offset = struct.unpack_from('<I', base_data, 128)[0]
-    
-    
-    
-    # Processing: datatype (single)
-    
-    
-    py_obj.datatype = struct.unpack_from('<B', base_data, 132)[0]
-    
-    
-    
-    # Processing: count (single)
-    
-    
-    py_obj.count = struct.unpack_from('<I', base_data, 136)[0]
-    
-    
-    
+def pdu_to_py_PointField(binary_data: bytes) -> PointField:
+    py_obj = PointField()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_PointField(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_PointField(py_obj: PointField) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 140
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_PointField(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: PointField, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: name 
+    # type_name: string 
+    # offset: 0 size: 128 
+    # array_len: 1
 
     
-    # Processing: name (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 128)
+    py_obj.name = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<', base_buffer, 0, py_obj.name)
-    
-    
-    
-    # Processing: offset (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 128, py_obj.offset)
-    
-    
-    
-    # Processing: datatype (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 132, py_obj.datatype)
-    
-    
-    
-    # Processing: count (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 136, py_obj.count)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: offset 
+    # type_name: uint32 
+    # offset: 128 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 128, 4)
+    py_obj.offset = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: datatype 
+    # type_name: uint8 
+    # offset: 132 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 132, 1)
+    py_obj.datatype = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: count 
+    # type_name: uint32 
+    # offset: 136 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 136, 4)
+    py_obj.count = binary_io.binTovalue(type, bin)
+    
+    return py_obj

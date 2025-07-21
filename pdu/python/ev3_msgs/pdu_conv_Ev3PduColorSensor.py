@@ -1,97 +1,77 @@
 
 import struct
 from .pdu_pytype_Ev3PduColorSensor import Ev3PduColorSensor
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_Ev3PduColorSensor(pdu_bytes: bytes) -> Ev3PduColorSensor:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = Ev3PduColorSensor()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: color (single)
-    
-    
-    py_obj.color = struct.unpack_from('<I', base_data, 0)[0]
-    
-    
-    
-    # Processing: reflect (single)
-    
-    
-    py_obj.reflect = struct.unpack_from('<I', base_data, 4)[0]
-    
-    
-    
-    # Processing: rgb_r (single)
-    
-    
-    py_obj.rgb_r = struct.unpack_from('<I', base_data, 8)[0]
-    
-    
-    
-    # Processing: rgb_g (single)
-    
-    
-    py_obj.rgb_g = struct.unpack_from('<I', base_data, 12)[0]
-    
-    
-    
-    # Processing: rgb_b (single)
-    
-    
-    py_obj.rgb_b = struct.unpack_from('<I', base_data, 16)[0]
-    
-    
-    
+def pdu_to_py_Ev3PduColorSensor(binary_data: bytes) -> Ev3PduColorSensor:
+    py_obj = Ev3PduColorSensor()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Ev3PduColorSensor(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Ev3PduColorSensor(py_obj: Ev3PduColorSensor) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 20
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_Ev3PduColorSensor(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Ev3PduColorSensor, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: color 
+    # type_name: uint32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: color (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.color = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<I', base_buffer, 0, py_obj.color)
-    
-    
-    
-    # Processing: reflect (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 4, py_obj.reflect)
-    
-    
-    
-    # Processing: rgb_r (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 8, py_obj.rgb_r)
-    
-    
-    
-    # Processing: rgb_g (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 12, py_obj.rgb_g)
-    
-    
-    
-    # Processing: rgb_b (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 16, py_obj.rgb_b)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: reflect 
+    # type_name: uint32 
+    # offset: 4 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.reflect = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: rgb_r 
+    # type_name: uint32 
+    # offset: 8 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 4)
+    py_obj.rgb_r = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: rgb_g 
+    # type_name: uint32 
+    # offset: 12 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 12, 4)
+    py_obj.rgb_g = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: rgb_b 
+    # type_name: uint32 
+    # offset: 16 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 16, 4)
+    py_obj.rgb_b = binary_io.binTovalue(type, bin)
+    
+    return py_obj

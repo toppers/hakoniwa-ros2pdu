@@ -1,41 +1,33 @@
 
 import struct
 from .pdu_pytype_Float32 import Float32
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_Float32(pdu_bytes: bytes) -> Float32:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = Float32()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: data (single)
-    
-    
-    py_obj.data = struct.unpack_from('<f', base_data, 0)[0]
-    
-    
-    
+def pdu_to_py_Float32(binary_data: bytes) -> Float32:
+    py_obj = Float32()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Float32(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Float32(py_obj: Float32) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 4
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_Float32(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Float32, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: data 
+    # type_name: float32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: data (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.data = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<f', base_buffer, 0, py_obj.data)
-    
-    
-    
-
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    return py_obj

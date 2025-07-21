@@ -1,209 +1,137 @@
 
 import struct
 from .pdu_pytype_LaserScan import LaserScan
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..std_msgs.pdu_conv_Header import *
 
-from ..std_msgs.pdu_conv_Header import pdu_to_py_, py_to_pdu_
 
 
-def pdu_to_py_LaserScan(pdu_bytes: bytes) -> LaserScan:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_LaserScan(binary_data: bytes) -> LaserScan:
     py_obj = LaserScan()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: header (single)
-    
-    
-    nested_base_data = base_data[0:136]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.header = pdu_to_py_Header(nested_pdu_bytes)
-    
-    
-    
-    # Processing: angle_min (single)
-    
-    
-    py_obj.angle_min = struct.unpack_from('<f', base_data, 136)[0]
-    
-    
-    
-    # Processing: angle_max (single)
-    
-    
-    py_obj.angle_max = struct.unpack_from('<f', base_data, 140)[0]
-    
-    
-    
-    # Processing: angle_increment (single)
-    
-    
-    py_obj.angle_increment = struct.unpack_from('<f', base_data, 144)[0]
-    
-    
-    
-    # Processing: time_increment (single)
-    
-    
-    py_obj.time_increment = struct.unpack_from('<f', base_data, 148)[0]
-    
-    
-    
-    # Processing: scan_time (single)
-    
-    
-    py_obj.scan_time = struct.unpack_from('<f', base_data, 152)[0]
-    
-    
-    
-    # Processing: range_min (single)
-    
-    
-    py_obj.range_min = struct.unpack_from('<f', base_data, 156)[0]
-    
-    
-    
-    # Processing: range_max (single)
-    
-    
-    py_obj.range_max = struct.unpack_from('<f', base_data, 160)[0]
-    
-    
-    
-    # Processing: ranges (varray)
-    
-    ref_offset = 164
-    array_len, heap_offset = struct.unpack_from(_VARRAY_REF_FORMAT, base_data, ref_offset)
-    py_obj.ranges = []
-    element_size = 4
-    current_heap_offset = heap_offset
-    for i in range(array_len):
-    
-        val = struct.unpack_from('<f', heap_data, current_heap_offset)[0]
-        py_obj.ranges.append(val)
-        current_heap_offset += element_size
-    
-    
-    
-    # Processing: intensities (varray)
-    
-    ref_offset = 172
-    array_len, heap_offset = struct.unpack_from(_VARRAY_REF_FORMAT, base_data, ref_offset)
-    py_obj.intensities = []
-    element_size = 4
-    current_heap_offset = heap_offset
-    for i in range(array_len):
-    
-        val = struct.unpack_from('<f', heap_data, current_heap_offset)[0]
-        py_obj.intensities.append(val)
-        current_heap_offset += element_size
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_LaserScan(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_LaserScan(py_obj: LaserScan) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 176
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: LaserScan, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: std_msgs/Header 
+    # offset: 0 size: 136 
+    # array_len: 1
+
+    tmp_py_obj = Header()
+    binary_read_recursive_Header(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.header = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: angle_min 
+    # type_name: float32 
+    # offset: 136 size: 4 
+    # array_len: 1
 
     
-    # Processing: header (single)
+    bin = binary_io.readBinary(binary_data, base_off + 136, 4)
+    py_obj.angle_min = binary_io.binTovalue(type, bin)
     
-    
-    nested_pdu_bytes = py_to_pdu_Header(py_obj.header)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:136] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: angle_min (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 136, py_obj.angle_min)
-    
-    
-    
-    # Processing: angle_max (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 140, py_obj.angle_max)
-    
-    
-    
-    # Processing: angle_increment (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 144, py_obj.angle_increment)
-    
-    
-    
-    # Processing: time_increment (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 148, py_obj.time_increment)
-    
-    
-    
-    # Processing: scan_time (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 152, py_obj.scan_time)
-    
-    
-    
-    # Processing: range_min (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 156, py_obj.range_min)
-    
-    
-    
-    # Processing: range_max (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 160, py_obj.range_max)
-    
-    
-    
-    # Processing: ranges (varray)
-    
-    array_len = len(py_obj.ranges)
-    
-    # 可変長配列の実データを先にヒープに確保
-    elements_heap_bytes = bytearray()
-    
-    for element in py_obj.ranges:
-        elements_heap_bytes += struct.pack('<f', element)
-    heap_offset = heap.allocate(bytes(elements_heap_bytes))
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: angle_max 
+    # type_name: float32 
+    # offset: 140 size: 4 
+    # array_len: 1
 
-    # BaseDataに参照情報を書き込む
-    struct.pack_into(_VARRAY_REF_FORMAT, base_buffer, 164, array_len, heap_offset)
     
+    bin = binary_io.readBinary(binary_data, base_off + 140, 4)
+    py_obj.angle_max = binary_io.binTovalue(type, bin)
     
-    # Processing: intensities (varray)
-    
-    array_len = len(py_obj.intensities)
-    
-    # 可変長配列の実データを先にヒープに確保
-    elements_heap_bytes = bytearray()
-    
-    for element in py_obj.intensities:
-        elements_heap_bytes += struct.pack('<f', element)
-    heap_offset = heap.allocate(bytes(elements_heap_bytes))
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: angle_increment 
+    # type_name: float32 
+    # offset: 144 size: 4 
+    # array_len: 1
 
-    # BaseDataに参照情報を書き込む
-    struct.pack_into(_VARRAY_REF_FORMAT, base_buffer, 172, array_len, heap_offset)
     
+    bin = binary_io.readBinary(binary_data, base_off + 144, 4)
+    py_obj.angle_increment = binary_io.binTovalue(type, bin)
     
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: time_increment 
+    # type_name: float32 
+    # offset: 148 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 148, 4)
+    py_obj.time_increment = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: scan_time 
+    # type_name: float32 
+    # offset: 152 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 152, 4)
+    py_obj.scan_time = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: range_min 
+    # type_name: float32 
+    # offset: 156 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 156, 4)
+    py_obj.range_min = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: range_max 
+    # type_name: float32 
+    # offset: 160 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 160, 4)
+    py_obj.range_max = binary_io.binTovalue(type, bin)
+    
+    # array_type: varray 
+    # data_type: primitive 
+    # member_name: ranges 
+    # type_name: float32 
+    # offset: 164 size: 4 
+    # array_len: 8
+
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 164, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 164 + 4, 4))
+    one_elm_size = 4 
+    array_value = binary_io.readBinary(binary_data, meta.heap_off + offset_from_heap, one_elm_size * array_size)
+    py_obj.ranges = array_value
+    
+    # array_type: varray 
+    # data_type: primitive 
+    # member_name: intensities 
+    # type_name: float32 
+    # offset: 172 size: 4 
+    # array_len: 8
+
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 172, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 172 + 4, 4))
+    one_elm_size = 4 
+    array_value = binary_io.readBinary(binary_data, meta.heap_off + offset_from_heap, one_elm_size * array_size)
+    py_obj.intensities = array_value
+    
+    return py_obj

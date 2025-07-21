@@ -1,50 +1,33 @@
 
 import struct
 from .pdu_pytype_HakoCanBody import HakoCanBody
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoCanBody(pdu_bytes: bytes) -> HakoCanBody:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoCanBody()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: data (array)
-    
-    py_obj.data = []
-    element_size = 1
-    for i in range(8):
-        element_offset = 0 + i * element_size
-    
-        val = struct.unpack_from('<B', base_data, element_offset)[0]
-        py_obj.data.append(val)
-    
-    
-    
+def pdu_to_py_HakoCanBody(binary_data: bytes) -> HakoCanBody:
+    py_obj = HakoCanBody()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoCanBody(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoCanBody(py_obj: HakoCanBody) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 8
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoCanBody(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoCanBody, base_off: int):
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: data 
+    # type_name: uint8 
+    # offset: 0 size: 8 
+    # array_len: 8
 
     
-    # Processing: data (array)
+    array_value = binary_io.readBinary(binary_data, base_off + 0, 8)
+    py_obj.data = binary_io.binToArrayValues(type, array_value)
     
-    element_size = 1
-    for i, element in enumerate(py_obj.data):
-        if i >= 8: break
-        element_offset = 0 + i * element_size
-    
-        struct.pack_into('<B', base_buffer, element_offset, element)
-    
-    
-    
-
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    return py_obj

@@ -1,191 +1,135 @@
 
 import struct
 from .pdu_pytype_GlobalPositionTarget import GlobalPositionTarget
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
-
-from ..std_msgs.pdu_conv_Header import pdu_to_py_, py_to_pdu_
-
-from ..geometry_msgs.pdu_conv_Vector3 import pdu_to_py_, py_to_pdu_
-
-from ..geometry_msgs.pdu_conv_Vector3 import pdu_to_py_, py_to_pdu_
+from ..std_msgs.pdu_conv_Header import *
+from ..geometry_msgs.pdu_conv_Vector3 import *
+from ..geometry_msgs.pdu_conv_Vector3 import *
 
 
-def pdu_to_py_GlobalPositionTarget(pdu_bytes: bytes) -> GlobalPositionTarget:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+
+def pdu_to_py_GlobalPositionTarget(binary_data: bytes) -> GlobalPositionTarget:
     py_obj = GlobalPositionTarget()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: header (single)
-    
-    
-    nested_base_data = base_data[0:136]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.header = pdu_to_py_Header(nested_pdu_bytes)
-    
-    
-    
-    # Processing: coordinate_frame (single)
-    
-    
-    py_obj.coordinate_frame = struct.unpack_from('<B', base_data, 136)[0]
-    
-    
-    
-    # Processing: type_mask (single)
-    
-    
-    py_obj.type_mask = struct.unpack_from('<H', base_data, 138)[0]
-    
-    
-    
-    # Processing: latitude (single)
-    
-    
-    py_obj.latitude = struct.unpack_from('<d', base_data, 144)[0]
-    
-    
-    
-    # Processing: longitude (single)
-    
-    
-    py_obj.longitude = struct.unpack_from('<d', base_data, 152)[0]
-    
-    
-    
-    # Processing: altitude (single)
-    
-    
-    py_obj.altitude = struct.unpack_from('<f', base_data, 160)[0]
-    
-    
-    
-    # Processing: velocity (single)
-    
-    
-    nested_base_data = base_data[168:192]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.velocity = pdu_to_py_Vector3(nested_pdu_bytes)
-    
-    
-    
-    # Processing: acceleration_or_force (single)
-    
-    
-    nested_base_data = base_data[192:216]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.acceleration_or_force = pdu_to_py_Vector3(nested_pdu_bytes)
-    
-    
-    
-    # Processing: yaw (single)
-    
-    
-    py_obj.yaw = struct.unpack_from('<f', base_data, 216)[0]
-    
-    
-    
-    # Processing: yaw_rate (single)
-    
-    
-    py_obj.yaw_rate = struct.unpack_from('<f', base_data, 220)[0]
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_GlobalPositionTarget(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_GlobalPositionTarget(py_obj: GlobalPositionTarget) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 224
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: GlobalPositionTarget, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: std_msgs/Header 
+    # offset: 0 size: 136 
+    # array_len: 1
+
+    tmp_py_obj = Header()
+    binary_read_recursive_Header(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.header = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: coordinate_frame 
+    # type_name: uint8 
+    # offset: 136 size: 1 
+    # array_len: 1
 
     
-    # Processing: header (single)
+    bin = binary_io.readBinary(binary_data, base_off + 136, 1)
+    py_obj.coordinate_frame = binary_io.binTovalue(type, bin)
     
-    
-    nested_pdu_bytes = py_to_pdu_Header(py_obj.header)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:136] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: coordinate_frame (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 136, py_obj.coordinate_frame)
-    
-    
-    
-    # Processing: type_mask (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 138, py_obj.type_mask)
-    
-    
-    
-    # Processing: latitude (single)
-    
-    
-    struct.pack_into('<d', base_buffer, 144, py_obj.latitude)
-    
-    
-    
-    # Processing: longitude (single)
-    
-    
-    struct.pack_into('<d', base_buffer, 152, py_obj.longitude)
-    
-    
-    
-    # Processing: altitude (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 160, py_obj.altitude)
-    
-    
-    
-    # Processing: velocity (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Vector3(py_obj.velocity)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[168:192] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: acceleration_or_force (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Vector3(py_obj.acceleration_or_force)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[192:216] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: yaw (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 216, py_obj.yaw)
-    
-    
-    
-    # Processing: yaw_rate (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 220, py_obj.yaw_rate)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: type_mask 
+    # type_name: uint16 
+    # offset: 138 size: 2 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 138, 2)
+    py_obj.type_mask = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: latitude 
+    # type_name: float64 
+    # offset: 144 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 144, 8)
+    py_obj.latitude = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: longitude 
+    # type_name: float64 
+    # offset: 152 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 152, 8)
+    py_obj.longitude = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: altitude 
+    # type_name: float32 
+    # offset: 160 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 160, 4)
+    py_obj.altitude = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: velocity 
+    # type_name: geometry_msgs/Vector3 
+    # offset: 168 size: 24 
+    # array_len: 1
+
+    tmp_py_obj = Vector3()
+    binary_read_recursive_Vector3(meta, binary_data, tmp_py_obj, base_off + 168)
+    py_obj.velocity = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: acceleration_or_force 
+    # type_name: geometry_msgs/Vector3 
+    # offset: 192 size: 24 
+    # array_len: 1
+
+    tmp_py_obj = Vector3()
+    binary_read_recursive_Vector3(meta, binary_data, tmp_py_obj, base_off + 192)
+    py_obj.acceleration_or_force = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yaw 
+    # type_name: float32 
+    # offset: 216 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 216, 4)
+    py_obj.yaw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yaw_rate 
+    # type_name: float32 
+    # offset: 220 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 220, 4)
+    py_obj.yaw_rate = binary_io.binTovalue(type, bin)
+    
+    return py_obj

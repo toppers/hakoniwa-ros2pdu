@@ -1,69 +1,55 @@
 
 import struct
 from .pdu_pytype_MultiArrayDimension import MultiArrayDimension
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_MultiArrayDimension(pdu_bytes: bytes) -> MultiArrayDimension:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = MultiArrayDimension()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: label (single)
-    
-    
-    py_obj.label = struct.unpack_from('<', base_data, 0)[0]
-    
-    
-    
-    # Processing: size (single)
-    
-    
-    py_obj.size = struct.unpack_from('<I', base_data, 128)[0]
-    
-    
-    
-    # Processing: stride (single)
-    
-    
-    py_obj.stride = struct.unpack_from('<I', base_data, 132)[0]
-    
-    
-    
+def pdu_to_py_MultiArrayDimension(binary_data: bytes) -> MultiArrayDimension:
+    py_obj = MultiArrayDimension()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_MultiArrayDimension(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_MultiArrayDimension(py_obj: MultiArrayDimension) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 136
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_MultiArrayDimension(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: MultiArrayDimension, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: label 
+    # type_name: string 
+    # offset: 0 size: 128 
+    # array_len: 1
 
     
-    # Processing: label (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 128)
+    py_obj.label = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<', base_buffer, 0, py_obj.label)
-    
-    
-    
-    # Processing: size (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 128, py_obj.size)
-    
-    
-    
-    # Processing: stride (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 132, py_obj.stride)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: size 
+    # type_name: uint32 
+    # offset: 128 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 128, 4)
+    py_obj.size = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: stride 
+    # type_name: uint32 
+    # offset: 132 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 132, 4)
+    py_obj.stride = binary_io.binTovalue(type, bin)
+    
+    return py_obj

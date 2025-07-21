@@ -1,75 +1,55 @@
 
 import struct
 from .pdu_pytype_Vector3 import Vector3
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_Vector3(pdu_bytes: bytes) -> Vector3:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = Vector3()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: x (single)
-    
-    
-        
-    py_obj.x = struct.unpack_from('<d', base_data, 0)[0]
-        
-    
-    
-    
-    # Processing: y (single)
-    
-    
-        
-    py_obj.y = struct.unpack_from('<d', base_data, 8)[0]
-        
-    
-    
-    
-    # Processing: z (single)
-    
-    
-        
-    py_obj.z = struct.unpack_from('<d', base_data, 16)[0]
-        
-    
-    
-    
+def pdu_to_py_Vector3(binary_data: bytes) -> Vector3:
+    py_obj = Vector3()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Vector3(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Vector3(py_obj: Vector3) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 24
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_Vector3(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Vector3, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: x 
+    # type_name: float64 
+    # offset: 0 size: 8 
+    # array_len: 1
 
     
-    # Processing: x (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 8)
+    py_obj.x = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<d', base_buffer, 0, py_obj.x)
-    
-    
-    
-    # Processing: y (single)
-    
-    
-    struct.pack_into('<d', base_buffer, 8, py_obj.y)
-    
-    
-    
-    # Processing: z (single)
-    
-    
-    struct.pack_into('<d', base_buffer, 16, py_obj.z)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: y 
+    # type_name: float64 
+    # offset: 8 size: 8 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 8)
+    py_obj.y = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: z 
+    # type_name: float64 
+    # offset: 16 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 16, 8)
+    py_obj.z = binary_io.binTovalue(type, bin)
+    
+    return py_obj

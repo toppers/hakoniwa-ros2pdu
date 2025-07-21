@@ -1,72 +1,45 @@
 
 import struct
 from .pdu_pytype_PoseWithCovariance import PoseWithCovariance
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..geometry_msgs.pdu_conv_Pose import *
 
-from ..geometry_msgs.pdu_conv_Pose import pdu_to_py_, py_to_pdu_
 
 
-def pdu_to_py_PoseWithCovariance(pdu_bytes: bytes) -> PoseWithCovariance:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_PoseWithCovariance(binary_data: bytes) -> PoseWithCovariance:
     py_obj = PoseWithCovariance()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: pose (single)
-    
-    
-    nested_base_data = base_data[0:56]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.pose = pdu_to_py_Pose(nested_pdu_bytes)
-    
-    
-    
-    # Processing: covariance (array)
-    
-    py_obj.covariance = []
-    element_size = 8
-    for i in range(36):
-        element_offset = 56 + i * element_size
-    
-        val = struct.unpack_from('<d', base_data, element_offset)[0]
-        py_obj.covariance.append(val)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_PoseWithCovariance(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_PoseWithCovariance(py_obj: PoseWithCovariance) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 344
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_PoseWithCovariance(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: PoseWithCovariance, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: pose 
+    # type_name: Pose 
+    # offset: 0 size: 56 
+    # array_len: 1
+
+    tmp_py_obj = Pose()
+    binary_read_recursive_Pose(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.pose = tmp_py_obj
+    
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: covariance 
+    # type_name: float64 
+    # offset: 56 size: 288 
+    # array_len: 36
 
     
-    # Processing: pose (single)
+    array_value = binary_io.readBinary(binary_data, base_off + 56, 288)
+    py_obj.covariance = binary_io.binToArrayValues(type, array_value)
     
-    
-    nested_pdu_bytes = py_to_pdu_Pose(py_obj.pose)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:56] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: covariance (array)
-    
-    element_size = 8
-    for i, element in enumerate(py_obj.covariance):
-        if i >= 36: break
-        element_offset = 56 + i * element_size
-    
-        struct.pack_into('<d', base_buffer, element_offset, element)
-    
-    
-    
-
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    return py_obj

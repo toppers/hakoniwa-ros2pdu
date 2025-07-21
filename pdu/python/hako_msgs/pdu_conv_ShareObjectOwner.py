@@ -1,91 +1,67 @@
 
 import struct
 from .pdu_pytype_ShareObjectOwner import ShareObjectOwner
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..geometry_msgs.pdu_conv_Twist import *
 
-from ..geometry_msgs.pdu_conv_Twist import pdu_to_py_, py_to_pdu_
 
 
-def pdu_to_py_ShareObjectOwner(pdu_bytes: bytes) -> ShareObjectOwner:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_ShareObjectOwner(binary_data: bytes) -> ShareObjectOwner:
     py_obj = ShareObjectOwner()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: object_name (single)
-    
-    
-    py_obj.object_name = struct.unpack_from('<', base_data, 0)[0]
-    
-    
-    
-    # Processing: owner_id (single)
-    
-    
-    py_obj.owner_id = struct.unpack_from('<I', base_data, 128)[0]
-    
-    
-    
-    # Processing: last_update (single)
-    
-    
-    py_obj.last_update = struct.unpack_from('<Q', base_data, 136)[0]
-    
-    
-    
-    # Processing: pos (single)
-    
-    
-    nested_base_data = base_data[144:192]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.pos = pdu_to_py_Twist(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_ShareObjectOwner(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_ShareObjectOwner(py_obj: ShareObjectOwner) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 192
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_ShareObjectOwner(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: ShareObjectOwner, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: object_name 
+    # type_name: string 
+    # offset: 0 size: 128 
+    # array_len: 1
 
     
-    # Processing: object_name (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 128)
+    py_obj.object_name = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<', base_buffer, 0, py_obj.object_name)
-    
-    
-    
-    # Processing: owner_id (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 128, py_obj.owner_id)
-    
-    
-    
-    # Processing: last_update (single)
-    
-    
-    struct.pack_into('<Q', base_buffer, 136, py_obj.last_update)
-    
-    
-    
-    # Processing: pos (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Twist(py_obj.pos)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[144:192] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: owner_id 
+    # type_name: uint32 
+    # offset: 128 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 128, 4)
+    py_obj.owner_id = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: last_update 
+    # type_name: uint64 
+    # offset: 136 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 136, 8)
+    py_obj.last_update = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: pos 
+    # type_name: geometry_msgs/Twist 
+    # offset: 144 size: 48 
+    # array_len: 1
+
+    tmp_py_obj = Twist()
+    binary_read_recursive_Twist(meta, binary_data, tmp_py_obj, base_off + 144)
+    py_obj.pos = tmp_py_obj
+    
+    return py_obj

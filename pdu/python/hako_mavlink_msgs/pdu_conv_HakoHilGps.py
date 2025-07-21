@@ -1,237 +1,187 @@
 
 import struct
 from .pdu_pytype_HakoHilGps import HakoHilGps
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoHilGps(pdu_bytes: bytes) -> HakoHilGps:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoHilGps()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: time_usec (single)
-    
-    
-    py_obj.time_usec = struct.unpack_from('<Q', base_data, 0)[0]
-    
-    
-    
-    # Processing: lat (single)
-    
-    
-    py_obj.lat = struct.unpack_from('<i', base_data, 8)[0]
-    
-    
-    
-    # Processing: lon (single)
-    
-    
-    py_obj.lon = struct.unpack_from('<i', base_data, 12)[0]
-    
-    
-    
-    # Processing: alt (single)
-    
-    
-    py_obj.alt = struct.unpack_from('<i', base_data, 16)[0]
-    
-    
-    
-    # Processing: eph (single)
-    
-    
-    py_obj.eph = struct.unpack_from('<H', base_data, 20)[0]
-    
-    
-    
-    # Processing: epv (single)
-    
-    
-    py_obj.epv = struct.unpack_from('<H', base_data, 22)[0]
-    
-    
-    
-    # Processing: vel (single)
-    
-    
-    py_obj.vel = struct.unpack_from('<H', base_data, 24)[0]
-    
-    
-    
-    # Processing: vn (single)
-    
-    
-    py_obj.vn = struct.unpack_from('<h', base_data, 26)[0]
-    
-    
-    
-    # Processing: ve (single)
-    
-    
-    py_obj.ve = struct.unpack_from('<h', base_data, 28)[0]
-    
-    
-    
-    # Processing: vd (single)
-    
-    
-    py_obj.vd = struct.unpack_from('<h', base_data, 30)[0]
-    
-    
-    
-    # Processing: cog (single)
-    
-    
-    py_obj.cog = struct.unpack_from('<H', base_data, 32)[0]
-    
-    
-    
-    # Processing: satellites_visible (single)
-    
-    
-    py_obj.satellites_visible = struct.unpack_from('<B', base_data, 34)[0]
-    
-    
-    
-    # Processing: id (single)
-    
-    
-    py_obj.id = struct.unpack_from('<B', base_data, 35)[0]
-    
-    
-    
-    # Processing: yaw (single)
-    
-    
-    py_obj.yaw = struct.unpack_from('<B', base_data, 36)[0]
-    
-    
-    
-    # Processing: fix_type (single)
-    
-    
-    py_obj.fix_type = struct.unpack_from('<B', base_data, 37)[0]
-    
-    
-    
+def pdu_to_py_HakoHilGps(binary_data: bytes) -> HakoHilGps:
+    py_obj = HakoHilGps()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoHilGps(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoHilGps(py_obj: HakoHilGps) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 38
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoHilGps, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: time_usec 
+    # type_name: uint64 
+    # offset: 0 size: 8 
+    # array_len: 1
 
     
-    # Processing: time_usec (single)
-    
-    
-    struct.pack_into('<Q', base_buffer, 0, py_obj.time_usec)
-    
-    
-    
-    # Processing: lat (single)
-    
-    
-    struct.pack_into('<i', base_buffer, 8, py_obj.lat)
-    
-    
-    
-    # Processing: lon (single)
-    
-    
-    struct.pack_into('<i', base_buffer, 12, py_obj.lon)
-    
-    
-    
-    # Processing: alt (single)
-    
-    
-    struct.pack_into('<i', base_buffer, 16, py_obj.alt)
-    
-    
-    
-    # Processing: eph (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 20, py_obj.eph)
-    
-    
-    
-    # Processing: epv (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 22, py_obj.epv)
-    
-    
-    
-    # Processing: vel (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 24, py_obj.vel)
-    
-    
-    
-    # Processing: vn (single)
-    
-    
-    struct.pack_into('<h', base_buffer, 26, py_obj.vn)
-    
-    
-    
-    # Processing: ve (single)
-    
-    
-    struct.pack_into('<h', base_buffer, 28, py_obj.ve)
-    
-    
-    
-    # Processing: vd (single)
-    
-    
-    struct.pack_into('<h', base_buffer, 30, py_obj.vd)
-    
-    
-    
-    # Processing: cog (single)
-    
-    
-    struct.pack_into('<H', base_buffer, 32, py_obj.cog)
-    
-    
-    
-    # Processing: satellites_visible (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 34, py_obj.satellites_visible)
-    
-    
-    
-    # Processing: id (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 35, py_obj.id)
-    
-    
-    
-    # Processing: yaw (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 36, py_obj.yaw)
-    
-    
-    
-    # Processing: fix_type (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 37, py_obj.fix_type)
-    
-    
-    
+    bin = binary_io.readBinary(binary_data, base_off + 0, 8)
+    py_obj.time_usec = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: lat 
+    # type_name: int32 
+    # offset: 8 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 4)
+    py_obj.lat = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: lon 
+    # type_name: int32 
+    # offset: 12 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 12, 4)
+    py_obj.lon = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: alt 
+    # type_name: int32 
+    # offset: 16 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 16, 4)
+    py_obj.alt = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: eph 
+    # type_name: uint16 
+    # offset: 20 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 20, 2)
+    py_obj.eph = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: epv 
+    # type_name: uint16 
+    # offset: 22 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 22, 2)
+    py_obj.epv = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: vel 
+    # type_name: uint16 
+    # offset: 24 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 24, 2)
+    py_obj.vel = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: vn 
+    # type_name: int16 
+    # offset: 26 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 26, 2)
+    py_obj.vn = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: ve 
+    # type_name: int16 
+    # offset: 28 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 28, 2)
+    py_obj.ve = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: vd 
+    # type_name: int16 
+    # offset: 30 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 30, 2)
+    py_obj.vd = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: cog 
+    # type_name: uint16 
+    # offset: 32 size: 2 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 32, 2)
+    py_obj.cog = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: satellites_visible 
+    # type_name: uint8 
+    # offset: 34 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 34, 1)
+    py_obj.satellites_visible = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: id 
+    # type_name: uint8 
+    # offset: 35 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 35, 1)
+    py_obj.id = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yaw 
+    # type_name: uint8 
+    # offset: 36 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 36, 1)
+    py_obj.yaw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: fix_type 
+    # type_name: uint8 
+    # offset: 37 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 37, 1)
+    py_obj.fix_type = binary_io.binTovalue(type, bin)
+    
+    return py_obj

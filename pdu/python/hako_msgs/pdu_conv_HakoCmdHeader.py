@@ -1,69 +1,55 @@
 
 import struct
 from .pdu_pytype_HakoCmdHeader import HakoCmdHeader
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoCmdHeader(pdu_bytes: bytes) -> HakoCmdHeader:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoCmdHeader()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: request (single)
-    
-    
-    py_obj.request = struct.unpack_from('<?', base_data, 0)[0]
-    
-    
-    
-    # Processing: result (single)
-    
-    
-    py_obj.result = struct.unpack_from('<?', base_data, 4)[0]
-    
-    
-    
-    # Processing: result_code (single)
-    
-    
-    py_obj.result_code = struct.unpack_from('<i', base_data, 8)[0]
-    
-    
-    
+def pdu_to_py_HakoCmdHeader(binary_data: bytes) -> HakoCmdHeader:
+    py_obj = HakoCmdHeader()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoCmdHeader(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoCmdHeader(py_obj: HakoCmdHeader) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 12
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoCmdHeader(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoCmdHeader, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: request 
+    # type_name: bool 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: request (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.request = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<?', base_buffer, 0, py_obj.request)
-    
-    
-    
-    # Processing: result (single)
-    
-    
-    struct.pack_into('<?', base_buffer, 4, py_obj.result)
-    
-    
-    
-    # Processing: result_code (single)
-    
-    
-    struct.pack_into('<i', base_buffer, 8, py_obj.result_code)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: result 
+    # type_name: bool 
+    # offset: 4 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.result = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: result_code 
+    # type_name: int32 
+    # offset: 8 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 4)
+    py_obj.result_code = binary_io.binTovalue(type, bin)
+    
+    return py_obj

@@ -1,97 +1,77 @@
 
 import struct
 from .pdu_pytype_HakoBatteryStatus import HakoBatteryStatus
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoBatteryStatus(pdu_bytes: bytes) -> HakoBatteryStatus:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoBatteryStatus()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: full_voltage (single)
-    
-    
-    py_obj.full_voltage = struct.unpack_from('<d', base_data, 0)[0]
-    
-    
-    
-    # Processing: curr_voltage (single)
-    
-    
-    py_obj.curr_voltage = struct.unpack_from('<d', base_data, 8)[0]
-    
-    
-    
-    # Processing: curr_temp (single)
-    
-    
-    py_obj.curr_temp = struct.unpack_from('<d', base_data, 16)[0]
-    
-    
-    
-    # Processing: status (single)
-    
-    
-    py_obj.status = struct.unpack_from('<I', base_data, 24)[0]
-    
-    
-    
-    # Processing: cycles (single)
-    
-    
-    py_obj.cycles = struct.unpack_from('<I', base_data, 28)[0]
-    
-    
-    
+def pdu_to_py_HakoBatteryStatus(binary_data: bytes) -> HakoBatteryStatus:
+    py_obj = HakoBatteryStatus()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoBatteryStatus(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoBatteryStatus(py_obj: HakoBatteryStatus) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 32
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoBatteryStatus(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoBatteryStatus, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: full_voltage 
+    # type_name: float64 
+    # offset: 0 size: 8 
+    # array_len: 1
 
     
-    # Processing: full_voltage (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 8)
+    py_obj.full_voltage = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<d', base_buffer, 0, py_obj.full_voltage)
-    
-    
-    
-    # Processing: curr_voltage (single)
-    
-    
-    struct.pack_into('<d', base_buffer, 8, py_obj.curr_voltage)
-    
-    
-    
-    # Processing: curr_temp (single)
-    
-    
-    struct.pack_into('<d', base_buffer, 16, py_obj.curr_temp)
-    
-    
-    
-    # Processing: status (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 24, py_obj.status)
-    
-    
-    
-    # Processing: cycles (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 28, py_obj.cycles)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: curr_voltage 
+    # type_name: float64 
+    # offset: 8 size: 8 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 8)
+    py_obj.curr_voltage = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: curr_temp 
+    # type_name: float64 
+    # offset: 16 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 16, 8)
+    py_obj.curr_temp = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: status 
+    # type_name: uint32 
+    # offset: 24 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 24, 4)
+    py_obj.status = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: cycles 
+    # type_name: uint32 
+    # offset: 28 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 28, 4)
+    py_obj.cycles = binary_io.binTovalue(type, bin)
+    
+    return py_obj

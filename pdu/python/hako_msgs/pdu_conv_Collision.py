@@ -1,120 +1,86 @@
 
 import struct
 from .pdu_pytype_Collision import Collision
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
-
-from ..geometry_msgs.pdu_conv_Vector3 import pdu_to_py_, py_to_pdu_
-
-from ..geometry_msgs.pdu_conv_Point import pdu_to_py_, py_to_pdu_
+from ..geometry_msgs.pdu_conv_Vector3 import *
+from ..geometry_msgs.pdu_conv_Point import *
 
 
-def pdu_to_py_Collision(pdu_bytes: bytes) -> Collision:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+
+def pdu_to_py_Collision(binary_data: bytes) -> Collision:
     py_obj = Collision()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: collision (single)
-    
-    
-    py_obj.collision = struct.unpack_from('<?', base_data, 0)[0]
-    
-    
-    
-    # Processing: contact_num (single)
-    
-    
-    py_obj.contact_num = struct.unpack_from('<I', base_data, 4)[0]
-    
-    
-    
-    # Processing: relative_velocity (single)
-    
-    
-    nested_base_data = base_data[8:32]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.relative_velocity = pdu_to_py_Vector3(nested_pdu_bytes)
-    
-    
-    
-    # Processing: contact_position (array)
-    
-    py_obj.contact_position = []
-    element_size = 24
-    for i in range(10):
-        element_offset = 32 + i * element_size
-    
-        nested_base_data = base_data[element_offset : element_offset + element_size]
-        nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-        val = pdu_to_py_Point(nested_pdu_bytes)
-        py_obj.contact_position.append(val)
-    
-    
-    
-    # Processing: restitution_coefficient (single)
-    
-    
-    py_obj.restitution_coefficient = struct.unpack_from('<d', base_data, 272)[0]
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Collision(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Collision(py_obj: Collision) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 280
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_Collision(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Collision, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: collision 
+    # type_name: bool 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: collision (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.collision = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<?', base_buffer, 0, py_obj.collision)
-    
-    
-    
-    # Processing: contact_num (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 4, py_obj.contact_num)
-    
-    
-    
-    # Processing: relative_velocity (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Vector3(py_obj.relative_velocity)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[8:32] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: contact_position (array)
-    
-    element_size = 24
-    for i, element in enumerate(py_obj.contact_position):
-        if i >= 10: break
-        element_offset = 32 + i * element_size
-    
-        nested_pdu_bytes = py_to_pdu_Point(element)
-        _m, nested_base_data, _nhd = unpack_pdu(nested_pdu_bytes)
-        base_buffer[element_offset : element_offset + element_size] = nested_base_data
-    
-    
-    
-    # Processing: restitution_coefficient (single)
-    
-    
-    struct.pack_into('<d', base_buffer, 272, py_obj.restitution_coefficient)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: contact_num 
+    # type_name: uint32 
+    # offset: 4 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.contact_num = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: relative_velocity 
+    # type_name: geometry_msgs/Vector3 
+    # offset: 8 size: 24 
+    # array_len: 1
+
+    tmp_py_obj = Vector3()
+    binary_read_recursive_Vector3(meta, binary_data, tmp_py_obj, base_off + 8)
+    py_obj.relative_velocity = tmp_py_obj
+    
+    # array_type: array 
+    # data_type: struct 
+    # member_name: contact_position 
+    # type_name: geometry_msgs/Point 
+    # offset: 32 size: 240 
+    # array_len: 10
+
+    i = 0
+    array_size = 10
+    one_elm_size = int(240) / array_size
+    array_value = []
+    while i < array_size:
+        tmp_py_obj = Point()
+        binary_read_recursive_Point(meta, binary_data, tmp_py_obj, 32 + (i * one_elm_size))
+        array_value.append(tmp_py_obj)
+        i = i + 1
+    py_obj.contact_position = array_value    
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: restitution_coefficient 
+    # type_name: float64 
+    # offset: 272 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 272, 8)
+    py_obj.restitution_coefficient = binary_io.binTovalue(type, bin)
+    
+    return py_obj

@@ -1,97 +1,77 @@
 
 import struct
 from .pdu_pytype_HakoCanHead import HakoCanHead
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoCanHead(pdu_bytes: bytes) -> HakoCanHead:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoCanHead()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: channel (single)
-    
-    
-    py_obj.channel = struct.unpack_from('<I', base_data, 0)[0]
-    
-    
-    
-    # Processing: ide (single)
-    
-    
-    py_obj.ide = struct.unpack_from('<I', base_data, 4)[0]
-    
-    
-    
-    # Processing: rtr (single)
-    
-    
-    py_obj.rtr = struct.unpack_from('<I', base_data, 8)[0]
-    
-    
-    
-    # Processing: dlc (single)
-    
-    
-    py_obj.dlc = struct.unpack_from('<I', base_data, 12)[0]
-    
-    
-    
-    # Processing: canid (single)
-    
-    
-    py_obj.canid = struct.unpack_from('<I', base_data, 16)[0]
-    
-    
-    
+def pdu_to_py_HakoCanHead(binary_data: bytes) -> HakoCanHead:
+    py_obj = HakoCanHead()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoCanHead(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoCanHead(py_obj: HakoCanHead) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 20
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoCanHead(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoCanHead, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: channel 
+    # type_name: uint32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: channel (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.channel = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<I', base_buffer, 0, py_obj.channel)
-    
-    
-    
-    # Processing: ide (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 4, py_obj.ide)
-    
-    
-    
-    # Processing: rtr (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 8, py_obj.rtr)
-    
-    
-    
-    # Processing: dlc (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 12, py_obj.dlc)
-    
-    
-    
-    # Processing: canid (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 16, py_obj.canid)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: ide 
+    # type_name: uint32 
+    # offset: 4 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.ide = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: rtr 
+    # type_name: uint32 
+    # offset: 8 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 4)
+    py_obj.rtr = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: dlc 
+    # type_name: uint32 
+    # offset: 12 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 12, 4)
+    py_obj.dlc = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: canid 
+    # type_name: uint32 
+    # offset: 16 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 16, 4)
+    py_obj.canid = binary_io.binTovalue(type, bin)
+    
+    return py_obj

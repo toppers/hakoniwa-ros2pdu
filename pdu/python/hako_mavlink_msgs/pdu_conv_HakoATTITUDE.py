@@ -1,125 +1,99 @@
 
 import struct
 from .pdu_pytype_HakoATTITUDE import HakoATTITUDE
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoATTITUDE(pdu_bytes: bytes) -> HakoATTITUDE:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoATTITUDE()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: time_boot_ms (single)
-    
-    
-    py_obj.time_boot_ms = struct.unpack_from('<I', base_data, 0)[0]
-    
-    
-    
-    # Processing: roll (single)
-    
-    
-    py_obj.roll = struct.unpack_from('<f', base_data, 4)[0]
-    
-    
-    
-    # Processing: pitch (single)
-    
-    
-    py_obj.pitch = struct.unpack_from('<f', base_data, 8)[0]
-    
-    
-    
-    # Processing: yaw (single)
-    
-    
-    py_obj.yaw = struct.unpack_from('<f', base_data, 12)[0]
-    
-    
-    
-    # Processing: rollspeed (single)
-    
-    
-    py_obj.rollspeed = struct.unpack_from('<f', base_data, 16)[0]
-    
-    
-    
-    # Processing: pitchspeed (single)
-    
-    
-    py_obj.pitchspeed = struct.unpack_from('<f', base_data, 20)[0]
-    
-    
-    
-    # Processing: yawspeed (single)
-    
-    
-    py_obj.yawspeed = struct.unpack_from('<f', base_data, 24)[0]
-    
-    
-    
+def pdu_to_py_HakoATTITUDE(binary_data: bytes) -> HakoATTITUDE:
+    py_obj = HakoATTITUDE()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoATTITUDE(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoATTITUDE(py_obj: HakoATTITUDE) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 28
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoATTITUDE, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: time_boot_ms 
+    # type_name: uint32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: time_boot_ms (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.time_boot_ms = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<I', base_buffer, 0, py_obj.time_boot_ms)
-    
-    
-    
-    # Processing: roll (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 4, py_obj.roll)
-    
-    
-    
-    # Processing: pitch (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 8, py_obj.pitch)
-    
-    
-    
-    # Processing: yaw (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 12, py_obj.yaw)
-    
-    
-    
-    # Processing: rollspeed (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 16, py_obj.rollspeed)
-    
-    
-    
-    # Processing: pitchspeed (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 20, py_obj.pitchspeed)
-    
-    
-    
-    # Processing: yawspeed (single)
-    
-    
-    struct.pack_into('<f', base_buffer, 24, py_obj.yawspeed)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: roll 
+    # type_name: float32 
+    # offset: 4 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.roll = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: pitch 
+    # type_name: float32 
+    # offset: 8 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 4)
+    py_obj.pitch = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yaw 
+    # type_name: float32 
+    # offset: 12 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 12, 4)
+    py_obj.yaw = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: rollspeed 
+    # type_name: float32 
+    # offset: 16 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 16, 4)
+    py_obj.rollspeed = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: pitchspeed 
+    # type_name: float32 
+    # offset: 20 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 20, 4)
+    py_obj.pitchspeed = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yawspeed 
+    # type_name: float32 
+    # offset: 24 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 24, 4)
+    py_obj.yawspeed = binary_io.binTovalue(type, bin)
+    
+    return py_obj

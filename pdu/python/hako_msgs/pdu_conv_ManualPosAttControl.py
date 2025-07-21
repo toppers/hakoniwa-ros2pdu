@@ -1,63 +1,45 @@
 
 import struct
 from .pdu_pytype_ManualPosAttControl import ManualPosAttControl
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..geometry_msgs.pdu_conv_Twist import *
 
-from ..geometry_msgs.pdu_conv_Twist import pdu_to_py_, py_to_pdu_
 
 
-def pdu_to_py_ManualPosAttControl(pdu_bytes: bytes) -> ManualPosAttControl:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_ManualPosAttControl(binary_data: bytes) -> ManualPosAttControl:
     py_obj = ManualPosAttControl()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: do_operation (single)
-    
-    
-    py_obj.do_operation = struct.unpack_from('<?', base_data, 0)[0]
-    
-    
-    
-    # Processing: posatt (single)
-    
-    
-    nested_base_data = base_data[8:56]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.posatt = pdu_to_py_Twist(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_ManualPosAttControl(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_ManualPosAttControl(py_obj: ManualPosAttControl) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 56
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_ManualPosAttControl(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: ManualPosAttControl, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: do_operation 
+    # type_name: bool 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: do_operation (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.do_operation = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<?', base_buffer, 0, py_obj.do_operation)
-    
-    
-    
-    # Processing: posatt (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Twist(py_obj.posatt)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[8:56] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: posatt 
+    # type_name: geometry_msgs/Twist 
+    # offset: 8 size: 48 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    tmp_py_obj = Twist()
+    binary_read_recursive_Twist(meta, binary_data, tmp_py_obj, base_off + 8)
+    py_obj.posatt = tmp_py_obj
+    
+    return py_obj

@@ -1,92 +1,66 @@
 
 import struct
 from .pdu_pytype_HakoHilActuatorControls import HakoHilActuatorControls
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_HakoHilActuatorControls(pdu_bytes: bytes) -> HakoHilActuatorControls:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = HakoHilActuatorControls()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: time_usec (single)
-    
-    
-    py_obj.time_usec = struct.unpack_from('<Q', base_data, 0)[0]
-    
-    
-    
-    # Processing: controls (array)
-    
-    py_obj.controls = []
-    element_size = 4
-    for i in range(16):
-        element_offset = 8 + i * element_size
-    
-        val = struct.unpack_from('<f', base_data, element_offset)[0]
-        py_obj.controls.append(val)
-    
-    
-    
-    # Processing: mode (single)
-    
-    
-    py_obj.mode = struct.unpack_from('<B', base_data, 72)[0]
-    
-    
-    
-    # Processing: flags (single)
-    
-    
-    py_obj.flags = struct.unpack_from('<Q', base_data, 80)[0]
-    
-    
-    
+def pdu_to_py_HakoHilActuatorControls(binary_data: bytes) -> HakoHilActuatorControls:
+    py_obj = HakoHilActuatorControls()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoHilActuatorControls(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoHilActuatorControls(py_obj: HakoHilActuatorControls) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 88
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoHilActuatorControls(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoHilActuatorControls, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: time_usec 
+    # type_name: uint64 
+    # offset: 0 size: 8 
+    # array_len: 1
 
     
-    # Processing: time_usec (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 8)
+    py_obj.time_usec = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<Q', base_buffer, 0, py_obj.time_usec)
-    
-    
-    
-    # Processing: controls (array)
-    
-    element_size = 4
-    for i, element in enumerate(py_obj.controls):
-        if i >= 16: break
-        element_offset = 8 + i * element_size
-    
-        struct.pack_into('<f', base_buffer, element_offset, element)
-    
-    
-    
-    # Processing: mode (single)
-    
-    
-    struct.pack_into('<B', base_buffer, 72, py_obj.mode)
-    
-    
-    
-    # Processing: flags (single)
-    
-    
-    struct.pack_into('<Q', base_buffer, 80, py_obj.flags)
-    
-    
-    
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: controls 
+    # type_name: float32 
+    # offset: 8 size: 64 
+    # array_len: 16
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    array_value = binary_io.readBinary(binary_data, base_off + 8, 64)
+    py_obj.controls = binary_io.binToArrayValues(type, array_value)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: mode 
+    # type_name: uint8 
+    # offset: 72 size: 1 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 72, 1)
+    py_obj.mode = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: flags 
+    # type_name: uint64 
+    # offset: 80 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 80, 8)
+    py_obj.flags = binary_io.binTovalue(type, bin)
+    
+    return py_obj

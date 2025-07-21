@@ -1,65 +1,42 @@
 
 import struct
 from .pdu_pytype_TFMessage import TFMessage
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..geometry_msgs.pdu_conv_TransformStamped import *
 
-from ..geometry_msgs.pdu_conv_TransformStamped import pdu_to_py_TransformStamped, py_to_pdu_TransformStamped
 
 
-def pdu_to_py_TFMessage(pdu_bytes: bytes) -> TFMessage:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_TFMessage(binary_data: bytes) -> TFMessage:
     py_obj = TFMessage()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: transforms (varray)
-    
-    ref_offset = 0
-    array_len, heap_offset = struct.unpack_from(_VARRAY_REF_FORMAT, base_data, ref_offset)
-    py_obj.transforms = []
-    element_size = 320
-    current_heap_offset = heap_offset
-    for i in range(array_len):
-    
-        nested_pdu_bytes = heap_data[current_heap_offset:]
-        val = pdu_to_py_TransformStamped(nested_pdu_bytes)
-        py_obj.transforms.append(val)
-        # Move offset by the total size of the nested PDU
-        _m, _b, nested_heap = unpack_pdu(nested_pdu_bytes)
-        current_heap_offset += _m['total_size']
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_TFMessage(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_TFMessage(py_obj: TFMessage) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 320
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
 
-    
-    # Processing: transforms (varray)
-    
-    array_len = len(py_obj.transforms)
-    
-    # 可変長配列の実データを先にヒープに確保
-    elements_heap_bytes = bytearray()
-    
-    # 構造体の可変長配列
-    for element in py_obj.transforms:
-        nested_pdu_bytes = py_to_pdu_TransformStamped(element)
-        elements_heap_bytes += nested_pdu_bytes
-    heap_offset = heap.allocate(bytes(elements_heap_bytes))
-    
+def binary_read_recursive_TFMessage(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: TFMessage, base_off: int):
+    # array_type: varray 
+    # data_type: struct 
+    # member_name: transforms 
+    # type_name: geometry_msgs/TransformStamped 
+    # offset: 0 size: 320 
+    # array_len: 8
 
-    # BaseDataに参照情報を書き込む
-    struct.pack_into(_VARRAY_REF_FORMAT, base_buffer, 0, array_len, heap_offset)
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 0, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 0 + 4, 4))
+    one_elm_size = 320
+    i = 0
+    array_value = []
+    while i < array_size:
+        tmp_py_obj = TransformStamped()
+        binary_read_recursive_TransformStamped(meta, binary_data, tmp_py_obj, meta.heap_off + offset_from_heap + (i * one_elm_size))
+        array_value.append(tmp_py_obj)
+        i = i + 1
+    py_obj.transforms = array_value    
     
-    
-
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    return py_obj

@@ -1,77 +1,56 @@
 
 import struct
 from .pdu_pytype_MonitorCameraData import MonitorCameraData
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..sensor_msgs.pdu_conv_CompressedImage import *
 
-from ..sensor_msgs.pdu_conv_CompressedImage import pdu_to_py_, py_to_pdu_
 
 
-def pdu_to_py_MonitorCameraData(pdu_bytes: bytes) -> MonitorCameraData:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_MonitorCameraData(binary_data: bytes) -> MonitorCameraData:
     py_obj = MonitorCameraData()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: request_id (single)
-    
-    
-    py_obj.request_id = struct.unpack_from('<i', base_data, 0)[0]
-    
-    
-    
-    # Processing: image_data_length (single)
-    
-    
-    py_obj.image_data_length = struct.unpack_from('<i', base_data, 4)[0]
-    
-    
-    
-    # Processing: image (single)
-    
-    
-    nested_base_data = base_data[8:280]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.image = pdu_to_py_CompressedImage(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_MonitorCameraData(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_MonitorCameraData(py_obj: MonitorCameraData) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 280
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_MonitorCameraData(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: MonitorCameraData, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: request_id 
+    # type_name: int32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: request_id (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.request_id = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<i', base_buffer, 0, py_obj.request_id)
-    
-    
-    
-    # Processing: image_data_length (single)
-    
-    
-    struct.pack_into('<i', base_buffer, 4, py_obj.image_data_length)
-    
-    
-    
-    # Processing: image (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_CompressedImage(py_obj.image)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[8:280] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: image_data_length 
+    # type_name: int32 
+    # offset: 4 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.image_data_length = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: image 
+    # type_name: sensor_msgs/CompressedImage 
+    # offset: 8 size: 272 
+    # array_len: 1
+
+    tmp_py_obj = CompressedImage()
+    binary_read_recursive_CompressedImage(meta, binary_data, tmp_py_obj, base_off + 8)
+    py_obj.image = tmp_py_obj
+    
+    return py_obj

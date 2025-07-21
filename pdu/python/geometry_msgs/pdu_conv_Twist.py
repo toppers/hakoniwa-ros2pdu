@@ -1,71 +1,46 @@
 
 import struct
 from .pdu_pytype_Twist import Twist
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
-
-from ..geometry_msgs.pdu_conv_Vector3 import pdu_to_py_, py_to_pdu_
-
-from ..geometry_msgs.pdu_conv_Vector3 import pdu_to_py_, py_to_pdu_
+from ..geometry_msgs.pdu_conv_Vector3 import *
+from ..geometry_msgs.pdu_conv_Vector3 import *
 
 
-def pdu_to_py_Twist(pdu_bytes: bytes) -> Twist:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+
+def pdu_to_py_Twist(binary_data: bytes) -> Twist:
     py_obj = Twist()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: linear (single)
-    
-    
-    nested_base_data = base_data[0:24]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.linear = pdu_to_py_Vector3(nested_pdu_bytes)
-    
-    
-    
-    # Processing: angular (single)
-    
-    
-    nested_base_data = base_data[24:48]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.angular = pdu_to_py_Vector3(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Twist(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Twist(py_obj: Twist) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 48
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
 
-    
-    # Processing: linear (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Vector3(py_obj.linear)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:24] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: angular (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Vector3(py_obj.angular)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[24:48] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+def binary_read_recursive_Twist(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Twist, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: linear 
+    # type_name: Vector3 
+    # offset: 0 size: 24 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    tmp_py_obj = Vector3()
+    binary_read_recursive_Vector3(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.linear = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: angular 
+    # type_name: Vector3 
+    # offset: 24 size: 24 
+    # array_len: 1
+
+    tmp_py_obj = Vector3()
+    binary_read_recursive_Vector3(meta, binary_data, tmp_py_obj, base_off + 24)
+    py_obj.angular = tmp_py_obj
+    
+    return py_obj

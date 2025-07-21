@@ -1,63 +1,45 @@
 
 import struct
 from .pdu_pytype_HakoCameraInfo import HakoCameraInfo
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..geometry_msgs.pdu_conv_Vector3 import *
 
-from ..geometry_msgs.pdu_conv_Vector3 import pdu_to_py_, py_to_pdu_
 
 
-def pdu_to_py_HakoCameraInfo(pdu_bytes: bytes) -> HakoCameraInfo:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_HakoCameraInfo(binary_data: bytes) -> HakoCameraInfo:
     py_obj = HakoCameraInfo()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: request_id (single)
-    
-    
-    py_obj.request_id = struct.unpack_from('<i', base_data, 0)[0]
-    
-    
-    
-    # Processing: angle (single)
-    
-    
-    nested_base_data = base_data[8:32]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.angle = pdu_to_py_Vector3(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_HakoCameraInfo(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_HakoCameraInfo(py_obj: HakoCameraInfo) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 32
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_HakoCameraInfo(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoCameraInfo, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: request_id 
+    # type_name: int32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: request_id (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.request_id = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<i', base_buffer, 0, py_obj.request_id)
-    
-    
-    
-    # Processing: angle (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Vector3(py_obj.angle)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[8:32] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: angle 
+    # type_name: geometry_msgs/Vector3 
+    # offset: 8 size: 24 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    tmp_py_obj = Vector3()
+    binary_read_recursive_Vector3(meta, binary_data, tmp_py_obj, base_off + 8)
+    py_obj.angle = tmp_py_obj
+    
+    return py_obj

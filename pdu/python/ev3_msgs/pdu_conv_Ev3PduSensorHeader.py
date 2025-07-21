@@ -1,97 +1,77 @@
 
 import struct
 from .pdu_pytype_Ev3PduSensorHeader import Ev3PduSensorHeader
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_Ev3PduSensorHeader(pdu_bytes: bytes) -> Ev3PduSensorHeader:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = Ev3PduSensorHeader()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: name (single)
-    
-    
-    py_obj.name = struct.unpack_from('<', base_data, 0)[0]
-    
-    
-    
-    # Processing: version (single)
-    
-    
-    py_obj.version = struct.unpack_from('<I', base_data, 128)[0]
-    
-    
-    
-    # Processing: hakoniwa_time (single)
-    
-    
-    py_obj.hakoniwa_time = struct.unpack_from('<q', base_data, 136)[0]
-    
-    
-    
-    # Processing: ext_off (single)
-    
-    
-    py_obj.ext_off = struct.unpack_from('<I', base_data, 144)[0]
-    
-    
-    
-    # Processing: ext_size (single)
-    
-    
-    py_obj.ext_size = struct.unpack_from('<I', base_data, 148)[0]
-    
-    
-    
+def pdu_to_py_Ev3PduSensorHeader(binary_data: bytes) -> Ev3PduSensorHeader:
+    py_obj = Ev3PduSensorHeader()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Ev3PduSensorHeader(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Ev3PduSensorHeader(py_obj: Ev3PduSensorHeader) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 152
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_Ev3PduSensorHeader(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Ev3PduSensorHeader, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: name 
+    # type_name: string 
+    # offset: 0 size: 128 
+    # array_len: 1
 
     
-    # Processing: name (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 128)
+    py_obj.name = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<', base_buffer, 0, py_obj.name)
-    
-    
-    
-    # Processing: version (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 128, py_obj.version)
-    
-    
-    
-    # Processing: hakoniwa_time (single)
-    
-    
-    struct.pack_into('<q', base_buffer, 136, py_obj.hakoniwa_time)
-    
-    
-    
-    # Processing: ext_off (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 144, py_obj.ext_off)
-    
-    
-    
-    # Processing: ext_size (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 148, py_obj.ext_size)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: version 
+    # type_name: uint32 
+    # offset: 128 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 128, 4)
+    py_obj.version = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: hakoniwa_time 
+    # type_name: int64 
+    # offset: 136 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 136, 8)
+    py_obj.hakoniwa_time = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: ext_off 
+    # type_name: uint32 
+    # offset: 144 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 144, 4)
+    py_obj.ext_off = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: ext_size 
+    # type_name: uint32 
+    # offset: 148 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 148, 4)
+    py_obj.ext_size = binary_io.binTovalue(type, bin)
+    
+    return py_obj

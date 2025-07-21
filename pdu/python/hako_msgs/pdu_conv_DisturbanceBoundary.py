@@ -1,71 +1,46 @@
 
 import struct
 from .pdu_pytype_DisturbanceBoundary import DisturbanceBoundary
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
-
-from ..geometry_msgs.pdu_conv_Point import pdu_to_py_, py_to_pdu_
-
-from ..geometry_msgs.pdu_conv_Vector3 import pdu_to_py_, py_to_pdu_
+from ..geometry_msgs.pdu_conv_Point import *
+from ..geometry_msgs.pdu_conv_Vector3 import *
 
 
-def pdu_to_py_DisturbanceBoundary(pdu_bytes: bytes) -> DisturbanceBoundary:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+
+def pdu_to_py_DisturbanceBoundary(binary_data: bytes) -> DisturbanceBoundary:
     py_obj = DisturbanceBoundary()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: boundary_point (single)
-    
-    
-    nested_base_data = base_data[0:24]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.boundary_point = pdu_to_py_Point(nested_pdu_bytes)
-    
-    
-    
-    # Processing: boundary_normal (single)
-    
-    
-    nested_base_data = base_data[24:48]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.boundary_normal = pdu_to_py_Vector3(nested_pdu_bytes)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_DisturbanceBoundary(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_DisturbanceBoundary(py_obj: DisturbanceBoundary) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 48
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
 
-    
-    # Processing: boundary_point (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Point(py_obj.boundary_point)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:24] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: boundary_normal (single)
-    
-    
-    nested_pdu_bytes = py_to_pdu_Vector3(py_obj.boundary_normal)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[24:48] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
+def binary_read_recursive_DisturbanceBoundary(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: DisturbanceBoundary, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: boundary_point 
+    # type_name: geometry_msgs/Point 
+    # offset: 0 size: 24 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    tmp_py_obj = Point()
+    binary_read_recursive_Point(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.boundary_point = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: boundary_normal 
+    # type_name: geometry_msgs/Vector3 
+    # offset: 24 size: 24 
+    # array_len: 1
+
+    tmp_py_obj = Vector3()
+    binary_read_recursive_Vector3(meta, binary_data, tmp_py_obj, base_off + 24)
+    py_obj.boundary_normal = tmp_py_obj
+    
+    return py_obj

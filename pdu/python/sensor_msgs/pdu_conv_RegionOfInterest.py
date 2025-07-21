@@ -1,97 +1,77 @@
 
 import struct
 from .pdu_pytype_RegionOfInterest import RegionOfInterest
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_RegionOfInterest(pdu_bytes: bytes) -> RegionOfInterest:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = RegionOfInterest()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: x_offset (single)
-    
-    
-    py_obj.x_offset = struct.unpack_from('<I', base_data, 0)[0]
-    
-    
-    
-    # Processing: y_offset (single)
-    
-    
-    py_obj.y_offset = struct.unpack_from('<I', base_data, 4)[0]
-    
-    
-    
-    # Processing: height (single)
-    
-    
-    py_obj.height = struct.unpack_from('<I', base_data, 8)[0]
-    
-    
-    
-    # Processing: width (single)
-    
-    
-    py_obj.width = struct.unpack_from('<I', base_data, 12)[0]
-    
-    
-    
-    # Processing: do_rectify (single)
-    
-    
-    py_obj.do_rectify = struct.unpack_from('<?', base_data, 16)[0]
-    
-    
-    
+def pdu_to_py_RegionOfInterest(binary_data: bytes) -> RegionOfInterest:
+    py_obj = RegionOfInterest()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_RegionOfInterest(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_RegionOfInterest(py_obj: RegionOfInterest) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 20
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_RegionOfInterest(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: RegionOfInterest, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: x_offset 
+    # type_name: uint32 
+    # offset: 0 size: 4 
+    # array_len: 1
 
     
-    # Processing: x_offset (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.x_offset = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<I', base_buffer, 0, py_obj.x_offset)
-    
-    
-    
-    # Processing: y_offset (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 4, py_obj.y_offset)
-    
-    
-    
-    # Processing: height (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 8, py_obj.height)
-    
-    
-    
-    # Processing: width (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 12, py_obj.width)
-    
-    
-    
-    # Processing: do_rectify (single)
-    
-    
-    struct.pack_into('<?', base_buffer, 16, py_obj.do_rectify)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: y_offset 
+    # type_name: uint32 
+    # offset: 4 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 4, 4)
+    py_obj.y_offset = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: height 
+    # type_name: uint32 
+    # offset: 8 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 8, 4)
+    py_obj.height = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: width 
+    # type_name: uint32 
+    # offset: 12 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 12, 4)
+    py_obj.width = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: do_rectify 
+    # type_name: bool 
+    # offset: 16 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 16, 4)
+    py_obj.do_rectify = binary_io.binTovalue(type, bin)
+    
+    return py_obj

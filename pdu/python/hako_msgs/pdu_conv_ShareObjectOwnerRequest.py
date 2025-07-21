@@ -1,83 +1,66 @@
 
 import struct
 from .pdu_pytype_ShareObjectOwnerRequest import ShareObjectOwnerRequest
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_ShareObjectOwnerRequest(pdu_bytes: bytes) -> ShareObjectOwnerRequest:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = ShareObjectOwnerRequest()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: object_name (single)
-    
-    
-    py_obj.object_name = struct.unpack_from('<', base_data, 0)[0]
-    
-    
-    
-    # Processing: request_type (single)
-    
-    
-    py_obj.request_type = struct.unpack_from('<I', base_data, 128)[0]
-    
-    
-    
-    # Processing: new_owner_id (single)
-    
-    
-    py_obj.new_owner_id = struct.unpack_from('<I', base_data, 132)[0]
-    
-    
-    
-    # Processing: request_time (single)
-    
-    
-    py_obj.request_time = struct.unpack_from('<Q', base_data, 136)[0]
-    
-    
-    
+def pdu_to_py_ShareObjectOwnerRequest(binary_data: bytes) -> ShareObjectOwnerRequest:
+    py_obj = ShareObjectOwnerRequest()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_ShareObjectOwnerRequest(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_ShareObjectOwnerRequest(py_obj: ShareObjectOwnerRequest) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 144
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_ShareObjectOwnerRequest(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: ShareObjectOwnerRequest, base_off: int):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: object_name 
+    # type_name: string 
+    # offset: 0 size: 128 
+    # array_len: 1
 
     
-    # Processing: object_name (single)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 128)
+    py_obj.object_name = binary_io.binTovalue(type, bin)
     
-    
-    struct.pack_into('<', base_buffer, 0, py_obj.object_name)
-    
-    
-    
-    # Processing: request_type (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 128, py_obj.request_type)
-    
-    
-    
-    # Processing: new_owner_id (single)
-    
-    
-    struct.pack_into('<I', base_buffer, 132, py_obj.new_owner_id)
-    
-    
-    
-    # Processing: request_time (single)
-    
-    
-    struct.pack_into('<Q', base_buffer, 136, py_obj.request_time)
-    
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: request_type 
+    # type_name: uint32 
+    # offset: 128 size: 4 
+    # array_len: 1
 
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    
+    bin = binary_io.readBinary(binary_data, base_off + 128, 4)
+    py_obj.request_type = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: new_owner_id 
+    # type_name: uint32 
+    # offset: 132 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 132, 4)
+    py_obj.new_owner_id = binary_io.binTovalue(type, bin)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: request_time 
+    # type_name: uint64 
+    # offset: 136 size: 8 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 136, 8)
+    py_obj.request_time = binary_io.binTovalue(type, bin)
+    
+    return py_obj

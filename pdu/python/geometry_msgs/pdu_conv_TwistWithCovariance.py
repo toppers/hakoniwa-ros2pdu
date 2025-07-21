@@ -1,72 +1,45 @@
 
 import struct
 from .pdu_pytype_TwistWithCovariance import TwistWithCovariance
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..geometry_msgs.pdu_conv_Twist import *
 
-from ..geometry_msgs.pdu_conv_Twist import pdu_to_py_, py_to_pdu_
 
 
-def pdu_to_py_TwistWithCovariance(pdu_bytes: bytes) -> TwistWithCovariance:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_TwistWithCovariance(binary_data: bytes) -> TwistWithCovariance:
     py_obj = TwistWithCovariance()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: twist (single)
-    
-    
-    nested_base_data = base_data[0:48]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.twist = pdu_to_py_Twist(nested_pdu_bytes)
-    
-    
-    
-    # Processing: covariance (array)
-    
-    py_obj.covariance = []
-    element_size = 8
-    for i in range(36):
-        element_offset = 48 + i * element_size
-    
-        val = struct.unpack_from('<d', base_data, element_offset)[0]
-        py_obj.covariance.append(val)
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_TwistWithCovariance(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_TwistWithCovariance(py_obj: TwistWithCovariance) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 336
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_TwistWithCovariance(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: TwistWithCovariance, base_off: int):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: twist 
+    # type_name: Twist 
+    # offset: 0 size: 48 
+    # array_len: 1
+
+    tmp_py_obj = Twist()
+    binary_read_recursive_Twist(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.twist = tmp_py_obj
+    
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: covariance 
+    # type_name: float64 
+    # offset: 48 size: 288 
+    # array_len: 36
 
     
-    # Processing: twist (single)
+    array_value = binary_io.readBinary(binary_data, base_off + 48, 288)
+    py_obj.covariance = binary_io.binToArrayValues(type, array_value)
     
-    
-    nested_pdu_bytes = py_to_pdu_Twist(py_obj.twist)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:48] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: covariance (array)
-    
-    element_size = 8
-    for i, element in enumerate(py_obj.covariance):
-        if i >= 36: break
-        element_offset = 48 + i * element_size
-    
-        struct.pack_into('<d', base_buffer, element_offset, element)
-    
-    
-    
-
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    return py_obj
