@@ -18,7 +18,7 @@ def pdu_to_py_SimpleVarray(binary_data: bytes) -> SimpleVarray:
     return py_obj
 
 
-def binary_read_recursive_SimpleVarray(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: SimpleVarray, base_off):
+def binary_read_recursive_SimpleVarray(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: SimpleVarray, base_off: int):
     # array_type: varray 
     # data_type: primitive 
     # member_name: data 

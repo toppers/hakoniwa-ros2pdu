@@ -18,7 +18,7 @@ def pdu_to_py_Point(binary_data: bytes) -> Point:
     return py_obj
 
 
-def binary_read_recursive_Point(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Point, base_off):
+def binary_read_recursive_Point(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Point, base_off: int):
     # array_type: single 
     # data_type: primitive 
     # member_name: x 

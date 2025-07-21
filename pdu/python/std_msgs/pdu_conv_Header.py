@@ -19,7 +19,7 @@ def pdu_to_py_Header(binary_data: bytes) -> Header:
     return py_obj
 
 
-def binary_read_recursive_Header(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Header, base_off):
+def binary_read_recursive_Header(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Header, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: stamp 

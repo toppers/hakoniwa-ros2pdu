@@ -20,7 +20,7 @@ def pdu_to_py_SimpleStructVarray(binary_data: bytes) -> SimpleStructVarray:
     return py_obj
 
 
-def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: SimpleStructVarray, base_off):
+def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: SimpleStructVarray, base_off: int):
     # array_type: single 
     # data_type: primitive 
     # member_name: aaa 
@@ -63,6 +63,16 @@ def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary
     # offset: 268 size: 120 
     # array_len: 5
 
+    i = 0
+    array_size = 5
+    one_elm_size = int(120) / array_size
+    array_value = []
+    while i < array_size:
+        tmp_py_obj = SimpleVarray()
+        binary_read_recursive_SimpleVarray(meta, binary_data, tmp_py_obj, 268 + (i * one_elm_size))
+        array_value.append(tmp_py_obj)
+        i = i + 1
+    py_obj.fixed_array = array_value    
     
     # array_type: varray 
     # data_type: struct 
@@ -71,4 +81,16 @@ def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary
     # offset: 388 size: 24 
     # array_len: 8
 
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 388, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 388 + 4, 4))
+    one_elm_size = 24
+    i = 0
+    array_value = []
+    while i < array_size:
+        tmp_py_obj = SimpleVarray()
+        binary_read_recursive_SimpleVarray(meta, binary_data, tmp_py_obj, meta.heap_off + offset_from_heap + (i * one_elm_size))
+        array_value.append(tmp_py_obj)
+        i = i + 1
+    py_obj.data = array_value    
+    
     return py_obj

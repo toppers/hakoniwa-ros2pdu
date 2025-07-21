@@ -20,7 +20,7 @@ def pdu_to_py_{{ container.msg_type_name }}(binary_data: bytes) -> {{ container.
     return py_obj
 
 
-def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: {{ container.class_name }}, base_off):
+def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: {{ container.class_name }}, base_off: int):
 {%- for item in container.offset_data %}
     # array_type: {{ item.array_type }} 
     # data_type: {{ item.data_type }} 
@@ -48,7 +48,28 @@ def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaD
     binary_read_recursive_{{ container.get_msg_type(item.type_name) }}(meta, binary_data, tmp_py_obj, base_off + {{ item.offset }})
     py_obj.{{ item.member_name }} = tmp_py_obj
     {% elif item.array_type == 'array' %}
-    {% else -%}
+    i = 0
+    array_size = {{ item.array_len }}
+    one_elm_size = int({{ item.size }}) / array_size
+    array_value = []
+    while i < array_size:
+        tmp_py_obj = {{ container.get_msg_type(item.type_name) }}()
+        binary_read_recursive_{{ container.get_msg_type(item.type_name) }}(meta, binary_data, tmp_py_obj, {{ item.offset }} + (i * one_elm_size))
+        array_value.append(tmp_py_obj)
+        i = i + 1
+    py_obj.{{ item.member_name }} = array_value    
+    {% else %}
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, {{ item.offset }}, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, {{ item.offset }} + 4, 4))
+    one_elm_size = {{ item.size }}
+    i = 0
+    array_value = []
+    while i < array_size:
+        tmp_py_obj = {{ container.get_msg_type(item.type_name) }}()
+        binary_read_recursive_{{ container.get_msg_type(item.type_name) }}(meta, binary_data, tmp_py_obj, meta.heap_off + offset_from_heap + (i * one_elm_size))
+        array_value.append(tmp_py_obj)
+        i = i + 1
+    py_obj.{{ item.member_name }} = array_value    
     {% endif -%}
 {% endif -%}
 {% endfor %}

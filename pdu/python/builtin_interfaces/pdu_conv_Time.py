@@ -18,7 +18,7 @@ def pdu_to_py_Time(binary_data: bytes) -> Time:
     return py_obj
 
 
-def binary_read_recursive_Time(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Time, base_off):
+def binary_read_recursive_Time(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Time, base_off: int):
     # array_type: single 
     # data_type: primitive 
     # member_name: sec 
