@@ -5,7 +5,7 @@ from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_
 
 # dependencies for the generated Python class
 {% for imp in container.py_conv_imports %}
-from ..{{ imp.dep_pkg }}.{{ imp.file }} import pdu_to_py_{{ imp.class_name }}, py_to_pdu_{{ imp.class_name }}
+from ..{{ imp.dep_pkg }}.{{ imp.file }} import {{ imp.pdu_to_py_func }}, {{ imp.py_to_pdu_func }}
 {% endfor %}
 
 def pdu_to_py_{{ container.msg_type_name }}(pdu_bytes: bytes) -> {{ container.class_name }}:
