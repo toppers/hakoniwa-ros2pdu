@@ -1,95 +1,57 @@
 
 import struct
 from .pdu_pytype_SimpleVarray import SimpleVarray
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
 
 
-def pdu_to_py_SimpleVarray(pdu_bytes: bytes) -> SimpleVarray:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
-    py_obj = SimpleVarray()
 
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: data (varray)
-    
-    ref_offset = 0
-    array_len, heap_offset = struct.unpack_from(_VARRAY_REF_FORMAT, base_data, ref_offset)
-    py_obj.data = []
-    element_size = 1
-    current_heap_offset = heap_offset
-    for i in range(array_len):
-    
-        val = struct.unpack_from('<b', heap_data, current_heap_offset)[0]
-        py_obj.data.append(val)
-        current_heap_offset += element_size
-    
-    
-    
-    # Processing: fixed_array (array)
-    
-    py_obj.fixed_array = []
-    element_size = 1
-    for i in range(10):
-        element_offset = 8 + i * element_size
-    
-        val = struct.unpack_from('<b', base_data, element_offset)[0]
-        py_obj.fixed_array.append(val)
-    
-    
-    
-    # Processing: p_mem1 (single)
-    
-    
-    py_obj.p_mem1 = struct.unpack_from('<i', base_data, 20)[0]
-    
-    
-    
+def pdu_to_py_SimpleVarray(binary_data: bytes) -> SimpleVarray:
+    py_obj = SimpleVarray()
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_SimpleVarray(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_SimpleVarray(py_obj: SimpleVarray) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 24
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_SimpleVarray(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: SimpleVarray, base_off):
+    # array_type: varray 
+    # data_type: primitive 
+    # member_name: data 
+    # type_name: int8 
+    # offset: 0 size: 1 
+    # array_len: 8
+
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 0, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 0 + 4, 4))
+    one_elm_size = 1 
+    array_value = binary_io.readBinary(binary_data, meta.heap_off + offset_from_heap, one_elm_size * array_size)
+    py_obj.data = array_value
+    
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: fixed_array 
+    # type_name: int8 
+    # offset: 8 size: 10 
+    # array_len: 10
 
     
-    # Processing: data (varray)
+    array_value = binary_io.readBinary(binary_data, base_off + 8, 10)
+    py_obj.fixed_array = binary_io.binToArrayValues(type, array_value)
     
-    array_len = len(py_obj.data)
-    
-    # 可変長配列の実データを先にヒープに確保
-    elements_heap_bytes = bytearray()
-    
-    for element in py_obj.data:
-        elements_heap_bytes += struct.pack('<b', element)
-    heap_offset = heap.allocate(bytes(elements_heap_bytes))
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: p_mem1 
+    # type_name: int32 
+    # offset: 20 size: 4 
+    # array_len: 1
 
-    # BaseDataに参照情報を書き込む
-    struct.pack_into(_VARRAY_REF_FORMAT, base_buffer, 0, array_len, heap_offset)
     
+    bin = binary_io.readBinary(binary_data, base_off + 20, 4)
+    py_obj.p_mem1 = binary_io.binTovalue(type, bin)
     
-    # Processing: fixed_array (array)
-    
-    element_size = 1
-    for i, element in enumerate(py_obj.fixed_array):
-        if i >= 10: break
-        element_offset = 8 + i * element_size
-    
-        struct.pack_into('<b', base_buffer, element_offset, element)
-    
-    
-    
-    # Processing: p_mem1 (single)
-    
-    
-    struct.pack_into('<i', base_buffer, 20, py_obj.p_mem1)
-    
-    
-    
-
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    return py_obj

@@ -1,66 +1,45 @@
 
 import struct
 from .pdu_pytype_Header import Header
-from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+from ..pdu_utils import *
+from .. import binary_io
 
 # dependencies for the generated Python class
+from ..builtin_interfaces.pdu_conv_Time import *
 
-from ..builtin_interfaces.pdu_conv_Time import pdu_to_py_Time, py_to_pdu_Time
 
 
-def pdu_to_py_Header(pdu_bytes: bytes) -> Header:
-    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
-    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
-    
+def pdu_to_py_Header(binary_data: bytes) -> Header:
     py_obj = Header()
-
-    # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: stamp (single)
-    
-    
-    nested_base_data = base_data[0:8]
-    nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
-    py_obj.stamp = pdu_to_py_Time(nested_pdu_bytes)
-    
-    
-    
-    # Processing: frame_id (single)
-    
-    
-        
-    end = base_data.find(b'\0', 8)
-    py_obj.frame_id = base_data[8:end].decode('utf-8')
-        
-    
-    
-    
+    meta_parser = binary_io.PduMetaDataParser()
+    meta = meta_parser.load_pdu_meta(binary_data)
+    if meta is None:
+        raise ValueError("Invalid PDU binary data: MetaData not found or corrupted")
+    binary_read_recursive_Header(meta, binary_data, py_obj, binary_io.PduMetaData.PDU_META_DATA_SIZE)
     return py_obj
 
-def py_to_pdu_Header(py_obj: Header) -> bytes:
-    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
-    base_data_size = 136
-    base_buffer = bytearray(base_data_size)
-    heap = PduDynamicMemoryPython()
+
+def binary_read_recursive_Header(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Header, base_off):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: stamp 
+    # type_name: builtin_interfaces/Time 
+    # offset: 0 size: 8 
+    # array_len: 1
+
+    tmp_py_obj = Time()
+    binary_read_recursive_Time(meta, binary_data, tmp_py_obj, base_off + 0)
+    py_obj.stamp = tmp_py_obj
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: frame_id 
+    # type_name: string 
+    # offset: 8 size: 128 
+    # array_len: 1
 
     
-    # Processing: stamp (single)
+    bin = binary_io.readBinary(binary_data, base_off + 8, 128)
+    py_obj.frame_id = binary_io.binTovalue(type, bin)
     
-    
-    nested_pdu_bytes = py_to_pdu_Time(py_obj.stamp)
-    _m, nested_base_data, nested_heap_data = unpack_pdu(nested_pdu_bytes)
-    base_buffer[0:8] = nested_base_data
-    if nested_heap_data:
-        heap.allocate(nested_heap_data) # Note: This is a simplified merge
-    
-    
-    
-    # Processing: frame_id (single)
-    
-    
-    struct.pack_into('<', base_buffer, 8, py_obj.frame_id)
-    
-    
-    
-
-    return create_pdu(bytes(base_buffer), heap.get_bytes())
+    return py_obj
