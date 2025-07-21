@@ -15,65 +15,70 @@ def pdu_to_py_{{ container.msg_type_name }}(pdu_bytes: bytes) -> {{ container.cl
     py_obj = {{ container.class_name }}()
 
     # 各フィールドをオフセット情報に基づいてデコード
-    {% for item in container.offset_data %}
-    # Processing: {{ item.member_name }} ({{ item.array_type }})
-    {% if item.array_type == 'single' %}
-    {%   if item.data_type == 'primitive' %}
+{%- for item in container.offset_data %}
+    # array_type: {{ item.array_type }} 
+    # data_type: {{ item.data_type }} 
+    # member_name: {{ item.member_name }} 
+    # type_name: {{ item.type_name }} 
+    # offset: {{ item.offset }} size: {{ item.size }} 
+    # array_len: {{ item.array_len }}
+    {% if item.array_type == 'single' -%}
+        {% if item.data_type == 'primitive' -%}
     py_obj.{{ item.member_name }} = struct.unpack_from('{{ container.get_struct_format(item.type_name) }}', base_data, {{ item.offset }})[0]
-    {%   elif item.data_type == 'string' %}
+        {% elif item.data_type == 'string' %}
     end = base_data.find(b'\0', {{ item.offset }})
     py_obj.{{ item.member_name }} = base_data[{{ item.offset }}:end].decode('utf-8')
-    {%   else %}
+        {% else -%}
     nested_base_data = base_data[{{ item.offset }}:{{ item.offset + item.size }}]
     nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
     py_obj.{{ item.member_name }} = pdu_to_py_{{ container.get_msg_type(item.type_name) }}(nested_pdu_bytes)
-    {%   endif %}
-    {% elif item.array_type == 'array' %}
+        {% endif %}
+    {% elif item.array_type == 'array' -%}
     py_obj.{{ item.member_name }} = []
     element_size = {{ item.size // item.array_len }}
     for i in range({{ item.array_len }}):
         element_offset = {{ item.offset }} + i * element_size
-    {%   if item.data_type == 'primitive' %}
+    {%   if item.data_type == 'primitive' -%}
         val = struct.unpack_from('{{ container.get_struct_format(item.type_name) }}', base_data, element_offset)[0]
         py_obj.{{ item.member_name }}.append(val)
-    {%   elif item.data_type == 'string' %}
+    {%   elif item.data_type == 'string' -%}
         end = base_data.find(b'\0', element_offset)
         val = base_data[element_offset:end].decode('utf-8')
         py_obj.{{ item.member_name }}.append(val)
-    {%   else %}
+    {%   else -%}
         nested_base_data = base_data[element_offset : element_offset + element_size]
         nested_pdu_bytes = create_pdu(nested_base_data, heap_data)
         val = pdu_to_py_{{ container.get_msg_type(item.type_name) }}(nested_pdu_bytes)
         py_obj.{{ item.member_name }}.append(val)
-    {%   endif %}
-    {% elif item.array_type == 'varray' %}
+    {%   endif -%}
+    {% elif item.array_type == 'varray' -%}
     ref_offset = {{ item.offset }}
     array_len, heap_offset = struct.unpack_from(_VARRAY_REF_FORMAT, base_data, ref_offset)
     py_obj.{{ item.member_name }} = []
     element_size = {{ item.size }}
     current_heap_offset = heap_offset
     for i in range(array_len):
-    {%   if item.data_type == 'primitive' %}
+    {%   if item.data_type == 'primitive' -%}
         val = struct.unpack_from('{{ container.get_struct_format(item.type_name) }}', heap_data, current_heap_offset)[0]
         py_obj.{{ item.member_name }}.append(val)
         current_heap_offset += element_size
-    {%   elif item.data_type == 'string' %}
+    {%   elif item.data_type == 'string' -%}
         str_ref_format = '<i'
         str_offset_in_heap = struct.unpack_from(str_ref_format, heap_data, current_heap_offset)[0]
         end = heap_data.find(b'\0', heap_offset + str_offset_in_heap)
         val = heap_data[heap_offset + str_offset_in_heap:end].decode('utf-8')
         py_obj.{{ item.member_name }}.append(val)
         current_heap_offset += struct.calcsize(str_ref_format)
-    {%   else %}
+    {%   else -%}
         nested_pdu_bytes = heap_data[current_heap_offset:]
         val = pdu_to_py_{{ container.get_msg_type(item.type_name) }}(nested_pdu_bytes)
         py_obj.{{ item.member_name }}.append(val)
         # Move offset by the total size of the nested PDU
         _m, _b, nested_heap = unpack_pdu(nested_pdu_bytes)
         current_heap_offset += _m['total_size']
-    {%   endif %}
-    {% endif %}
-    {% endfor %}
+    {%   endif -%}
+    {% endif -%}
+    {% endfor -%}
     return py_obj
 
 def py_to_pdu_{{ container.msg_type_name }}(py_obj: {{ container.class_name }}) -> bytes:

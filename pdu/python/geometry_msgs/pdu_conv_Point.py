@@ -13,28 +13,32 @@ def pdu_to_py_Point(pdu_bytes: bytes) -> Point:
     py_obj = Point()
 
     # 各フィールドをオフセット情報に基づいてデコード
-    
-    # Processing: x (single)
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: x 
+    # type_name: float64 
+    # offset: 0 size: 8 
+    # array_len: 1
     py_obj.x = struct.unpack_from('<d', base_data, 0)[0]
+        
     
-    
-    
-    # Processing: y (single)
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: y 
+    # type_name: float64 
+    # offset: 8 size: 8 
+    # array_len: 1
     py_obj.y = struct.unpack_from('<d', base_data, 8)[0]
+        
     
-    
-    
-    # Processing: z (single)
-    
-    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: z 
+    # type_name: float64 
+    # offset: 16 size: 8 
+    # array_len: 1
     py_obj.z = struct.unpack_from('<d', base_data, 16)[0]
-    
-    
-    
+        
     return py_obj
 
 def py_to_pdu_Point(py_obj: Point) -> bytes:
