@@ -1,0 +1,91 @@
+
+import struct
+from .pdu_pytype_Quaternion import Quaternion
+from ..pdu_utils import PduDynamicMemoryPython, create_pdu, unpack_pdu, _VARRAY_REF_FORMAT, _VARRAY_REF_SIZE
+
+# dependencies for the generated Python class
+
+
+def pdu_to_py_Quaternion(pdu_bytes: bytes) -> Quaternion:
+    """PDUバイト列からPythonオブジェクトを生成（デシリアライズ）"""
+    metadata, base_data, heap_data = unpack_pdu(pdu_bytes)
+    
+    py_obj = Quaternion()
+
+    # 各フィールドをオフセット情報に基づいてデコード
+    
+    # Processing: x (single)
+    
+    
+        
+    py_obj.x = struct.unpack_from('<d', base_data, 0)[0]
+        
+    
+    
+    
+    # Processing: y (single)
+    
+    
+        
+    py_obj.y = struct.unpack_from('<d', base_data, 8)[0]
+        
+    
+    
+    
+    # Processing: z (single)
+    
+    
+        
+    py_obj.z = struct.unpack_from('<d', base_data, 16)[0]
+        
+    
+    
+    
+    # Processing: w (single)
+    
+    
+        
+    py_obj.w = struct.unpack_from('<d', base_data, 24)[0]
+        
+    
+    
+    
+    return py_obj
+
+def py_to_pdu_Quaternion(py_obj: Quaternion) -> bytes:
+    """PythonオブジェクトからPDUバイト列を生成（シリアライズ）"""
+    base_data_size = 32
+    base_buffer = bytearray(base_data_size)
+    heap = PduDynamicMemoryPython()
+
+    
+    # Processing: x (single)
+    
+    
+    struct.pack_into('<d', base_buffer, 0, py_obj.x)
+    
+    
+    
+    # Processing: y (single)
+    
+    
+    struct.pack_into('<d', base_buffer, 8, py_obj.y)
+    
+    
+    
+    # Processing: z (single)
+    
+    
+    struct.pack_into('<d', base_buffer, 16, py_obj.z)
+    
+    
+    
+    # Processing: w (single)
+    
+    
+    struct.pack_into('<d', base_buffer, 24, py_obj.w)
+    
+    
+    
+
+    return create_pdu(bytes(base_buffer), heap.get_bytes())

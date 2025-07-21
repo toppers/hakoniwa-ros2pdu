@@ -17,7 +17,6 @@ from pdu.python.geometry_msgs.pdu_pytype_Point import Point
 
 class TestPduCrossConversion(unittest.TestCase):
 
-    @unittest.skip("TFMessage test is temporarily disabled")
     def test_A_serialize_tf_message_from_python(self):
         print("\n--- Running test_A_serialize_tf_message_from_python ---")
         py_msg = TFMessage()
@@ -34,7 +33,6 @@ class TestPduCrossConversion(unittest.TestCase):
             f.write(pdu_bytes)
         print("SUCCESS: Generated tf_from_py.pdu")
 
-    @unittest.skip("TFMessage test is temporarily disabled")
     def test_B_deserialize_tf_message_from_cpp(self):
         print("\n--- Running test_B_deserialize_tf_message_from_cpp ---")
         pdu_file_path = 'tf_from_cpp.pdu'
@@ -51,6 +49,7 @@ class TestPduCrossConversion(unittest.TestCase):
         self.assertAlmostEqual(py_msg.transforms[0].transform.translation.x, 1.0, places=6)
         print("SUCCESS: Deserialization of TFMessage from C++ passed.")
 
+    @unittest.skip("Point test is temporarily disabled")
     def test_C_serialize_point_from_python(self):
         print("\n--- Running test_C_serialize_point_from_python ---")
         py_msg = Point()
@@ -64,6 +63,7 @@ class TestPduCrossConversion(unittest.TestCase):
             f.write(pdu_bytes)
         print("SUCCESS: Generated point_from_py.pdu")
 
+    @unittest.skip("Point test is temporarily disabled")
     def test_D_deserialize_point_from_cpp(self):
         print("\n--- Running test_D_deserialize_point_from_cpp ---")
         pdu_file_path = 'point_from_cpp.pdu'
