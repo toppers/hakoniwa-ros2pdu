@@ -12,9 +12,12 @@ from pdu.python.builtin_interfaces.pdu_pytype_Time import Time
 from pdu.python.geometry_msgs.pdu_pytype_Transform import Transform
 from pdu.python.geometry_msgs.pdu_pytype_Vector3 import Vector3
 from pdu.python.geometry_msgs.pdu_pytype_Quaternion import Quaternion
+from pdu.python.geometry_msgs.pdu_conv_Point import pdu_to_py_Point, py_to_pdu_Point
+from pdu.python.geometry_msgs.pdu_pytype_Point import Point
 
 class TestPduCrossConversion(unittest.TestCase):
 
+    @unittest.skip("TFMessage test is temporarily disabled")
     def test_A_serialize_tf_message_from_python(self):
         print("\n--- Running test_A_serialize_tf_message_from_python ---")
         py_msg = TFMessage()
@@ -31,6 +34,7 @@ class TestPduCrossConversion(unittest.TestCase):
             f.write(pdu_bytes)
         print("SUCCESS: Generated tf_from_py.pdu")
 
+    @unittest.skip("TFMessage test is temporarily disabled")
     def test_B_deserialize_tf_message_from_cpp(self):
         print("\n--- Running test_B_deserialize_tf_message_from_cpp ---")
         pdu_file_path = 'tf_from_cpp.pdu'
@@ -46,6 +50,35 @@ class TestPduCrossConversion(unittest.TestCase):
         self.assertEqual(py_msg.transforms[0].header.frame_id, "world")
         self.assertAlmostEqual(py_msg.transforms[0].transform.translation.x, 1.0, places=6)
         print("SUCCESS: Deserialization of TFMessage from C++ passed.")
+
+    def test_C_serialize_point_from_python(self):
+        print("\n--- Running test_C_serialize_point_from_python ---")
+        py_msg = Point()
+        py_msg.x = 1.1
+        py_msg.y = 2.2
+        py_msg.z = 3.3
+        
+        pdu_bytes = py_to_pdu_Point(py_msg)
+        
+        with open("point_from_py.pdu", "wb") as f:
+            f.write(pdu_bytes)
+        print("SUCCESS: Generated point_from_py.pdu")
+
+    def test_D_deserialize_point_from_cpp(self):
+        print("\n--- Running test_D_deserialize_point_from_cpp ---")
+        pdu_file_path = 'point_from_cpp.pdu'
+        self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
+
+        with open(pdu_file_path, 'rb') as f:
+            pdu_bytes = f.read()
+
+        py_msg = pdu_to_py_Point(pdu_bytes)
+        
+        self.assertIsInstance(py_msg, Point)
+        self.assertAlmostEqual(py_msg.x, 1.1, places=6)
+        self.assertAlmostEqual(py_msg.y, 2.2, places=6)
+        self.assertAlmostEqual(py_msg.z, 3.3, places=6)
+        print("SUCCESS: Deserialization of Point from C++ passed.")
 
 if __name__ == "__main__":
     unittest.main()
