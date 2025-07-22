@@ -10,7 +10,7 @@ from ..hako_srv_msgs.pdu_conv_AddTwoIntsResponse import *
 
 
 
-def pdu_to_py_AddTwoIntsResponsePacket(binary_data: bytes) -> AddTwoIntsResponsePacket:
+def pdu_to_py_AddTwoIntsResponsePacket(binary_data: bytearray) -> AddTwoIntsResponsePacket:
     py_obj = AddTwoIntsResponsePacket()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -20,7 +20,7 @@ def pdu_to_py_AddTwoIntsResponsePacket(binary_data: bytes) -> AddTwoIntsResponse
     return py_obj
 
 
-def binary_read_recursive_AddTwoIntsResponsePacket(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: AddTwoIntsResponsePacket, base_off: int):
+def binary_read_recursive_AddTwoIntsResponsePacket(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: AddTwoIntsResponsePacket, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: header 
@@ -44,3 +44,57 @@ def binary_read_recursive_AddTwoIntsResponsePacket(meta: binary_io.PduMetaData, 
     py_obj.body = tmp_py_obj
     
     return py_obj
+
+
+
+def py_to_pduAddTwoIntsResponsePacket(py_obj: AddTwoIntsResponsePacket) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_AddTwoIntsResponsePacket(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_AddTwoIntsResponsePacket(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: AddTwoIntsResponsePacket):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: ServiceResponseHeader 
+    # offset: 0 size: 268 
+    # array_len: 1
+    type = "ServiceResponseHeader"
+    off = 0
+
+    binary_write_recursive_ServiceResponseHeader(parent_off + off, bw_container, allocator, py_obj.header)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: body 
+    # type_name: AddTwoIntsResponse 
+    # offset: 272 size: 8 
+    # array_len: 1
+    type = "AddTwoIntsResponse"
+    off = 272
+
+    binary_write_recursive_AddTwoIntsResponse(parent_off + off, bw_container, allocator, py_obj.body)
+    

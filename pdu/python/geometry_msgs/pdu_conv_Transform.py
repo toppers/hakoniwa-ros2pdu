@@ -10,7 +10,7 @@ from ..geometry_msgs.pdu_conv_Quaternion import *
 
 
 
-def pdu_to_py_Transform(binary_data: bytes) -> Transform:
+def pdu_to_py_Transform(binary_data: bytearray) -> Transform:
     py_obj = Transform()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -20,7 +20,7 @@ def pdu_to_py_Transform(binary_data: bytes) -> Transform:
     return py_obj
 
 
-def binary_read_recursive_Transform(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Transform, base_off: int):
+def binary_read_recursive_Transform(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: Transform, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: translation 
@@ -44,3 +44,57 @@ def binary_read_recursive_Transform(meta: binary_io.PduMetaData, binary_data: by
     py_obj.rotation = tmp_py_obj
     
     return py_obj
+
+
+
+def py_to_pduTransform(py_obj: Transform) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_Transform(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_Transform(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: Transform):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: translation 
+    # type_name: Vector3 
+    # offset: 0 size: 24 
+    # array_len: 1
+    type = "Vector3"
+    off = 0
+
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.translation)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: rotation 
+    # type_name: Quaternion 
+    # offset: 24 size: 32 
+    # array_len: 1
+    type = "Quaternion"
+    off = 24
+
+    binary_write_recursive_Quaternion(parent_off + off, bw_container, allocator, py_obj.rotation)
+    

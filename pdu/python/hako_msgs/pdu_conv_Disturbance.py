@@ -12,7 +12,7 @@ from ..hako_msgs.pdu_conv_DisturbanceBoundary import *
 
 
 
-def pdu_to_py_Disturbance(binary_data: bytes) -> Disturbance:
+def pdu_to_py_Disturbance(binary_data: bytearray) -> Disturbance:
     py_obj = Disturbance()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -22,7 +22,7 @@ def pdu_to_py_Disturbance(binary_data: bytes) -> Disturbance:
     return py_obj
 
 
-def binary_read_recursive_Disturbance(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Disturbance, base_off: int):
+def binary_read_recursive_Disturbance(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: Disturbance, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: d_temp 
@@ -68,3 +68,79 @@ def binary_read_recursive_Disturbance(meta: binary_io.PduMetaData, binary_data: 
     py_obj.d_boundary = tmp_py_obj
     
     return py_obj
+
+
+
+def py_to_pduDisturbance(py_obj: Disturbance) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_Disturbance(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_Disturbance(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: Disturbance):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: d_temp 
+    # type_name: hako_msgs/DisturbanceTemperature 
+    # offset: 0 size: 8 
+    # array_len: 1
+    type = "hako_msgs/DisturbanceTemperature"
+    off = 0
+
+    binary_write_recursive_hako_msgs/DisturbanceTemperature(parent_off + off, bw_container, allocator, py_obj.d_temp)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: d_wind 
+    # type_name: hako_msgs/DisturbanceWind 
+    # offset: 8 size: 24 
+    # array_len: 1
+    type = "hako_msgs/DisturbanceWind"
+    off = 8
+
+    binary_write_recursive_hako_msgs/DisturbanceWind(parent_off + off, bw_container, allocator, py_obj.d_wind)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: d_atm 
+    # type_name: hako_msgs/DisturbanceAtm 
+    # offset: 32 size: 8 
+    # array_len: 1
+    type = "hako_msgs/DisturbanceAtm"
+    off = 32
+
+    binary_write_recursive_hako_msgs/DisturbanceAtm(parent_off + off, bw_container, allocator, py_obj.d_atm)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: d_boundary 
+    # type_name: hako_msgs/DisturbanceBoundary 
+    # offset: 40 size: 48 
+    # array_len: 1
+    type = "hako_msgs/DisturbanceBoundary"
+    off = 40
+
+    binary_write_recursive_hako_msgs/DisturbanceBoundary(parent_off + off, bw_container, allocator, py_obj.d_boundary)
+    

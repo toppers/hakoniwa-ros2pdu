@@ -8,7 +8,7 @@ from .. import binary_io
 
 
 
-def pdu_to_py_AddTwoIntsResponse(binary_data: bytes) -> AddTwoIntsResponse:
+def pdu_to_py_AddTwoIntsResponse(binary_data: bytearray) -> AddTwoIntsResponse:
     py_obj = AddTwoIntsResponse()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -18,7 +18,7 @@ def pdu_to_py_AddTwoIntsResponse(binary_data: bytes) -> AddTwoIntsResponse:
     return py_obj
 
 
-def binary_read_recursive_AddTwoIntsResponse(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: AddTwoIntsResponse, base_off: int):
+def binary_read_recursive_AddTwoIntsResponse(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: AddTwoIntsResponse, base_off: int):
     # array_type: single 
     # data_type: primitive 
     # member_name: sum 
@@ -31,3 +31,49 @@ def binary_read_recursive_AddTwoIntsResponse(meta: binary_io.PduMetaData, binary
     py_obj.sum = binary_io.binTovalue("int64", bin)
     
     return py_obj
+
+
+
+def py_to_pduAddTwoIntsResponse(py_obj: AddTwoIntsResponse) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_AddTwoIntsResponse(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_AddTwoIntsResponse(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: AddTwoIntsResponse):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: sum 
+    # type_name: int64 
+    # offset: 0 size: 8 
+    # array_len: 1
+    type = "int64"
+    off = 0
+
+    
+    bin = binary_io.typeTobin(type, py_obj.sum)
+    bin = get_binary(type, bin, 8)
+    allocator.add(bin, expected_offset=parent_off + off)
+    

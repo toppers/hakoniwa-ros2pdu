@@ -10,7 +10,7 @@ from ..ev3_msgs.pdu_conv_Ev3PduMotor import *
 
 
 
-def pdu_to_py_Ev3PduActuator(binary_data: bytes) -> Ev3PduActuator:
+def pdu_to_py_Ev3PduActuator(binary_data: bytearray) -> Ev3PduActuator:
     py_obj = Ev3PduActuator()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -20,7 +20,7 @@ def pdu_to_py_Ev3PduActuator(binary_data: bytes) -> Ev3PduActuator:
     return py_obj
 
 
-def binary_read_recursive_Ev3PduActuator(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Ev3PduActuator, base_off: int):
+def binary_read_recursive_Ev3PduActuator(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: Ev3PduActuator, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: head 
@@ -73,3 +73,91 @@ def binary_read_recursive_Ev3PduActuator(meta: binary_io.PduMetaData, binary_dat
     py_obj.gyro_reset = binary_io.binTovalue("uint32", bin)
     
     return py_obj
+
+
+
+def py_to_pduEv3PduActuator(py_obj: Ev3PduActuator) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_Ev3PduActuator(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_Ev3PduActuator(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: Ev3PduActuator):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: head 
+    # type_name: Ev3PduActuatorHeader 
+    # offset: 0 size: 152 
+    # array_len: 1
+    type = "Ev3PduActuatorHeader"
+    off = 0
+
+    binary_write_recursive_Ev3PduActuatorHeader(parent_off + off, bw_container, allocator, py_obj.head)
+    
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: leds 
+    # type_name: uint8 
+    # offset: 152 size: 1 
+    # array_len: 1
+    type = "uint8"
+    off = 152
+
+    
+    elm_size =  1 
+    array_size = int(1.0)
+    one_elm_size = int(elm_size / array_size)
+    binary = binary_io.typeTobin_array(type, py_obj.leds, one_elm_size)
+    allocator.add(binary, expected_offset=(parent_off + off))
+    
+    # array_type: array 
+    # data_type: struct 
+    # member_name: motors 
+    # type_name: Ev3PduMotor 
+    # offset: 156 size: 36 
+    # array_len: 3
+    type = "Ev3PduMotor"
+    off = 156
+
+    for i, elm in enumerate(py_obj.motors):
+        elm_size = 36
+        array_size = int(12.0)
+        one_elm_size = int(elm_size / array_size)
+        binary_write_recursive_Ev3PduMotor((parent_off + off + i * one_elm_size), bw_container, allocator, elm)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: gyro_reset 
+    # type_name: uint32 
+    # offset: 192 size: 4 
+    # array_len: 1
+    type = "uint32"
+    off = 192
+
+    
+    bin = binary_io.typeTobin(type, py_obj.gyro_reset)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    

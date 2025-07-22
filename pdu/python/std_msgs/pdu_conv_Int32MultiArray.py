@@ -9,7 +9,7 @@ from ..std_msgs.pdu_conv_MultiArrayLayout import *
 
 
 
-def pdu_to_py_Int32MultiArray(binary_data: bytes) -> Int32MultiArray:
+def pdu_to_py_Int32MultiArray(binary_data: bytearray) -> Int32MultiArray:
     py_obj = Int32MultiArray()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -19,7 +19,7 @@ def pdu_to_py_Int32MultiArray(binary_data: bytes) -> Int32MultiArray:
     return py_obj
 
 
-def binary_read_recursive_Int32MultiArray(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Int32MultiArray, base_off: int):
+def binary_read_recursive_Int32MultiArray(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: Int32MultiArray, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: layout 
@@ -45,3 +45,63 @@ def binary_read_recursive_Int32MultiArray(meta: binary_io.PduMetaData, binary_da
     py_obj.data = array_value
     
     return py_obj
+
+
+
+def py_to_pduInt32MultiArray(py_obj: Int32MultiArray) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_Int32MultiArray(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_Int32MultiArray(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: Int32MultiArray):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: layout 
+    # type_name: MultiArrayLayout 
+    # offset: 0 size: 12 
+    # array_len: 1
+    type = "MultiArrayLayout"
+    off = 0
+
+    binary_write_recursive_MultiArrayLayout(parent_off + off, bw_container, allocator, py_obj.layout)
+    
+    # array_type: varray 
+    # data_type: primitive 
+    # member_name: data 
+    # type_name: int32 
+    # offset: 12 size: 4 
+    # array_len: 8
+    type = "int32"
+    off = 12
+
+    offset_from_heap = bw_container.heap_allocator.size()
+    array_size = len(py_obj.data)
+    binary = binary_io.typeTobin_array(type, py_obj.data, 4)
+    bw_container.heap_allocator.add(binary, expected_offset=0)
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)
+    

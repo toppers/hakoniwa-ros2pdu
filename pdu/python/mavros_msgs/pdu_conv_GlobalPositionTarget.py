@@ -11,7 +11,7 @@ from ..geometry_msgs.pdu_conv_Vector3 import *
 
 
 
-def pdu_to_py_GlobalPositionTarget(binary_data: bytes) -> GlobalPositionTarget:
+def pdu_to_py_GlobalPositionTarget(binary_data: bytearray) -> GlobalPositionTarget:
     py_obj = GlobalPositionTarget()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -21,7 +21,7 @@ def pdu_to_py_GlobalPositionTarget(binary_data: bytes) -> GlobalPositionTarget:
     return py_obj
 
 
-def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: GlobalPositionTarget, base_off: int):
+def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: GlobalPositionTarget, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: header 
@@ -133,3 +133,166 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
     py_obj.yaw_rate = binary_io.binTovalue("float32", bin)
     
     return py_obj
+
+
+
+def py_to_pduGlobalPositionTarget(py_obj: GlobalPositionTarget) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_GlobalPositionTarget(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_GlobalPositionTarget(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: GlobalPositionTarget):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: std_msgs/Header 
+    # offset: 0 size: 136 
+    # array_len: 1
+    type = "std_msgs/Header"
+    off = 0
+
+    binary_write_recursive_std_msgs/Header(parent_off + off, bw_container, allocator, py_obj.header)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: coordinate_frame 
+    # type_name: uint8 
+    # offset: 136 size: 1 
+    # array_len: 1
+    type = "uint8"
+    off = 136
+
+    
+    bin = binary_io.typeTobin(type, py_obj.coordinate_frame)
+    bin = get_binary(type, bin, 1)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: type_mask 
+    # type_name: uint16 
+    # offset: 138 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 138
+
+    
+    bin = binary_io.typeTobin(type, py_obj.type_mask)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: latitude 
+    # type_name: float64 
+    # offset: 144 size: 8 
+    # array_len: 1
+    type = "float64"
+    off = 144
+
+    
+    bin = binary_io.typeTobin(type, py_obj.latitude)
+    bin = get_binary(type, bin, 8)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: longitude 
+    # type_name: float64 
+    # offset: 152 size: 8 
+    # array_len: 1
+    type = "float64"
+    off = 152
+
+    
+    bin = binary_io.typeTobin(type, py_obj.longitude)
+    bin = get_binary(type, bin, 8)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: altitude 
+    # type_name: float32 
+    # offset: 160 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 160
+
+    
+    bin = binary_io.typeTobin(type, py_obj.altitude)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: velocity 
+    # type_name: geometry_msgs/Vector3 
+    # offset: 168 size: 24 
+    # array_len: 1
+    type = "geometry_msgs/Vector3"
+    off = 168
+
+    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.velocity)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: acceleration_or_force 
+    # type_name: geometry_msgs/Vector3 
+    # offset: 192 size: 24 
+    # array_len: 1
+    type = "geometry_msgs/Vector3"
+    off = 192
+
+    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.acceleration_or_force)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yaw 
+    # type_name: float32 
+    # offset: 216 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 216
+
+    
+    bin = binary_io.typeTobin(type, py_obj.yaw)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yaw_rate 
+    # type_name: float32 
+    # offset: 220 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 220
+
+    
+    bin = binary_io.typeTobin(type, py_obj.yaw_rate)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    

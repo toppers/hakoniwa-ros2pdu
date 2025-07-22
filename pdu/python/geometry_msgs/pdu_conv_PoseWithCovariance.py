@@ -9,7 +9,7 @@ from ..geometry_msgs.pdu_conv_Pose import *
 
 
 
-def pdu_to_py_PoseWithCovariance(binary_data: bytes) -> PoseWithCovariance:
+def pdu_to_py_PoseWithCovariance(binary_data: bytearray) -> PoseWithCovariance:
     py_obj = PoseWithCovariance()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -19,7 +19,7 @@ def pdu_to_py_PoseWithCovariance(binary_data: bytes) -> PoseWithCovariance:
     return py_obj
 
 
-def binary_read_recursive_PoseWithCovariance(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: PoseWithCovariance, base_off: int):
+def binary_read_recursive_PoseWithCovariance(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: PoseWithCovariance, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: pose 
@@ -43,3 +43,62 @@ def binary_read_recursive_PoseWithCovariance(meta: binary_io.PduMetaData, binary
     py_obj.covariance = binary_io.binToArrayValues("float64", array_value)
     
     return py_obj
+
+
+
+def py_to_pduPoseWithCovariance(py_obj: PoseWithCovariance) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_PoseWithCovariance(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_PoseWithCovariance(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: PoseWithCovariance):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: pose 
+    # type_name: Pose 
+    # offset: 0 size: 56 
+    # array_len: 1
+    type = "Pose"
+    off = 0
+
+    binary_write_recursive_Pose(parent_off + off, bw_container, allocator, py_obj.pose)
+    
+    # array_type: array 
+    # data_type: primitive 
+    # member_name: covariance 
+    # type_name: float64 
+    # offset: 56 size: 288 
+    # array_len: 36
+    type = "float64"
+    off = 56
+
+    
+    elm_size =  288 
+    array_size = int(8.0)
+    one_elm_size = int(elm_size / array_size)
+    binary = binary_io.typeTobin_array(type, py_obj.covariance, one_elm_size)
+    allocator.add(binary, expected_offset=(parent_off + off))
+    

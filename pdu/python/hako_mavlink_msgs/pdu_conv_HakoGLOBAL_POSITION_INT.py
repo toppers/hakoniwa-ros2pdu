@@ -8,7 +8,7 @@ from .. import binary_io
 
 
 
-def pdu_to_py_HakoGLOBAL_POSITION_INT(binary_data: bytes) -> HakoGLOBAL_POSITION_INT:
+def pdu_to_py_HakoGLOBAL_POSITION_INT(binary_data: bytearray) -> HakoGLOBAL_POSITION_INT:
     py_obj = HakoGLOBAL_POSITION_INT()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -18,7 +18,7 @@ def pdu_to_py_HakoGLOBAL_POSITION_INT(binary_data: bytes) -> HakoGLOBAL_POSITION
     return py_obj
 
 
-def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoGLOBAL_POSITION_INT, base_off: int):
+def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: HakoGLOBAL_POSITION_INT, base_off: int):
     # array_type: single 
     # data_type: primitive 
     # member_name: time_boot_ms 
@@ -119,3 +119,161 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
     py_obj.hdg = binary_io.binTovalue("uint16", bin)
     
     return py_obj
+
+
+
+def py_to_pduHakoGLOBAL_POSITION_INT(py_obj: HakoGLOBAL_POSITION_INT) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_HakoGLOBAL_POSITION_INT(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_HakoGLOBAL_POSITION_INT(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: HakoGLOBAL_POSITION_INT):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: time_boot_ms 
+    # type_name: uint32 
+    # offset: 0 size: 4 
+    # array_len: 1
+    type = "uint32"
+    off = 0
+
+    
+    bin = binary_io.typeTobin(type, py_obj.time_boot_ms)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: lat 
+    # type_name: int32 
+    # offset: 4 size: 4 
+    # array_len: 1
+    type = "int32"
+    off = 4
+
+    
+    bin = binary_io.typeTobin(type, py_obj.lat)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: lon 
+    # type_name: int32 
+    # offset: 8 size: 4 
+    # array_len: 1
+    type = "int32"
+    off = 8
+
+    
+    bin = binary_io.typeTobin(type, py_obj.lon)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: alt 
+    # type_name: int32 
+    # offset: 12 size: 4 
+    # array_len: 1
+    type = "int32"
+    off = 12
+
+    
+    bin = binary_io.typeTobin(type, py_obj.alt)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: relative_alt 
+    # type_name: int32 
+    # offset: 16 size: 4 
+    # array_len: 1
+    type = "int32"
+    off = 16
+
+    
+    bin = binary_io.typeTobin(type, py_obj.relative_alt)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: vx 
+    # type_name: int16 
+    # offset: 20 size: 2 
+    # array_len: 1
+    type = "int16"
+    off = 20
+
+    
+    bin = binary_io.typeTobin(type, py_obj.vx)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: vy 
+    # type_name: int16 
+    # offset: 22 size: 2 
+    # array_len: 1
+    type = "int16"
+    off = 22
+
+    
+    bin = binary_io.typeTobin(type, py_obj.vy)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: vz 
+    # type_name: int16 
+    # offset: 24 size: 2 
+    # array_len: 1
+    type = "int16"
+    off = 24
+
+    
+    bin = binary_io.typeTobin(type, py_obj.vz)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: hdg 
+    # type_name: uint16 
+    # offset: 26 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 26
+
+    
+    bin = binary_io.typeTobin(type, py_obj.hdg)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    

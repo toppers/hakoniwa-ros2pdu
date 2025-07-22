@@ -8,7 +8,7 @@ from .. import binary_io
 
 
 
-def pdu_to_py_HakoSERVO_OUTPUT_RAW(binary_data: bytes) -> HakoSERVO_OUTPUT_RAW:
+def pdu_to_py_HakoSERVO_OUTPUT_RAW(binary_data: bytearray) -> HakoSERVO_OUTPUT_RAW:
     py_obj = HakoSERVO_OUTPUT_RAW()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -18,7 +18,7 @@ def pdu_to_py_HakoSERVO_OUTPUT_RAW(binary_data: bytes) -> HakoSERVO_OUTPUT_RAW:
     return py_obj
 
 
-def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoSERVO_OUTPUT_RAW, base_off: int):
+def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: HakoSERVO_OUTPUT_RAW, base_off: int):
     # array_type: single 
     # data_type: primitive 
     # member_name: time_usec 
@@ -218,3 +218,287 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
     py_obj.servo16_raw = binary_io.binTovalue("uint16", bin)
     
     return py_obj
+
+
+
+def py_to_pduHakoSERVO_OUTPUT_RAW(py_obj: HakoSERVO_OUTPUT_RAW) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_HakoSERVO_OUTPUT_RAW(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_HakoSERVO_OUTPUT_RAW(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: HakoSERVO_OUTPUT_RAW):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: time_usec 
+    # type_name: uint32 
+    # offset: 0 size: 4 
+    # array_len: 1
+    type = "uint32"
+    off = 0
+
+    
+    bin = binary_io.typeTobin(type, py_obj.time_usec)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: port 
+    # type_name: uint8 
+    # offset: 4 size: 1 
+    # array_len: 1
+    type = "uint8"
+    off = 4
+
+    
+    bin = binary_io.typeTobin(type, py_obj.port)
+    bin = get_binary(type, bin, 1)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo1_raw 
+    # type_name: uint16 
+    # offset: 6 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 6
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo1_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo2_raw 
+    # type_name: uint16 
+    # offset: 8 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 8
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo2_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo3_raw 
+    # type_name: uint16 
+    # offset: 10 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 10
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo3_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo4_raw 
+    # type_name: uint16 
+    # offset: 12 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 12
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo4_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo5_raw 
+    # type_name: uint16 
+    # offset: 14 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 14
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo5_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo6_raw 
+    # type_name: uint16 
+    # offset: 16 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 16
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo6_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo7_raw 
+    # type_name: uint16 
+    # offset: 18 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 18
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo7_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo8_raw 
+    # type_name: uint16 
+    # offset: 20 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 20
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo8_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo9_raw 
+    # type_name: uint16 
+    # offset: 22 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 22
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo9_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo10_raw 
+    # type_name: uint16 
+    # offset: 24 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 24
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo10_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo11_raw 
+    # type_name: uint16 
+    # offset: 26 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 26
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo11_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo12_raw 
+    # type_name: uint16 
+    # offset: 28 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 28
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo12_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo13_raw 
+    # type_name: uint16 
+    # offset: 30 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 30
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo13_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo14_raw 
+    # type_name: uint16 
+    # offset: 32 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 32
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo14_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo15_raw 
+    # type_name: uint16 
+    # offset: 34 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 34
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo15_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: servo16_raw 
+    # type_name: uint16 
+    # offset: 36 size: 2 
+    # array_len: 1
+    type = "uint16"
+    off = 36
+
+    
+    bin = binary_io.typeTobin(type, py_obj.servo16_raw)
+    bin = get_binary(type, bin, 2)
+    allocator.add(bin, expected_offset=parent_off + off)
+    

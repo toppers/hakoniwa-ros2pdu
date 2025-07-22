@@ -10,7 +10,7 @@ from ..sensor_msgs.pdu_conv_PointField import *
 
 
 
-def pdu_to_py_PointCloud2(binary_data: bytes) -> PointCloud2:
+def pdu_to_py_PointCloud2(binary_data: bytearray) -> PointCloud2:
     py_obj = PointCloud2()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -20,7 +20,7 @@ def pdu_to_py_PointCloud2(binary_data: bytes) -> PointCloud2:
     return py_obj
 
 
-def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: PointCloud2, base_off: int):
+def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: PointCloud2, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: header 
@@ -131,3 +131,164 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
     py_obj.is_dense = binary_io.binTovalue("bool", bin)
     
     return py_obj
+
+
+
+def py_to_pduPointCloud2(py_obj: PointCloud2) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_PointCloud2(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_PointCloud2(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: PointCloud2):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: std_msgs/Header 
+    # offset: 0 size: 136 
+    # array_len: 1
+    type = "std_msgs/Header"
+    off = 0
+
+    binary_write_recursive_std_msgs/Header(parent_off + off, bw_container, allocator, py_obj.header)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: height 
+    # type_name: uint32 
+    # offset: 136 size: 4 
+    # array_len: 1
+    type = "uint32"
+    off = 136
+
+    
+    bin = binary_io.typeTobin(type, py_obj.height)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: width 
+    # type_name: uint32 
+    # offset: 140 size: 4 
+    # array_len: 1
+    type = "uint32"
+    off = 140
+
+    
+    bin = binary_io.typeTobin(type, py_obj.width)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: varray 
+    # data_type: struct 
+    # member_name: fields 
+    # type_name: PointField 
+    # offset: 144 size: 140 
+    # array_len: 8
+    type = "PointField"
+    off = 144
+
+    offset_from_heap = bw_container.heap_allocator.size()
+    array_size = len(py_obj.fields)
+    for i, elm in enumerate(py_obj.fields):
+        binary_write_recursive_PointField(0, bw_container, bw_container.heap_allocator, elm)
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)    
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: is_bigendian 
+    # type_name: bool 
+    # offset: 152 size: 4 
+    # array_len: 1
+    type = "bool"
+    off = 152
+
+    
+    bin = binary_io.typeTobin(type, py_obj.is_bigendian)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: point_step 
+    # type_name: uint32 
+    # offset: 156 size: 4 
+    # array_len: 1
+    type = "uint32"
+    off = 156
+
+    
+    bin = binary_io.typeTobin(type, py_obj.point_step)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: row_step 
+    # type_name: uint32 
+    # offset: 160 size: 4 
+    # array_len: 1
+    type = "uint32"
+    off = 160
+
+    
+    bin = binary_io.typeTobin(type, py_obj.row_step)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: varray 
+    # data_type: primitive 
+    # member_name: data 
+    # type_name: uint8 
+    # offset: 164 size: 1 
+    # array_len: 8
+    type = "uint8"
+    off = 164
+
+    offset_from_heap = bw_container.heap_allocator.size()
+    array_size = len(py_obj.data)
+    binary = binary_io.typeTobin_array(type, py_obj.data, 1)
+    bw_container.heap_allocator.add(binary, expected_offset=0)
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: is_dense 
+    # type_name: bool 
+    # offset: 172 size: 4 
+    # array_len: 1
+    type = "bool"
+    off = 172
+
+    
+    bin = binary_io.typeTobin(type, py_obj.is_dense)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    

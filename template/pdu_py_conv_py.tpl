@@ -10,7 +10,7 @@ from ..{{ imp.dep_pkg }}.{{ imp.file }} import *
 {% endfor %}
 
 
-def pdu_to_py_{{ container.msg_type_name }}(binary_data: bytes) -> {{ container.class_name }}:
+def pdu_to_py_{{ container.msg_type_name }}(binary_data: bytearray) -> {{ container.class_name }}:
     py_obj = {{ container.class_name }}()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -20,7 +20,7 @@ def pdu_to_py_{{ container.msg_type_name }}(binary_data: bytes) -> {{ container.
     return py_obj
 
 
-def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: {{ container.class_name }}, base_off: int):
+def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: {{ container.class_name }}, base_off: int):
 {%- for item in container.offset_data %}
     # array_type: {{ item.array_type }} 
     # data_type: {{ item.data_type }} 
@@ -74,3 +74,84 @@ def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaD
 {% endif -%}
 {% endfor %}
     return py_obj
+
+
+
+def py_to_pdu{{ container.msg_type_name }}(py_obj: {{ container.class_name }}) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_{{ container.msg_type_name }}(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_{{ container.msg_type_name }}(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: {{ container.msg_type_name }}):
+{%- for item in container.offset_data %}
+    # array_type: {{ item.array_type }} 
+    # data_type: {{ item.data_type }} 
+    # member_name: {{ item.member_name }} 
+    # type_name: {{ item.type_name }} 
+    # offset: {{ item.offset }} size: {{ item.size }} 
+    # array_len: {{ item.array_len }}
+    type = "{{ item.type_name  }}"
+    off = {{ item.offset }}
+{% if item.data_type == 'primitive' %}
+    {% if item.array_type == 'single' %}
+    bin = binary_io.typeTobin(type, py_obj.{{ item.member_name }})
+    bin = get_binary(type, bin, {{ item.size }})
+    allocator.add(bin, expected_offset=parent_off + off)
+    {% elif item.array_type == 'array' %}
+    elm_size =  {{ item.size }} 
+    array_size = int({{ (item.size / item.array_len) }})
+    one_elm_size = int(elm_size / array_size)
+    binary = binary_io.typeTobin_array(type, py_obj.{{ item.member_name }}, one_elm_size)
+    allocator.add(binary, expected_offset=(parent_off + off))
+    {% else -%}
+    offset_from_heap = bw_container.heap_allocator.size()
+    array_size = len(py_obj.{{ item.member_name}})
+    binary = binary_io.typeTobin_array(type, py_obj.{{ item.member_name}}, {{ item.size }})
+    bw_container.heap_allocator.add(binary, expected_offset=0)
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)
+    {% endif -%}
+{% else -%}
+    {% if item.array_type == 'single' %}
+    binary_write_recursive_{{ item.type_name }}(parent_off + off, bw_container, allocator, py_obj.{{ item.member_name }})
+    {% elif item.array_type == 'array' %}
+    for i, elm in enumerate(py_obj.{{ item.member_name }}):
+        elm_size = {{ item.size }}
+        array_size = int({{ item.size / item.array_len }})
+        one_elm_size = int(elm_size / array_size)
+        binary_write_recursive_{{ item.type_name }}((parent_off + off + i * one_elm_size), bw_container, allocator, elm)
+    {% else %}
+    offset_from_heap = bw_container.heap_allocator.size()
+    array_size = len(py_obj.{{ item.member_name }})
+    for i, elm in enumerate(py_obj.{{ item.member_name }}):
+        binary_write_recursive_{{ item.type_name }}(0, bw_container, bw_container.heap_allocator, elm)
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)    
+    {% endif -%}
+{% endif -%}
+{% endfor %}

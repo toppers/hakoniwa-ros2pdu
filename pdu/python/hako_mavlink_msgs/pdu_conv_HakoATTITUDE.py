@@ -8,7 +8,7 @@ from .. import binary_io
 
 
 
-def pdu_to_py_HakoATTITUDE(binary_data: bytes) -> HakoATTITUDE:
+def pdu_to_py_HakoATTITUDE(binary_data: bytearray) -> HakoATTITUDE:
     py_obj = HakoATTITUDE()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -18,7 +18,7 @@ def pdu_to_py_HakoATTITUDE(binary_data: bytes) -> HakoATTITUDE:
     return py_obj
 
 
-def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: HakoATTITUDE, base_off: int):
+def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: HakoATTITUDE, base_off: int):
     # array_type: single 
     # data_type: primitive 
     # member_name: time_boot_ms 
@@ -97,3 +97,133 @@ def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data:
     py_obj.yawspeed = binary_io.binTovalue("float32", bin)
     
     return py_obj
+
+
+
+def py_to_pduHakoATTITUDE(py_obj: HakoATTITUDE) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_HakoATTITUDE(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_HakoATTITUDE(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: HakoATTITUDE):
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: time_boot_ms 
+    # type_name: uint32 
+    # offset: 0 size: 4 
+    # array_len: 1
+    type = "uint32"
+    off = 0
+
+    
+    bin = binary_io.typeTobin(type, py_obj.time_boot_ms)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: roll 
+    # type_name: float32 
+    # offset: 4 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 4
+
+    
+    bin = binary_io.typeTobin(type, py_obj.roll)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: pitch 
+    # type_name: float32 
+    # offset: 8 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 8
+
+    
+    bin = binary_io.typeTobin(type, py_obj.pitch)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yaw 
+    # type_name: float32 
+    # offset: 12 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 12
+
+    
+    bin = binary_io.typeTobin(type, py_obj.yaw)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: rollspeed 
+    # type_name: float32 
+    # offset: 16 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 16
+
+    
+    bin = binary_io.typeTobin(type, py_obj.rollspeed)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: pitchspeed 
+    # type_name: float32 
+    # offset: 20 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 20
+
+    
+    bin = binary_io.typeTobin(type, py_obj.pitchspeed)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: yawspeed 
+    # type_name: float32 
+    # offset: 24 size: 4 
+    # array_len: 1
+    type = "float32"
+    off = 24
+
+    
+    bin = binary_io.typeTobin(type, py_obj.yawspeed)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
+    

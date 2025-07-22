@@ -15,45 +15,48 @@ _ALIGNED_PDU_META_SIZE = (_PDU_META_SIZE + 7) & ~7
 _VARRAY_REF_FORMAT = '<ii' # Little-endian: length, offset
 _VARRAY_REF_SIZE = struct.calcsize(_VARRAY_REF_FORMAT)
 
-class PduDynamicMemoryPython:
-    """
-    A Python implementation of the C++ PduDynamicMemory class.
-    Manages the heap area for PDU serialization.
-    """
-    def __init__(self):
-        self.current_offset = 0
-        self.allocations = []  # List of (offset, data_bytes)
+class DynamicAllocator:
+    def __init__(self, is_heap: bool):
+        self.data = bytearray()
+        self.offset_map = {}
+        self.is_heap = is_heap
 
-    def allocate(self, data_bytes: bytes) -> int:
-        """
-        Allocates data to the heap, returning its offset within the heap.
-        """
-        if not isinstance(data_bytes, bytes):
-            raise TypeError("data must be bytes")
-        offset = self.current_offset
-        self.allocations.append((offset, data_bytes))
-        self.current_offset += len(data_bytes)
+    def add(self, bytes_data, expected_offset=None, key=None):
+        current_size = len(self.data)
+        #print(f"is_heap: {self.is_heap} current_size: {current_size} expected_offset: {expected_offset} len(bytes_data): {len(bytes_data)}")
+        if (current_size < expected_offset):
+            padding = bytearray(expected_offset - current_size)
+            self.data.extend(padding)
+        offset = len(self.data)
+        self.data.extend(bytes_data)
+        #print(f"add: {bytes_data} offset: {offset} len(self.data): {len(self.data)}")
+        if key:
+            self.offset_map[key] = offset
+        
         return offset
 
-    def get_total_size(self) -> int:
-        """
-        Returns the total size of the allocated heap data.
-        """
-        return self.current_offset
+    def to_array(self):
+        return self.data
 
-    def copy_to_pdu(self, heap_buffer: bytearray):
-        """
-        Copies all managed data blocks into the provided heap buffer.
-        """
-        for offset, data_bytes in self.allocations:
-            heap_buffer[offset:offset + len(data_bytes)] = data_bytes
+    def size(self):
+        return len(self.data)
 
-    def get_bytes(self) -> bytes:
-        """Returns the entire heap as a single bytes object."""
-        total_size = self.get_total_size()
-        heap_buffer = bytearray(total_size)
-        self.copy_to_pdu(heap_buffer)
-        return bytes(heap_buffer)
+    def get_offset(self, key):
+        return self.offset_map.get(key, None)
+
+class BinaryWriterContainer:
+    def __init__(self, meta):
+        self.heap_allocator = DynamicAllocator(True)
+        self.meta = meta
+        self.meta.set_empty()
+
+def get_binary(type, bin, elm_size):
+    if type == "string":
+        buffer = bytearray(elm_size)
+        buffer[:len(bin)] = bin
+        return buffer
+    else:
+        return bin
 
 def create_pdu(base_data: bytes, heap_data: bytes = b'') -> bytes:
     """

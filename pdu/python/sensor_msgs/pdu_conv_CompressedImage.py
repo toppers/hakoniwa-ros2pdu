@@ -9,7 +9,7 @@ from ..std_msgs.pdu_conv_Header import *
 
 
 
-def pdu_to_py_CompressedImage(binary_data: bytes) -> CompressedImage:
+def pdu_to_py_CompressedImage(binary_data: bytearray) -> CompressedImage:
     py_obj = CompressedImage()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -19,7 +19,7 @@ def pdu_to_py_CompressedImage(binary_data: bytes) -> CompressedImage:
     return py_obj
 
 
-def binary_read_recursive_CompressedImage(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: CompressedImage, base_off: int):
+def binary_read_recursive_CompressedImage(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: CompressedImage, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: header 
@@ -56,3 +56,77 @@ def binary_read_recursive_CompressedImage(meta: binary_io.PduMetaData, binary_da
     py_obj.data = array_value
     
     return py_obj
+
+
+
+def py_to_pduCompressedImage(py_obj: CompressedImage) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_CompressedImage(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_CompressedImage(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: CompressedImage):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: std_msgs/Header 
+    # offset: 0 size: 136 
+    # array_len: 1
+    type = "std_msgs/Header"
+    off = 0
+
+    binary_write_recursive_std_msgs/Header(parent_off + off, bw_container, allocator, py_obj.header)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: format 
+    # type_name: string 
+    # offset: 136 size: 128 
+    # array_len: 1
+    type = "string"
+    off = 136
+
+    
+    bin = binary_io.typeTobin(type, py_obj.format)
+    bin = get_binary(type, bin, 128)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: varray 
+    # data_type: primitive 
+    # member_name: data 
+    # type_name: uint8 
+    # offset: 264 size: 1 
+    # array_len: 8
+    type = "uint8"
+    off = 264
+
+    offset_from_heap = bw_container.heap_allocator.size()
+    array_size = len(py_obj.data)
+    binary = binary_io.typeTobin_array(type, py_obj.data, 1)
+    bw_container.heap_allocator.add(binary, expected_offset=0)
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)
+    

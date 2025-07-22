@@ -11,7 +11,7 @@ from ..geometry_msgs.pdu_conv_TwistWithCovariance import *
 
 
 
-def pdu_to_py_Odometry(binary_data: bytes) -> Odometry:
+def pdu_to_py_Odometry(binary_data: bytearray) -> Odometry:
     py_obj = Odometry()
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -21,7 +21,7 @@ def pdu_to_py_Odometry(binary_data: bytes) -> Odometry:
     return py_obj
 
 
-def binary_read_recursive_Odometry(meta: binary_io.PduMetaData, binary_data: bytes, py_obj: Odometry, base_off: int):
+def binary_read_recursive_Odometry(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: Odometry, base_off: int):
     # array_type: single 
     # data_type: struct 
     # member_name: header 
@@ -67,3 +67,82 @@ def binary_read_recursive_Odometry(meta: binary_io.PduMetaData, binary_data: byt
     py_obj.twist = tmp_py_obj
     
     return py_obj
+
+
+
+def py_to_pduOdometry(py_obj: Odometry) -> bytearray:
+    binary_data = bytearray()
+    base_allocator = DynamicAllocator(False)
+    bw_container = BinaryWriterContainer(binary_io.PduMetaData())
+    binary_write_recursive_Odometry(0, bw_container, base_allocator, py_obj)
+
+    # メタデータの設定
+    total_size = base_allocator.size() + bw_container.heap_allocator.size() + binary_io.PduMetaData.PDU_META_DATA_SIZE
+    bw_container.meta.total_size = total_size
+    bw_container.meta.heap_off = binary_io.PduMetaData.PDU_META_DATA_SIZE + base_allocator.size()
+
+    # binary_data のサイズを total_size に調整
+    if len(binary_data) < total_size:
+        binary_data.extend(bytearray(total_size - len(binary_data)))
+    elif len(binary_data) > total_size:
+        del binary_data[total_size:]
+
+    # メタデータをバッファにコピー
+    binary_io.writeBinary(binary_data, 0, bw_container.meta.to_bytes())
+
+    # 基本データをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.base_off, base_allocator.to_array())
+
+    # ヒープデータをバッファにコピー
+    binary_io.writeBinary(binary_data, bw_container.meta.heap_off, bw_container.heap_allocator.to_array())
+
+    return binary_data
+
+def binary_write_recursive_Odometry(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: Odometry):
+    # array_type: single 
+    # data_type: struct 
+    # member_name: header 
+    # type_name: std_msgs/Header 
+    # offset: 0 size: 136 
+    # array_len: 1
+    type = "std_msgs/Header"
+    off = 0
+
+    binary_write_recursive_std_msgs/Header(parent_off + off, bw_container, allocator, py_obj.header)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: child_frame_id 
+    # type_name: string 
+    # offset: 136 size: 128 
+    # array_len: 1
+    type = "string"
+    off = 136
+
+    
+    bin = binary_io.typeTobin(type, py_obj.child_frame_id)
+    bin = get_binary(type, bin, 128)
+    allocator.add(bin, expected_offset=parent_off + off)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: pose 
+    # type_name: geometry_msgs/PoseWithCovariance 
+    # offset: 264 size: 344 
+    # array_len: 1
+    type = "geometry_msgs/PoseWithCovariance"
+    off = 264
+
+    binary_write_recursive_geometry_msgs/PoseWithCovariance(parent_off + off, bw_container, allocator, py_obj.pose)
+    
+    # array_type: single 
+    # data_type: struct 
+    # member_name: twist 
+    # type_name: geometry_msgs/TwistWithCovariance 
+    # offset: 608 size: 336 
+    # array_len: 1
+    type = "geometry_msgs/TwistWithCovariance"
+    off = 608
+
+    binary_write_recursive_geometry_msgs/TwistWithCovariance(parent_off + off, bw_container, allocator, py_obj.twist)
+    
