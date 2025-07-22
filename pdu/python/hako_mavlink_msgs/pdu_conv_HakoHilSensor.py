@@ -28,7 +28,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.time_usec = binary_io.binTovalue(type, bin)
+    py_obj.time_usec = binary_io.binTovalue("uint64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 4)
-    py_obj.xacc = binary_io.binTovalue(type, bin)
+    py_obj.xacc = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 4)
-    py_obj.yacc = binary_io.binTovalue(type, bin)
+    py_obj.yacc = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 4)
-    py_obj.zacc = binary_io.binTovalue(type, bin)
+    py_obj.zacc = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 20, 4)
-    py_obj.xgyro = binary_io.binTovalue(type, bin)
+    py_obj.xgyro = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,7 +83,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 24, 4)
-    py_obj.ygyro = binary_io.binTovalue(type, bin)
+    py_obj.ygyro = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -94,7 +94,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 28, 4)
-    py_obj.zgyro = binary_io.binTovalue(type, bin)
+    py_obj.zgyro = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -105,7 +105,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 32, 4)
-    py_obj.xmag = binary_io.binTovalue(type, bin)
+    py_obj.xmag = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -116,7 +116,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 36, 4)
-    py_obj.ymag = binary_io.binTovalue(type, bin)
+    py_obj.ymag = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -127,7 +127,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 40, 4)
-    py_obj.zmag = binary_io.binTovalue(type, bin)
+    py_obj.zmag = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -138,7 +138,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 44, 4)
-    py_obj.abs_pressure = binary_io.binTovalue(type, bin)
+    py_obj.abs_pressure = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -149,7 +149,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 48, 4)
-    py_obj.diff_pressure = binary_io.binTovalue(type, bin)
+    py_obj.diff_pressure = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -160,7 +160,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 52, 4)
-    py_obj.pressure_alt = binary_io.binTovalue(type, bin)
+    py_obj.pressure_alt = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -171,7 +171,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 56, 4)
-    py_obj.temperature = binary_io.binTovalue(type, bin)
+    py_obj.temperature = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -182,7 +182,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 60, 4)
-    py_obj.fields_updated = binary_io.binTovalue(type, bin)
+    py_obj.fields_updated = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -193,6 +193,6 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 64, 1)
-    py_obj.id = binary_io.binTovalue(type, bin)
+    py_obj.id = binary_io.binTovalue("uint8", bin)
     
     return py_obj

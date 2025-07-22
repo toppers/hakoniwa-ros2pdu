@@ -40,7 +40,7 @@ def binary_read_recursive_Image(meta: binary_io.PduMetaData, binary_data: bytes,
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 4)
-    py_obj.height = binary_io.binTovalue(type, bin)
+    py_obj.height = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -51,7 +51,7 @@ def binary_read_recursive_Image(meta: binary_io.PduMetaData, binary_data: bytes,
 
     
     bin = binary_io.readBinary(binary_data, base_off + 140, 4)
-    py_obj.width = binary_io.binTovalue(type, bin)
+    py_obj.width = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -62,7 +62,7 @@ def binary_read_recursive_Image(meta: binary_io.PduMetaData, binary_data: bytes,
 
     
     bin = binary_io.readBinary(binary_data, base_off + 144, 128)
-    py_obj.encoding = binary_io.binTovalue(type, bin)
+    py_obj.encoding = binary_io.binTovalue("string", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -73,7 +73,7 @@ def binary_read_recursive_Image(meta: binary_io.PduMetaData, binary_data: bytes,
 
     
     bin = binary_io.readBinary(binary_data, base_off + 272, 1)
-    py_obj.is_bigendian = binary_io.binTovalue(type, bin)
+    py_obj.is_bigendian = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -84,7 +84,7 @@ def binary_read_recursive_Image(meta: binary_io.PduMetaData, binary_data: bytes,
 
     
     bin = binary_io.readBinary(binary_data, base_off + 276, 4)
-    py_obj.step = binary_io.binTovalue(type, bin)
+    py_obj.step = binary_io.binTovalue("uint32", bin)
     
     # array_type: varray 
     # data_type: primitive 

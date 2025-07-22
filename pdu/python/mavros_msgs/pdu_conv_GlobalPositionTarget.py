@@ -42,7 +42,7 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 1)
-    py_obj.coordinate_frame = binary_io.binTovalue(type, bin)
+    py_obj.coordinate_frame = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -53,7 +53,7 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 138, 2)
-    py_obj.type_mask = binary_io.binTovalue(type, bin)
+    py_obj.type_mask = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -64,7 +64,7 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 144, 8)
-    py_obj.latitude = binary_io.binTovalue(type, bin)
+    py_obj.latitude = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -75,7 +75,7 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 152, 8)
-    py_obj.longitude = binary_io.binTovalue(type, bin)
+    py_obj.longitude = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -86,7 +86,7 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 160, 4)
-    py_obj.altitude = binary_io.binTovalue(type, bin)
+    py_obj.altitude = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: struct 
@@ -119,7 +119,7 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 216, 4)
-    py_obj.yaw = binary_io.binTovalue(type, bin)
+    py_obj.yaw = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -130,6 +130,6 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 220, 4)
-    py_obj.yaw_rate = binary_io.binTovalue(type, bin)
+    py_obj.yaw_rate = binary_io.binTovalue("float32", bin)
     
     return py_obj

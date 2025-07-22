@@ -28,6 +28,6 @@ def binary_read_recursive_Char(meta: binary_io.PduMetaData, binary_data: bytes, 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 1)
-    py_obj.data = binary_io.binTovalue(type, bin)
+    py_obj.data = binary_io.binTovalue("char", bin)
     
     return py_obj

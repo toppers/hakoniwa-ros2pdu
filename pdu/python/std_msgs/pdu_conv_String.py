@@ -28,6 +28,6 @@ def binary_read_recursive_String(meta: binary_io.PduMetaData, binary_data: bytes
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 128)
-    py_obj.data = binary_io.binTovalue(type, bin)
+    py_obj.data = binary_io.binTovalue("string", bin)
     
     return py_obj

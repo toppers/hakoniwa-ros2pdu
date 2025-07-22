@@ -29,7 +29,7 @@ def binary_read_recursive_ManualPosAttControl(meta: binary_io.PduMetaData, binar
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.do_operation = binary_io.binTovalue(type, bin)
+    py_obj.do_operation = binary_io.binTovalue("bool", bin)
     
     # array_type: single 
     # data_type: struct 

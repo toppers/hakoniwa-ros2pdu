@@ -28,6 +28,6 @@ def binary_read_recursive_UInt8(meta: binary_io.PduMetaData, binary_data: bytes,
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 1)
-    py_obj.data = binary_io.binTovalue(type, bin)
+    py_obj.data = binary_io.binTovalue("uint8", bin)
     
     return py_obj

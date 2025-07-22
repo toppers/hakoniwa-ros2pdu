@@ -28,7 +28,7 @@ def binary_read_recursive_PointField(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 128)
-    py_obj.name = binary_io.binTovalue(type, bin)
+    py_obj.name = binary_io.binTovalue("string", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_PointField(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 128, 4)
-    py_obj.offset = binary_io.binTovalue(type, bin)
+    py_obj.offset = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_PointField(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 132, 1)
-    py_obj.datatype = binary_io.binTovalue(type, bin)
+    py_obj.datatype = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,6 +61,6 @@ def binary_read_recursive_PointField(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 4)
-    py_obj.count = binary_io.binTovalue(type, bin)
+    py_obj.count = binary_io.binTovalue("uint32", bin)
     
     return py_obj

@@ -28,7 +28,7 @@ def binary_read_recursive_HakoSystemTime(meta: binary_io.PduMetaData, binary_dat
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.time_unix_usec = binary_io.binTovalue(type, bin)
+    py_obj.time_unix_usec = binary_io.binTovalue("uint64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,6 +39,6 @@ def binary_read_recursive_HakoSystemTime(meta: binary_io.PduMetaData, binary_dat
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 8)
-    py_obj.time_boot_ms = binary_io.binTovalue(type, bin)
+    py_obj.time_boot_ms = binary_io.binTovalue("uint64", bin)
     
     return py_obj

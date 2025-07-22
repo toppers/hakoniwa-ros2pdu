@@ -30,7 +30,7 @@ def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.aaa = binary_io.binTovalue(type, bin)
+    py_obj.aaa = binary_io.binTovalue("int32", bin)
     
     # array_type: array 
     # data_type: primitive 
@@ -41,7 +41,7 @@ def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 4, 256)
-    py_obj.fixed_str = binary_io.binToArrayValues(type, array_value)
+    py_obj.fixed_str = binary_io.binToArrayValues("string", array_value)
     
     # array_type: varray 
     # data_type: primitive 

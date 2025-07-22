@@ -41,7 +41,7 @@ def binary_read_recursive_Ev3PduActuator(meta: binary_io.PduMetaData, binary_dat
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 152, 1)
-    py_obj.leds = binary_io.binToArrayValues(type, array_value)
+    py_obj.leds = binary_io.binToArrayValues("uint8", array_value)
     
     # array_type: array 
     # data_type: struct 
@@ -70,6 +70,6 @@ def binary_read_recursive_Ev3PduActuator(meta: binary_io.PduMetaData, binary_dat
 
     
     bin = binary_io.readBinary(binary_data, base_off + 192, 4)
-    py_obj.gyro_reset = binary_io.binTovalue(type, bin)
+    py_obj.gyro_reset = binary_io.binTovalue("uint32", bin)
     
     return py_obj

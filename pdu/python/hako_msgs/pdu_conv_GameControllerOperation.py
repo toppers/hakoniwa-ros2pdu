@@ -28,7 +28,7 @@ def binary_read_recursive_GameControllerOperation(meta: binary_io.PduMetaData, b
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 0, 48)
-    py_obj.axis = binary_io.binToArrayValues(type, array_value)
+    py_obj.axis = binary_io.binToArrayValues("float64", array_value)
     
     # array_type: array 
     # data_type: primitive 
@@ -39,6 +39,6 @@ def binary_read_recursive_GameControllerOperation(meta: binary_io.PduMetaData, b
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 48, 60)
-    py_obj.button = binary_io.binToArrayValues(type, array_value)
+    py_obj.button = binary_io.binToArrayValues("bool", array_value)
     
     return py_obj

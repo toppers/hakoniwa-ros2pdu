@@ -28,7 +28,7 @@ def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.time_boot_ms = binary_io.binTovalue(type, bin)
+    py_obj.time_boot_ms = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.roll = binary_io.binTovalue(type, bin)
+    py_obj.roll = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 4)
-    py_obj.pitch = binary_io.binTovalue(type, bin)
+    py_obj.pitch = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 4)
-    py_obj.yaw = binary_io.binTovalue(type, bin)
+    py_obj.yaw = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 4)
-    py_obj.rollspeed = binary_io.binTovalue(type, bin)
+    py_obj.rollspeed = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,7 +83,7 @@ def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 20, 4)
-    py_obj.pitchspeed = binary_io.binTovalue(type, bin)
+    py_obj.pitchspeed = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -94,6 +94,6 @@ def binary_read_recursive_HakoATTITUDE(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 24, 4)
-    py_obj.yawspeed = binary_io.binTovalue(type, bin)
+    py_obj.yawspeed = binary_io.binTovalue("float32", bin)
     
     return py_obj

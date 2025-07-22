@@ -28,7 +28,7 @@ def binary_read_recursive_HakoBatteryStatus(meta: binary_io.PduMetaData, binary_
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.full_voltage = binary_io.binTovalue(type, bin)
+    py_obj.full_voltage = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoBatteryStatus(meta: binary_io.PduMetaData, binary_
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 8)
-    py_obj.curr_voltage = binary_io.binTovalue(type, bin)
+    py_obj.curr_voltage = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoBatteryStatus(meta: binary_io.PduMetaData, binary_
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 8)
-    py_obj.curr_temp = binary_io.binTovalue(type, bin)
+    py_obj.curr_temp = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoBatteryStatus(meta: binary_io.PduMetaData, binary_
 
     
     bin = binary_io.readBinary(binary_data, base_off + 24, 4)
-    py_obj.status = binary_io.binTovalue(type, bin)
+    py_obj.status = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,6 +72,6 @@ def binary_read_recursive_HakoBatteryStatus(meta: binary_io.PduMetaData, binary_
 
     
     bin = binary_io.readBinary(binary_data, base_off + 28, 4)
-    py_obj.cycles = binary_io.binTovalue(type, bin)
+    py_obj.cycles = binary_io.binTovalue("uint32", bin)
     
     return py_obj

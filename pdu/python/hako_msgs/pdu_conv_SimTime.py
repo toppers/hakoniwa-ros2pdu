@@ -28,6 +28,6 @@ def binary_read_recursive_SimTime(meta: binary_io.PduMetaData, binary_data: byte
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.time_usec = binary_io.binTovalue(type, bin)
+    py_obj.time_usec = binary_io.binTovalue("uint64", bin)
     
     return py_obj

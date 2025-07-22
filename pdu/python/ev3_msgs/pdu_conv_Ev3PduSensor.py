@@ -42,7 +42,7 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 152, 1)
-    py_obj.buttons = binary_io.binToArrayValues(type, array_value)
+    py_obj.buttons = binary_io.binToArrayValues("uint8", array_value)
     
     # array_type: array 
     # data_type: struct 
@@ -89,7 +89,7 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 204, 12)
-    py_obj.motor_angle = binary_io.binToArrayValues(type, array_value)
+    py_obj.motor_angle = binary_io.binToArrayValues("uint32", array_value)
     
     # array_type: single 
     # data_type: primitive 
@@ -100,7 +100,7 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 216, 4)
-    py_obj.gyro_degree = binary_io.binTovalue(type, bin)
+    py_obj.gyro_degree = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -111,7 +111,7 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 220, 4)
-    py_obj.gyro_degree_rate = binary_io.binTovalue(type, bin)
+    py_obj.gyro_degree_rate = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -122,7 +122,7 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 224, 4)
-    py_obj.sensor_ultrasonic = binary_io.binTovalue(type, bin)
+    py_obj.sensor_ultrasonic = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -133,7 +133,7 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 232, 8)
-    py_obj.gps_lat = binary_io.binTovalue(type, bin)
+    py_obj.gps_lat = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -144,6 +144,6 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 240, 8)
-    py_obj.gps_lon = binary_io.binTovalue(type, bin)
+    py_obj.gps_lon = binary_io.binTovalue("float64", bin)
     
     return py_obj

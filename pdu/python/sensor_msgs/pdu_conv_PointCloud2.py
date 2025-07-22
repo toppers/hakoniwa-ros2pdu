@@ -41,7 +41,7 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 4)
-    py_obj.height = binary_io.binTovalue(type, bin)
+    py_obj.height = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -52,7 +52,7 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 140, 4)
-    py_obj.width = binary_io.binTovalue(type, bin)
+    py_obj.width = binary_io.binTovalue("uint32", bin)
     
     # array_type: varray 
     # data_type: struct 
@@ -82,7 +82,7 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 152, 4)
-    py_obj.is_bigendian = binary_io.binTovalue(type, bin)
+    py_obj.is_bigendian = binary_io.binTovalue("bool", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -93,7 +93,7 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 156, 4)
-    py_obj.point_step = binary_io.binTovalue(type, bin)
+    py_obj.point_step = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -104,7 +104,7 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 160, 4)
-    py_obj.row_step = binary_io.binTovalue(type, bin)
+    py_obj.row_step = binary_io.binTovalue("uint32", bin)
     
     # array_type: varray 
     # data_type: primitive 
@@ -128,6 +128,6 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 172, 4)
-    py_obj.is_dense = binary_io.binTovalue(type, bin)
+    py_obj.is_dense = binary_io.binTovalue("bool", bin)
     
     return py_obj

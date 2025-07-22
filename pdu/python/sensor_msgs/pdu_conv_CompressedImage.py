@@ -40,7 +40,7 @@ def binary_read_recursive_CompressedImage(meta: binary_io.PduMetaData, binary_da
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 128)
-    py_obj.format = binary_io.binTovalue(type, bin)
+    py_obj.format = binary_io.binTovalue("string", bin)
     
     # array_type: varray 
     # data_type: primitive 

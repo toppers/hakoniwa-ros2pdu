@@ -28,7 +28,7 @@ def binary_read_recursive_HakoHeartbeat(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 1)
-    py_obj.type = binary_io.binTovalue(type, bin)
+    py_obj.type = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoHeartbeat(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 1, 1)
-    py_obj.autopilot = binary_io.binTovalue(type, bin)
+    py_obj.autopilot = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoHeartbeat(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 2, 1)
-    py_obj.base_mode = binary_io.binTovalue(type, bin)
+    py_obj.base_mode = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoHeartbeat(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.custom_mode = binary_io.binTovalue(type, bin)
+    py_obj.custom_mode = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_HakoHeartbeat(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 1)
-    py_obj.system_status = binary_io.binTovalue(type, bin)
+    py_obj.system_status = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,6 +83,6 @@ def binary_read_recursive_HakoHeartbeat(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 9, 1)
-    py_obj.mavlink_version = binary_io.binTovalue(type, bin)
+    py_obj.mavlink_version = binary_io.binTovalue("uint8", bin)
     
     return py_obj

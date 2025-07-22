@@ -35,7 +35,7 @@ def binary_read_recursive_ImpulseCollision(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.collision = binary_io.binTovalue(type, bin)
+    py_obj.collision = binary_io.binTovalue("bool", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -46,7 +46,7 @@ def binary_read_recursive_ImpulseCollision(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.is_target_static = binary_io.binTovalue(type, bin)
+    py_obj.is_target_static = binary_io.binTovalue("bool", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -57,7 +57,7 @@ def binary_read_recursive_ImpulseCollision(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 8)
-    py_obj.restitution_coefficient = binary_io.binTovalue(type, bin)
+    py_obj.restitution_coefficient = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: struct 
@@ -145,6 +145,6 @@ def binary_read_recursive_ImpulseCollision(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 184, 8)
-    py_obj.target_mass = binary_io.binTovalue(type, bin)
+    py_obj.target_mass = binary_io.binTovalue("float64", bin)
     
     return py_obj

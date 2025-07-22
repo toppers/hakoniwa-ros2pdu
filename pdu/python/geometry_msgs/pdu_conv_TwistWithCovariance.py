@@ -40,6 +40,6 @@ def binary_read_recursive_TwistWithCovariance(meta: binary_io.PduMetaData, binar
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 48, 288)
-    py_obj.covariance = binary_io.binToArrayValues(type, array_value)
+    py_obj.covariance = binary_io.binToArrayValues("float64", array_value)
     
     return py_obj

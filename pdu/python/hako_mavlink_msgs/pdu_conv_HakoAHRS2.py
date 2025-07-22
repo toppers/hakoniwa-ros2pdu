@@ -28,7 +28,7 @@ def binary_read_recursive_HakoAHRS2(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.roll = binary_io.binTovalue(type, bin)
+    py_obj.roll = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoAHRS2(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.pitch = binary_io.binTovalue(type, bin)
+    py_obj.pitch = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoAHRS2(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 4)
-    py_obj.yaw = binary_io.binTovalue(type, bin)
+    py_obj.yaw = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoAHRS2(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 4)
-    py_obj.altitude = binary_io.binTovalue(type, bin)
+    py_obj.altitude = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_HakoAHRS2(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 4)
-    py_obj.lat = binary_io.binTovalue(type, bin)
+    py_obj.lat = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,6 +83,6 @@ def binary_read_recursive_HakoAHRS2(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 20, 4)
-    py_obj.lng = binary_io.binTovalue(type, bin)
+    py_obj.lng = binary_io.binTovalue("int32", bin)
     
     return py_obj

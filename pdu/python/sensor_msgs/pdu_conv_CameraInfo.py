@@ -41,7 +41,7 @@ def binary_read_recursive_CameraInfo(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 4)
-    py_obj.height = binary_io.binTovalue(type, bin)
+    py_obj.height = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -52,7 +52,7 @@ def binary_read_recursive_CameraInfo(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 140, 4)
-    py_obj.width = binary_io.binTovalue(type, bin)
+    py_obj.width = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -63,7 +63,7 @@ def binary_read_recursive_CameraInfo(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 144, 128)
-    py_obj.distortion_model = binary_io.binTovalue(type, bin)
+    py_obj.distortion_model = binary_io.binTovalue("string", bin)
     
     # array_type: varray 
     # data_type: primitive 
@@ -87,7 +87,7 @@ def binary_read_recursive_CameraInfo(meta: binary_io.PduMetaData, binary_data: b
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 280, 72)
-    py_obj.k = binary_io.binToArrayValues(type, array_value)
+    py_obj.k = binary_io.binToArrayValues("float64", array_value)
     
     # array_type: array 
     # data_type: primitive 
@@ -98,7 +98,7 @@ def binary_read_recursive_CameraInfo(meta: binary_io.PduMetaData, binary_data: b
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 352, 72)
-    py_obj.r = binary_io.binToArrayValues(type, array_value)
+    py_obj.r = binary_io.binToArrayValues("float64", array_value)
     
     # array_type: array 
     # data_type: primitive 
@@ -109,7 +109,7 @@ def binary_read_recursive_CameraInfo(meta: binary_io.PduMetaData, binary_data: b
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 424, 96)
-    py_obj.p = binary_io.binToArrayValues(type, array_value)
+    py_obj.p = binary_io.binToArrayValues("float64", array_value)
     
     # array_type: single 
     # data_type: primitive 
@@ -120,7 +120,7 @@ def binary_read_recursive_CameraInfo(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 520, 4)
-    py_obj.binning_x = binary_io.binTovalue(type, bin)
+    py_obj.binning_x = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -131,7 +131,7 @@ def binary_read_recursive_CameraInfo(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 524, 4)
-    py_obj.binning_y = binary_io.binTovalue(type, bin)
+    py_obj.binning_y = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: struct 

@@ -30,7 +30,7 @@ def binary_read_recursive_Collision(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.collision = binary_io.binTovalue(type, bin)
+    py_obj.collision = binary_io.binTovalue("bool", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -41,7 +41,7 @@ def binary_read_recursive_Collision(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.contact_num = binary_io.binTovalue(type, bin)
+    py_obj.contact_num = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: struct 
@@ -81,6 +81,6 @@ def binary_read_recursive_Collision(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 272, 8)
-    py_obj.restitution_coefficient = binary_io.binTovalue(type, bin)
+    py_obj.restitution_coefficient = binary_io.binTovalue("float64", bin)
     
     return py_obj

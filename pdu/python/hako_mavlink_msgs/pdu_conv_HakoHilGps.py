@@ -28,7 +28,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.time_usec = binary_io.binTovalue(type, bin)
+    py_obj.time_usec = binary_io.binTovalue("uint64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 4)
-    py_obj.lat = binary_io.binTovalue(type, bin)
+    py_obj.lat = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 4)
-    py_obj.lon = binary_io.binTovalue(type, bin)
+    py_obj.lon = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 4)
-    py_obj.alt = binary_io.binTovalue(type, bin)
+    py_obj.alt = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 20, 2)
-    py_obj.eph = binary_io.binTovalue(type, bin)
+    py_obj.eph = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,7 +83,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 22, 2)
-    py_obj.epv = binary_io.binTovalue(type, bin)
+    py_obj.epv = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -94,7 +94,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 24, 2)
-    py_obj.vel = binary_io.binTovalue(type, bin)
+    py_obj.vel = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -105,7 +105,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 26, 2)
-    py_obj.vn = binary_io.binTovalue(type, bin)
+    py_obj.vn = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -116,7 +116,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 28, 2)
-    py_obj.ve = binary_io.binTovalue(type, bin)
+    py_obj.ve = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -127,7 +127,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 30, 2)
-    py_obj.vd = binary_io.binTovalue(type, bin)
+    py_obj.vd = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -138,7 +138,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 32, 2)
-    py_obj.cog = binary_io.binTovalue(type, bin)
+    py_obj.cog = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -149,7 +149,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 34, 1)
-    py_obj.satellites_visible = binary_io.binTovalue(type, bin)
+    py_obj.satellites_visible = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -160,7 +160,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 35, 1)
-    py_obj.id = binary_io.binTovalue(type, bin)
+    py_obj.id = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -171,7 +171,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 36, 1)
-    py_obj.yaw = binary_io.binTovalue(type, bin)
+    py_obj.yaw = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -182,6 +182,6 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 37, 1)
-    py_obj.fix_type = binary_io.binTovalue(type, bin)
+    py_obj.fix_type = binary_io.binTovalue("uint8", bin)
     
     return py_obj

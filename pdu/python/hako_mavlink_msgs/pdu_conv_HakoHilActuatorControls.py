@@ -28,7 +28,7 @@ def binary_read_recursive_HakoHilActuatorControls(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.time_usec = binary_io.binTovalue(type, bin)
+    py_obj.time_usec = binary_io.binTovalue("uint64", bin)
     
     # array_type: array 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoHilActuatorControls(meta: binary_io.PduMetaData, b
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 8, 64)
-    py_obj.controls = binary_io.binToArrayValues(type, array_value)
+    py_obj.controls = binary_io.binToArrayValues("float32", array_value)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoHilActuatorControls(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 72, 1)
-    py_obj.mode = binary_io.binTovalue(type, bin)
+    py_obj.mode = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,6 +61,6 @@ def binary_read_recursive_HakoHilActuatorControls(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 80, 8)
-    py_obj.flags = binary_io.binTovalue(type, bin)
+    py_obj.flags = binary_io.binTovalue("uint64", bin)
     
     return py_obj

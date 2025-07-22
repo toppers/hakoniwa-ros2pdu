@@ -28,7 +28,7 @@ def binary_read_recursive_HakoCanHead(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.channel = binary_io.binTovalue(type, bin)
+    py_obj.channel = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoCanHead(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.ide = binary_io.binTovalue(type, bin)
+    py_obj.ide = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoCanHead(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 4)
-    py_obj.rtr = binary_io.binTovalue(type, bin)
+    py_obj.rtr = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoCanHead(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 4)
-    py_obj.dlc = binary_io.binTovalue(type, bin)
+    py_obj.dlc = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,6 +72,6 @@ def binary_read_recursive_HakoCanHead(meta: binary_io.PduMetaData, binary_data: 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 4)
-    py_obj.canid = binary_io.binTovalue(type, bin)
+    py_obj.canid = binary_io.binTovalue("uint32", bin)
     
     return py_obj

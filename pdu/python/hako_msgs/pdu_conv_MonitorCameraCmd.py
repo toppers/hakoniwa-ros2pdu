@@ -40,7 +40,7 @@ def binary_read_recursive_MonitorCameraCmd(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 4)
-    py_obj.request_id = binary_io.binTovalue(type, bin)
+    py_obj.request_id = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -51,7 +51,7 @@ def binary_read_recursive_MonitorCameraCmd(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 4)
-    py_obj.encode_type = binary_io.binTovalue(type, bin)
+    py_obj.encode_type = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -62,6 +62,6 @@ def binary_read_recursive_MonitorCameraCmd(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 20, 4)
-    py_obj.request_type = binary_io.binTovalue(type, bin)
+    py_obj.request_type = binary_io.binTovalue("int32", bin)
     
     return py_obj

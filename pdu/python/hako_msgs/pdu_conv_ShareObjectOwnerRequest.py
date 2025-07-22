@@ -28,7 +28,7 @@ def binary_read_recursive_ShareObjectOwnerRequest(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 128)
-    py_obj.object_name = binary_io.binTovalue(type, bin)
+    py_obj.object_name = binary_io.binTovalue("string", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_ShareObjectOwnerRequest(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 128, 4)
-    py_obj.request_type = binary_io.binTovalue(type, bin)
+    py_obj.request_type = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_ShareObjectOwnerRequest(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 132, 4)
-    py_obj.new_owner_id = binary_io.binTovalue(type, bin)
+    py_obj.new_owner_id = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,6 +61,6 @@ def binary_read_recursive_ShareObjectOwnerRequest(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 8)
-    py_obj.request_time = binary_io.binTovalue(type, bin)
+    py_obj.request_time = binary_io.binTovalue("uint64", bin)
     
     return py_obj

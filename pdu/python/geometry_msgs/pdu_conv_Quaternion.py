@@ -28,7 +28,7 @@ def binary_read_recursive_Quaternion(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.x = binary_io.binTovalue(type, bin)
+    py_obj.x = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_Quaternion(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 8)
-    py_obj.y = binary_io.binTovalue(type, bin)
+    py_obj.y = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_Quaternion(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 8)
-    py_obj.z = binary_io.binTovalue(type, bin)
+    py_obj.z = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,6 +61,6 @@ def binary_read_recursive_Quaternion(meta: binary_io.PduMetaData, binary_data: b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 24, 8)
-    py_obj.w = binary_io.binTovalue(type, bin)
+    py_obj.w = binary_io.binTovalue("float64", bin)
     
     return py_obj

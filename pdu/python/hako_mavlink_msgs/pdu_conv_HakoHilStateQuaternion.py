@@ -28,7 +28,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.time_usec = binary_io.binTovalue(type, bin)
+    py_obj.time_usec = binary_io.binTovalue("uint64", bin)
     
     # array_type: array 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 8, 16)
-    py_obj.attitude_quaternion = binary_io.binToArrayValues(type, array_value)
+    py_obj.attitude_quaternion = binary_io.binToArrayValues("float32", array_value)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 24, 4)
-    py_obj.rollspeed = binary_io.binTovalue(type, bin)
+    py_obj.rollspeed = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 28, 4)
-    py_obj.pitchspeed = binary_io.binTovalue(type, bin)
+    py_obj.pitchspeed = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 32, 4)
-    py_obj.yawspeed = binary_io.binTovalue(type, bin)
+    py_obj.yawspeed = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,7 +83,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 36, 4)
-    py_obj.lat = binary_io.binTovalue(type, bin)
+    py_obj.lat = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -94,7 +94,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 40, 4)
-    py_obj.lon = binary_io.binTovalue(type, bin)
+    py_obj.lon = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -105,7 +105,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 44, 4)
-    py_obj.alt = binary_io.binTovalue(type, bin)
+    py_obj.alt = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -116,7 +116,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 48, 2)
-    py_obj.vx = binary_io.binTovalue(type, bin)
+    py_obj.vx = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -127,7 +127,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 50, 2)
-    py_obj.vy = binary_io.binTovalue(type, bin)
+    py_obj.vy = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -138,7 +138,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 52, 2)
-    py_obj.vz = binary_io.binTovalue(type, bin)
+    py_obj.vz = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -149,7 +149,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 54, 2)
-    py_obj.ind_airspeed = binary_io.binTovalue(type, bin)
+    py_obj.ind_airspeed = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -160,7 +160,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 56, 2)
-    py_obj.true_airspeed = binary_io.binTovalue(type, bin)
+    py_obj.true_airspeed = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -171,7 +171,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 58, 2)
-    py_obj.xacc = binary_io.binTovalue(type, bin)
+    py_obj.xacc = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -182,7 +182,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 60, 2)
-    py_obj.yacc = binary_io.binTovalue(type, bin)
+    py_obj.yacc = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -193,6 +193,6 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 62, 2)
-    py_obj.zacc = binary_io.binTovalue(type, bin)
+    py_obj.zacc = binary_io.binTovalue("int16", bin)
     
     return py_obj

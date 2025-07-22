@@ -41,7 +41,7 @@ def binary_read_recursive_SimpleVarray(meta: binary_io.PduMetaData, binary_data:
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 8, 10)
-    py_obj.fixed_array = binary_io.binToArrayValues(type, array_value)
+    py_obj.fixed_array = binary_io.binToArrayValues("int8", array_value)
     
     # array_type: single 
     # data_type: primitive 
@@ -52,6 +52,6 @@ def binary_read_recursive_SimpleVarray(meta: binary_io.PduMetaData, binary_data:
 
     
     bin = binary_io.readBinary(binary_data, base_off + 20, 4)
-    py_obj.p_mem1 = binary_io.binTovalue(type, bin)
+    py_obj.p_mem1 = binary_io.binTovalue("int32", bin)
     
     return py_obj

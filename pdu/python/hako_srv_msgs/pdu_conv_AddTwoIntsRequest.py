@@ -28,7 +28,7 @@ def binary_read_recursive_AddTwoIntsRequest(meta: binary_io.PduMetaData, binary_
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.a = binary_io.binTovalue(type, bin)
+    py_obj.a = binary_io.binTovalue("int64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,6 +39,6 @@ def binary_read_recursive_AddTwoIntsRequest(meta: binary_io.PduMetaData, binary_
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 8)
-    py_obj.b = binary_io.binTovalue(type, bin)
+    py_obj.b = binary_io.binTovalue("int64", bin)
     
     return py_obj

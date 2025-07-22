@@ -40,6 +40,6 @@ def binary_read_recursive_Header(meta: binary_io.PduMetaData, binary_data: bytes
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 128)
-    py_obj.frame_id = binary_io.binTovalue(type, bin)
+    py_obj.frame_id = binary_io.binTovalue("string", bin)
     
     return py_obj

@@ -41,7 +41,7 @@ def binary_read_recursive_TransformStamped(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 128)
-    py_obj.child_frame_id = binary_io.binTovalue(type, bin)
+    py_obj.child_frame_id = binary_io.binTovalue("string", bin)
     
     # array_type: single 
     # data_type: struct 

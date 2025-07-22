@@ -54,7 +54,7 @@ def binary_read_recursive_Imu(meta: binary_io.PduMetaData, binary_data: bytes, p
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 168, 72)
-    py_obj.orientation_covariance = binary_io.binToArrayValues(type, array_value)
+    py_obj.orientation_covariance = binary_io.binToArrayValues("float64", array_value)
     
     # array_type: single 
     # data_type: struct 
@@ -76,7 +76,7 @@ def binary_read_recursive_Imu(meta: binary_io.PduMetaData, binary_data: bytes, p
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 264, 72)
-    py_obj.angular_velocity_covariance = binary_io.binToArrayValues(type, array_value)
+    py_obj.angular_velocity_covariance = binary_io.binToArrayValues("float64", array_value)
     
     # array_type: single 
     # data_type: struct 
@@ -98,6 +98,6 @@ def binary_read_recursive_Imu(meta: binary_io.PduMetaData, binary_data: bytes, p
 
     
     array_value = binary_io.readBinary(binary_data, base_off + 360, 72)
-    py_obj.linear_acceleration_covariance = binary_io.binToArrayValues(type, array_value)
+    py_obj.linear_acceleration_covariance = binary_io.binToArrayValues("float64", array_value)
     
     return py_obj

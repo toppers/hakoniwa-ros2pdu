@@ -41,7 +41,7 @@ def binary_read_recursive_HakoCmdCameraMove(meta: binary_io.PduMetaData, binary_
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 4)
-    py_obj.request_id = binary_io.binTovalue(type, bin)
+    py_obj.request_id = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: struct 

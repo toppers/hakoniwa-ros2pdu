@@ -28,7 +28,7 @@ def binary_read_recursive_ServiceResponseHeader(meta: binary_io.PduMetaData, bin
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.request_id = binary_io.binTovalue(type, bin)
+    py_obj.request_id = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_ServiceResponseHeader(meta: binary_io.PduMetaData, bin
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 128)
-    py_obj.service_name = binary_io.binTovalue(type, bin)
+    py_obj.service_name = binary_io.binTovalue("string", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_ServiceResponseHeader(meta: binary_io.PduMetaData, bin
 
     
     bin = binary_io.readBinary(binary_data, base_off + 132, 128)
-    py_obj.client_name = binary_io.binTovalue(type, bin)
+    py_obj.client_name = binary_io.binTovalue("string", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_ServiceResponseHeader(meta: binary_io.PduMetaData, bin
 
     
     bin = binary_io.readBinary(binary_data, base_off + 260, 1)
-    py_obj.status = binary_io.binTovalue(type, bin)
+    py_obj.status = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_ServiceResponseHeader(meta: binary_io.PduMetaData, bin
 
     
     bin = binary_io.readBinary(binary_data, base_off + 261, 1)
-    py_obj.processing_percentage = binary_io.binTovalue(type, bin)
+    py_obj.processing_percentage = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,6 +83,6 @@ def binary_read_recursive_ServiceResponseHeader(meta: binary_io.PduMetaData, bin
 
     
     bin = binary_io.readBinary(binary_data, base_off + 264, 4)
-    py_obj.result_code = binary_io.binTovalue(type, bin)
+    py_obj.result_code = binary_io.binTovalue("int32", bin)
     
     return py_obj

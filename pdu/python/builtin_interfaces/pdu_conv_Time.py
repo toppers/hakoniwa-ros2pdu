@@ -28,7 +28,7 @@ def binary_read_recursive_Time(meta: binary_io.PduMetaData, binary_data: bytes, 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.sec = binary_io.binTovalue(type, bin)
+    py_obj.sec = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,6 +39,6 @@ def binary_read_recursive_Time(meta: binary_io.PduMetaData, binary_data: bytes, 
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.nanosec = binary_io.binTovalue(type, bin)
+    py_obj.nanosec = binary_io.binTovalue("uint32", bin)
     
     return py_obj

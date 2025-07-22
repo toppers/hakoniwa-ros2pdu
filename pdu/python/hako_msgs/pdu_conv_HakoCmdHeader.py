@@ -28,7 +28,7 @@ def binary_read_recursive_HakoCmdHeader(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.request = binary_io.binTovalue(type, bin)
+    py_obj.request = binary_io.binTovalue("bool", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoCmdHeader(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.result = binary_io.binTovalue(type, bin)
+    py_obj.result = binary_io.binTovalue("bool", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,6 +50,6 @@ def binary_read_recursive_HakoCmdHeader(meta: binary_io.PduMetaData, binary_data
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 4)
-    py_obj.result_code = binary_io.binTovalue(type, bin)
+    py_obj.result_code = binary_io.binTovalue("int32", bin)
     
     return py_obj

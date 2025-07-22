@@ -28,7 +28,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.time_usec = binary_io.binTovalue(type, bin)
+    py_obj.time_usec = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 1)
-    py_obj.port = binary_io.binTovalue(type, bin)
+    py_obj.port = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 6, 2)
-    py_obj.servo1_raw = binary_io.binTovalue(type, bin)
+    py_obj.servo1_raw = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 2)
-    py_obj.servo2_raw = binary_io.binTovalue(type, bin)
+    py_obj.servo2_raw = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 10, 2)
-    py_obj.servo3_raw = binary_io.binTovalue(type, bin)
+    py_obj.servo3_raw = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,7 +83,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 2)
-    py_obj.servo4_raw = binary_io.binTovalue(type, bin)
+    py_obj.servo4_raw = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -94,7 +94,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 14, 2)
-    py_obj.servo5_raw = binary_io.binTovalue(type, bin)
+    py_obj.servo5_raw = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -105,7 +105,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 2)
-    py_obj.servo6_raw = binary_io.binTovalue(type, bin)
+    py_obj.servo6_raw = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -116,7 +116,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 18, 2)
-    py_obj.servo7_raw = binary_io.binTovalue(type, bin)
+    py_obj.servo7_raw = binary_io.binTovalue("uint16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -127,6 +127,6 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
     
     bin = binary_io.readBinary(binary_data, base_off + 20, 2)
-    py_obj.servo8_raw = binary_io.binTovalue(type, bin)
+    py_obj.servo8_raw = binary_io.binTovalue("uint16", bin)
     
     return py_obj

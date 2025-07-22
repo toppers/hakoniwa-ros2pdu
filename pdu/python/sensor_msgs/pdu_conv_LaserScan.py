@@ -40,7 +40,7 @@ def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 4)
-    py_obj.angle_min = binary_io.binTovalue(type, bin)
+    py_obj.angle_min = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -51,7 +51,7 @@ def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 140, 4)
-    py_obj.angle_max = binary_io.binTovalue(type, bin)
+    py_obj.angle_max = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -62,7 +62,7 @@ def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 144, 4)
-    py_obj.angle_increment = binary_io.binTovalue(type, bin)
+    py_obj.angle_increment = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -73,7 +73,7 @@ def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 148, 4)
-    py_obj.time_increment = binary_io.binTovalue(type, bin)
+    py_obj.time_increment = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -84,7 +84,7 @@ def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 152, 4)
-    py_obj.scan_time = binary_io.binTovalue(type, bin)
+    py_obj.scan_time = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -95,7 +95,7 @@ def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 156, 4)
-    py_obj.range_min = binary_io.binTovalue(type, bin)
+    py_obj.range_min = binary_io.binTovalue("float32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -106,7 +106,7 @@ def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: by
 
     
     bin = binary_io.readBinary(binary_data, base_off + 160, 4)
-    py_obj.range_max = binary_io.binTovalue(type, bin)
+    py_obj.range_max = binary_io.binTovalue("float32", bin)
     
     # array_type: varray 
     # data_type: primitive 

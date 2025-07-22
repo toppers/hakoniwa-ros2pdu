@@ -31,10 +31,10 @@ def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaD
 {% if item.data_type == 'primitive' %}
     {% if item.array_type == 'single' %}
     bin = binary_io.readBinary(binary_data, base_off + {{ item.offset }}, {{ item.size }})
-    py_obj.{{ item.member_name }} = binary_io.binTovalue(type, bin)
+    py_obj.{{ item.member_name }} = binary_io.binTovalue("{{ item.type_name }}", bin)
     {% elif item.array_type == 'array' %}
     array_value = binary_io.readBinary(binary_data, base_off + {{ item.offset }}, {{ item.size }})
-    py_obj.{{ item.member_name }} = binary_io.binToArrayValues(type, array_value)
+    py_obj.{{ item.member_name }} = binary_io.binToArrayValues("{{ item.type_name }}", array_value)
     {% else -%}
     array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + {{ item.offset }}, 4))
     offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + {{ item.offset }} + 4, 4))

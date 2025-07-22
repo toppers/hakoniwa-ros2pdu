@@ -28,7 +28,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.time_boot_ms = binary_io.binTovalue(type, bin)
+    py_obj.time_boot_ms = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.lat = binary_io.binTovalue(type, bin)
+    py_obj.lat = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 4)
-    py_obj.lon = binary_io.binTovalue(type, bin)
+    py_obj.lon = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 12, 4)
-    py_obj.alt = binary_io.binTovalue(type, bin)
+    py_obj.alt = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,7 +72,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 4)
-    py_obj.relative_alt = binary_io.binTovalue(type, bin)
+    py_obj.relative_alt = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -83,7 +83,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 20, 2)
-    py_obj.vx = binary_io.binTovalue(type, bin)
+    py_obj.vx = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -94,7 +94,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 22, 2)
-    py_obj.vy = binary_io.binTovalue(type, bin)
+    py_obj.vy = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -105,7 +105,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 24, 2)
-    py_obj.vz = binary_io.binTovalue(type, bin)
+    py_obj.vz = binary_io.binTovalue("int16", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -116,6 +116,6 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
     
     bin = binary_io.readBinary(binary_data, base_off + 26, 2)
-    py_obj.hdg = binary_io.binTovalue(type, bin)
+    py_obj.hdg = binary_io.binTovalue("uint16", bin)
     
     return py_obj

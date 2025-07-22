@@ -29,7 +29,7 @@ def binary_read_recursive_ShareObjectOwner(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 128)
-    py_obj.object_name = binary_io.binTovalue(type, bin)
+    py_obj.object_name = binary_io.binTovalue("string", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -40,7 +40,7 @@ def binary_read_recursive_ShareObjectOwner(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 128, 4)
-    py_obj.owner_id = binary_io.binTovalue(type, bin)
+    py_obj.owner_id = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -51,7 +51,7 @@ def binary_read_recursive_ShareObjectOwner(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 8)
-    py_obj.last_update = binary_io.binTovalue(type, bin)
+    py_obj.last_update = binary_io.binTovalue("uint64", bin)
     
     # array_type: single 
     # data_type: struct 

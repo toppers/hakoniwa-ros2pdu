@@ -28,6 +28,6 @@ def binary_read_recursive_AddTwoIntsResponse(meta: binary_io.PduMetaData, binary
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 8)
-    py_obj.sum = binary_io.binTovalue(type, bin)
+    py_obj.sum = binary_io.binTovalue("int64", bin)
     
     return py_obj

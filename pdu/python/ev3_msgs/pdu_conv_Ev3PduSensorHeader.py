@@ -28,7 +28,7 @@ def binary_read_recursive_Ev3PduSensorHeader(meta: binary_io.PduMetaData, binary
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 128)
-    py_obj.name = binary_io.binTovalue(type, bin)
+    py_obj.name = binary_io.binTovalue("string", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,7 +39,7 @@ def binary_read_recursive_Ev3PduSensorHeader(meta: binary_io.PduMetaData, binary
 
     
     bin = binary_io.readBinary(binary_data, base_off + 128, 4)
-    py_obj.version = binary_io.binTovalue(type, bin)
+    py_obj.version = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -50,7 +50,7 @@ def binary_read_recursive_Ev3PduSensorHeader(meta: binary_io.PduMetaData, binary
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 8)
-    py_obj.hakoniwa_time = binary_io.binTovalue(type, bin)
+    py_obj.hakoniwa_time = binary_io.binTovalue("int64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -61,7 +61,7 @@ def binary_read_recursive_Ev3PduSensorHeader(meta: binary_io.PduMetaData, binary
 
     
     bin = binary_io.readBinary(binary_data, base_off + 144, 4)
-    py_obj.ext_off = binary_io.binTovalue(type, bin)
+    py_obj.ext_off = binary_io.binTovalue("uint32", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -72,6 +72,6 @@ def binary_read_recursive_Ev3PduSensorHeader(meta: binary_io.PduMetaData, binary
 
     
     bin = binary_io.readBinary(binary_data, base_off + 148, 4)
-    py_obj.ext_size = binary_io.binTovalue(type, bin)
+    py_obj.ext_size = binary_io.binTovalue("uint32", bin)
     
     return py_obj

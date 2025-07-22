@@ -40,7 +40,7 @@ def binary_read_recursive_HakoDroneCmdMove(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 16, 8)
-    py_obj.x = binary_io.binTovalue(type, bin)
+    py_obj.x = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -51,7 +51,7 @@ def binary_read_recursive_HakoDroneCmdMove(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 24, 8)
-    py_obj.y = binary_io.binTovalue(type, bin)
+    py_obj.y = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -62,7 +62,7 @@ def binary_read_recursive_HakoDroneCmdMove(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 32, 8)
-    py_obj.z = binary_io.binTovalue(type, bin)
+    py_obj.z = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -73,7 +73,7 @@ def binary_read_recursive_HakoDroneCmdMove(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 40, 8)
-    py_obj.speed = binary_io.binTovalue(type, bin)
+    py_obj.speed = binary_io.binTovalue("float64", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -84,6 +84,6 @@ def binary_read_recursive_HakoDroneCmdMove(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 48, 8)
-    py_obj.yaw_deg = binary_io.binTovalue(type, bin)
+    py_obj.yaw_deg = binary_io.binTovalue("float64", bin)
     
     return py_obj

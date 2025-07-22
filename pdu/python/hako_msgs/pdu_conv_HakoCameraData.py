@@ -29,7 +29,7 @@ def binary_read_recursive_HakoCameraData(meta: binary_io.PduMetaData, binary_dat
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.request_id = binary_io.binTovalue(type, bin)
+    py_obj.request_id = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: struct 

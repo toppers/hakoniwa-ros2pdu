@@ -42,7 +42,7 @@ def binary_read_recursive_AttitudeTarget(meta: binary_io.PduMetaData, binary_dat
 
     
     bin = binary_io.readBinary(binary_data, base_off + 136, 1)
-    py_obj.type_mask = binary_io.binTovalue(type, bin)
+    py_obj.type_mask = binary_io.binTovalue("uint8", bin)
     
     # array_type: single 
     # data_type: struct 
@@ -75,6 +75,6 @@ def binary_read_recursive_AttitudeTarget(meta: binary_io.PduMetaData, binary_dat
 
     
     bin = binary_io.readBinary(binary_data, base_off + 200, 4)
-    py_obj.thrust = binary_io.binTovalue(type, bin)
+    py_obj.thrust = binary_io.binTovalue("float32", bin)
     
     return py_obj

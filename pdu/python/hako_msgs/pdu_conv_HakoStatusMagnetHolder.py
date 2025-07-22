@@ -28,7 +28,7 @@ def binary_read_recursive_HakoStatusMagnetHolder(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
-    py_obj.magnet_on = binary_io.binTovalue(type, bin)
+    py_obj.magnet_on = binary_io.binTovalue("bool", bin)
     
     # array_type: single 
     # data_type: primitive 
@@ -39,6 +39,6 @@ def binary_read_recursive_HakoStatusMagnetHolder(meta: binary_io.PduMetaData, bi
 
     
     bin = binary_io.readBinary(binary_data, base_off + 4, 4)
-    py_obj.contact_on = binary_io.binTovalue(type, bin)
+    py_obj.contact_on = binary_io.binTovalue("bool", bin)
     
     return py_obj

@@ -48,6 +48,6 @@ def binary_read_recursive_MultiArrayLayout(meta: binary_io.PduMetaData, binary_d
 
     
     bin = binary_io.readBinary(binary_data, base_off + 8, 4)
-    py_obj.data_offset = binary_io.binTovalue(type, bin)
+    py_obj.data_offset = binary_io.binTovalue("uint32", bin)
     
     return py_obj
