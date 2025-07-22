@@ -70,8 +70,8 @@ def binary_write_recursive_DisturbanceWind(parent_off: int, bw_container: Binary
     # type_name: geometry_msgs/Vector3 
     # offset: 0 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 0
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.value)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.value)
     

@@ -116,10 +116,10 @@ def binary_write_recursive_AttitudeTarget(parent_off: int, bw_container: BinaryW
     # type_name: std_msgs/Header 
     # offset: 0 size: 136 
     # array_len: 1
-    type = "std_msgs/Header"
+    type = "Header"
     off = 0
 
-    binary_write_recursive_std_msgs/Header(parent_off + off, bw_container, allocator, py_obj.header)
+    binary_write_recursive_Header(parent_off + off, bw_container, allocator, py_obj.header)
     
     # array_type: single 
     # data_type: primitive 
@@ -141,10 +141,10 @@ def binary_write_recursive_AttitudeTarget(parent_off: int, bw_container: BinaryW
     # type_name: geometry_msgs/Quaternion 
     # offset: 144 size: 32 
     # array_len: 1
-    type = "geometry_msgs/Quaternion"
+    type = "Quaternion"
     off = 144
 
-    binary_write_recursive_geometry_msgs/Quaternion(parent_off + off, bw_container, allocator, py_obj.orientation)
+    binary_write_recursive_Quaternion(parent_off + off, bw_container, allocator, py_obj.orientation)
     
     # array_type: single 
     # data_type: struct 
@@ -152,10 +152,10 @@ def binary_write_recursive_AttitudeTarget(parent_off: int, bw_container: BinaryW
     # type_name: geometry_msgs/Vector3 
     # offset: 176 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 176
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.body_rate)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.body_rate)
     
     # array_type: single 
     # data_type: primitive 

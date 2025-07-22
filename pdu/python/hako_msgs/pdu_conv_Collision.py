@@ -150,10 +150,10 @@ def binary_write_recursive_Collision(parent_off: int, bw_container: BinaryWriter
     # type_name: geometry_msgs/Vector3 
     # offset: 8 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 8
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.relative_velocity)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.relative_velocity)
     
     # array_type: array 
     # data_type: struct 
@@ -161,14 +161,14 @@ def binary_write_recursive_Collision(parent_off: int, bw_container: BinaryWriter
     # type_name: geometry_msgs/Point 
     # offset: 32 size: 240 
     # array_len: 10
-    type = "geometry_msgs/Point"
+    type = "Point"
     off = 32
 
     for i, elm in enumerate(py_obj.contact_position):
         elm_size = 240
         array_size = int(24.0)
         one_elm_size = int(elm_size / array_size)
-        binary_write_recursive_geometry_msgs/Point((parent_off + off + i * one_elm_size), bw_container, allocator, elm)
+        binary_write_recursive_Point((parent_off + off + i * one_elm_size), bw_container, allocator, elm)
     
     # array_type: single 
     # data_type: primitive 

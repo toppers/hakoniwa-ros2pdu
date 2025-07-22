@@ -145,8 +145,8 @@ def binary_write_recursive_ShareObjectOwner(parent_off: int, bw_container: Binar
     # type_name: geometry_msgs/Twist 
     # offset: 144 size: 48 
     # array_len: 1
-    type = "geometry_msgs/Twist"
+    type = "Twist"
     off = 144
 
-    binary_write_recursive_geometry_msgs/Twist(parent_off + off, bw_container, allocator, py_obj.pos)
+    binary_write_recursive_Twist(parent_off + off, bw_container, allocator, py_obj.pos)
     

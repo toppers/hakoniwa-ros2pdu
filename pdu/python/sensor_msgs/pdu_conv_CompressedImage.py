@@ -94,10 +94,10 @@ def binary_write_recursive_CompressedImage(parent_off: int, bw_container: Binary
     # type_name: std_msgs/Header 
     # offset: 0 size: 136 
     # array_len: 1
-    type = "std_msgs/Header"
+    type = "Header"
     off = 0
 
-    binary_write_recursive_std_msgs/Header(parent_off + off, bw_container, allocator, py_obj.header)
+    binary_write_recursive_Header(parent_off + off, bw_container, allocator, py_obj.header)
     
     # array_type: single 
     # data_type: primitive 

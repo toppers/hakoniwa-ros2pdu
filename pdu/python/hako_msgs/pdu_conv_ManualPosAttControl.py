@@ -95,8 +95,8 @@ def binary_write_recursive_ManualPosAttControl(parent_off: int, bw_container: Bi
     # type_name: geometry_msgs/Twist 
     # offset: 8 size: 48 
     # array_len: 1
-    type = "geometry_msgs/Twist"
+    type = "Twist"
     off = 8
 
-    binary_write_recursive_geometry_msgs/Twist(parent_off + off, bw_container, allocator, py_obj.posatt)
+    binary_write_recursive_Twist(parent_off + off, bw_container, allocator, py_obj.posatt)
     

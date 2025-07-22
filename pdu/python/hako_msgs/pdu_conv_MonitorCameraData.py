@@ -120,8 +120,8 @@ def binary_write_recursive_MonitorCameraData(parent_off: int, bw_container: Bina
     # type_name: sensor_msgs/CompressedImage 
     # offset: 8 size: 272 
     # array_len: 1
-    type = "sensor_msgs/CompressedImage"
+    type = "CompressedImage"
     off = 8
 
-    binary_write_recursive_sensor_msgs/CompressedImage(parent_off + off, bw_container, allocator, py_obj.image)
+    binary_write_recursive_CompressedImage(parent_off + off, bw_container, allocator, py_obj.image)
     

@@ -228,10 +228,10 @@ def binary_write_recursive_ImpulseCollision(parent_off: int, bw_container: Binar
     # type_name: geometry_msgs/Point 
     # offset: 16 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Point"
+    type = "Point"
     off = 16
 
-    binary_write_recursive_geometry_msgs/Point(parent_off + off, bw_container, allocator, py_obj.self_contact_vector)
+    binary_write_recursive_Point(parent_off + off, bw_container, allocator, py_obj.self_contact_vector)
     
     # array_type: single 
     # data_type: struct 
@@ -239,10 +239,10 @@ def binary_write_recursive_ImpulseCollision(parent_off: int, bw_container: Binar
     # type_name: geometry_msgs/Vector3 
     # offset: 40 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 40
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.normal)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.normal)
     
     # array_type: single 
     # data_type: struct 
@@ -250,10 +250,10 @@ def binary_write_recursive_ImpulseCollision(parent_off: int, bw_container: Binar
     # type_name: geometry_msgs/Point 
     # offset: 64 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Point"
+    type = "Point"
     off = 64
 
-    binary_write_recursive_geometry_msgs/Point(parent_off + off, bw_container, allocator, py_obj.target_contact_vector)
+    binary_write_recursive_Point(parent_off + off, bw_container, allocator, py_obj.target_contact_vector)
     
     # array_type: single 
     # data_type: struct 
@@ -261,10 +261,10 @@ def binary_write_recursive_ImpulseCollision(parent_off: int, bw_container: Binar
     # type_name: geometry_msgs/Vector3 
     # offset: 88 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 88
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.target_velocity)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.target_velocity)
     
     # array_type: single 
     # data_type: struct 
@@ -272,10 +272,10 @@ def binary_write_recursive_ImpulseCollision(parent_off: int, bw_container: Binar
     # type_name: geometry_msgs/Vector3 
     # offset: 112 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 112
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.target_angular_velocity)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.target_angular_velocity)
     
     # array_type: single 
     # data_type: struct 
@@ -283,10 +283,10 @@ def binary_write_recursive_ImpulseCollision(parent_off: int, bw_container: Binar
     # type_name: geometry_msgs/Vector3 
     # offset: 136 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 136
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.target_euler)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.target_euler)
     
     # array_type: single 
     # data_type: struct 
@@ -294,10 +294,10 @@ def binary_write_recursive_ImpulseCollision(parent_off: int, bw_container: Binar
     # type_name: geometry_msgs/Vector3 
     # offset: 160 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 160
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.target_inertia)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.target_inertia)
     
     # array_type: single 
     # data_type: primitive 

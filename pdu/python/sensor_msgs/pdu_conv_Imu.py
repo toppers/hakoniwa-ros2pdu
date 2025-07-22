@@ -139,10 +139,10 @@ def binary_write_recursive_Imu(parent_off: int, bw_container: BinaryWriterContai
     # type_name: std_msgs/Header 
     # offset: 0 size: 136 
     # array_len: 1
-    type = "std_msgs/Header"
+    type = "Header"
     off = 0
 
-    binary_write_recursive_std_msgs/Header(parent_off + off, bw_container, allocator, py_obj.header)
+    binary_write_recursive_Header(parent_off + off, bw_container, allocator, py_obj.header)
     
     # array_type: single 
     # data_type: struct 
@@ -150,10 +150,10 @@ def binary_write_recursive_Imu(parent_off: int, bw_container: BinaryWriterContai
     # type_name: geometry_msgs/Quaternion 
     # offset: 136 size: 32 
     # array_len: 1
-    type = "geometry_msgs/Quaternion"
+    type = "Quaternion"
     off = 136
 
-    binary_write_recursive_geometry_msgs/Quaternion(parent_off + off, bw_container, allocator, py_obj.orientation)
+    binary_write_recursive_Quaternion(parent_off + off, bw_container, allocator, py_obj.orientation)
     
     # array_type: array 
     # data_type: primitive 
@@ -177,10 +177,10 @@ def binary_write_recursive_Imu(parent_off: int, bw_container: BinaryWriterContai
     # type_name: geometry_msgs/Vector3 
     # offset: 240 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 240
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.angular_velocity)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.angular_velocity)
     
     # array_type: array 
     # data_type: primitive 
@@ -204,10 +204,10 @@ def binary_write_recursive_Imu(parent_off: int, bw_container: BinaryWriterContai
     # type_name: geometry_msgs/Vector3 
     # offset: 336 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 336
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.linear_acceleration)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.linear_acceleration)
     
     # array_type: array 
     # data_type: primitive 

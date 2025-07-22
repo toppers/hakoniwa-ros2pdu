@@ -105,10 +105,10 @@ def binary_write_recursive_Odometry(parent_off: int, bw_container: BinaryWriterC
     # type_name: std_msgs/Header 
     # offset: 0 size: 136 
     # array_len: 1
-    type = "std_msgs/Header"
+    type = "Header"
     off = 0
 
-    binary_write_recursive_std_msgs/Header(parent_off + off, bw_container, allocator, py_obj.header)
+    binary_write_recursive_Header(parent_off + off, bw_container, allocator, py_obj.header)
     
     # array_type: single 
     # data_type: primitive 
@@ -130,10 +130,10 @@ def binary_write_recursive_Odometry(parent_off: int, bw_container: BinaryWriterC
     # type_name: geometry_msgs/PoseWithCovariance 
     # offset: 264 size: 344 
     # array_len: 1
-    type = "geometry_msgs/PoseWithCovariance"
+    type = "PoseWithCovariance"
     off = 264
 
-    binary_write_recursive_geometry_msgs/PoseWithCovariance(parent_off + off, bw_container, allocator, py_obj.pose)
+    binary_write_recursive_PoseWithCovariance(parent_off + off, bw_container, allocator, py_obj.pose)
     
     # array_type: single 
     # data_type: struct 
@@ -141,8 +141,8 @@ def binary_write_recursive_Odometry(parent_off: int, bw_container: BinaryWriterC
     # type_name: geometry_msgs/TwistWithCovariance 
     # offset: 608 size: 336 
     # array_len: 1
-    type = "geometry_msgs/TwistWithCovariance"
+    type = "TwistWithCovariance"
     off = 608
 
-    binary_write_recursive_geometry_msgs/TwistWithCovariance(parent_off + off, bw_container, allocator, py_obj.twist)
+    binary_write_recursive_TwistWithCovariance(parent_off + off, bw_container, allocator, py_obj.twist)
     

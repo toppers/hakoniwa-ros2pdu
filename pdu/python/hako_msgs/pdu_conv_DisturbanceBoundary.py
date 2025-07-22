@@ -82,10 +82,10 @@ def binary_write_recursive_DisturbanceBoundary(parent_off: int, bw_container: Bi
     # type_name: geometry_msgs/Point 
     # offset: 0 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Point"
+    type = "Point"
     off = 0
 
-    binary_write_recursive_geometry_msgs/Point(parent_off + off, bw_container, allocator, py_obj.boundary_point)
+    binary_write_recursive_Point(parent_off + off, bw_container, allocator, py_obj.boundary_point)
     
     # array_type: single 
     # data_type: struct 
@@ -93,8 +93,8 @@ def binary_write_recursive_DisturbanceBoundary(parent_off: int, bw_container: Bi
     # type_name: geometry_msgs/Vector3 
     # offset: 24 size: 24 
     # array_len: 1
-    type = "geometry_msgs/Vector3"
+    type = "Vector3"
     off = 24
 
-    binary_write_recursive_geometry_msgs/Vector3(parent_off + off, bw_container, allocator, py_obj.boundary_normal)
+    binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.boundary_normal)
     

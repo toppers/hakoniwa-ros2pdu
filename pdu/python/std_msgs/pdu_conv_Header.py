@@ -81,10 +81,10 @@ def binary_write_recursive_Header(parent_off: int, bw_container: BinaryWriterCon
     # type_name: builtin_interfaces/Time 
     # offset: 0 size: 8 
     # array_len: 1
-    type = "builtin_interfaces/Time"
+    type = "Time"
     off = 0
 
-    binary_write_recursive_builtin_interfaces/Time(parent_off + off, bw_container, allocator, py_obj.stamp)
+    binary_write_recursive_Time(parent_off + off, bw_container, allocator, py_obj.stamp)
     
     # array_type: single 
     # data_type: primitive 

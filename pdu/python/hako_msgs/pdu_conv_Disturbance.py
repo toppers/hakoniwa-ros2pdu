@@ -106,10 +106,10 @@ def binary_write_recursive_Disturbance(parent_off: int, bw_container: BinaryWrit
     # type_name: hako_msgs/DisturbanceTemperature 
     # offset: 0 size: 8 
     # array_len: 1
-    type = "hako_msgs/DisturbanceTemperature"
+    type = "DisturbanceTemperature"
     off = 0
 
-    binary_write_recursive_hako_msgs/DisturbanceTemperature(parent_off + off, bw_container, allocator, py_obj.d_temp)
+    binary_write_recursive_DisturbanceTemperature(parent_off + off, bw_container, allocator, py_obj.d_temp)
     
     # array_type: single 
     # data_type: struct 
@@ -117,10 +117,10 @@ def binary_write_recursive_Disturbance(parent_off: int, bw_container: BinaryWrit
     # type_name: hako_msgs/DisturbanceWind 
     # offset: 8 size: 24 
     # array_len: 1
-    type = "hako_msgs/DisturbanceWind"
+    type = "DisturbanceWind"
     off = 8
 
-    binary_write_recursive_hako_msgs/DisturbanceWind(parent_off + off, bw_container, allocator, py_obj.d_wind)
+    binary_write_recursive_DisturbanceWind(parent_off + off, bw_container, allocator, py_obj.d_wind)
     
     # array_type: single 
     # data_type: struct 
@@ -128,10 +128,10 @@ def binary_write_recursive_Disturbance(parent_off: int, bw_container: BinaryWrit
     # type_name: hako_msgs/DisturbanceAtm 
     # offset: 32 size: 8 
     # array_len: 1
-    type = "hako_msgs/DisturbanceAtm"
+    type = "DisturbanceAtm"
     off = 32
 
-    binary_write_recursive_hako_msgs/DisturbanceAtm(parent_off + off, bw_container, allocator, py_obj.d_atm)
+    binary_write_recursive_DisturbanceAtm(parent_off + off, bw_container, allocator, py_obj.d_atm)
     
     # array_type: single 
     # data_type: struct 
@@ -139,8 +139,8 @@ def binary_write_recursive_Disturbance(parent_off: int, bw_container: BinaryWrit
     # type_name: hako_msgs/DisturbanceBoundary 
     # offset: 40 size: 48 
     # array_len: 1
-    type = "hako_msgs/DisturbanceBoundary"
+    type = "DisturbanceBoundary"
     off = 40
 
-    binary_write_recursive_hako_msgs/DisturbanceBoundary(parent_off + off, bw_container, allocator, py_obj.d_boundary)
+    binary_write_recursive_DisturbanceBoundary(parent_off + off, bw_container, allocator, py_obj.d_boundary)
     
