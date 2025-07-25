@@ -1,0 +1,15 @@
+
+[
+  {
+    "name": "point",
+    "pdu_file_prefix": "point"
+  },
+  {
+    "name": "tf_message",
+    "pdu_file_prefix": "tf"
+  },
+  {
+    "name": "imu",
+    "pdu_file_prefix": "imu"
+  }
+]

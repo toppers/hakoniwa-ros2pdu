@@ -3,15 +3,18 @@
 #include <vector>
 #include <cassert>
 #include <cmath>
+#include <string>
 
 #include "pdu/types/tf2_msgs/pdu_cpptype_conv_TFMessage.hpp"
 #include "pdu/types/geometry_msgs/pdu_cpptype_conv_TransformStamped.hpp"
 #include "pdu/types/geometry_msgs/pdu_cpptype_conv_Point.hpp"
+#include "pdu/types/sensor_msgs/pdu_cpptype_conv_Imu.hpp"
 
-void validate_tf_message() {
-    std::ifstream ifs("tf_from_py.pdu", std::ios::binary);
+void validate_tf_message(const std::string& pdu_file_prefix) {
+    std::string filename = pdu_file_prefix + "_from_py.pdu";
+    std::ifstream ifs(filename, std::ios::binary);
     if (!ifs) {
-        std::cerr << "Error: Can not open tf_from_py.pdu" << std::endl;
+        std::cerr << "Error: Can not open " << filename << std::endl;
         exit(1);
     }
     std::vector<char> buffer((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
@@ -28,7 +31,7 @@ void validate_tf_message() {
     std::cout << "SUCCESS: Validation of TFMessage from Python passed." << std::endl;
 }
 
-void generate_tf_message() {
+void generate_tf_message(const std::string& pdu_file_prefix) {
     HakoCpp_TFMessage cpp_msg;
     HakoCpp_TransformStamped transform;
     transform.header.stamp.sec = 123;
@@ -51,17 +54,19 @@ void generate_tf_message() {
     void* top_ptr = hako_get_top_ptr_pdu(pdu_ptr);
     assert(top_ptr != nullptr);
 
-    std::ofstream ofs("tf_from_cpp.pdu", std::ios::binary);
+    std::string filename = pdu_file_prefix + "_from_cpp.pdu";
+    std::ofstream ofs(filename, std::ios::binary);
     ofs.write(static_cast<const char*>(top_ptr), pdu_size);
-    std::cout << "SUCCESS: Generated tf_from_cpp.pdu" << std::endl;
+    std::cout << "SUCCESS: Generated " << filename << std::endl;
 
     hako_destroy_pdu(pdu_ptr);
 }
 
-void validate_point_message() {
-    std::ifstream ifs("point_from_py.pdu", std::ios::binary);
+void validate_point_message(const std::string& pdu_file_prefix) {
+    std::string filename = pdu_file_prefix + "_from_py.pdu";
+    std::ifstream ifs(filename, std::ios::binary);
     if (!ifs) {
-        std::cerr << "Error: Can not open point_from_py.pdu" << std::endl;
+        std::cerr << "Error: Can not open " << filename << std::endl;
         exit(1);
     }
     std::vector<char> buffer((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
@@ -78,7 +83,7 @@ void validate_point_message() {
     std::cout << "SUCCESS: Validation of Point from Python passed." << std::endl;
 }
 
-void generate_point_message() {
+void generate_point_message(const std::string& pdu_file_prefix) {
     HakoCpp_Point cpp_msg;
     cpp_msg.x = 1.1;
     cpp_msg.y = 2.2;
@@ -91,15 +96,60 @@ void generate_point_message() {
     void* top_ptr = hako_get_top_ptr_pdu(pdu_ptr);
     assert(top_ptr != nullptr);
 
-    std::ofstream ofs("point_from_cpp.pdu", std::ios::binary);
+    std::string filename = pdu_file_prefix + "_from_cpp.pdu";
+    std::ofstream ofs(filename, std::ios::binary);
     ofs.write(static_cast<const char*>(top_ptr), pdu_size);
-    std::cout << "SUCCESS: Generated point_from_cpp.pdu" << std::endl;
+    std::cout << "SUCCESS: Generated " << filename << std::endl;
+
+    hako_destroy_pdu(pdu_ptr);
+}
+
+void validate_imu_message(const std::string& pdu_file_prefix) {
+    std::string filename = pdu_file_prefix + "_from_py.pdu";
+    std::ifstream ifs(filename, std::ios::binary);
+    if (!ifs) {
+        std::cerr << "Error: Can not open " << filename << std::endl;
+        exit(1);
+    }
+    std::vector<char> buffer((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    
+    HakoCpp_Imu cpp_msg;
+    hako::pdu::msgs::sensor_msgs::Imu conv;
+    bool ret = conv.pdu2cpp(buffer.data(), cpp_msg);
+    assert(ret);
+
+    std::cout << "Validating Imu from Python..." << std::endl;
+    assert(abs(cpp_msg.orientation.x - 0.1) < 1e-6);
+    assert(abs(cpp_msg.orientation.y - 0.2) < 1e-6);
+    assert(abs(cpp_msg.orientation.z - 0.3) < 1e-6);
+    assert(abs(cpp_msg.orientation.w - 0.4) < 1e-6);
+    std::cout << "SUCCESS: Validation of Imu from Python passed." << std::endl;
+}
+
+void generate_imu_message(const std::string& pdu_file_prefix) {
+    HakoCpp_Imu cpp_msg;
+    cpp_msg.orientation.x = 0.1;
+    cpp_msg.orientation.y = 0.2;
+    cpp_msg.orientation.z = 0.3;
+    cpp_msg.orientation.w = 0.4;
+
+    Hako_Imu* pdu_ptr = nullptr;
+    int pdu_size = hako_convert_cpp2pdu_Imu(cpp_msg, &pdu_ptr);
+    assert(pdu_size > 0);
+
+    void* top_ptr = hako_get_top_ptr_pdu(pdu_ptr);
+    assert(top_ptr != nullptr);
+
+    std::string filename = pdu_file_prefix + "_from_cpp.pdu";
+    std::ofstream ofs(filename, std::ios::binary);
+    ofs.write(static_cast<const char*>(top_ptr), pdu_size);
+    std::cout << "SUCCESS: Generated " << filename << std::endl;
 
     hako_destroy_pdu(pdu_ptr);
 }
 
 // Function pointer type for test functions
-typedef void (*TestFunction)();
+typedef void (*TestFunction)(const std::string&);
 
 // Test function table
 struct TestEntry {
@@ -111,17 +161,19 @@ struct TestEntry {
 TestEntry test_table[] = {
     { "tf_message", generate_tf_message, validate_tf_message },
     { "point", generate_point_message, validate_point_message },
+    { "imu", generate_imu_message, validate_imu_message },
     // Add new test functions here
     { "", nullptr, nullptr } // Sentinel
 };
 
 int main(int argc, char* argv[]) {
-    if (argc != 3) {
-        std::cerr << "Usage: " << argv[0] << " [generate|validate] [tf|point|all]" << std::endl;
+    if (argc != 4) {
+        std::cerr << "Usage: " << argv[0] << " [generate|validate] [target] [pdu_file_prefix]" << std::endl;
         return 1;
     }
     std::string mode = argv[1];
     std::string target = argv[2];
+    std::string pdu_file_prefix = argv[3];
 
     bool found_target = false;
     for (int i = 0; test_table[i].name != ""; ++i) {
@@ -129,11 +181,11 @@ int main(int argc, char* argv[]) {
             found_target = true;
             if (mode == "generate") {
                 if (test_table[i].generate_func) {
-                    test_table[i].generate_func();
+                    test_table[i].generate_func(pdu_file_prefix);
                 }
             } else if (mode == "validate") {
                 if (test_table[i].validate_func) {
-                    test_table[i].validate_func();
+                    test_table[i].validate_func(pdu_file_prefix);
                 }
             } else {
                 std::cerr << "Invalid mode: " << mode << std::endl;

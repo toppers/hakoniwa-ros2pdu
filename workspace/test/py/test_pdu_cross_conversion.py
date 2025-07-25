@@ -14,8 +14,13 @@ from pdu.python.geometry_msgs.pdu_pytype_Vector3 import Vector3
 from pdu.python.geometry_msgs.pdu_pytype_Quaternion import Quaternion
 from pdu.python.geometry_msgs.pdu_conv_Point import pdu_to_py_Point, py_to_pdu_Point
 from pdu.python.geometry_msgs.pdu_pytype_Point import Point
+from pdu.python.sensor_msgs.pdu_conv_Imu import pdu_to_py_Imu, py_to_pdu_Imu
+from pdu.python.sensor_msgs.pdu_pytype_Imu import Imu
 
 class TestPduCrossConversion(unittest.TestCase):
+
+    def setUp(self):
+        self.pdu_file_prefix = os.getenv("PDU_FILE_PREFIX")
 
     def test_serialize_tf_message_from_python(self):
         print("\n--- Running test_serialize_tf_message_from_python ---")
@@ -29,13 +34,14 @@ class TestPduCrossConversion(unittest.TestCase):
 
         pdu_bytes = py_to_pdu_TFMessage(py_msg)
         
-        with open("tf_from_py.pdu", "wb") as f:
+        filename = self.pdu_file_prefix + "_from_py.pdu"
+        with open(filename, "wb") as f:
             f.write(pdu_bytes)
-        print("SUCCESS: Generated tf_from_py.pdu")
+        print(f"SUCCESS: Generated {filename}")
 
     def test_deserialize_tf_message_from_cpp(self):
         print("\n--- Running test_deserialize_tf_message_from_cpp ---")
-        pdu_file_path = 'tf_from_cpp.pdu'
+        pdu_file_path = self.pdu_file_prefix + '_from_cpp.pdu'
         self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
 
         with open(pdu_file_path, 'rb') as f:
@@ -58,13 +64,14 @@ class TestPduCrossConversion(unittest.TestCase):
         
         pdu_bytes = py_to_pdu_Point(py_msg)
         
-        with open("point_from_py.pdu", "wb") as f:
+        filename = self.pdu_file_prefix + "_from_py.pdu"
+        with open(filename, "wb") as f:
             f.write(pdu_bytes)
-        print("SUCCESS: Generated point_from_py.pdu")
+        print(f"SUCCESS: Generated {filename}")
 
     def test_deserialize_point_from_cpp(self):
         print("\n--- Running test_deserialize_point_from_cpp ---")
-        pdu_file_path = 'point_from_cpp.pdu'
+        pdu_file_path = self.pdu_file_prefix + '_from_cpp.pdu'
         self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
 
         with open(pdu_file_path, 'rb') as f:
@@ -77,6 +84,39 @@ class TestPduCrossConversion(unittest.TestCase):
         self.assertAlmostEqual(py_msg.y, 2.2, places=6)
         self.assertAlmostEqual(py_msg.z, 3.3, places=6)
         print("SUCCESS: Deserialization of Point from C++ passed.")
+
+    def test_serialize_imu_from_python(self):
+        print("\n--- Running test_serialize_imu_from_python ---")
+        py_msg = Imu()
+        py_msg.orientation.x = 0.1
+        py_msg.orientation.y = 0.2
+        py_msg.orientation.z = 0.3
+        py_msg.orientation.w = 0.4
+        
+        pdu_bytes = py_to_pdu_Imu(py_msg)
+        
+        filename = self.pdu_file_prefix + "_from_py.pdu"
+        with open(filename, "wb") as f:
+            f.write(pdu_bytes)
+        print(f"SUCCESS: Generated {filename}")
+
+    def test_deserialize_imu_from_cpp(self):
+        print("\n--- Running test_deserialize_imu_from_cpp ---")
+        pdu_file_path = self.pdu_file_prefix + '_from_cpp.pdu'
+        self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
+
+        with open(pdu_file_path, 'rb') as f:
+            pdu_bytes = f.read()
+
+        py_msg = pdu_to_py_Imu(pdu_bytes)
+        
+        self.assertIsInstance(py_msg, Imu)
+        self.assertAlmostEqual(py_msg.orientation.x, 0.1, places=6)
+        self.assertAlmostEqual(py_msg.orientation.y, 0.2, places=6)
+        self.assertAlmostEqual(py_msg.orientation.z, 0.3, places=6)
+        self.assertAlmostEqual(py_msg.orientation.w, 0.4, places=6)
+        print("SUCCESS: Deserialization of Imu from C++ passed.")
+
 
 if __name__ == "__main__":
     unittest.main()
