@@ -34,7 +34,7 @@ def binary_read_recursive_Ev3PduTouchSensor(meta: binary_io.PduMetaData, binary_
 
 
 
-def py_to_pduEv3PduTouchSensor(py_obj: Ev3PduTouchSensor) -> bytearray:
+def py_to_pdu_Ev3PduTouchSensor(py_obj: Ev3PduTouchSensor) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

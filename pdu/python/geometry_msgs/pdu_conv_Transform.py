@@ -47,7 +47,7 @@ def binary_read_recursive_Transform(meta: binary_io.PduMetaData, binary_data: by
 
 
 
-def py_to_pduTransform(py_obj: Transform) -> bytearray:
+def py_to_pdu_Transform(py_obj: Transform) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

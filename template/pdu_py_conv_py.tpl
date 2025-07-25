@@ -59,8 +59,8 @@ def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaD
         i = i + 1
     py_obj.{{ item.member_name }} = array_value    
     {% else %}
-    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, {{ item.offset }}, 4))
-    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, {{ item.offset }} + 4, 4))
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + {{ item.offset }}, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + {{ item.offset }} + 4, 4))
     one_elm_size = {{ item.size }}
     i = 0
     array_value = []
@@ -77,7 +77,7 @@ def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaD
 
 
 
-def py_to_pdu{{ container.msg_type_name }}(py_obj: {{ container.class_name }}) -> bytearray:
+def py_to_pdu_{{ container.msg_type_name }}(py_obj: {{ container.class_name }}) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

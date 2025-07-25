@@ -58,7 +58,7 @@ def binary_read_recursive_HakoCmdCameraMove(meta: binary_io.PduMetaData, binary_
 
 
 
-def py_to_pduHakoCmdCameraMove(py_obj: HakoCmdCameraMove) -> bytearray:
+def py_to_pdu_HakoCmdCameraMove(py_obj: HakoCmdCameraMove) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

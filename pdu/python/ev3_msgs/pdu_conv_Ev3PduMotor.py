@@ -56,7 +56,7 @@ def binary_read_recursive_Ev3PduMotor(meta: binary_io.PduMetaData, binary_data: 
 
 
 
-def py_to_pduEv3PduMotor(py_obj: Ev3PduMotor) -> bytearray:
+def py_to_pdu_Ev3PduMotor(py_obj: Ev3PduMotor) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

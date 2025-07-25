@@ -47,7 +47,7 @@ def binary_read_recursive_Twist(meta: binary_io.PduMetaData, binary_data: bytear
 
 
 
-def py_to_pduTwist(py_obj: Twist) -> bytearray:
+def py_to_pdu_Twist(py_obj: Twist) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

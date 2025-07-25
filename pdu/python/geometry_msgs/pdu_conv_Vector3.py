@@ -56,7 +56,7 @@ def binary_read_recursive_Vector3(meta: binary_io.PduMetaData, binary_data: byte
 
 
 
-def py_to_pduVector3(py_obj: Vector3) -> bytearray:
+def py_to_pdu_Vector3(py_obj: Vector3) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

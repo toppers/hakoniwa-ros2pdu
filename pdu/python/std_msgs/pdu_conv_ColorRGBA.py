@@ -67,7 +67,7 @@ def binary_read_recursive_ColorRGBA(meta: binary_io.PduMetaData, binary_data: by
 
 
 
-def py_to_pduColorRGBA(py_obj: ColorRGBA) -> bytearray:
+def py_to_pdu_ColorRGBA(py_obj: ColorRGBA) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

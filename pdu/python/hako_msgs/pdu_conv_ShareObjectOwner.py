@@ -68,7 +68,7 @@ def binary_read_recursive_ShareObjectOwner(meta: binary_io.PduMetaData, binary_d
 
 
 
-def py_to_pduShareObjectOwner(py_obj: ShareObjectOwner) -> bytearray:
+def py_to_pdu_ShareObjectOwner(py_obj: ShareObjectOwner) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

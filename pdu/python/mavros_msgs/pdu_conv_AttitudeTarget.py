@@ -81,7 +81,7 @@ def binary_read_recursive_AttitudeTarget(meta: binary_io.PduMetaData, binary_dat
 
 
 
-def py_to_pduAttitudeTarget(py_obj: AttitudeTarget) -> bytearray:
+def py_to_pdu_AttitudeTarget(py_obj: AttitudeTarget) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

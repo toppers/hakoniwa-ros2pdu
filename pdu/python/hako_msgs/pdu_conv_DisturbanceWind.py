@@ -35,7 +35,7 @@ def binary_read_recursive_DisturbanceWind(meta: binary_io.PduMetaData, binary_da
 
 
 
-def py_to_pduDisturbanceWind(py_obj: DisturbanceWind) -> bytearray:
+def py_to_pdu_DisturbanceWind(py_obj: DisturbanceWind) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

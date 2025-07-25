@@ -45,7 +45,7 @@ def binary_read_recursive_GameControllerOperation(meta: binary_io.PduMetaData, b
 
 
 
-def py_to_pduGameControllerOperation(py_obj: GameControllerOperation) -> bytearray:
+def py_to_pdu_GameControllerOperation(py_obj: GameControllerOperation) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -78,7 +78,7 @@ def binary_read_recursive_Ev3PduActuatorHeader(meta: binary_io.PduMetaData, bina
 
 
 
-def py_to_pduEv3PduActuatorHeader(py_obj: Ev3PduActuatorHeader) -> bytearray:
+def py_to_pdu_Ev3PduActuatorHeader(py_obj: Ev3PduActuatorHeader) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

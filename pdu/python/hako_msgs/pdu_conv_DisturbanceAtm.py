@@ -34,7 +34,7 @@ def binary_read_recursive_DisturbanceAtm(meta: binary_io.PduMetaData, binary_dat
 
 
 
-def py_to_pduDisturbanceAtm(py_obj: DisturbanceAtm) -> bytearray:
+def py_to_pdu_DisturbanceAtm(py_obj: DisturbanceAtm) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

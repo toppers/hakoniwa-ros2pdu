@@ -90,7 +90,7 @@ def binary_read_recursive_HakoDroneCmdMove(meta: binary_io.PduMetaData, binary_d
 
 
 
-def py_to_pduHakoDroneCmdMove(py_obj: HakoDroneCmdMove) -> bytearray:
+def py_to_pdu_HakoDroneCmdMove(py_obj: HakoDroneCmdMove) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

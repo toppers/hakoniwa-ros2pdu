@@ -17,8 +17,8 @@ from pdu.python.geometry_msgs.pdu_pytype_Point import Point
 
 class TestPduCrossConversion(unittest.TestCase):
 
-    def test_A_serialize_tf_message_from_python(self):
-        print("\n--- Running test_A_serialize_tf_message_from_python ---")
+    def test_serialize_tf_message_from_python(self):
+        print("\n--- Running test_serialize_tf_message_from_python ---")
         py_msg = TFMessage()
         transform = TransformStamped()
         transform.header.stamp.sec = 123
@@ -33,8 +33,8 @@ class TestPduCrossConversion(unittest.TestCase):
             f.write(pdu_bytes)
         print("SUCCESS: Generated tf_from_py.pdu")
 
-    def test_B_deserialize_tf_message_from_cpp(self):
-        print("\n--- Running test_B_deserialize_tf_message_from_cpp ---")
+    def test_deserialize_tf_message_from_cpp(self):
+        print("\n--- Running test_deserialize_tf_message_from_cpp ---")
         pdu_file_path = 'tf_from_cpp.pdu'
         self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
 
@@ -49,9 +49,8 @@ class TestPduCrossConversion(unittest.TestCase):
         self.assertAlmostEqual(py_msg.transforms[0].transform.translation.x, 1.0, places=6)
         print("SUCCESS: Deserialization of TFMessage from C++ passed.")
 
-    @unittest.skip("Point test is temporarily disabled")
-    def test_C_serialize_point_from_python(self):
-        print("\n--- Running test_C_serialize_point_from_python ---")
+    def test_serialize_point_from_python(self):
+        print("\n--- Running test_serialize_point_from_python ---")
         py_msg = Point()
         py_msg.x = 1.1
         py_msg.y = 2.2
@@ -63,9 +62,8 @@ class TestPduCrossConversion(unittest.TestCase):
             f.write(pdu_bytes)
         print("SUCCESS: Generated point_from_py.pdu")
 
-    @unittest.skip("Point test is temporarily disabled")
-    def test_D_deserialize_point_from_cpp(self):
-        print("\n--- Running test_D_deserialize_point_from_cpp ---")
+    def test_deserialize_point_from_cpp(self):
+        print("\n--- Running test_deserialize_point_from_cpp ---")
         pdu_file_path = 'point_from_cpp.pdu'
         self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
 

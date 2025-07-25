@@ -136,7 +136,7 @@ def binary_read_recursive_GlobalPositionTarget(meta: binary_io.PduMetaData, bina
 
 
 
-def py_to_pduGlobalPositionTarget(py_obj: GlobalPositionTarget) -> bytearray:
+def py_to_pdu_GlobalPositionTarget(py_obj: GlobalPositionTarget) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

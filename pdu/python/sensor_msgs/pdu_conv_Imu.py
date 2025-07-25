@@ -104,7 +104,7 @@ def binary_read_recursive_Imu(meta: binary_io.PduMetaData, binary_data: bytearra
 
 
 
-def py_to_pduImu(py_obj: Imu) -> bytearray:
+def py_to_pdu_Imu(py_obj: Imu) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -45,7 +45,7 @@ def binary_read_recursive_Time(meta: binary_io.PduMetaData, binary_data: bytearr
 
 
 
-def py_to_pduTime(py_obj: Time) -> bytearray:
+def py_to_pdu_Time(py_obj: Time) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

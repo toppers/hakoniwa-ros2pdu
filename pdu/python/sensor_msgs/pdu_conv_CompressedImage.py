@@ -59,7 +59,7 @@ def binary_read_recursive_CompressedImage(meta: binary_io.PduMetaData, binary_da
 
 
 
-def py_to_pduCompressedImage(py_obj: CompressedImage) -> bytearray:
+def py_to_pdu_CompressedImage(py_obj: CompressedImage) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

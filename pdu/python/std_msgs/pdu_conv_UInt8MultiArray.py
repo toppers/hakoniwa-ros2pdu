@@ -48,7 +48,7 @@ def binary_read_recursive_UInt8MultiArray(meta: binary_io.PduMetaData, binary_da
 
 
 
-def py_to_pduUInt8MultiArray(py_obj: UInt8MultiArray) -> bytearray:
+def py_to_pdu_UInt8MultiArray(py_obj: UInt8MultiArray) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

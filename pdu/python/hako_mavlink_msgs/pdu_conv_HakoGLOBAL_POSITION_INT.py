@@ -122,7 +122,7 @@ def binary_read_recursive_HakoGLOBAL_POSITION_INT(meta: binary_io.PduMetaData, b
 
 
 
-def py_to_pduHakoGLOBAL_POSITION_INT(py_obj: HakoGLOBAL_POSITION_INT) -> bytearray:
+def py_to_pdu_HakoGLOBAL_POSITION_INT(py_obj: HakoGLOBAL_POSITION_INT) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

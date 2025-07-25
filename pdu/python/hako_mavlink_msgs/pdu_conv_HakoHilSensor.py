@@ -199,7 +199,7 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
 
 
 
-def py_to_pduHakoHilSensor(py_obj: HakoHilSensor) -> bytearray:
+def py_to_pdu_HakoHilSensor(py_obj: HakoHilSensor) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

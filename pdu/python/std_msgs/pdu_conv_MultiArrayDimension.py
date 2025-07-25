@@ -56,7 +56,7 @@ def binary_read_recursive_MultiArrayDimension(meta: binary_io.PduMetaData, binar
 
 
 
-def py_to_pduMultiArrayDimension(py_obj: MultiArrayDimension) -> bytearray:
+def py_to_pdu_MultiArrayDimension(py_obj: MultiArrayDimension) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

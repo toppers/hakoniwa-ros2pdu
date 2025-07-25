@@ -47,7 +47,7 @@ def binary_read_recursive_DisturbanceBoundary(meta: binary_io.PduMetaData, binar
 
 
 
-def py_to_pduDisturbanceBoundary(py_obj: DisturbanceBoundary) -> bytearray:
+def py_to_pdu_DisturbanceBoundary(py_obj: DisturbanceBoundary) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

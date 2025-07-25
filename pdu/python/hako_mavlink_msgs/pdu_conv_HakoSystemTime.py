@@ -45,7 +45,7 @@ def binary_read_recursive_HakoSystemTime(meta: binary_io.PduMetaData, binary_dat
 
 
 
-def py_to_pduHakoSystemTime(py_obj: HakoSystemTime) -> bytearray:
+def py_to_pdu_HakoSystemTime(py_obj: HakoSystemTime) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

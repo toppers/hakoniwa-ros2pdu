@@ -199,7 +199,7 @@ def binary_read_recursive_HakoHilStateQuaternion(meta: binary_io.PduMetaData, bi
 
 
 
-def py_to_pduHakoHilStateQuaternion(py_obj: HakoHilStateQuaternion) -> bytearray:
+def py_to_pdu_HakoHilStateQuaternion(py_obj: HakoHilStateQuaternion) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

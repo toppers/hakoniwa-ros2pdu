@@ -46,7 +46,7 @@ def binary_read_recursive_Header(meta: binary_io.PduMetaData, binary_data: bytea
 
 
 
-def py_to_pduHeader(py_obj: Header) -> bytearray:
+def py_to_pdu_Header(py_obj: Header) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

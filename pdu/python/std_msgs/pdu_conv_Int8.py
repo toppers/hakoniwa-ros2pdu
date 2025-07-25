@@ -34,7 +34,7 @@ def binary_read_recursive_Int8(meta: binary_io.PduMetaData, binary_data: bytearr
 
 
 
-def py_to_pduInt8(py_obj: Int8) -> bytearray:
+def py_to_pdu_Int8(py_obj: Int8) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

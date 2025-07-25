@@ -48,7 +48,7 @@ def binary_read_recursive_Int16MultiArray(meta: binary_io.PduMetaData, binary_da
 
 
 
-def py_to_pduInt16MultiArray(py_obj: Int16MultiArray) -> bytearray:
+def py_to_pdu_Int16MultiArray(py_obj: Int16MultiArray) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

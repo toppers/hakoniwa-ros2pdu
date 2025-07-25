@@ -67,7 +67,7 @@ def binary_read_recursive_PointField(meta: binary_io.PduMetaData, binary_data: b
 
 
 
-def py_to_pduPointField(py_obj: PointField) -> bytearray:
+def py_to_pdu_PointField(py_obj: PointField) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

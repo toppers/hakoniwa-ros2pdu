@@ -71,7 +71,7 @@ def binary_read_recursive_Disturbance(meta: binary_io.PduMetaData, binary_data: 
 
 
 
-def py_to_pduDisturbance(py_obj: Disturbance) -> bytearray:
+def py_to_pdu_Disturbance(py_obj: Disturbance) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -70,7 +70,7 @@ def binary_read_recursive_Odometry(meta: binary_io.PduMetaData, binary_data: byt
 
 
 
-def py_to_pduOdometry(py_obj: Odometry) -> bytearray:
+def py_to_pdu_Odometry(py_obj: Odometry) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

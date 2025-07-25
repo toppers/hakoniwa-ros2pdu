@@ -87,7 +87,7 @@ def binary_read_recursive_Collision(meta: binary_io.PduMetaData, binary_data: by
 
 
 
-def py_to_pduCollision(py_obj: Collision) -> bytearray:
+def py_to_pdu_Collision(py_obj: Collision) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -45,7 +45,7 @@ def binary_read_recursive_AddTwoIntsRequest(meta: binary_io.PduMetaData, binary_
 
 
 
-def py_to_pduAddTwoIntsRequest(py_obj: AddTwoIntsRequest) -> bytearray:
+def py_to_pdu_AddTwoIntsRequest(py_obj: AddTwoIntsRequest) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

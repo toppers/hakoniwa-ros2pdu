@@ -27,8 +27,8 @@ def binary_read_recursive_TFMessage(meta: binary_io.PduMetaData, binary_data: by
     # offset: 0 size: 320 
     # array_len: 8
 
-    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 0, 4))
-    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 0 + 4, 4))
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 0, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 0 + 4, 4))
     one_elm_size = 320
     i = 0
     array_value = []
@@ -43,7 +43,7 @@ def binary_read_recursive_TFMessage(meta: binary_io.PduMetaData, binary_data: by
 
 
 
-def py_to_pduTFMessage(py_obj: TFMessage) -> bytearray:
+def py_to_pdu_TFMessage(py_obj: TFMessage) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

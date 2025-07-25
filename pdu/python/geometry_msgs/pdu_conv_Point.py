@@ -56,7 +56,7 @@ def binary_read_recursive_Point(meta: binary_io.PduMetaData, binary_data: bytear
 
 
 
-def py_to_pduPoint(py_obj: Point) -> bytearray:
+def py_to_pdu_Point(py_obj: Point) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

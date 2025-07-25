@@ -34,7 +34,7 @@ def binary_read_recursive_UInt16(meta: binary_io.PduMetaData, binary_data: bytea
 
 
 
-def py_to_pduUInt16(py_obj: UInt16) -> bytearray:
+def py_to_pdu_UInt16(py_obj: UInt16) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

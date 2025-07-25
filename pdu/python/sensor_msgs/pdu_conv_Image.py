@@ -103,7 +103,7 @@ def binary_read_recursive_Image(meta: binary_io.PduMetaData, binary_data: bytear
 
 
 
-def py_to_pduImage(py_obj: Image) -> bytearray:
+def py_to_pdu_Image(py_obj: Image) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -78,7 +78,7 @@ def binary_read_recursive_HakoBatteryStatus(meta: binary_io.PduMetaData, binary_
 
 
 
-def py_to_pduHakoBatteryStatus(py_obj: HakoBatteryStatus) -> bytearray:
+def py_to_pdu_HakoBatteryStatus(py_obj: HakoBatteryStatus) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -78,7 +78,7 @@ def binary_read_recursive_Ev3PduColorSensor(meta: binary_io.PduMetaData, binary_
 
 
 
-def py_to_pduEv3PduColorSensor(py_obj: Ev3PduColorSensor) -> bytearray:
+def py_to_pdu_Ev3PduColorSensor(py_obj: Ev3PduColorSensor) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

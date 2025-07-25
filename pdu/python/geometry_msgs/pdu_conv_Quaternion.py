@@ -67,7 +67,7 @@ def binary_read_recursive_Quaternion(meta: binary_io.PduMetaData, binary_data: b
 
 
 
-def py_to_pduQuaternion(py_obj: Quaternion) -> bytearray:
+def py_to_pdu_Quaternion(py_obj: Quaternion) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

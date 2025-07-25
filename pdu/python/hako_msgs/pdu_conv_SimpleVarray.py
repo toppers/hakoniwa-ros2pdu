@@ -58,7 +58,7 @@ def binary_read_recursive_SimpleVarray(meta: binary_io.PduMetaData, binary_data:
 
 
 
-def py_to_pduSimpleVarray(py_obj: SimpleVarray) -> bytearray:
+def py_to_pdu_SimpleVarray(py_obj: SimpleVarray) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

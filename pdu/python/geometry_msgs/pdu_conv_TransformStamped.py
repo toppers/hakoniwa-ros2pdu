@@ -58,7 +58,7 @@ def binary_read_recursive_TransformStamped(meta: binary_io.PduMetaData, binary_d
 
 
 
-def py_to_pduTransformStamped(py_obj: TransformStamped) -> bytearray:
+def py_to_pdu_TransformStamped(py_obj: TransformStamped) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

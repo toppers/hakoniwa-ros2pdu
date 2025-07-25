@@ -109,7 +109,7 @@ struct TestEntry {
 };
 
 TestEntry test_table[] = {
-    { "tf", generate_tf_message, validate_tf_message },
+    { "tf_message", generate_tf_message, validate_tf_message },
     { "point", generate_point_message, validate_point_message },
     // Add new test functions here
     { "", nullptr, nullptr } // Sentinel

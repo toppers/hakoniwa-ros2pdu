@@ -78,7 +78,7 @@ def binary_read_recursive_RegionOfInterest(meta: binary_io.PduMetaData, binary_d
 
 
 
-def py_to_pduRegionOfInterest(py_obj: RegionOfInterest) -> bytearray:
+def py_to_pdu_RegionOfInterest(py_obj: RegionOfInterest) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -68,7 +68,7 @@ def binary_read_recursive_MonitorCameraCmd(meta: binary_io.PduMetaData, binary_d
 
 
 
-def py_to_pduMonitorCameraCmd(py_obj: MonitorCameraCmd) -> bytearray:
+def py_to_pdu_MonitorCameraCmd(py_obj: MonitorCameraCmd) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

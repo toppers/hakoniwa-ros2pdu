@@ -61,8 +61,8 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
     # offset: 144 size: 140 
     # array_len: 8
 
-    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 144, 4))
-    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 144 + 4, 4))
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 144, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 144 + 4, 4))
     one_elm_size = 140
     i = 0
     array_value = []
@@ -134,7 +134,7 @@ def binary_read_recursive_PointCloud2(meta: binary_io.PduMetaData, binary_data: 
 
 
 
-def py_to_pduPointCloud2(py_obj: PointCloud2) -> bytearray:
+def py_to_pdu_PointCloud2(py_obj: PointCloud2) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

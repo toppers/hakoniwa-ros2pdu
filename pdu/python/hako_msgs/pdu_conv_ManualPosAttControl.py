@@ -46,7 +46,7 @@ def binary_read_recursive_ManualPosAttControl(meta: binary_io.PduMetaData, binar
 
 
 
-def py_to_pduManualPosAttControl(py_obj: ManualPosAttControl) -> bytearray:
+def py_to_pdu_ManualPosAttControl(py_obj: ManualPosAttControl) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

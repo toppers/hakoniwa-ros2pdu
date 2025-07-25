@@ -138,7 +138,7 @@ def binary_read_recursive_LaserScan(meta: binary_io.PduMetaData, binary_data: by
 
 
 
-def py_to_pduLaserScan(py_obj: LaserScan) -> bytearray:
+def py_to_pdu_LaserScan(py_obj: LaserScan) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -34,7 +34,7 @@ def binary_read_recursive_HakoCanBody(meta: binary_io.PduMetaData, binary_data: 
 
 
 
-def py_to_pduHakoCanBody(py_obj: HakoCanBody) -> bytearray:
+def py_to_pdu_HakoCanBody(py_obj: HakoCanBody) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

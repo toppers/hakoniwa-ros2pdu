@@ -67,7 +67,7 @@ def binary_read_recursive_HakoHilActuatorControls(meta: binary_io.PduMetaData, b
 
 
 
-def py_to_pduHakoHilActuatorControls(py_obj: HakoHilActuatorControls) -> bytearray:
+def py_to_pdu_HakoHilActuatorControls(py_obj: HakoHilActuatorControls) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

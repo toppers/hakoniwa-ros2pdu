@@ -34,7 +34,7 @@ def binary_read_recursive_String(meta: binary_io.PduMetaData, binary_data: bytea
 
 
 
-def py_to_pduString(py_obj: String) -> bytearray:
+def py_to_pdu_String(py_obj: String) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

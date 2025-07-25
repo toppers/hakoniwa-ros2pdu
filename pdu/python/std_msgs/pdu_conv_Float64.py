@@ -34,7 +34,7 @@ def binary_read_recursive_Float64(meta: binary_io.PduMetaData, binary_data: byte
 
 
 
-def py_to_pduFloat64(py_obj: Float64) -> bytearray:
+def py_to_pdu_Float64(py_obj: Float64) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

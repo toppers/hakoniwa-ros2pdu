@@ -56,7 +56,7 @@ def binary_read_recursive_HakoCmdHeader(meta: binary_io.PduMetaData, binary_data
 
 
 
-def py_to_pduHakoCmdHeader(py_obj: HakoCmdHeader) -> bytearray:
+def py_to_pdu_HakoCmdHeader(py_obj: HakoCmdHeader) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

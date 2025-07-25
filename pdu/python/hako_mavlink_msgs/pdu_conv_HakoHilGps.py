@@ -188,7 +188,7 @@ def binary_read_recursive_HakoHilGps(meta: binary_io.PduMetaData, binary_data: b
 
 
 
-def py_to_pduHakoHilGps(py_obj: HakoHilGps) -> bytearray:
+def py_to_pdu_HakoHilGps(py_obj: HakoHilGps) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

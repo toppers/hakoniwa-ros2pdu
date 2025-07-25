@@ -89,7 +89,7 @@ def binary_read_recursive_HakoAHRS2(meta: binary_io.PduMetaData, binary_data: by
 
 
 
-def py_to_pduHakoAHRS2(py_obj: HakoAHRS2) -> bytearray:
+def py_to_pdu_HakoAHRS2(py_obj: HakoAHRS2) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

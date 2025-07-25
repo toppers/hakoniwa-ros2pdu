@@ -47,7 +47,7 @@ def binary_read_recursive_Pose(meta: binary_io.PduMetaData, binary_data: bytearr
 
 
 
-def py_to_pduPose(py_obj: Pose) -> bytearray:
+def py_to_pdu_Pose(py_obj: Pose) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

@@ -81,8 +81,8 @@ def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary
     # offset: 388 size: 24 
     # array_len: 8
 
-    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 388, 4))
-    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, 388 + 4, 4))
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 388, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 388 + 4, 4))
     one_elm_size = 24
     i = 0
     array_value = []
@@ -97,7 +97,7 @@ def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary
 
 
 
-def py_to_pduSimpleStructVarray(py_obj: SimpleStructVarray) -> bytearray:
+def py_to_pdu_SimpleStructVarray(py_obj: SimpleStructVarray) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

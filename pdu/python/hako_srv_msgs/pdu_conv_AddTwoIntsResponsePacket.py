@@ -47,7 +47,7 @@ def binary_read_recursive_AddTwoIntsResponsePacket(meta: binary_io.PduMetaData, 
 
 
 
-def py_to_pduAddTwoIntsResponsePacket(py_obj: AddTwoIntsResponsePacket) -> bytearray:
+def py_to_pdu_AddTwoIntsResponsePacket(py_obj: AddTwoIntsResponsePacket) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

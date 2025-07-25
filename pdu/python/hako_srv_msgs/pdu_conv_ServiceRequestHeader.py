@@ -78,7 +78,7 @@ def binary_read_recursive_ServiceRequestHeader(meta: binary_io.PduMetaData, bina
 
 
 
-def py_to_pduServiceRequestHeader(py_obj: ServiceRequestHeader) -> bytearray:
+def py_to_pdu_ServiceRequestHeader(py_obj: ServiceRequestHeader) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

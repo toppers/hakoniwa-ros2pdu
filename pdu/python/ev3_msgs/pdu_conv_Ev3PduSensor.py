@@ -150,7 +150,7 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
 
 
-def py_to_pduEv3PduSensor(py_obj: Ev3PduSensor) -> bytearray:
+def py_to_pdu_Ev3PduSensor(py_obj: Ev3PduSensor) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

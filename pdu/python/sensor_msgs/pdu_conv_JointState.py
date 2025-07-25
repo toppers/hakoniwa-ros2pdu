@@ -87,7 +87,7 @@ def binary_read_recursive_JointState(meta: binary_io.PduMetaData, binary_data: b
 
 
 
-def py_to_pduJointState(py_obj: JointState) -> bytearray:
+def py_to_pdu_JointState(py_obj: JointState) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

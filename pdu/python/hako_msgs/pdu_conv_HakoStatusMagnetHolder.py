@@ -45,7 +45,7 @@ def binary_read_recursive_HakoStatusMagnetHolder(meta: binary_io.PduMetaData, bi
 
 
 
-def py_to_pduHakoStatusMagnetHolder(py_obj: HakoStatusMagnetHolder) -> bytearray:
+def py_to_pdu_HakoStatusMagnetHolder(py_obj: HakoStatusMagnetHolder) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())

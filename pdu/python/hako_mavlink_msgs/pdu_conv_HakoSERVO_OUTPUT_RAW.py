@@ -133,7 +133,7 @@ def binary_read_recursive_HakoSERVO_OUTPUT_RAW(meta: binary_io.PduMetaData, bina
 
 
 
-def py_to_pduHakoSERVO_OUTPUT_RAW(py_obj: HakoSERVO_OUTPUT_RAW) -> bytearray:
+def py_to_pdu_HakoSERVO_OUTPUT_RAW(py_obj: HakoSERVO_OUTPUT_RAW) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
     bw_container = BinaryWriterContainer(binary_io.PduMetaData())
