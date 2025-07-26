@@ -25,6 +25,7 @@ class DynamicAllocator:
         current_size = len(self.data)
         #print(f"is_heap: {self.is_heap} current_size: {current_size} expected_offset: {expected_offset} len(bytes_data): {len(bytes_data)}")
         if (current_size < expected_offset):
+            #print("Padding data to align with expected offset")
             padding = bytearray(expected_offset - current_size)
             self.data.extend(padding)
         offset = len(self.data)
