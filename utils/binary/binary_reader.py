@@ -11,7 +11,7 @@ from . import offset_map
 def decode_base64(data):
     return base64.b64decode(data)
 
-def binary_read(offmap, typename, binary_data):
+def binary_read(offmap, typename, binary_data) -> dict:
     json_data = {}
     meta_parser = binary_io.PduMetaDataParser()
     meta = meta_parser.load_pdu_meta(binary_data)
@@ -95,6 +95,6 @@ if __name__ == "__main__":
     with open(binary_filepath, "rb") as f:
         binary_data = bytearray(f.read())
 
-    binary_read(offmap, typename, binary_data)
+    json_data = binary_read(offmap, typename, binary_data)
 
-    print(json.dumps(json_data))
+    print(json.dumps(json_data, indent=2, ensure_ascii=False))

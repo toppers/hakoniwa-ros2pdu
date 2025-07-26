@@ -16,10 +16,5 @@ then
     exit 1
 fi
 
-if [ $# -eq 3 ]
-then
-    python3 -m utils.binary.binary_reader ./pdu/offset ${TYPE} ${BINFILE}  | jq
-else
-    python3 -m utils.binary.binary_reader ./pdu/offset ${TYPE} ${BINFILE}  | yq -y
-fi
 
+python3 -m utils.binary.binary_reader ./pdu/offset ${TYPE} ${BINFILE}
