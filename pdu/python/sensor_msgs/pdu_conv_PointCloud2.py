@@ -214,7 +214,8 @@ def binary_write_recursive_PointCloud2(parent_off: int, bw_container: BinaryWrit
     offset_from_heap = bw_container.heap_allocator.size()
     array_size = len(py_obj.fields)
     for i, elm in enumerate(py_obj.fields):
-        binary_write_recursive_PointField(0, bw_container, bw_container.heap_allocator, elm)
+        one_elm_size =  140
+        binary_write_recursive_PointField((parent_off + i * one_elm_size), bw_container, bw_container.heap_allocator, elm)
     a_b = array_size.to_bytes(4, byteorder='little')
     o_b = offset_from_heap.to_bytes(4, byteorder='little')
     allocator.add(a_b + o_b, expected_offset=parent_off + off)    

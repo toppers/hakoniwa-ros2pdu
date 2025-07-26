@@ -20,6 +20,9 @@ from pdu.python.geometry_msgs.pdu_conv_Twist import pdu_to_py_Twist, py_to_pdu_T
 from pdu.python.geometry_msgs.pdu_pytype_Twist import Twist
 from pdu.python.hako_msgs.pdu_conv_HakoCameraData import pdu_to_py_HakoCameraData, py_to_pdu_HakoCameraData
 from pdu.python.hako_msgs.pdu_pytype_HakoCameraData import HakoCameraData
+from pdu.python.sensor_msgs.pdu_conv_PointCloud2 import pdu_to_py_PointCloud2, py_to_pdu_PointCloud2
+from pdu.python.sensor_msgs.pdu_pytype_PointCloud2 import PointCloud2
+from pdu.python.sensor_msgs.pdu_pytype_PointField import PointField
 from pdu.python.sensor_msgs.pdu_pytype_CompressedImage import CompressedImage
 from pdu.python.std_msgs.pdu_pytype_Header import Header
 from pdu.python.builtin_interfaces.pdu_pytype_Time import Time
@@ -195,6 +198,74 @@ class TestPduCrossConversion(unittest.TestCase):
         self.assertEqual(py_msg.image.format, "jpeg")
         self.assertEqual(py_msg.image.data, bytes([i + 1 for i in range(10)]))
         print("SUCCESS: Deserialization of HakoCameraData from C++ passed.")
+
+    def test_serialize_point_cloud_2_from_python(self):
+        print("\n--- Running test_serialize_point_cloud_2_from_python ---")
+        py_msg = PointCloud2()
+        py_msg.header.stamp.sec = 1000
+        py_msg.header.stamp.nanosec = 2000
+        py_msg.header.frame_id = "cloud_frame"
+        py_msg.height = 1
+        py_msg.width = 10
+        
+        field1 = PointField()
+        field1.name = "x"
+        field1.offset = 0
+        field1.datatype = 7
+        field1.count = 1
+        py_msg.fields.append(field1)
+
+        field2 = PointField()
+        field2.name = "y"
+        field2.offset = 4
+        field2.datatype = 7
+        field2.count = 1
+        py_msg.fields.append(field2)
+
+        py_msg.is_bigendian = False
+        py_msg.point_step = 8
+        py_msg.row_step = 80
+        py_msg.data = [i + 1 for i in range(10)]
+        py_msg.is_dense = True
+        
+        pdu_bytes = py_to_pdu_PointCloud2(py_msg)
+        
+        filename = self.pdu_file_prefix + "_from_py.pdu"
+        with open(filename, "wb") as f:
+            f.write(pdu_bytes)
+        print(f"SUCCESS: Generated {filename}")
+
+    def test_deserialize_point_cloud_2_from_cpp(self):
+        print("\n--- Running test_deserialize_point_cloud_2_from_cpp ---")
+        pdu_file_path = self.pdu_file_prefix + '_from_cpp.pdu'
+        self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
+
+        with open(pdu_file_path, 'rb') as f:
+            pdu_bytes = f.read()
+
+        py_msg = pdu_to_py_PointCloud2(pdu_bytes)
+        
+        self.assertIsInstance(py_msg, PointCloud2)
+        self.assertEqual(py_msg.header.stamp.sec, 1000)
+        self.assertEqual(py_msg.header.stamp.nanosec, 2000)
+        self.assertEqual(py_msg.header.frame_id, "cloud_frame")
+        self.assertEqual(py_msg.height, 1)
+        self.assertEqual(py_msg.width, 10)
+        self.assertEqual(len(py_msg.fields), 2)
+        self.assertEqual(py_msg.fields[0].name, "x")
+        self.assertEqual(py_msg.fields[0].offset, 0)
+        self.assertEqual(py_msg.fields[0].datatype, 7)
+        self.assertEqual(py_msg.fields[0].count, 1)
+        self.assertEqual(py_msg.fields[1].name, "y")
+        self.assertEqual(py_msg.fields[1].offset, 4)
+        self.assertEqual(py_msg.fields[1].datatype, 7)
+        self.assertEqual(py_msg.fields[1].count, 1)
+        self.assertEqual(py_msg.is_bigendian, False)
+        self.assertEqual(py_msg.point_step, 8)
+        self.assertEqual(py_msg.row_step, 80)
+        self.assertEqual(list(py_msg.data), [i + 1 for i in range(10)])
+        self.assertEqual(py_msg.is_dense, True)
+        print("SUCCESS: Deserialization of PointCloud2 from C++ passed.")
 
 
 if __name__ == "__main__":

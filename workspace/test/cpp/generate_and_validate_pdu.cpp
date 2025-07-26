@@ -11,6 +11,7 @@
 #include "pdu/types/sensor_msgs/pdu_cpptype_conv_Imu.hpp"
 #include "pdu/types/geometry_msgs/pdu_cpptype_conv_Twist.hpp"
 #include "pdu/types/hako_msgs/pdu_cpptype_conv_HakoCameraData.hpp"
+#include "pdu/types/sensor_msgs/pdu_cpptype_conv_PointCloud2.hpp"
 
 void validate_tf_message(const std::string& pdu_file_prefix) {
     std::string filename = pdu_file_prefix + "_from_py.pdu";
@@ -251,6 +252,91 @@ void generate_hako_camera_data_message(const std::string& pdu_file_prefix) {
     hako_destroy_pdu(pdu_ptr);
 }
 
+void validate_point_cloud_2_message(const std::string& pdu_file_prefix) {
+    std::string filename = pdu_file_prefix + "_from_py.pdu";
+    std::ifstream ifs(filename, std::ios::binary);
+    if (!ifs) {
+        std::cerr << "Error: Can not open " << filename << std::endl;
+        exit(1);
+    }
+    std::vector<char> buffer((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    
+    HakoCpp_PointCloud2 cpp_msg;
+    hako::pdu::msgs::sensor_msgs::PointCloud2 conv;
+    bool ret = conv.pdu2cpp(buffer.data(), cpp_msg);
+    assert(ret);
+
+    std::cout << "Validating PointCloud2 from Python..." << std::endl;
+    assert(cpp_msg.header.stamp.sec == 1000);
+    assert(cpp_msg.header.stamp.nanosec == 2000);
+    assert(cpp_msg.header.frame_id == "cloud_frame");
+    assert(cpp_msg.height == 1);
+    assert(cpp_msg.width == 10);
+    assert(cpp_msg.fields.size() == 2);
+    assert(cpp_msg.fields[0].name == "x");
+    assert(cpp_msg.fields[0].offset == 0);
+    assert(cpp_msg.fields[0].datatype == 7);
+    assert(cpp_msg.fields[0].count == 1);
+    assert(cpp_msg.fields[1].name == "y");
+    assert(cpp_msg.fields[1].offset == 4);
+    assert(cpp_msg.fields[1].datatype == 7);
+    assert(cpp_msg.fields[1].count == 1);
+    assert(cpp_msg.is_bigendian == false);
+    assert(cpp_msg.point_step == 8);
+    assert(cpp_msg.row_step == 80);
+    assert(cpp_msg.data.size() == 10);
+    for (size_t i = 0; i < cpp_msg.data.size(); ++i) {
+        assert(cpp_msg.data[i] == (char)(i + 1));
+    }
+    assert(cpp_msg.is_dense == true);
+    std::cout << "SUCCESS: Validation of PointCloud2 from Python passed." << std::endl;
+}
+
+void generate_point_cloud_2_message(const std::string& pdu_file_prefix) {
+    HakoCpp_PointCloud2 cpp_msg;
+    cpp_msg.header.stamp.sec = 1000;
+    cpp_msg.header.stamp.nanosec = 2000;
+    cpp_msg.header.frame_id = "cloud_frame";
+    cpp_msg.height = 1;
+    cpp_msg.width = 10;
+    
+    HakoCpp_PointField field1;
+    field1.name = "x";
+    field1.offset = 0;
+    field1.datatype = 7;
+    field1.count = 1;
+    cpp_msg.fields.push_back(field1);
+
+    HakoCpp_PointField field2;
+    field2.name = "y";
+    field2.offset = 4;
+    field2.datatype = 7;
+    field2.count = 1;
+    cpp_msg.fields.push_back(field2);
+
+    cpp_msg.is_bigendian = false;
+    cpp_msg.point_step = 8;
+    cpp_msg.row_step = 80;
+    for (int i = 0; i < 10; ++i) {
+        cpp_msg.data.push_back((char)(i + 1));
+    }
+    cpp_msg.is_dense = true;
+
+    Hako_PointCloud2* pdu_ptr = nullptr;
+    int pdu_size = hako_convert_cpp2pdu_PointCloud2(cpp_msg, &pdu_ptr);
+    assert(pdu_size > 0);
+
+    void* top_ptr = hako_get_top_ptr_pdu(pdu_ptr);
+    assert(top_ptr != nullptr);
+
+    std::string filename = pdu_file_prefix + "_from_cpp.pdu";
+    std::ofstream ofs(filename, std::ios::binary);
+    ofs.write(static_cast<const char*>(top_ptr), pdu_size);
+    std::cout << "SUCCESS: Generated " << filename << std::endl;
+
+    hako_destroy_pdu(pdu_ptr);
+}
+
 // Function pointer type for test functions
 typedef void (*TestFunction)(const std::string&);
 
@@ -267,6 +353,7 @@ TestEntry test_table[] = {
     { "imu", generate_imu_message, validate_imu_message },
     { "twist", generate_twist_message, validate_twist_message },
     { "hako_camera_data", generate_hako_camera_data_message, validate_hako_camera_data_message },
+    { "point_cloud_2", generate_point_cloud_2_message, validate_point_cloud_2_message },
     // Add new test functions here
     { "", nullptr, nullptr } // Sentinel
 };

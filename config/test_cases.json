@@ -84,5 +84,39 @@
         "data": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       }
     }
+  },
+  {
+    "name": "point_cloud_2",
+    "pdu_file_prefix": "point_cloud_2",
+    "test_data": {
+      "header": {
+        "stamp": {
+          "sec": 1000,
+          "nanosec": 2000
+        },
+        "frame_id": "cloud_frame"
+      },
+      "height": 1,
+      "width": 10,
+      "fields": [
+        {
+          "name": "x",
+          "offset": 0,
+          "datatype": 7,
+          "count": 1
+        },
+        {
+          "name": "y",
+          "offset": 4,
+          "datatype": 7,
+          "count": 1
+        }
+      ],
+      "is_bigendian": false,
+      "point_step": 8,
+      "row_step": 80,
+      "data": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "is_dense": true
+    }
   }
 ]

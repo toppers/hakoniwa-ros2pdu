@@ -148,7 +148,8 @@ def binary_write_recursive_{{ container.get_msg_type(container.msg_type_name) }}
     offset_from_heap = bw_container.heap_allocator.size()
     array_size = len(py_obj.{{ item.member_name }})
     for i, elm in enumerate(py_obj.{{ item.member_name }}):
-        binary_write_recursive_{{ container.get_msg_type(item.type_name) }}(0, bw_container, bw_container.heap_allocator, elm)
+        one_elm_size =  {{ item.size }}
+        binary_write_recursive_{{ container.get_msg_type(item.type_name) }}((parent_off + i * one_elm_size), bw_container, bw_container.heap_allocator, elm)
     a_b = array_size.to_bytes(4, byteorder='little')
     o_b = offset_from_heap.to_bytes(4, byteorder='little')
     allocator.add(a_b + o_b, expected_offset=parent_off + off)    
