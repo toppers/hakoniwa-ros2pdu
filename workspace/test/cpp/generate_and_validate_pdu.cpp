@@ -12,6 +12,10 @@
 #include "pdu/types/geometry_msgs/pdu_cpptype_conv_Twist.hpp"
 #include "pdu/types/hako_msgs/pdu_cpptype_conv_HakoCameraData.hpp"
 #include "pdu/types/sensor_msgs/pdu_cpptype_conv_PointCloud2.hpp"
+#include "pdu/types/ev3_msgs/pdu_cpptype_conv_Ev3PduSensor.hpp"
+#include "pdu/types/ev3_msgs/pdu_cpptype_conv_Ev3PduSensorHeader.hpp"
+#include "pdu/types/ev3_msgs/pdu_cpptype_conv_Ev3PduColorSensor.hpp"
+#include "pdu/types/ev3_msgs/pdu_cpptype_conv_Ev3PduTouchSensor.hpp"
 
 void validate_tf_message(const std::string& pdu_file_prefix) {
     std::string filename = pdu_file_prefix + "_from_py.pdu";
@@ -292,6 +296,111 @@ void validate_point_cloud_2_message(const std::string& pdu_file_prefix) {
     std::cout << "SUCCESS: Validation of PointCloud2 from Python passed." << std::endl;
 }
 
+void validate_ev3_pdu_sensor_message(const std::string& pdu_file_prefix) {
+    std::string filename = pdu_file_prefix + "_from_py.pdu";
+    std::ifstream ifs(filename, std::ios::binary);
+    if (!ifs) {
+        std::cerr << "Error: Can not open " << filename << std::endl;
+        exit(1);
+    }
+    std::vector<char> buffer((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    
+    HakoCpp_Ev3PduSensor cpp_msg;
+    hako::pdu::msgs::ev3_msgs::Ev3PduSensor conv;
+    bool ret = conv.pdu2cpp(buffer.data(), cpp_msg);
+    assert(ret);
+
+    std::cout << "Validating EV3PduSensor from Python..." << std::endl;
+    assert(cpp_msg.head.name == "sensor_test");
+    assert(cpp_msg.head.version == 1);
+    assert(cpp_msg.head.hakoniwa_time == 1234567890);
+    assert(cpp_msg.head.ext_off == 0);
+    assert(cpp_msg.head.ext_size == 0);
+    assert(cpp_msg.buttons.size() == 1);
+    assert(cpp_msg.buttons[0] == 1);
+    assert(cpp_msg.color_sensors.size() == 2);
+    assert(cpp_msg.color_sensors[0].color == 1);
+    assert(cpp_msg.color_sensors[0].reflect == 10);
+    assert(cpp_msg.color_sensors[0].rgb_r == 20);
+    assert(cpp_msg.color_sensors[0].rgb_g == 30);
+    assert(cpp_msg.color_sensors[0].rgb_b == 40);
+    assert(cpp_msg.color_sensors[1].color == 2);
+    assert(cpp_msg.color_sensors[1].reflect == 11);
+    assert(cpp_msg.color_sensors[1].rgb_r == 21);
+    assert(cpp_msg.color_sensors[1].rgb_g == 31);
+    assert(cpp_msg.color_sensors[1].rgb_b == 41);
+    assert(cpp_msg.touch_sensors.size() == 2);
+    assert(cpp_msg.touch_sensors[0].value == 1);
+    assert(cpp_msg.touch_sensors[1].value == 0);
+    assert(cpp_msg.motor_angle.size() == 3);
+    assert(cpp_msg.motor_angle[0] == 100);
+    assert(cpp_msg.motor_angle[1] == 200);
+    assert(cpp_msg.motor_angle[2] == 300);
+    assert(cpp_msg.gyro_degree == 45);
+    assert(cpp_msg.gyro_degree_rate == 5);
+    assert(cpp_msg.sensor_ultrasonic == 250);
+    assert(abs(cpp_msg.gps_lat - 35.681236) < 1e-6);
+    assert(abs(cpp_msg.gps_lon - 139.767125) < 1e-6);
+    std::cout << "SUCCESS: Validation of EV3PduSensor from Python passed." << std::endl;
+}
+
+void generate_ev3_pdu_sensor_message(const std::string& pdu_file_prefix) {
+    HakoCpp_Ev3PduSensor cpp_msg;
+    cpp_msg.head.name = "sensor_test";
+    cpp_msg.head.version = 1;
+    cpp_msg.head.hakoniwa_time = 1234567890;
+    cpp_msg.head.ext_off = 0;
+    cpp_msg.head.ext_size = 0;
+    cpp_msg.buttons[0] = 1;
+
+    HakoCpp_Ev3PduColorSensor color_sensor1;
+    color_sensor1.color = 1;
+    color_sensor1.reflect = 10;
+    color_sensor1.rgb_r = 20;
+    color_sensor1.rgb_g = 30;
+    color_sensor1.rgb_b = 40;
+    cpp_msg.color_sensors[0] = color_sensor1;
+
+    HakoCpp_Ev3PduColorSensor color_sensor2;
+    color_sensor2.color = 2;
+    color_sensor2.reflect = 11;
+    color_sensor2.rgb_r = 21;
+    color_sensor2.rgb_g = 31;
+    color_sensor2.rgb_b = 41;
+    cpp_msg.color_sensors[1] = color_sensor2;
+
+    HakoCpp_Ev3PduTouchSensor touch_sensor1;
+    touch_sensor1.value = 1;
+    cpp_msg.touch_sensors[0] = touch_sensor1;
+
+    HakoCpp_Ev3PduTouchSensor touch_sensor2;
+    touch_sensor2.value = 0;
+    cpp_msg.touch_sensors[1] = touch_sensor2;
+
+    cpp_msg.motor_angle[0] = 100;
+    cpp_msg.motor_angle[1] = 200;
+    cpp_msg.motor_angle[2] = 300;
+    cpp_msg.gyro_degree = 45;
+    cpp_msg.gyro_degree_rate = 5;
+    cpp_msg.sensor_ultrasonic = 250;
+    cpp_msg.gps_lat = 35.681236;
+    cpp_msg.gps_lon = 139.767125;
+
+    Hako_Ev3PduSensor* pdu_ptr = nullptr;
+    int pdu_size = hako_convert_cpp2pdu_Ev3PduSensor(cpp_msg, &pdu_ptr);
+    assert(pdu_size > 0);
+
+    void* top_ptr = hako_get_top_ptr_pdu(pdu_ptr);
+    assert(top_ptr != nullptr);
+
+    std::string filename = pdu_file_prefix + "_from_cpp.pdu";
+    std::ofstream ofs(filename, std::ios::binary);
+    ofs.write(static_cast<const char*>(top_ptr), pdu_size);
+    std::cout << "SUCCESS: Generated " << filename << std::endl;
+
+    hako_destroy_pdu(pdu_ptr);
+}
+
 void generate_point_cloud_2_message(const std::string& pdu_file_prefix) {
     HakoCpp_PointCloud2 cpp_msg;
     cpp_msg.header.stamp.sec = 1000;
@@ -354,6 +463,7 @@ TestEntry test_table[] = {
     { "twist", generate_twist_message, validate_twist_message },
     { "hako_camera_data", generate_hako_camera_data_message, validate_hako_camera_data_message },
     { "point_cloud_2", generate_point_cloud_2_message, validate_point_cloud_2_message },
+    { "ev3_pdu_sensor", generate_ev3_pdu_sensor_message, validate_ev3_pdu_sensor_message },
     // Add new test functions here
     { "", nullptr, nullptr } // Sentinel
 };

@@ -65,11 +65,11 @@ def binary_read_recursive_SimpleStructVarray(meta: binary_io.PduMetaData, binary
 
     i = 0
     array_size = 5
-    one_elm_size = int(120) / array_size
+    one_elm_size = int(120 / array_size)
     array_value = []
     while i < array_size:
         tmp_py_obj = SimpleVarray()
-        binary_read_recursive_SimpleVarray(meta, binary_data, tmp_py_obj, 268 + (i * one_elm_size))
+        binary_read_recursive_SimpleVarray(meta, binary_data, tmp_py_obj, base_off + 268 + (i * one_elm_size))
         array_value.append(tmp_py_obj)
         i = i + 1
     py_obj.fixed_array = array_value    

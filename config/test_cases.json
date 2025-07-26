@@ -118,5 +118,49 @@
       "data": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
       "is_dense": true
     }
+  },
+  {
+    "name": "ev3_pdu_sensor",
+    "pdu_file_prefix": "ev3_sensor",
+    "test_data": {
+      "head": {
+        "name": "sensor_test",
+        "version": 1,
+        "hakoniwa_time": 1234567890,
+        "ext_off": 0,
+        "ext_size": 0
+      },
+      "buttons": [1],
+      "color_sensors": [
+        {
+          "color": 1,
+          "reflect": 10,
+          "rgb_r": 20,
+          "rgb_g": 30,
+          "rgb_b": 40
+        },
+        {
+          "color": 2,
+          "reflect": 11,
+          "rgb_r": 21,
+          "rgb_g": 31,
+          "rgb_b": 41
+        }
+      ],
+      "touch_sensors": [
+        {
+          "value": 1
+        },
+        {
+          "value": 0
+        }
+      ],
+      "motor_angle": [100, 200, 300],
+      "gyro_degree": 45,
+      "gyro_degree_rate": 5,
+      "sensor_ultrasonic": 250,
+      "gps_lat": 35.681236,
+      "gps_lon": 139.767125
+    }
   }
 ]

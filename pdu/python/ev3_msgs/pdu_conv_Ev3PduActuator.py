@@ -52,11 +52,11 @@ def binary_read_recursive_Ev3PduActuator(meta: binary_io.PduMetaData, binary_dat
 
     i = 0
     array_size = 3
-    one_elm_size = int(36) / array_size
+    one_elm_size = int(36 / array_size)
     array_value = []
     while i < array_size:
         tmp_py_obj = Ev3PduMotor()
-        binary_read_recursive_Ev3PduMotor(meta, binary_data, tmp_py_obj, 156 + (i * one_elm_size))
+        binary_read_recursive_Ev3PduMotor(meta, binary_data, tmp_py_obj, base_off + 156 + (i * one_elm_size))
         array_value.append(tmp_py_obj)
         i = i + 1
     py_obj.motors = array_value    

@@ -26,6 +26,11 @@ from pdu.python.sensor_msgs.pdu_pytype_PointField import PointField
 from pdu.python.sensor_msgs.pdu_pytype_CompressedImage import CompressedImage
 from pdu.python.std_msgs.pdu_pytype_Header import Header
 from pdu.python.builtin_interfaces.pdu_pytype_Time import Time
+from pdu.python.ev3_msgs.pdu_conv_Ev3PduSensor import pdu_to_py_Ev3PduSensor, py_to_pdu_Ev3PduSensor
+from pdu.python.ev3_msgs.pdu_pytype_Ev3PduSensor import Ev3PduSensor
+from pdu.python.ev3_msgs.pdu_pytype_Ev3PduSensorHeader import Ev3PduSensorHeader
+from pdu.python.ev3_msgs.pdu_pytype_Ev3PduColorSensor import Ev3PduColorSensor
+from pdu.python.ev3_msgs.pdu_pytype_Ev3PduTouchSensor import Ev3PduTouchSensor
 
 class TestPduCrossConversion(unittest.TestCase):
 
@@ -266,6 +271,93 @@ class TestPduCrossConversion(unittest.TestCase):
         self.assertEqual(list(py_msg.data), [i + 1 for i in range(10)])
         self.assertEqual(py_msg.is_dense, True)
         print("SUCCESS: Deserialization of PointCloud2 from C++ passed.")
+
+    def test_serialize_ev3_pdu_sensor_from_python(self):
+        print("\n--- Running test_serialize_ev3_pdu_sensor_from_python ---")
+        py_msg = Ev3PduSensor()
+        py_msg.head.name = "sensor_test"
+        py_msg.head.version = 1
+        py_msg.head.hakoniwa_time = 1234567890
+        py_msg.head.ext_off = 0
+        py_msg.head.ext_size = 0
+        py_msg.buttons = bytes([1])
+
+        color_sensor1 = Ev3PduColorSensor()
+        color_sensor1.color = 1
+        color_sensor1.reflect = 10
+        color_sensor1.rgb_r = 20
+        color_sensor1.rgb_g = 30
+        color_sensor1.rgb_b = 40
+        py_msg.color_sensors.append(color_sensor1)
+
+        color_sensor2 = Ev3PduColorSensor()
+        color_sensor2.color = 2
+        color_sensor2.reflect = 11
+        color_sensor2.rgb_r = 21
+        color_sensor2.rgb_g = 31
+        color_sensor2.rgb_b = 41
+        py_msg.color_sensors.append(color_sensor2)
+
+        touch_sensor1 = Ev3PduTouchSensor()
+        touch_sensor1.value = 1
+        py_msg.touch_sensors.append(touch_sensor1)
+
+        touch_sensor2 = Ev3PduTouchSensor()
+        touch_sensor2.value = 0
+        py_msg.touch_sensors.append(touch_sensor2)
+
+        py_msg.motor_angle = [100, 200, 300]
+        py_msg.gyro_degree = 45
+        py_msg.gyro_degree_rate = 5
+        py_msg.sensor_ultrasonic = 250
+        py_msg.gps_lat = 35.681236
+        py_msg.gps_lon = 139.767125
+        
+        pdu_bytes = py_to_pdu_Ev3PduSensor(py_msg)
+        
+        filename = self.pdu_file_prefix + "_from_py.pdu"
+        with open(filename, "wb") as f:
+            f.write(pdu_bytes)
+        print(f"SUCCESS: Generated {filename}")
+
+    def test_deserialize_ev3_pdu_sensor_from_cpp(self):
+        print("\n--- Running test_deserialize_ev3_pdu_sensor_from_cpp ---")
+        pdu_file_path = self.pdu_file_prefix + '_from_cpp.pdu'
+        self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
+
+        with open(pdu_file_path, 'rb') as f:
+            pdu_bytes = f.read()
+
+        py_msg = pdu_to_py_Ev3PduSensor(pdu_bytes)
+        
+        self.assertIsInstance(py_msg, Ev3PduSensor)
+        self.assertEqual(py_msg.head.name, "sensor_test")
+        self.assertEqual(py_msg.head.version, 1)
+        self.assertEqual(py_msg.head.hakoniwa_time, 1234567890)
+        self.assertEqual(py_msg.head.ext_off, 0)
+        self.assertEqual(py_msg.head.ext_size, 0)
+        self.assertEqual(list(py_msg.buttons), [1])
+        self.assertEqual(len(py_msg.color_sensors), 2)
+        self.assertEqual(py_msg.color_sensors[0].color, 1)
+        self.assertEqual(py_msg.color_sensors[0].reflect, 10)
+        self.assertEqual(py_msg.color_sensors[0].rgb_r, 20)
+        self.assertEqual(py_msg.color_sensors[0].rgb_g, 30)
+        self.assertEqual(py_msg.color_sensors[0].rgb_b, 40)
+        self.assertEqual(py_msg.color_sensors[1].color, 2)
+        self.assertEqual(py_msg.color_sensors[1].reflect, 11)
+        self.assertEqual(py_msg.color_sensors[1].rgb_r, 21)
+        self.assertEqual(py_msg.color_sensors[1].rgb_g, 31)
+        self.assertEqual(py_msg.color_sensors[1].rgb_b, 41)
+        self.assertEqual(len(py_msg.touch_sensors), 2)
+        self.assertEqual(py_msg.touch_sensors[0].value, 1)
+        self.assertEqual(py_msg.touch_sensors[1].value, 0)
+        self.assertEqual(list(py_msg.motor_angle), [100, 200, 300])
+        self.assertEqual(py_msg.gyro_degree, 45)
+        self.assertEqual(py_msg.gyro_degree_rate, 5)
+        self.assertEqual(py_msg.sensor_ultrasonic, 250)
+        self.assertAlmostEqual(py_msg.gps_lat, 35.681236, places=6)
+        self.assertAlmostEqual(py_msg.gps_lon, 139.767125, places=6)
+        print("SUCCESS: Deserialization of EV3PduSensor from C++ passed.")
 
 
 if __name__ == "__main__":

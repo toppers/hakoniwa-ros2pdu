@@ -53,11 +53,11 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     i = 0
     array_size = 2
-    one_elm_size = int(40) / array_size
+    one_elm_size = int(40 / array_size)
     array_value = []
     while i < array_size:
         tmp_py_obj = Ev3PduColorSensor()
-        binary_read_recursive_Ev3PduColorSensor(meta, binary_data, tmp_py_obj, 156 + (i * one_elm_size))
+        binary_read_recursive_Ev3PduColorSensor(meta, binary_data, tmp_py_obj, base_off + 156 + (i * one_elm_size))
         array_value.append(tmp_py_obj)
         i = i + 1
     py_obj.color_sensors = array_value    
@@ -71,11 +71,11 @@ def binary_read_recursive_Ev3PduSensor(meta: binary_io.PduMetaData, binary_data:
 
     i = 0
     array_size = 2
-    one_elm_size = int(8) / array_size
+    one_elm_size = int(8 / array_size)
     array_value = []
     while i < array_size:
         tmp_py_obj = Ev3PduTouchSensor()
-        binary_read_recursive_Ev3PduTouchSensor(meta, binary_data, tmp_py_obj, 196 + (i * one_elm_size))
+        binary_read_recursive_Ev3PduTouchSensor(meta, binary_data, tmp_py_obj, base_off + 196 + (i * one_elm_size))
         array_value.append(tmp_py_obj)
         i = i + 1
     py_obj.touch_sensors = array_value    

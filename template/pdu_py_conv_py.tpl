@@ -50,11 +50,11 @@ def binary_read_recursive_{{ container.msg_type_name }}(meta: binary_io.PduMetaD
     {% elif item.array_type == 'array' %}
     i = 0
     array_size = {{ item.array_len }}
-    one_elm_size = int({{ item.size }}) / array_size
+    one_elm_size = int({{ item.size }} / array_size)
     array_value = []
     while i < array_size:
         tmp_py_obj = {{ container.get_msg_type(item.type_name) }}()
-        binary_read_recursive_{{ container.get_msg_type(item.type_name) }}(meta, binary_data, tmp_py_obj, {{ item.offset }} + (i * one_elm_size))
+        binary_read_recursive_{{ container.get_msg_type(item.type_name) }}(meta, binary_data, tmp_py_obj, base_off + {{ item.offset }} + (i * one_elm_size))
         array_value.append(tmp_py_obj)
         i = i + 1
     py_obj.{{ item.member_name }} = array_value    
