@@ -126,7 +126,9 @@ def binary_write_recursive(parent_off: int, bw_container: BinaryWriterContainer,
                 offset_from_heap = bw_container.heap_allocator.size()
                 array_size = len(json_data[key])
                 for i, elm in enumerate(json_data[key]):
+                    one_elm_size = offset_parser.member_size(line)
                     binary_write_recursive(0, bw_container, offmap, bw_container.heap_allocator, elm, type)
+                    #binary_write_recursive(parent_off + i * one_elm_size, bw_container, offmap, bw_container.heap_allocator, elm, type)
                 a_b = array_size.to_bytes(4, byteorder='little')
                 o_b = offset_from_heap.to_bytes(4, byteorder='little')
                 allocator.add(a_b + o_b, expected_offset=parent_off + off)

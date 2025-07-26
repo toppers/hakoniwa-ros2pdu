@@ -97,4 +97,4 @@ if __name__ == "__main__":
 
     json_data = binary_read(offmap, typename, binary_data)
 
-    print(json.dumps(json_data, indent=2, ensure_ascii=False))
+    print(json_data)
