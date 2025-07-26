@@ -1,15 +1,70 @@
-
 [
   {
     "name": "point",
-    "pdu_file_prefix": "point"
+    "pdu_file_prefix": "point",
+    "test_data": {
+      "x": 1.1,
+      "y": 2.2,
+      "z": 3.3
+    }
   },
   {
     "name": "tf_message",
-    "pdu_file_prefix": "tf"
+    "pdu_file_prefix": "tf",
+    "test_data": {
+      "transforms": [
+        {
+          "header": {
+            "stamp": {
+              "sec": 123,
+              "nanosec": 456
+            },
+            "frame_id": "world"
+          },
+          "child_frame_id": "base_link",
+          "transform": {
+            "translation": {
+              "x": 1.0,
+              "y": 2.0,
+              "z": 3.0
+            },
+            "rotation": {
+              "x": 0.0,
+              "y": 0.0,
+              "z": 0.0,
+              "w": 1.0
+            }
+          }
+        }
+      ]
+    }
   },
   {
     "name": "imu",
-    "pdu_file_prefix": "imu"
+    "pdu_file_prefix": "imu",
+    "test_data": {
+      "orientation": {
+        "x": 0.1,
+        "y": 0.2,
+        "z": 0.3,
+        "w": 0.4
+      }
+    }
+  },
+  {
+    "name": "twist",
+    "pdu_file_prefix": "twist",
+    "test_data": {
+      "linear": {
+        "x": 10.0,
+        "y": 20.0,
+        "z": 30.0
+      },
+      "angular": {
+        "x": 0.1,
+        "y": 0.2,
+        "z": 0.3
+      }
+    }
   }
 ]

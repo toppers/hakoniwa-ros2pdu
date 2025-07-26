@@ -16,6 +16,8 @@ from pdu.python.geometry_msgs.pdu_conv_Point import pdu_to_py_Point, py_to_pdu_P
 from pdu.python.geometry_msgs.pdu_pytype_Point import Point
 from pdu.python.sensor_msgs.pdu_conv_Imu import pdu_to_py_Imu, py_to_pdu_Imu
 from pdu.python.sensor_msgs.pdu_pytype_Imu import Imu
+from pdu.python.geometry_msgs.pdu_conv_Twist import pdu_to_py_Twist, py_to_pdu_Twist
+from pdu.python.geometry_msgs.pdu_pytype_Twist import Twist
 
 class TestPduCrossConversion(unittest.TestCase):
 
@@ -116,6 +118,42 @@ class TestPduCrossConversion(unittest.TestCase):
         self.assertAlmostEqual(py_msg.orientation.z, 0.3, places=6)
         self.assertAlmostEqual(py_msg.orientation.w, 0.4, places=6)
         print("SUCCESS: Deserialization of Imu from C++ passed.")
+
+    def test_serialize_twist_from_python(self):
+        print("\n--- Running test_serialize_twist_from_python ---")
+        py_msg = Twist()
+        py_msg.linear.x = 10.0
+        py_msg.linear.y = 20.0
+        py_msg.linear.z = 30.0
+        py_msg.angular.x = 0.1
+        py_msg.angular.y = 0.2
+        py_msg.angular.z = 0.3
+        
+        pdu_bytes = py_to_pdu_Twist(py_msg)
+        
+        filename = self.pdu_file_prefix + "_from_py.pdu"
+        with open(filename, "wb") as f:
+            f.write(pdu_bytes)
+        print(f"SUCCESS: Generated {filename}")
+
+    def test_deserialize_twist_from_cpp(self):
+        print("\n--- Running test_deserialize_twist_from_cpp ---")
+        pdu_file_path = self.pdu_file_prefix + '_from_cpp.pdu'
+        self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
+
+        with open(pdu_file_path, 'rb') as f:
+            pdu_bytes = f.read()
+
+        py_msg = pdu_to_py_Twist(pdu_bytes)
+        
+        self.assertIsInstance(py_msg, Twist)
+        self.assertAlmostEqual(py_msg.linear.x, 10.0, places=6)
+        self.assertAlmostEqual(py_msg.linear.y, 20.0, places=6)
+        self.assertAlmostEqual(py_msg.linear.z, 30.0, places=6)
+        self.assertAlmostEqual(py_msg.angular.x, 0.1, places=6)
+        self.assertAlmostEqual(py_msg.angular.y, 0.2, places=6)
+        self.assertAlmostEqual(py_msg.angular.z, 0.3, places=6)
+        print("SUCCESS: Deserialization of Twist from C++ passed.")
 
 
 if __name__ == "__main__":

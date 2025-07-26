@@ -9,6 +9,7 @@
 #include "pdu/types/geometry_msgs/pdu_cpptype_conv_TransformStamped.hpp"
 #include "pdu/types/geometry_msgs/pdu_cpptype_conv_Point.hpp"
 #include "pdu/types/sensor_msgs/pdu_cpptype_conv_Imu.hpp"
+#include "pdu/types/geometry_msgs/pdu_cpptype_conv_Twist.hpp"
 
 void validate_tf_message(const std::string& pdu_file_prefix) {
     std::string filename = pdu_file_prefix + "_from_py.pdu";
@@ -148,6 +149,54 @@ void generate_imu_message(const std::string& pdu_file_prefix) {
     hako_destroy_pdu(pdu_ptr);
 }
 
+void validate_twist_message(const std::string& pdu_file_prefix) {
+    std::string filename = pdu_file_prefix + "_from_py.pdu";
+    std::ifstream ifs(filename, std::ios::binary);
+    if (!ifs) {
+        std::cerr << "Error: Can not open " << filename << std::endl;
+        exit(1);
+    }
+    std::vector<char> buffer((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    
+    HakoCpp_Twist cpp_msg;
+    hako::pdu::msgs::geometry_msgs::Twist conv;
+    bool ret = conv.pdu2cpp(buffer.data(), cpp_msg);
+    assert(ret);
+
+    std::cout << "Validating Twist from Python..." << std::endl;
+    assert(abs(cpp_msg.linear.x - 10.0) < 1e-6);
+    assert(abs(cpp_msg.linear.y - 20.0) < 1e-6);
+    assert(abs(cpp_msg.linear.z - 30.0) < 1e-6);
+    assert(abs(cpp_msg.angular.x - 0.1) < 1e-6);
+    assert(abs(cpp_msg.angular.y - 0.2) < 1e-6);
+    assert(abs(cpp_msg.angular.z - 0.3) < 1e-6);
+    std::cout << "SUCCESS: Validation of Twist from Python passed." << std::endl;
+}
+
+void generate_twist_message(const std::string& pdu_file_prefix) {
+    HakoCpp_Twist cpp_msg;
+    cpp_msg.linear.x = 10.0;
+    cpp_msg.linear.y = 20.0;
+    cpp_msg.linear.z = 30.0;
+    cpp_msg.angular.x = 0.1;
+    cpp_msg.angular.y = 0.2;
+    cpp_msg.angular.z = 0.3;
+
+    Hako_Twist* pdu_ptr = nullptr;
+    int pdu_size = hako_convert_cpp2pdu_Twist(cpp_msg, &pdu_ptr);
+    assert(pdu_size > 0);
+
+    void* top_ptr = hako_get_top_ptr_pdu(pdu_ptr);
+    assert(top_ptr != nullptr);
+
+    std::string filename = pdu_file_prefix + "_from_cpp.pdu";
+    std::ofstream ofs(filename, std::ios::binary);
+    ofs.write(static_cast<const char*>(top_ptr), pdu_size);
+    std::cout << "SUCCESS: Generated " << filename << std::endl;
+
+    hako_destroy_pdu(pdu_ptr);
+}
+
 // Function pointer type for test functions
 typedef void (*TestFunction)(const std::string&);
 
@@ -162,6 +211,7 @@ TestEntry test_table[] = {
     { "tf_message", generate_tf_message, validate_tf_message },
     { "point", generate_point_message, validate_point_message },
     { "imu", generate_imu_message, validate_imu_message },
+    { "twist", generate_twist_message, validate_twist_message },
     // Add new test functions here
     { "", nullptr, nullptr } // Sentinel
 };
