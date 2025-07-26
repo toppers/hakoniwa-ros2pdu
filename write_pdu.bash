@@ -19,6 +19,6 @@ then
     exit 1
 fi
 
-python3 ./utils/binary/binary_writer.py ./pdu/offset ${TYPE} ${JSONFILE}  .tmp.bin
-cat .tmp.bin
-rm -f .tmp.bin
+python3 -m utils.binary.binary_writer ./pdu/offset ${TYPE} ${JSONFILE}  out.bin
+echo "Write to out.bin:"
+od -x out.bin

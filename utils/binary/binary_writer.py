@@ -5,6 +5,7 @@ import sys
 
 from . import binary_io
 from . import offset_parser
+from . import offset_map
 
 class DynamicAllocator:
     def __init__(self, is_heap: bool):
@@ -130,3 +131,21 @@ def binary_write_recursive(parent_off: int, bw_container: BinaryWriterContainer,
                 o_b = offset_from_heap.to_bytes(4, byteorder='little')
                 allocator.add(a_b + o_b, expected_offset=parent_off + off)
 
+if __name__ == "__main__":
+    if len(sys.argv) != 5:
+        print("Usage: binary_writer.py <offset_path> <typename> <binary_def_json> <outfile>")
+        sys.exit()
+
+    offset_path=sys.argv[1] 
+    typename=sys.argv[2]
+    binary_def_json=sys.argv[3]
+    outfile=sys.argv[4]
+    offmap = offset_map.create_offmap(offset_path)
+
+    json_open = open(binary_def_json, 'r')
+    base_json_data = json.load(json_open)
+    binary_data = bytearray()
+    binary_write(offmap, binary_data, base_json_data, typename)
+
+    with open(outfile, 'wb') as f:
+        f.write(binary_data)

@@ -18,8 +18,8 @@ fi
 
 if [ $# -eq 3 ]
 then
-    python3 ./utils/binary/binary_reader.py ./pdu/offset ${TYPE} ${BINFILE}  | jq
+    python3 -m utils.binary.binary_reader ./pdu/offset ${TYPE} ${BINFILE}  | jq
 else
-    python3 ./utils/binary/binary_reader.py ./pdu/offset ${TYPE} ${BINFILE}  | yq -y
+    python3 -m utils.binary.binary_reader ./pdu/offset ${TYPE} ${BINFILE}  | yq -y
 fi
 
