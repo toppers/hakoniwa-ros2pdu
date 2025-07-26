@@ -198,7 +198,6 @@ def binary_read_recursive_HakoHilSensor(meta: binary_io.PduMetaData, binary_data
     return py_obj
 
 
-
 def py_to_pdu_HakoHilSensor(py_obj: HakoHilSensor) -> bytearray:
     binary_data = bytearray()
     base_allocator = DynamicAllocator(False)
@@ -452,3 +451,57 @@ def binary_write_recursive_HakoHilSensor(parent_off: int, bw_container: BinaryWr
     bin = get_binary(type, bin, 1)
     allocator.add(bin, expected_offset=parent_off + off)
     
+
+if __name__ == "__main__":
+    import sys
+    import json
+
+    def print_usage():
+        print(f"Usage: python -m pdu.python.pdu_conv_HakoHilSensor <read|write> [args...]")
+        print(f"  read <input_binary_file> <output_json_file>")
+        print(f"  write <input_json_file> <output_binary_file>")
+
+    if len(sys.argv) < 2:
+        print_usage()
+        sys.exit(1)
+
+    command = sys.argv[1]
+
+    if command == "read":
+        if len(sys.argv) != 4:
+            print_usage()
+            sys.exit(1)
+        
+        binary_filepath = sys.argv[2]
+        output_json_filepath = sys.argv[3]
+
+        with open(binary_filepath, "rb") as f:
+            binary_data = bytearray(f.read())
+        
+        py_obj = pdu_to_py_HakoHilSensor(binary_data)
+        
+        with open(output_json_filepath, "w") as f:
+            f.write(py_obj.to_json())
+
+    elif command == "write":
+        if len(sys.argv) != 4:
+            print_usage()
+            sys.exit(1)
+
+        input_json_filepath = sys.argv[2]
+        output_binary_filepath = sys.argv[3]
+
+        with open(input_json_filepath, "r") as f:
+            json_str = f.read()
+        
+        py_obj = HakoHilSensor.from_json(json_str)
+        
+        binary_data = py_to_pdu_HakoHilSensor(py_obj)
+
+        with open(output_binary_filepath, "wb") as f:
+            f.write(binary_data)
+
+    else:
+        print(f"Unknown command: {command}")
+        print_usage()
+        sys.exit(1)
