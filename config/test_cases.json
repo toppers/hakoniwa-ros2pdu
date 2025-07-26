@@ -66,5 +66,23 @@
         "z": 0.3
       }
     }
+  },
+  {
+    "name": "hako_camera_data",
+    "pdu_file_prefix": "hako_camera_data",
+    "test_data": {
+      "request_id": 12345,
+      "image": {
+        "header": {
+          "stamp": {
+            "sec": 100,
+            "nanosec": 200
+          },
+          "frame_id": "camera_frame"
+        },
+        "format": "jpeg",
+        "data": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      }
+    }
   }
 ]

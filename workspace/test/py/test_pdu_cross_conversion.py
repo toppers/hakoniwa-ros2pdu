@@ -18,6 +18,11 @@ from pdu.python.sensor_msgs.pdu_conv_Imu import pdu_to_py_Imu, py_to_pdu_Imu
 from pdu.python.sensor_msgs.pdu_pytype_Imu import Imu
 from pdu.python.geometry_msgs.pdu_conv_Twist import pdu_to_py_Twist, py_to_pdu_Twist
 from pdu.python.geometry_msgs.pdu_pytype_Twist import Twist
+from pdu.python.hako_msgs.pdu_conv_HakoCameraData import pdu_to_py_HakoCameraData, py_to_pdu_HakoCameraData
+from pdu.python.hako_msgs.pdu_pytype_HakoCameraData import HakoCameraData
+from pdu.python.sensor_msgs.pdu_pytype_CompressedImage import CompressedImage
+from pdu.python.std_msgs.pdu_pytype_Header import Header
+from pdu.python.builtin_interfaces.pdu_pytype_Time import Time
 
 class TestPduCrossConversion(unittest.TestCase):
 
@@ -154,6 +159,42 @@ class TestPduCrossConversion(unittest.TestCase):
         self.assertAlmostEqual(py_msg.angular.y, 0.2, places=6)
         self.assertAlmostEqual(py_msg.angular.z, 0.3, places=6)
         print("SUCCESS: Deserialization of Twist from C++ passed.")
+
+    def test_serialize_hako_camera_data_from_python(self):
+        print("\n--- Running test_serialize_hako_camera_data_from_python ---")
+        py_msg = HakoCameraData()
+        py_msg.request_id = 12345
+        py_msg.image.header.stamp.sec = 100
+        py_msg.image.header.stamp.nanosec = 200
+        py_msg.image.header.frame_id = "camera_frame"
+        py_msg.image.format = "jpeg"
+        py_msg.image.data = bytes([i + 1 for i in range(10)])
+        
+        pdu_bytes = py_to_pdu_HakoCameraData(py_msg)
+        
+        filename = self.pdu_file_prefix + "_from_py.pdu"
+        with open(filename, "wb") as f:
+            f.write(pdu_bytes)
+        print(f"SUCCESS: Generated {filename}")
+
+    def test_deserialize_hako_camera_data_from_cpp(self):
+        print("\n--- Running test_deserialize_hako_camera_data_from_cpp ---")
+        pdu_file_path = self.pdu_file_prefix + '_from_cpp.pdu'
+        self.assertTrue(os.path.exists(pdu_file_path), f"{pdu_file_path} not found. Run C++ test first.")
+
+        with open(pdu_file_path, 'rb') as f:
+            pdu_bytes = f.read()
+
+        py_msg = pdu_to_py_HakoCameraData(pdu_bytes)
+        
+        self.assertIsInstance(py_msg, HakoCameraData)
+        self.assertEqual(py_msg.request_id, 12345)
+        self.assertEqual(py_msg.image.header.stamp.sec, 100)
+        self.assertEqual(py_msg.image.header.stamp.nanosec, 200)
+        self.assertEqual(py_msg.image.header.frame_id, "camera_frame")
+        self.assertEqual(py_msg.image.format, "jpeg")
+        self.assertEqual(py_msg.image.data, bytes([i + 1 for i in range(10)]))
+        print("SUCCESS: Deserialization of HakoCameraData from C++ passed.")
 
 
 if __name__ == "__main__":

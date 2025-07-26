@@ -10,6 +10,7 @@
 #include "pdu/types/geometry_msgs/pdu_cpptype_conv_Point.hpp"
 #include "pdu/types/sensor_msgs/pdu_cpptype_conv_Imu.hpp"
 #include "pdu/types/geometry_msgs/pdu_cpptype_conv_Twist.hpp"
+#include "pdu/types/hako_msgs/pdu_cpptype_conv_HakoCameraData.hpp"
 
 void validate_tf_message(const std::string& pdu_file_prefix) {
     std::string filename = pdu_file_prefix + "_from_py.pdu";
@@ -197,6 +198,59 @@ void generate_twist_message(const std::string& pdu_file_prefix) {
     hako_destroy_pdu(pdu_ptr);
 }
 
+void validate_hako_camera_data_message(const std::string& pdu_file_prefix) {
+    std::string filename = pdu_file_prefix + "_from_py.pdu";
+    std::ifstream ifs(filename, std::ios::binary);
+    if (!ifs) {
+        std::cerr << "Error: Can not open " << filename << std::endl;
+        exit(1);
+    }
+    std::vector<char> buffer((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+    
+    HakoCpp_HakoCameraData cpp_msg;
+    hako::pdu::msgs::hako_msgs::HakoCameraData conv;
+    bool ret = conv.pdu2cpp(buffer.data(), cpp_msg);
+    assert(ret);
+
+    std::cout << "Validating HakoCameraData from Python..." << std::endl;
+    assert(cpp_msg.request_id == 12345);
+    assert(cpp_msg.image.header.stamp.sec == 100);
+    assert(cpp_msg.image.header.stamp.nanosec == 200);
+    assert(cpp_msg.image.header.frame_id == "camera_frame");
+    assert(cpp_msg.image.format == "jpeg");
+    assert(cpp_msg.image.data.size() == 10);
+    for (size_t i = 0; i < cpp_msg.image.data.size(); ++i) {
+        assert(cpp_msg.image.data[i] == (char)(i + 1));
+    }
+    std::cout << "SUCCESS: Validation of HakoCameraData from Python passed." << std::endl;
+}
+
+void generate_hako_camera_data_message(const std::string& pdu_file_prefix) {
+    HakoCpp_HakoCameraData cpp_msg;
+    cpp_msg.request_id = 12345;
+    cpp_msg.image.header.stamp.sec = 100;
+    cpp_msg.image.header.stamp.nanosec = 200;
+    cpp_msg.image.header.frame_id = "camera_frame";
+    cpp_msg.image.format = "jpeg";
+    for (int i = 0; i < 10; ++i) {
+        cpp_msg.image.data.push_back((char)(i + 1));
+    }
+
+    Hako_HakoCameraData* pdu_ptr = nullptr;
+    int pdu_size = hako_convert_cpp2pdu_HakoCameraData(cpp_msg, &pdu_ptr);
+    assert(pdu_size > 0);
+
+    void* top_ptr = hako_get_top_ptr_pdu(pdu_ptr);
+    assert(top_ptr != nullptr);
+
+    std::string filename = pdu_file_prefix + "_from_cpp.pdu";
+    std::ofstream ofs(filename, std::ios::binary);
+    ofs.write(static_cast<const char*>(top_ptr), pdu_size);
+    std::cout << "SUCCESS: Generated " << filename << std::endl;
+
+    hako_destroy_pdu(pdu_ptr);
+}
+
 // Function pointer type for test functions
 typedef void (*TestFunction)(const std::string&);
 
@@ -212,6 +266,7 @@ TestEntry test_table[] = {
     { "point", generate_point_message, validate_point_message },
     { "imu", generate_imu_message, validate_imu_message },
     { "twist", generate_twist_message, validate_twist_message },
+    { "hako_camera_data", generate_hako_camera_data_message, validate_hako_camera_data_message },
     // Add new test functions here
     { "", nullptr, nullptr } // Sentinel
 };
