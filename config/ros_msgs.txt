@@ -5,6 +5,7 @@ hako_msgs/DroneStatus
 hako_msgs/ShareObjectOwnerResponse
 hako_msgs/ShareObjectOwner
 hako_msgs/HakoDroneCmdMove
+hako_msgs/HakoCmdMagnetHolder
 hako_msgs/DisturbanceWind
 hako_msgs/HakoCameraData
 hako_msgs/SimpleVarray
