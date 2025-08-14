@@ -59,7 +59,10 @@ typedef struct {
  */
 
 /* ---- atomic helpers ---- */
-#if __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__)
+#if defined(_MSC_VER)
+  #include <intrin.h>
+  #define HAKO_ATOMIC_LOAD_U32(p) (uint32_t)_InterlockedCompareExchange((volatile long*)(p), 0, 0)
+#elif __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__) 
   #include <stdatomic.h>
   #define HAKO_ATOMIC_LOAD_U32(p)  atomic_load_explicit((_Atomic uint32_t*)(p), memory_order_acquire)
 #else
