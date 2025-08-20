@@ -1,3 +1,4 @@
+hako_msgs/MetaPdu
 hako_msgs/SimpleStructVarray
 hako_msgs/MonitorCameraCmd
 hako_msgs/MonitorCameraData

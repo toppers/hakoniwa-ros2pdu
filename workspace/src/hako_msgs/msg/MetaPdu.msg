@@ -1,0 +1,12 @@
+uint32 total_len
+uint32 magicno
+uint16 version
+uint16 flags
+uint32 meta_request_type
+uint64 hako_time_us
+uint64 asset_time_us
+uint64 real_time_us
+string robot_name
+string message_type
+int32  channel_id
+uint32 body_len
