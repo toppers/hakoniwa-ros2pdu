@@ -58,8 +58,30 @@ typedef struct {
  *  -------------
  */
 
-#define HAKO_PDU_METADATA_IS_INVALID(meta) \
-    (((meta)->magicno != HAKO_PDU_META_DATA_MAGICNO) || ((meta)->version != HAKO_PDU_META_DATA_VERSION))
+/* ---- atomic helpers ---- */
+#if defined(_MSC_VER)
+  #include <intrin.h>
+  #define HAKO_ATOMIC_LOAD_U32(p) (uint32_t)_InterlockedCompareExchange((volatile long*)(p), 0, 0)
+#elif __STDC_VERSION__ >= 201112L && !defined(__STDC_NO_ATOMICS__) 
+  #include <stdatomic.h>
+  #define HAKO_ATOMIC_LOAD_U32(p)  atomic_load_explicit((_Atomic uint32_t*)(p), memory_order_acquire)
+#else
+  #define HAKO_ATOMIC_LOAD_U32(p)  __atomic_load_n((uint32_t*)(p), __ATOMIC_ACQUIRE)
+#endif
+
+/* 旧マクロの実体は関数へ委譲（呼び出しシグネチャは維持） */
+static inline int hako_pdu_metadata_is_invalid_inline(const HakoPduMetaDataType* meta) {
+    if (meta == NULL) return 1;
+    /* writer は magic を「最後」に立てる想定（release） */
+    const uint32_t magic   = HAKO_ATOMIC_LOAD_U32(&meta->magicno);
+    const uint32_t version = meta->version;
+    /* ここでは magic/version だけ判定（従来と同じ意味） */
+    return (magic != HAKO_PDU_META_DATA_MAGICNO) || (version != HAKO_PDU_META_DATA_VERSION);
+}
+
+/* 公開APIはマクロ名を維持（呼び出し側はそのまま） */
+#define HAKO_PDU_METADATA_IS_INVALID(meta_) \
+    hako_pdu_metadata_is_invalid_inline((const HakoPduMetaDataType*)(meta_))
 
 #define HAKO_GET_BASE_PTR(top_ptr, meta) (((char*)(top_ptr)) + (meta)->base_off)
 #define HAKO_GET_HEAP_PTR(top_ptr, meta) (((char*)(top_ptr)) + (meta)->heap_off)
@@ -113,7 +135,6 @@ static inline void* hako_create_empty_pdu(int base_size, int heap_size)
     meta->total_size = total_size;
     return HAKO_GET_BASE_PTR(top_ptr, meta);
 }
-
 static inline void* hako_get_top_ptr_pdu(void *base_ptr)
 {
     char* top_ptr = (char*)HAKO_GET_TOP_PTR(base_ptr);
