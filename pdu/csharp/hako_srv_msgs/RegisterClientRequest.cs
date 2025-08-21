@@ -15,15 +15,10 @@ namespace hakoniwa.pdu.msgs.hako_srv_msgs
         {
             _pdu = pdu;
         }
-        public string service_name
+        public uint dummy
         {
-            get => _pdu.GetData<string>("service_name");
-            set => _pdu.SetData("service_name", value);
-        }
-        public string client_name
-        {
-            get => _pdu.GetData<string>("client_name");
-            set => _pdu.SetData("client_name", value);
+            get => _pdu.GetData<uint>("dummy");
+            set => _pdu.SetData("dummy", value);
         }
     }
 }

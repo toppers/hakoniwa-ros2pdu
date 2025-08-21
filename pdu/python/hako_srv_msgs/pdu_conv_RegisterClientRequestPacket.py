@@ -36,7 +36,7 @@ def binary_read_recursive_RegisterClientRequestPacket(meta: binary_io.PduMetaDat
     # data_type: struct 
     # member_name: body 
     # type_name: RegisterClientRequest 
-    # offset: 268 size: 256 
+    # offset: 268 size: 4 
     # array_len: 1
 
     tmp_py_obj = RegisterClientRequest()
@@ -90,7 +90,7 @@ def binary_write_recursive_RegisterClientRequestPacket(parent_off: int, bw_conta
     # data_type: struct 
     # member_name: body 
     # type_name: RegisterClientRequest 
-    # offset: 268 size: 256 
+    # offset: 268 size: 4 
     # array_len: 1
     type = "RegisterClientRequest"
     off = 268

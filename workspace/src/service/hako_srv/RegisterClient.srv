@@ -1,5 +1,4 @@
-string service_name
-string client_name
+uint32 dummy
 ---
 uint32 service_id
 uint32 client_id

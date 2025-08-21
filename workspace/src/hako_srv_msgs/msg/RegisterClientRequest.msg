@@ -1,2 +1,1 @@
-string service_name
-string client_name
+uint32 dummy

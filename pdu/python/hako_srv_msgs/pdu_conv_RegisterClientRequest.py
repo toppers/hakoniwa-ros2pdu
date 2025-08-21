@@ -21,25 +21,14 @@ def pdu_to_py_RegisterClientRequest(binary_data: bytearray) -> RegisterClientReq
 def binary_read_recursive_RegisterClientRequest(meta: binary_io.PduMetaData, binary_data: bytearray, py_obj: RegisterClientRequest, base_off: int):
     # array_type: single 
     # data_type: primitive 
-    # member_name: service_name 
-    # type_name: string 
-    # offset: 0 size: 128 
+    # member_name: dummy 
+    # type_name: uint32 
+    # offset: 0 size: 4 
     # array_len: 1
 
     
-    bin = binary_io.readBinary(binary_data, base_off + 0, 128)
-    py_obj.service_name = binary_io.binTovalue("string", bin)
-    
-    # array_type: single 
-    # data_type: primitive 
-    # member_name: client_name 
-    # type_name: string 
-    # offset: 128 size: 128 
-    # array_len: 1
-
-    
-    bin = binary_io.readBinary(binary_data, base_off + 128, 128)
-    py_obj.client_name = binary_io.binTovalue("string", bin)
+    bin = binary_io.readBinary(binary_data, base_off + 0, 4)
+    py_obj.dummy = binary_io.binTovalue("uint32", bin)
     
     return py_obj
 
@@ -75,30 +64,16 @@ def py_to_pdu_RegisterClientRequest(py_obj: RegisterClientRequest) -> bytearray:
 def binary_write_recursive_RegisterClientRequest(parent_off: int, bw_container: BinaryWriterContainer, allocator, py_obj: RegisterClientRequest):
     # array_type: single 
     # data_type: primitive 
-    # member_name: service_name 
-    # type_name: string 
-    # offset: 0 size: 128 
+    # member_name: dummy 
+    # type_name: uint32 
+    # offset: 0 size: 4 
     # array_len: 1
-    type = "string"
+    type = "uint32"
     off = 0
 
     
-    bin = binary_io.typeTobin(type, py_obj.service_name)
-    bin = get_binary(type, bin, 128)
-    allocator.add(bin, expected_offset=parent_off + off)
-    
-    # array_type: single 
-    # data_type: primitive 
-    # member_name: client_name 
-    # type_name: string 
-    # offset: 128 size: 128 
-    # array_len: 1
-    type = "string"
-    off = 128
-
-    
-    bin = binary_io.typeTobin(type, py_obj.client_name)
-    bin = get_binary(type, bin, 128)
+    bin = binary_io.typeTobin(type, py_obj.dummy)
+    bin = get_binary(type, bin, 4)
     allocator.add(bin, expected_offset=parent_off + off)
     
 

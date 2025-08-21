@@ -25,10 +25,8 @@
 
 static inline int cpp_pdu2cpp_RegisterClientRequest(const char* heap_ptr, Hako_RegisterClientRequest &src, HakoCpp_RegisterClientRequest &dst)
 {
-    // string convertor
-    dst.service_name = (const char*)src.service_name;
-    // string convertor
-    dst.client_name = (const char*)src.client_name;
+    // primitive convert
+    hako_convert_pdu2cpp(src.dummy, dst.dummy);
     (void)heap_ptr;
     return 0;
 }
@@ -55,16 +53,8 @@ static inline int hako_convert_pdu2cpp_RegisterClientRequest(Hako_RegisterClient
 static inline bool cpp_cpp2pdu_RegisterClientRequest(HakoCpp_RegisterClientRequest &src, Hako_RegisterClientRequest &dst, PduDynamicMemory &dynamic_memory)
 {
     try {
-        // string convertor
-        (void)hako_convert_cpp2pdu_array(
-            src.service_name, src.service_name.length(),
-            dst.service_name, M_ARRAY_SIZE(Hako_RegisterClientRequest, char, service_name));
-        dst.service_name[src.service_name.length()] = '\0';
-        // string convertor
-        (void)hako_convert_cpp2pdu_array(
-            src.client_name, src.client_name.length(),
-            dst.client_name, M_ARRAY_SIZE(Hako_RegisterClientRequest, char, client_name));
-        dst.client_name[src.client_name.length()] = '\0';
+        // primitive convert
+        hako_convert_cpp2pdu(src.dummy, dst.dummy);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;
