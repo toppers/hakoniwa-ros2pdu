@@ -7,6 +7,5 @@ uint64 hako_time_us
 uint64 asset_time_us
 uint64 real_time_us
 string robot_name
-string message_type
 int32  channel_id
 uint32 body_len

@@ -1,0 +1,4 @@
+uint32 service_id
+uint32 client_id
+uint32 request_channel_id
+uint32 response_channel_id

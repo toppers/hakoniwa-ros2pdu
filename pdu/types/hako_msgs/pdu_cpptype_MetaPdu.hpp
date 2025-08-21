@@ -15,7 +15,6 @@ typedef struct {
         Hako_uint64 asset_time_us;
         Hako_uint64 real_time_us;
         std::string robot_name;
-        std::string message_type;
         Hako_int32 channel_id;
         Hako_uint32 body_len;
 } HakoCpp_MetaPdu;

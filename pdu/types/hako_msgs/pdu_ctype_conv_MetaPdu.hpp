@@ -44,8 +44,6 @@ static inline int _pdu2ros_MetaPdu(const char* heap_ptr, Hako_MetaPdu &src, hako
     hako_convert_pdu2ros(src.real_time_us, dst.real_time_us);
     // string convertor
     dst.robot_name = (const char*)src.robot_name;
-    // string convertor
-    dst.message_type = (const char*)src.message_type;
     // primitive convert
     hako_convert_pdu2ros(src.channel_id, dst.channel_id);
     // primitive convert
@@ -97,11 +95,6 @@ static inline bool _ros2pdu_MetaPdu(hako_msgs::msg::MetaPdu &src, Hako_MetaPdu &
             src.robot_name, src.robot_name.length(),
             dst.robot_name, M_ARRAY_SIZE(Hako_MetaPdu, char, robot_name));
         dst.robot_name[src.robot_name.length()] = '\0';
-        // string convertor
-        (void)hako_convert_ros2pdu_array(
-            src.message_type, src.message_type.length(),
-            dst.message_type, M_ARRAY_SIZE(Hako_MetaPdu, char, message_type));
-        dst.message_type[src.message_type.length()] = '\0';
         // primitive convert
         hako_convert_ros2pdu(src.channel_id, dst.channel_id);
         // primitive convert

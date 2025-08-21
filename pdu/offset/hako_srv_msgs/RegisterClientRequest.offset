@@ -1,0 +1,2 @@
+single:primitive:service_name:string:0:128
+single:primitive:client_name:string:128:128

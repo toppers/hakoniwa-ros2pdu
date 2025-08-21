@@ -1,4 +1,8 @@
 hako_msgs/MetaPdu
+hako_srv_msgs/RegisterClientRequest
+hako_srv_msgs/RegisterClientResponse
+hako_srv_msgs/RegisterClientRequestPacket
+hako_srv_msgs/RegisterClientResponsePacket
 hako_msgs/SimpleStructVarray
 hako_msgs/MonitorCameraCmd
 hako_msgs/MonitorCameraData

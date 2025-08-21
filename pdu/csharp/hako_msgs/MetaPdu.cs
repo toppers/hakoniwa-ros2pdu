@@ -60,11 +60,6 @@ namespace hakoniwa.pdu.msgs.hako_msgs
             get => _pdu.GetData<string>("robot_name");
             set => _pdu.SetData("robot_name", value);
         }
-        public string message_type
-        {
-            get => _pdu.GetData<string>("message_type");
-            set => _pdu.SetData("message_type", value);
-        }
         public int channel_id
         {
             get => _pdu.GetData<int>("channel_id");

@@ -120,35 +120,24 @@ def binary_read_recursive_MetaPdu(meta: binary_io.PduMetaData, binary_data: byte
     
     # array_type: single 
     # data_type: primitive 
-    # member_name: message_type 
-    # type_name: string 
-    # offset: 168 size: 128 
-    # array_len: 1
-
-    
-    bin = binary_io.readBinary(binary_data, base_off + 168, 128)
-    py_obj.message_type = binary_io.binTovalue("string", bin)
-    
-    # array_type: single 
-    # data_type: primitive 
     # member_name: channel_id 
     # type_name: int32 
-    # offset: 296 size: 4 
+    # offset: 168 size: 4 
     # array_len: 1
 
     
-    bin = binary_io.readBinary(binary_data, base_off + 296, 4)
+    bin = binary_io.readBinary(binary_data, base_off + 168, 4)
     py_obj.channel_id = binary_io.binTovalue("int32", bin)
     
     # array_type: single 
     # data_type: primitive 
     # member_name: body_len 
     # type_name: uint32 
-    # offset: 300 size: 4 
+    # offset: 172 size: 4 
     # array_len: 1
 
     
-    bin = binary_io.readBinary(binary_data, base_off + 300, 4)
+    bin = binary_io.readBinary(binary_data, base_off + 172, 4)
     py_obj.body_len = binary_io.binTovalue("uint32", bin)
     
     return py_obj
@@ -311,26 +300,12 @@ def binary_write_recursive_MetaPdu(parent_off: int, bw_container: BinaryWriterCo
     
     # array_type: single 
     # data_type: primitive 
-    # member_name: message_type 
-    # type_name: string 
-    # offset: 168 size: 128 
-    # array_len: 1
-    type = "string"
-    off = 168
-
-    
-    bin = binary_io.typeTobin(type, py_obj.message_type)
-    bin = get_binary(type, bin, 128)
-    allocator.add(bin, expected_offset=parent_off + off)
-    
-    # array_type: single 
-    # data_type: primitive 
     # member_name: channel_id 
     # type_name: int32 
-    # offset: 296 size: 4 
+    # offset: 168 size: 4 
     # array_len: 1
     type = "int32"
-    off = 296
+    off = 168
 
     
     bin = binary_io.typeTobin(type, py_obj.channel_id)
@@ -341,10 +316,10 @@ def binary_write_recursive_MetaPdu(parent_off: int, bw_container: BinaryWriterCo
     # data_type: primitive 
     # member_name: body_len 
     # type_name: uint32 
-    # offset: 300 size: 4 
+    # offset: 172 size: 4 
     # array_len: 1
     type = "uint32"
-    off = 300
+    off = 172
 
     
     bin = binary_io.typeTobin(type, py_obj.body_len)

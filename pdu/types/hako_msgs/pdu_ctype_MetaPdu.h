@@ -13,7 +13,6 @@ typedef struct {
         Hako_uint64 asset_time_us;
         Hako_uint64 real_time_us;
         char robot_name[HAKO_STRING_SIZE];
-        char message_type[HAKO_STRING_SIZE];
         Hako_int32 channel_id;
         Hako_uint32 body_len;
 } Hako_MetaPdu;

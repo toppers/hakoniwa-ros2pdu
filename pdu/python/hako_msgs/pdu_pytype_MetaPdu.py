@@ -19,7 +19,6 @@ class MetaPdu:
     asset_time_us: int
     real_time_us: int
     robot_name: str
-    message_type: str
     channel_id: int
     body_len: int
 
@@ -33,7 +32,6 @@ class MetaPdu:
         self.asset_time_us = 0
         self.real_time_us = 0
         self.robot_name = ""
-        self.message_type = ""
         self.channel_id = 0
         self.body_len = 0
 
@@ -48,7 +46,6 @@ class MetaPdu:
             f"asset_time_us={self.asset_time_us}"
             f"real_time_us={self.real_time_us}"
             f"robot_name={self.robot_name}"
-            f"message_type={self.message_type}"
             f"channel_id={self.channel_id}"
             f"body_len={self.body_len}"
         ]) + ")"
@@ -151,16 +148,6 @@ class MetaPdu:
             d['robot_name'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
         else:
             d['robot_name'] = field_val
-        # handle field 'message_type'
-        field_val = self.message_type
-        if isinstance(field_val, bytearray):
-            d['message_type'] = list(field_val)
-        elif hasattr(field_val, 'to_dict'):
-            d['message_type'] = field_val.to_dict()
-        elif isinstance(field_val, list):
-            d['message_type'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
-        else:
-            d['message_type'] = field_val
         # handle field 'channel_id'
         field_val = self.channel_id
         if isinstance(field_val, bytearray):
@@ -342,23 +329,6 @@ class MetaPdu:
                 obj.robot_name = field_type.from_dict(value)
             else:
                 obj.robot_name = value
-        # handle field 'message_type'
-        if 'message_type' in d:
-            field_type = cls.__annotations__.get('message_type')
-            value = d['message_type']
-            
-            if field_type is bytearray:
-                obj.message_type = bytearray(value)
-            elif hasattr(field_type, '__origin__') and field_type.__origin__ is list:
-                list_item_type = field_type.__args__[0]
-                if hasattr(list_item_type, 'from_dict'):
-                    obj.message_type = [list_item_type.from_dict(item) for item in value]
-                else:
-                    obj.message_type = value
-            elif hasattr(field_type, 'from_dict'):
-                obj.message_type = field_type.from_dict(value)
-            else:
-                obj.message_type = value
         # handle field 'channel_id'
         if 'channel_id' in d:
             field_type = cls.__annotations__.get('channel_id')
