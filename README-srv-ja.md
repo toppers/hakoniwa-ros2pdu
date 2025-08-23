@@ -34,7 +34,7 @@ python generate_hako_service_msgs.py <srvファイルパス> --out <出力ベー
 ### 実行例
 
 ```bash
-python generate_hako_service_msgs.py hako_srv/AddTwoInts.srv --out dest/
+python3 -m utils.generate_hako_service_msgs.main workspace/src/service/hako_srv/SystemControl.srv --out workspace/src
 ```
 
 生成されるディレクトリ構成は以下の通りです：
