@@ -1,0 +1,3 @@
+single:primitive:ok:bool:0:4
+single:struct:image:sensor_msgs/CompressedImage:4:272
+single:primitive:message:string:276:128

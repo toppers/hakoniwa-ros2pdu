@@ -1,0 +1,6 @@
+string drone_name
+geometry_msgs/Vector3 target_pose
+float32 speed_m_s
+float32 yaw_deg
+float32 tolerance_m
+float32 timeout_sec

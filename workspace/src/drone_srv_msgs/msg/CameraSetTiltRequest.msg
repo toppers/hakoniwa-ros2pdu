@@ -1,0 +1,2 @@
+string drone_name
+float32 tilt_angle_deg

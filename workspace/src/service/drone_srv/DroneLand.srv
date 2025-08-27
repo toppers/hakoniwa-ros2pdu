@@ -1,0 +1,4 @@
+string drone_name
+---
+bool ok
+string message

@@ -1,0 +1,5 @@
+float64 alt_m
+string drone_name
+---
+bool ok
+string message

@@ -1,13 +1,14 @@
 import os
 
 class ServiceContext:
-    def __init__(self, srv_file_path):
+    def __init__(self, srv_file_path, header_package_name=None):
         if not os.path.isfile(srv_file_path):
             raise ValueError(f"Error: '{srv_file_path}' is not a valid .srv file (file does not exist or is not a regular file).")
         self.srv_file_path = srv_file_path
         self.service_name = self._extract_service_name()
         self.srv_package_name = self._extract_srv_package_name()
         self.msg_package_name = f"{self.srv_package_name}_msgs"
+        self.header_package_name = header_package_name or os.getenv("HAKO_HEADER_PKG", "hako_srv_msgs")
 
     def _extract_service_name(self):
         basename = os.path.basename(self.srv_file_path)

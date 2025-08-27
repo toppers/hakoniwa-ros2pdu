@@ -1,0 +1,8 @@
+string drone_name
+bool grab_on
+float32 timeout_sec
+---
+bool ok
+bool magnet_on
+bool contact_on
+string message

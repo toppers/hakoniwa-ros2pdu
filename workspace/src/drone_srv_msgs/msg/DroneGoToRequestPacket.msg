@@ -1,0 +1,2 @@
+hako_srv_msgs/ServiceRequestHeader header
+DroneGoToRequest body

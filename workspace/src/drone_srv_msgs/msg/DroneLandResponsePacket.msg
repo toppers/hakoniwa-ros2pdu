@@ -1,0 +1,2 @@
+hako_srv_msgs/ServiceResponseHeader header
+DroneLandResponse body
