@@ -2,10 +2,7 @@ from typing import List
 
 # dependencies for the generated Python class
 from ..drone_srv_msgs.pdu_pytype_CameraCaptureImageResponse import CameraCaptureImageResponse
-from ..sensor_msgs.pdu_pytype_CompressedImage import CompressedImage
-from ..std_msgs.pdu_pytype_Header import Header
 from ..hako_srv_msgs.pdu_pytype_ServiceResponseHeader import ServiceResponseHeader
-from ..builtin_interfaces.pdu_pytype_Time import Time
 
 
 # class definition for the ROS message

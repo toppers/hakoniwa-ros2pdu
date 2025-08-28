@@ -5,7 +5,6 @@ from ..pdu_utils import *
 from .. import binary_io
 
 # dependencies for the generated Python class
-from ..sensor_msgs.pdu_conv_CompressedImage import *
 
 
 
@@ -31,26 +30,28 @@ def binary_read_recursive_CameraCaptureImageResponse(meta: binary_io.PduMetaData
     bin = binary_io.readBinary(binary_data, base_off + 0, 4)
     py_obj.ok = binary_io.binTovalue("bool", bin)
     
-    # array_type: single 
-    # data_type: struct 
-    # member_name: image 
-    # type_name: sensor_msgs/CompressedImage 
-    # offset: 4 size: 272 
-    # array_len: 1
+    # array_type: varray 
+    # data_type: primitive 
+    # member_name: data 
+    # type_name: uint8 
+    # offset: 4 size: 1 
+    # array_len: 8
 
-    tmp_py_obj = CompressedImage()
-    binary_read_recursive_CompressedImage(meta, binary_data, tmp_py_obj, base_off + 4)
-    py_obj.image = tmp_py_obj
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 4, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 4 + 4, 4))
+    one_elm_size = 1 
+    array_value = binary_io.readBinary(binary_data, meta.heap_off + offset_from_heap, one_elm_size * array_size)
+    py_obj.data = array_value
     
     # array_type: single 
     # data_type: primitive 
     # member_name: message 
     # type_name: string 
-    # offset: 276 size: 128 
+    # offset: 12 size: 128 
     # array_len: 1
 
     
-    bin = binary_io.readBinary(binary_data, base_off + 276, 128)
+    bin = binary_io.readBinary(binary_data, base_off + 12, 128)
     py_obj.message = binary_io.binTovalue("string", bin)
     
     return py_obj
@@ -99,25 +100,31 @@ def binary_write_recursive_CameraCaptureImageResponse(parent_off: int, bw_contai
     bin = get_binary(type, bin, 4)
     allocator.add(bin, expected_offset=parent_off + off)
     
-    # array_type: single 
-    # data_type: struct 
-    # member_name: image 
-    # type_name: sensor_msgs/CompressedImage 
-    # offset: 4 size: 272 
-    # array_len: 1
-    type = "CompressedImage"
+    # array_type: varray 
+    # data_type: primitive 
+    # member_name: data 
+    # type_name: uint8 
+    # offset: 4 size: 1 
+    # array_len: 8
+    type = "uint8"
     off = 4
 
-    binary_write_recursive_CompressedImage(parent_off + off, bw_container, allocator, py_obj.image)
+    offset_from_heap = bw_container.heap_allocator.size()
+    array_size = len(py_obj.data)
+    binary = binary_io.typeTobin_array(type, py_obj.data, 1)
+    bw_container.heap_allocator.add(binary, expected_offset=0)
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)
     
     # array_type: single 
     # data_type: primitive 
     # member_name: message 
     # type_name: string 
-    # offset: 276 size: 128 
+    # offset: 12 size: 128 
     # array_len: 1
     type = "string"
-    off = 276
+    off = 12
 
     
     bin = binary_io.typeTobin(type, py_obj.message)

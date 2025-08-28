@@ -1,9 +1,6 @@
 from typing import List
 
 # dependencies for the generated Python class
-from ..sensor_msgs.pdu_pytype_CompressedImage import CompressedImage
-from ..std_msgs.pdu_pytype_Header import Header
-from ..builtin_interfaces.pdu_pytype_Time import Time
 
 
 # class definition for the ROS message
@@ -14,18 +11,18 @@ class CameraCaptureImageResponse:
     """
 
     ok: bool
-    image: CompressedImage
+    data: List[int]
     message: str
 
     def __init__(self):
         self.ok = False
-        self.image = CompressedImage()
+        self.data = []
         self.message = ""
 
     def __str__(self):
         return f"CameraCaptureImageResponse(" + ", ".join([
             f"ok={self.ok}"
-            f"image={self.image}"
+            f"data={self.data}"
             f"message={self.message}"
         ]) + ")"
 
@@ -47,16 +44,16 @@ class CameraCaptureImageResponse:
             d['ok'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
         else:
             d['ok'] = field_val
-        # handle field 'image'
-        field_val = self.image
+        # handle field 'data'
+        field_val = self.data
         if isinstance(field_val, bytearray):
-            d['image'] = list(field_val)
+            d['data'] = list(field_val)
         elif hasattr(field_val, 'to_dict'):
-            d['image'] = field_val.to_dict()
+            d['data'] = field_val.to_dict()
         elif isinstance(field_val, list):
-            d['image'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
+            d['data'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
         else:
-            d['image'] = field_val
+            d['data'] = field_val
         # handle field 'message'
         field_val = self.message
         if isinstance(field_val, bytearray):
@@ -92,23 +89,23 @@ class CameraCaptureImageResponse:
                 obj.ok = field_type.from_dict(value)
             else:
                 obj.ok = value
-        # handle field 'image'
-        if 'image' in d:
-            field_type = cls.__annotations__.get('image')
-            value = d['image']
+        # handle field 'data'
+        if 'data' in d:
+            field_type = cls.__annotations__.get('data')
+            value = d['data']
             
             if field_type is bytearray:
-                obj.image = bytearray(value)
+                obj.data = bytearray(value)
             elif hasattr(field_type, '__origin__') and field_type.__origin__ is list:
                 list_item_type = field_type.__args__[0]
                 if hasattr(list_item_type, 'from_dict'):
-                    obj.image = [list_item_type.from_dict(item) for item in value]
+                    obj.data = [list_item_type.from_dict(item) for item in value]
                 else:
-                    obj.image = value
+                    obj.data = value
             elif hasattr(field_type, 'from_dict'):
-                obj.image = field_type.from_dict(value)
+                obj.data = field_type.from_dict(value)
             else:
-                obj.image = value
+                obj.data = value
         # handle field 'message'
         if 'message' in d:
             field_type = cls.__annotations__.get('message')

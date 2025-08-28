@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using hakoniwa.pdu.interfaces;
-using hakoniwa.pdu.msgs.builtin_interfaces;
-using hakoniwa.pdu.msgs.sensor_msgs;
-using hakoniwa.pdu.msgs.std_msgs;
 
 namespace hakoniwa.pdu.msgs.drone_srv_msgs
 {
@@ -23,22 +20,10 @@ namespace hakoniwa.pdu.msgs.drone_srv_msgs
             get => _pdu.GetData<bool>("ok");
             set => _pdu.SetData("ok", value);
         }
-        private CompressedImage _image;
-        public CompressedImage image
+        public byte[] data
         {
-            get
-            {
-                if (_image == null)
-                {
-                    _image = new CompressedImage(_pdu.GetData<IPdu>("image"));
-                }
-                return _image;
-            }
-            set
-            {
-                _image = value;
-                _pdu.SetData("image", value.GetPdu());
-            }
+            get => _pdu.GetDataArray<byte>("data");
+            set => _pdu.SetData("data", value);
         }
         public string message
         {

@@ -17,11 +17,8 @@
 /*
  * Dependent Convertors
  */
-#include "builtin_interfaces/pdu_ctype_conv_Time.hpp"
 #include "drone_srv_msgs/pdu_ctype_conv_CameraCaptureImageResponse.hpp"
 #include "hako_srv_msgs/pdu_ctype_conv_ServiceResponseHeader.hpp"
-#include "sensor_msgs/pdu_ctype_conv_CompressedImage.hpp"
-#include "std_msgs/pdu_ctype_conv_Header.hpp"
 
 /***************************
  *

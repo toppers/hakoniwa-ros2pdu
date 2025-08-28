@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using hakoniwa.pdu.interfaces;
-using hakoniwa.pdu.msgs.builtin_interfaces;
 using hakoniwa.pdu.msgs.hako_srv_msgs;
-using hakoniwa.pdu.msgs.sensor_msgs;
-using hakoniwa.pdu.msgs.std_msgs;
 
 namespace hakoniwa.pdu.msgs.drone_srv_msgs
 {

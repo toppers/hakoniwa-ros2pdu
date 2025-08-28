@@ -1,3 +1,3 @@
 bool ok
-sensor_msgs/CompressedImage image
+uint8[] data
 string message

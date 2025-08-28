@@ -36,7 +36,7 @@ def binary_read_recursive_CameraCaptureImageResponsePacket(meta: binary_io.PduMe
     # data_type: struct 
     # member_name: body 
     # type_name: CameraCaptureImageResponse 
-    # offset: 268 size: 404 
+    # offset: 268 size: 140 
     # array_len: 1
 
     tmp_py_obj = CameraCaptureImageResponse()
@@ -90,7 +90,7 @@ def binary_write_recursive_CameraCaptureImageResponsePacket(parent_off: int, bw_
     # data_type: struct 
     # member_name: body 
     # type_name: CameraCaptureImageResponse 
-    # offset: 268 size: 404 
+    # offset: 268 size: 140 
     # array_len: 1
     type = "CameraCaptureImageResponse"
     off = 268

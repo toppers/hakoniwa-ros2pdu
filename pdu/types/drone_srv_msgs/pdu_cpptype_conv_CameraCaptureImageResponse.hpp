@@ -16,22 +16,30 @@
 /*
  * Dependent Convertors
  */
-#include "builtin_interfaces/pdu_cpptype_conv_Time.hpp"
-#include "sensor_msgs/pdu_cpptype_conv_CompressedImage.hpp"
-#include "std_msgs/pdu_cpptype_conv_Header.hpp"
 
 /***************************
  *
  * PDU ==> CPP PDU
  *
  ***************************/
+static inline int cpp_pdu2cpp_primitive_array_CameraCaptureImageResponse_data(const char* heap_ptr, Hako_CameraCaptureImageResponse &src, HakoCpp_CameraCaptureImageResponse &dst)
+{
+    // Convert using len and off
+    int offset = src._data_off;
+    int length = src._data_len;
+    if (length > 0) {
+        dst.data.resize(length);
+        memcpy(dst.data.data(), heap_ptr + offset, length * sizeof(Hako_uint8));
+    }
+    return 0;
+}
 
 static inline int cpp_pdu2cpp_CameraCaptureImageResponse(const char* heap_ptr, Hako_CameraCaptureImageResponse &src, HakoCpp_CameraCaptureImageResponse &dst)
 {
     // primitive convert
     hako_convert_pdu2cpp(src.ok, dst.ok);
-    // Struct convert
-    cpp_pdu2cpp_CompressedImage(heap_ptr, src.image, dst.image);
+    // primitive array convertor
+    cpp_pdu2cpp_primitive_array_CameraCaptureImageResponse_data(heap_ptr, src, dst);
     // string convertor
     dst.message = (const char*)src.message;
     (void)heap_ptr;
@@ -56,14 +64,28 @@ static inline int hako_convert_pdu2cpp_CameraCaptureImageResponse(Hako_CameraCap
  * CPP PDU ==> PDU
  *
  ***************************/
+static inline bool cpp_cpp2pdu_primitive_array_CameraCaptureImageResponse_data(HakoCpp_CameraCaptureImageResponse &src, Hako_CameraCaptureImageResponse &dst, PduDynamicMemory &dynamic_memory)
+{
+    //Copy varray
+    dst._data_len = src.data.size();
+    if (dst._data_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._data_len, sizeof(Hako_uint8));
+        memcpy(temp_ptr, src.data.data(), dst._data_len * sizeof(Hako_uint8));
+        dst._data_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._data_off = dynamic_memory.get_total_size();
+    }
+    return true;
+}
 
 static inline bool cpp_cpp2pdu_CameraCaptureImageResponse(HakoCpp_CameraCaptureImageResponse &src, Hako_CameraCaptureImageResponse &dst, PduDynamicMemory &dynamic_memory)
 {
     try {
         // primitive convert
         hako_convert_cpp2pdu(src.ok, dst.ok);
-        // struct convert
-        cpp_cpp2pdu_CompressedImage(src.image, dst.image, dynamic_memory);
+        //primitive array copy
+        cpp_cpp2pdu_primitive_array_CameraCaptureImageResponse_data(src, dst, dynamic_memory);
         // string convertor
         (void)hako_convert_cpp2pdu_array(
             src.message, src.message.length(),

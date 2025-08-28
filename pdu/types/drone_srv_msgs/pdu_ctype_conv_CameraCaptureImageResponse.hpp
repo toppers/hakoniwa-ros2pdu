@@ -17,22 +17,30 @@
 /*
  * Dependent Convertors
  */
-#include "builtin_interfaces/pdu_ctype_conv_Time.hpp"
-#include "sensor_msgs/pdu_ctype_conv_CompressedImage.hpp"
-#include "std_msgs/pdu_ctype_conv_Header.hpp"
 
 /***************************
  *
  * PDU ==> ROS2
  *
  ***************************/
+static inline int _pdu2ros_primitive_array_CameraCaptureImageResponse_data(const char* heap_ptr, Hako_CameraCaptureImageResponse &src, drone_srv_msgs::msg::CameraCaptureImageResponse &dst)
+{
+    // Convert using len and off
+    int offset = src._data_off;
+    int length = src._data_len;
+    if (length > 0) {
+        dst.data.resize(length);
+        memcpy(dst.data.data(), heap_ptr + offset, length * sizeof(Hako_uint8));
+    }
+    return 0;
+}
 
 static inline int _pdu2ros_CameraCaptureImageResponse(const char* heap_ptr, Hako_CameraCaptureImageResponse &src, drone_srv_msgs::msg::CameraCaptureImageResponse &dst)
 {
     // primitive convert
     hako_convert_pdu2ros(src.ok, dst.ok);
-    // Struct convert
-    _pdu2ros_CompressedImage(heap_ptr, src.image, dst.image);
+    // primitive array convertor
+    _pdu2ros_primitive_array_CameraCaptureImageResponse_data(heap_ptr, src, dst);
     // string convertor
     dst.message = (const char*)src.message;
     (void)heap_ptr;
@@ -57,14 +65,28 @@ static inline int hako_convert_pdu2ros_CameraCaptureImageResponse(Hako_CameraCap
  * ROS2 ==> PDU
  *
  ***************************/
+static inline bool _ros2pdu_primitive_array_CameraCaptureImageResponse_data(drone_srv_msgs::msg::CameraCaptureImageResponse &src, Hako_CameraCaptureImageResponse &dst, PduDynamicMemory &dynamic_memory)
+{
+    //Copy varray
+    dst._data_len = src.data.size();
+    if (dst._data_len > 0) {
+        void* temp_ptr = dynamic_memory.allocate(dst._data_len, sizeof(Hako_uint8));
+        memcpy(temp_ptr, src.data.data(), dst._data_len * sizeof(Hako_uint8));
+        dst._data_off = dynamic_memory.get_offset(temp_ptr);
+    }
+    else {
+        dst._data_off = dynamic_memory.get_total_size();
+    }
+    return true;
+}
 
 static inline bool _ros2pdu_CameraCaptureImageResponse(drone_srv_msgs::msg::CameraCaptureImageResponse &src, Hako_CameraCaptureImageResponse &dst, PduDynamicMemory &dynamic_memory)
 {
     try {
         // primitive convert
         hako_convert_ros2pdu(src.ok, dst.ok);
-        // struct convert
-        _ros2pdu_CompressedImage(src.image, dst.image, dynamic_memory);
+        //primitive array copy
+        _ros2pdu_primitive_array_CameraCaptureImageResponse_data(src, dst, dynamic_memory);
         // string convertor
         (void)hako_convert_ros2pdu_array(
             src.message, src.message.length(),

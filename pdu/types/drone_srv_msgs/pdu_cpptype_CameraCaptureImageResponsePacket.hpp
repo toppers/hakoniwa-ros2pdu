@@ -4,11 +4,8 @@
 #include "pdu_primitive_ctypes.h"
 #include <vector>
 #include <array>
-#include "builtin_interfaces/pdu_cpptype_Time.hpp"
 #include "drone_srv_msgs/pdu_cpptype_CameraCaptureImageResponse.hpp"
 #include "hako_srv_msgs/pdu_cpptype_ServiceResponseHeader.hpp"
-#include "sensor_msgs/pdu_cpptype_CompressedImage.hpp"
-#include "std_msgs/pdu_cpptype_Header.hpp"
 
 typedef struct {
         HakoCpp_ServiceResponseHeader header;
