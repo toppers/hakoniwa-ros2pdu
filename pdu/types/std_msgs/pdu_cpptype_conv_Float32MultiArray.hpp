@@ -164,7 +164,7 @@ public:
         void* top_ptr = hako_get_top_ptr_pdu((void*)base_ptr);
         if (top_ptr == nullptr) {
             std::cerr << "[ConvertorError][" << "Float32MultiArray" << "] hako_get_top_ptr_pdu returned null" << std::endl;
-            return false;
+            return -1;
         }
         memcpy(pdu_buffer, top_ptr, pdu_size);
         hako_destroy_pdu((void*)base_ptr);
