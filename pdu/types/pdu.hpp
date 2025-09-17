@@ -119,8 +119,16 @@ namespace hako::pdu {
 }
     
 #define DECLARE_PDU_INSTANCE(pdu_package, pdu_type, instance, robot_name, pdu_name) \
-    hako::robots::pdu::PDU< \
+    hako::pdu::PDU< \
         Hako_##pdu_type, \
         HakoCpp_##pdu_type, \
         pdu_package::pdu_type \
     > instance(robot_name, pdu_name)
+
+#define HAKO_PDU_TYPE(pdu_package, pdu_type) \
+    hako::pdu::PDU< \
+        Hako_##pdu_type, \
+        HakoCpp_##pdu_type, \
+        pdu_package::pdu_type \
+    >
+    
