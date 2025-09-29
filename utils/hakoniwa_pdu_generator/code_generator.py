@@ -7,7 +7,7 @@ from collections import OrderedDict
 def _collect_dependencies(pkg_msg, message_cache, root_pkg,
                           visited,  # set[str]
                           includes, csharp_includes,
-                          cpp_includes, conv_includes, conv_cpp_includes, py_imports):
+                          cpp_includes, conv_includes, conv_cpp_includes, py_imports, js_imports):
     if pkg_msg in visited:
         return
     visited.add(pkg_msg)
@@ -22,7 +22,7 @@ def _collect_dependencies(pkg_msg, message_cache, root_pkg,
         dep_pkg_msg = f"{msg_def['package']}/{base}" if '/' not in base else base
         if dep_pkg_msg not in message_cache:
             #print(f"Warning: Dependency {dep_pkg_msg} not found in message cache. Skipping.")
-            #print(f"arguments: {pkg_msg}, {root_pkg}, {visited}, {includes}, {csharp_includes}, {cpp_includes}, {conv_includes}, {conv_cpp_includes}, {py_imports}")
+            #print(f"arguments: {pkg_msg}, {root_pkg}, {visited}, {includes}, {csharp_includes}, {cpp_includes}, {conv_includes}, {conv_cpp_includes}, {py_imports}, {js_imports}")
             continue
 
         dep_pkg, dep_msg = dep_pkg_msg.split('/')
@@ -37,13 +37,18 @@ def _collect_dependencies(pkg_msg, message_cache, root_pkg,
             'file': f"pdu_pytype_{dep_msg}",
             'class_name': get_python_class_name(dep_msg)
         }
+        js_imports[dep_pkg_msg] = {
+            'dep_pkg': dep_pkg,
+            'file': f"pdu_jstype_{dep_msg}",
+            'class_name': get_js_class_name(dep_msg)
+        }
         if dep_pkg != root_pkg:
             csharp_includes[dep_pkg] = None
 
         # ───── さらに再帰 ─────
         _collect_dependencies(dep_pkg_msg, message_cache, root_pkg,
                               visited, includes, csharp_includes,
-                              cpp_includes, conv_includes, conv_cpp_includes, py_imports)
+                              cpp_includes, conv_includes, conv_cpp_includes, py_imports, js_imports)
 # --- テンプレートヘルパー関数群 (generate.pyの挙動を完全に模倣) ---
 
 ROS_PRIMITIVE_TYPES_FOR_TEMPLATE = [
@@ -149,6 +154,45 @@ def get_python_default_value(name):
     # 構造体の場合はクラスのインスタンス化
     return f"{get_python_class_name(name)}()"
 
+# --- JavaScript用ヘルパー関数 ---
+def get_js_class_name(name):
+    return get_msg_type(name)
+
+def get_js_type_hint(name):
+    type_map = {
+        "bool": "boolean", "byte": "number", "char": "string",
+        "float32": "number", "float64": "number",
+        "int8": "number", "uint8": "number",
+        "int16": "number", "uint16": "number",
+        "int32": "number", "uint32": "number",
+        "int64": "bigint", "uint64": "bigint",
+        "string": "string"
+    }
+    base_type = get_array_type(name)
+    js_type = type_map.get(base_type, get_js_class_name(base_type))
+
+    if is_array(name):
+        return f"Array<{js_type}>"
+    return js_type
+
+def get_js_default_value(name):
+    if is_array(name):
+        return "[]"
+    if is_primitive(name):
+        if name in ['int64', 'uint64']:
+            return "0n"
+        elif name in ['float32', 'float64']:
+            return "0.0"
+        elif name == 'bool':
+            return "false"
+        else:
+            return "0"
+    if is_string(name):
+        return '""'
+    # 構造体の場合は null
+    return "null"
+
+
 def get_struct_format(ros_type_name):
     """ROSのプリミティブ型名をPythonのstructモジュールのフォーマット文字に変換"""
     format_map = {
@@ -206,6 +250,7 @@ class CodeGenerator:
         conv_includes     = OrderedDict()
         conv_cpp_includes = OrderedDict()
         py_imports        = OrderedDict()
+        js_imports        = OrderedDict()
 
         _collect_dependencies(package_msg, message_cache, root_pkg,
                           visited=set(),
@@ -214,7 +259,8 @@ class CodeGenerator:
                           cpp_includes=cpp_includes,
                           conv_includes=conv_includes,
                           conv_cpp_includes=conv_cpp_includes,
-                          py_imports=py_imports)
+                          py_imports=py_imports,
+                          js_imports=js_imports)
 
         def get_array_size(mem_name, type_name_from_tpl):
             try:
@@ -228,13 +274,14 @@ class CodeGenerator:
 
         container = {
             'json_data': msg_def, 'pkg_name': root_pkg, 'msg_type_name': msg_name,
-            'class_name': get_python_class_name(msg_name),
+            'class_name': get_python_class_name(msg_name), # Default class name
             'includes': sorted(includes), 
             'csharp_includes': sorted(csharp_includes), 
             'cpp_includes': sorted(cpp_includes),
             'conv_includes': sorted(conv_includes), 
             'conv_cpp_includes': sorted(conv_cpp_includes),
             'py_imports': sorted(py_imports.values(), key=lambda x: x['class_name']),
+            'js_imports': sorted(js_imports.values(), key=lambda x: x['class_name']),
             'is_primitive': is_primitive, 'is_string': is_string, 'is_array': is_array,
             'is_primitive_array': is_primitive_array, 'is_string_array': is_string_array,
             'get_array_type': get_array_type, 'get_struct_array_type': get_struct_array_type,
@@ -245,6 +292,9 @@ class CodeGenerator:
             'get_python_type_hint': get_python_type_hint,
             'get_python_default_value': get_python_default_value,
             'get_python_class_name': get_python_class_name,
+            'get_js_type_hint': get_js_type_hint,
+            'get_js_default_value': get_js_default_value,
+            'get_js_class_name': get_js_class_name,
             'get_struct_format': get_struct_format
         }
         return {'container': container}
@@ -269,6 +319,7 @@ class CodeGenerator:
         types_dir = Path(output_root_dir) / 'types'
         csharp_dir = Path(output_root_dir) / 'csharp'
         python_dir = Path(output_root_dir) / 'python'
+        javascript_dir = Path(output_root_dir) / 'javascript'
 
         for package_msg in message_cache.keys():
             context = self._prepare_context(package_msg, message_cache, varray_size_def)
@@ -280,6 +331,46 @@ class CodeGenerator:
             self._generate_file(context, 'pdu_cpptypes_conv_cpp.tpl', types_dir, "pdu_cpptype_conv_{msg_name}.hpp", "C++->C conv header")
             # Python
             self._generate_file(context, 'pdu_pytypes_py.tpl', python_dir, "pdu_pytype_{msg_name}.py", "Python type definition")
+            # JavaScript
+            self._generate_file(context, 'pdu_jstypes_js.tpl', javascript_dir, "pdu_jstype_{msg_name}.js", "JavaScript type definition")
+
+    def generate_javascript_converter(self, msg_def, offset_data, output_root_dir):
+        javascript_dir = Path(output_root_dir) / 'javascript'
+        pkg_name = msg_def['package']
+        msg_name = msg_def['message']
+
+        js_conv_imports = []
+        added_imports = set()
+        for item in offset_data:
+            if item.data_type == 'struct':
+                dep_pkg = get_msg_pkg(item.type_name, pkg_name)
+                dep_msg = get_msg_type(item.type_name)
+                if dep_msg not in added_imports:
+                    js_conv_imports.append({
+                        'dep_pkg': dep_pkg,
+                        'file': f"pdu_conv_{dep_msg}",
+                        'msg_type': dep_msg,
+                        'type_name': item.type_name,
+                        'class_name': get_js_class_name(dep_msg)
+                    })
+                    added_imports.add(dep_msg)
+
+        context = {
+            'container': {
+                'pkg_name': pkg_name,
+                'msg_type_name': msg_name,
+                'class_name': get_js_class_name(msg_name),
+                'offset_data': [o.to_dict() for o in offset_data],
+                'js_conv_imports': js_conv_imports,
+                'get_js_class_name': get_js_class_name,
+                'get_msg_type': get_msg_type,
+                'get_array_type': get_array_type,
+                'is_primitive': is_primitive,
+                'is_string': is_string,
+                'is_array': is_array,
+            }
+        }
+        self._generate_file(context, 'pdu_js_conv_js.tpl', javascript_dir, f"pdu_conv_{msg_name}.js", "JavaScript converter")
 
     def generate_python_converter(self, msg_def, offset_data, output_root_dir):
         python_dir = Path(output_root_dir) / 'python'
