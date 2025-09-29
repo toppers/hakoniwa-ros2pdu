@@ -13,8 +13,8 @@ export class Twist {
 
 
     constructor() {
-        this.linear = null;
-        this.angular = null;
+        this.linear = new Vector3();
+        this.angular = new Vector3();
     }
 
     /**

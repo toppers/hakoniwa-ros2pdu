@@ -16,9 +16,9 @@ export class HakoCmdCameraMove {
 
 
     constructor() {
-        this.header = null;
+        this.header = new HakoCmdHeader();
         this.request_id = 0;
-        this.angle = null;
+        this.angle = new Vector3();
     }
 
     /**

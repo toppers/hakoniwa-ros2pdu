@@ -31,7 +31,7 @@ export class Ev3PduSensor {
 
 
     constructor() {
-        this.head = null;
+        this.head = new Ev3PduSensorHeader();
         this.buttons = [];
         this.color_sensors = [];
         this.touch_sensors = [];

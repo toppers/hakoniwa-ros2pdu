@@ -17,7 +17,7 @@ export class HakoDroneCmdTakeoff {
 
 
     constructor() {
-        this.header = null;
+        this.header = new HakoDroneCmdHeader();
         this.height = 0.0;
         this.speed = 0.0;
         this.yaw_deg = 0.0;

@@ -17,7 +17,7 @@ export class DroneStatus {
     constructor() {
         this.flight_mode = 0;
         this.internal_state = 0;
-        this.propeller_wind = null;
+        this.propeller_wind = new Vector3();
     }
 
     /**

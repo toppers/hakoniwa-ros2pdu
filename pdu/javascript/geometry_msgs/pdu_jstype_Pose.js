@@ -14,8 +14,8 @@ export class Pose {
 
 
     constructor() {
-        this.position = null;
-        this.orientation = null;
+        this.position = new Point();
+        this.orientation = new Quaternion();
     }
 
     /**

@@ -19,7 +19,7 @@ export class MonitorCameraData {
     constructor() {
         this.request_id = 0;
         this.image_data_length = 0;
-        this.image = null;
+        this.image = new CompressedImage();
     }
 
     /**

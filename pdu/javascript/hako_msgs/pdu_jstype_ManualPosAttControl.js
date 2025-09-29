@@ -15,7 +15,7 @@ export class ManualPosAttControl {
 
     constructor() {
         this.do_operation = false;
-        this.posatt = null;
+        this.posatt = new Twist();
     }
 
     /**

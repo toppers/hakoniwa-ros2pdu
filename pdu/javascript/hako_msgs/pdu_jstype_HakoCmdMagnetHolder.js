@@ -13,7 +13,7 @@ export class HakoCmdMagnetHolder {
 
 
     constructor() {
-        this.header = null;
+        this.header = new HakoCmdHeader();
         this.magnet_on = false;
     }
 

@@ -31,14 +31,14 @@ export class GlobalPositionTarget {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.coordinate_frame = 0;
         this.type_mask = 0;
         this.latitude = 0.0;
         this.longitude = 0.0;
         this.altitude = 0.0;
-        this.velocity = null;
-        this.acceleration_or_force = null;
+        this.velocity = new Vector3();
+        this.acceleration_or_force = new Vector3();
         this.yaw = 0.0;
         this.yaw_rate = 0.0;
     }

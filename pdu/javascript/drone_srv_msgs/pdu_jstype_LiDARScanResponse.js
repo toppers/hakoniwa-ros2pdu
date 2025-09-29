@@ -24,8 +24,8 @@ export class LiDARScanResponse {
 
     constructor() {
         this.ok = false;
-        this.point_cloud = null;
-        this.lidar_pose = null;
+        this.point_cloud = new PointCloud2();
+        this.lidar_pose = new Pose();
         this.message = "";
     }
 

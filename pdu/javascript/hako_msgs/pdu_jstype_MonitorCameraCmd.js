@@ -17,7 +17,7 @@ export class MonitorCameraCmd {
 
 
     constructor() {
-        this.header = null;
+        this.header = new HakoCmdHeader();
         this.request_id = 0;
         this.encode_type = 0;
         this.request_type = 0;

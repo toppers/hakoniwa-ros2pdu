@@ -29,7 +29,7 @@ export class PointCloud2 {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.height = 0;
         this.width = 0;
         this.fields = [];

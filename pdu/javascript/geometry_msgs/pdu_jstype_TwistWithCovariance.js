@@ -14,7 +14,7 @@ export class TwistWithCovariance {
 
 
     constructor() {
-        this.twist = null;
+        this.twist = new Twist();
         this.covariance = [];
     }
 

@@ -35,13 +35,13 @@ export class ImpulseCollision {
         this.collision = false;
         this.is_target_static = false;
         this.restitution_coefficient = 0.0;
-        this.self_contact_vector = null;
-        this.normal = null;
-        this.target_contact_vector = null;
-        this.target_velocity = null;
-        this.target_angular_velocity = null;
-        this.target_euler = null;
-        this.target_inertia = null;
+        this.self_contact_vector = new Point();
+        this.normal = new Vector3();
+        this.target_contact_vector = new Point();
+        this.target_velocity = new Vector3();
+        this.target_angular_velocity = new Vector3();
+        this.target_euler = new Vector3();
+        this.target_inertia = new Vector3();
         this.target_mass = 0.0;
     }
 

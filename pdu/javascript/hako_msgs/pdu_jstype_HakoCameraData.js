@@ -16,7 +16,7 @@ export class HakoCameraData {
 
     constructor() {
         this.request_id = 0;
-        this.image = null;
+        this.image = new CompressedImage();
     }
 
     /**

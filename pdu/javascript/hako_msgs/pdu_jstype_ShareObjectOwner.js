@@ -21,7 +21,7 @@ export class ShareObjectOwner {
         this.object_name = "";
         this.owner_id = 0;
         this.last_update = 0n;
-        this.pos = null;
+        this.pos = new Twist();
     }
 
     /**

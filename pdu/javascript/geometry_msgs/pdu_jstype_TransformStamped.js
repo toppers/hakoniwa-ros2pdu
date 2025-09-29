@@ -19,9 +19,9 @@ export class TransformStamped {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.child_frame_id = "";
-        this.transform = null;
+        this.transform = new Transform();
     }
 
     /**

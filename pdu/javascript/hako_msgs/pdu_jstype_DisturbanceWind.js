@@ -11,7 +11,7 @@ export class DisturbanceWind {
 
 
     constructor() {
-        this.value = null;
+        this.value = new Vector3();
     }
 
     /**

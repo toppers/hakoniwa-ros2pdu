@@ -14,8 +14,8 @@ export class DisturbanceBoundary {
 
 
     constructor() {
-        this.boundary_point = null;
-        this.boundary_normal = null;
+        this.boundary_point = new Point();
+        this.boundary_normal = new Vector3();
     }
 
     /**

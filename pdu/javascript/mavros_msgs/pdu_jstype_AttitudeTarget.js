@@ -22,10 +22,10 @@ export class AttitudeTarget {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.type_mask = 0;
-        this.orientation = null;
-        this.body_rate = null;
+        this.orientation = new Quaternion();
+        this.body_rate = new Vector3();
         this.thrust = 0.0;
     }
 

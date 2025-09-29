@@ -14,7 +14,7 @@ export class HakoCameraInfo {
 
     constructor() {
         this.request_id = 0;
-        this.angle = null;
+        this.angle = new Vector3();
     }
 
     /**

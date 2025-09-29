@@ -18,7 +18,7 @@ export class Ev3PduActuator {
 
 
     constructor() {
-        this.head = null;
+        this.head = new Ev3PduActuatorHeader();
         this.leds = [];
         this.motors = [];
         this.gyro_reset = 0;

@@ -21,8 +21,8 @@ export class LiDARScanResponsePacket {
 
 
     constructor() {
-        this.header = null;
-        this.body = null;
+        this.header = new ServiceResponseHeader();
+        this.body = new LiDARScanResponse();
     }
 
     /**

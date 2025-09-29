@@ -14,8 +14,8 @@ export class Transform {
 
 
     constructor() {
-        this.translation = null;
-        this.rotation = null;
+        this.translation = new Vector3();
+        this.rotation = new Quaternion();
     }
 
     /**

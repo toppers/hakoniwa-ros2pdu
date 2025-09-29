@@ -22,7 +22,7 @@ export class Collision {
     constructor() {
         this.collision = false;
         this.contact_num = 0;
-        this.relative_velocity = null;
+        this.relative_velocity = new Vector3();
         this.contact_position = [];
         this.restitution_coefficient = 0.0;
     }

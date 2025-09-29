@@ -26,12 +26,12 @@ export class Imu {
 
 
     constructor() {
-        this.header = null;
-        this.orientation = null;
+        this.header = new Header();
+        this.orientation = new Quaternion();
         this.orientation_covariance = [];
-        this.angular_velocity = null;
+        this.angular_velocity = new Vector3();
         this.angular_velocity_covariance = [];
-        this.linear_acceleration = null;
+        this.linear_acceleration = new Vector3();
         this.linear_acceleration_covariance = [];
     }
 

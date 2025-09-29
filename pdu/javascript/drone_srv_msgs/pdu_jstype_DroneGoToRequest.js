@@ -22,7 +22,7 @@ export class DroneGoToRequest {
 
     constructor() {
         this.drone_name = "";
-        this.target_pose = null;
+        this.target_pose = new Vector3();
         this.speed_m_s = 0.0;
         this.yaw_deg = 0.0;
         this.tolerance_m = 0.0;

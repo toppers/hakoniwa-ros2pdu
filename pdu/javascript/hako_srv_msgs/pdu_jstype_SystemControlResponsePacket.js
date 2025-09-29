@@ -14,8 +14,8 @@ export class SystemControlResponsePacket {
 
 
     constructor() {
-        this.header = null;
-        this.body = null;
+        this.header = new ServiceResponseHeader();
+        this.body = new SystemControlResponse();
     }
 
     /**

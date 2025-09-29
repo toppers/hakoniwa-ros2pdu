@@ -15,7 +15,7 @@ export class HakoCmdCamera {
 
 
     constructor() {
-        this.header = null;
+        this.header = new HakoCmdHeader();
         this.request_id = 0;
         this.encode_type = 0;
     }

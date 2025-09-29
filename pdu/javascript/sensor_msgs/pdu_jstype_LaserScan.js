@@ -30,7 +30,7 @@ export class LaserScan {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.angle_min = 0.0;
         this.angle_max = 0.0;
         this.angle_increment = 0.0;

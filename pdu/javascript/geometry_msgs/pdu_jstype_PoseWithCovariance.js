@@ -15,7 +15,7 @@ export class PoseWithCovariance {
 
 
     constructor() {
-        this.pose = null;
+        this.pose = new Pose();
         this.covariance = [];
     }
 

@@ -189,8 +189,8 @@ def get_js_default_value(name):
             return "0"
     if is_string(name):
         return '""'
-    # 構造体の場合は null
-    return "null"
+    # 構造体：インスタンス化して返す（nullにしない）
+    return f"new {get_js_class_name(name)}()"
 
 
 def get_struct_format(ros_type_name):

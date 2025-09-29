@@ -25,10 +25,10 @@ export class Odometry {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.child_frame_id = "";
-        this.pose = null;
-        this.twist = null;
+        this.pose = new PoseWithCovariance();
+        this.twist = new TwistWithCovariance();
     }
 
     /**

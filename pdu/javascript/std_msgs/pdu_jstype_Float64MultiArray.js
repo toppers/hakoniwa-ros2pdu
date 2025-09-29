@@ -14,7 +14,7 @@ export class Float64MultiArray {
 
 
     constructor() {
-        this.layout = null;
+        this.layout = new MultiArrayLayout();
         this.data = [];
     }
 

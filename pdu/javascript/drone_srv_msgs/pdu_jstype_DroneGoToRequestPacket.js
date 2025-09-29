@@ -15,8 +15,8 @@ export class DroneGoToRequestPacket {
 
 
     constructor() {
-        this.header = null;
-        this.body = null;
+        this.header = new ServiceRequestHeader();
+        this.body = new DroneGoToRequest();
     }
 
     /**

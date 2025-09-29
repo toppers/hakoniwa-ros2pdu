@@ -26,8 +26,8 @@ export class DroneGetStateResponse {
     constructor() {
         this.ok = false;
         this.is_ready = false;
-        this.current_pose = null;
-        this.battery_status = null;
+        this.current_pose = new Pose();
+        this.battery_status = new HakoBatteryStatus();
         this.mode = "";
         this.message = "";
     }

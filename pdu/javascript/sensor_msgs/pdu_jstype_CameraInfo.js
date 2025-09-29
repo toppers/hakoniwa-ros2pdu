@@ -33,7 +33,7 @@ export class CameraInfo {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.height = 0;
         this.width = 0;
         this.distortion_model = "";
@@ -43,7 +43,7 @@ export class CameraInfo {
         this.p = [];
         this.binning_x = 0;
         this.binning_y = 0;
-        this.roi = null;
+        this.roi = new RegionOfInterest();
     }
 
     /**

@@ -13,7 +13,7 @@ export class Header {
 
 
     constructor() {
-        this.stamp = null;
+        this.stamp = new Time();
         this.frame_id = "";
     }
 

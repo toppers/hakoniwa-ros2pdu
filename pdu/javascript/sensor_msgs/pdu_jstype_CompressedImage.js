@@ -16,7 +16,7 @@ export class CompressedImage {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.format = "";
         this.data = [];
     }

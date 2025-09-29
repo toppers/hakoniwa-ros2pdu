@@ -14,8 +14,8 @@ export class HakoCan {
 
 
     constructor() {
-        this.head = null;
-        this.body = null;
+        this.head = new HakoCanHead();
+        this.body = new HakoCanBody();
     }
 
     /**

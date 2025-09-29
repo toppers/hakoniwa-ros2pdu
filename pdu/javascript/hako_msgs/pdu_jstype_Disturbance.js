@@ -22,10 +22,10 @@ export class Disturbance {
 
 
     constructor() {
-        this.d_temp = null;
-        this.d_wind = null;
-        this.d_atm = null;
-        this.d_boundary = null;
+        this.d_temp = new DisturbanceTemperature();
+        this.d_wind = new DisturbanceWind();
+        this.d_atm = new DisturbanceAtm();
+        this.d_boundary = new DisturbanceBoundary();
     }
 
     /**

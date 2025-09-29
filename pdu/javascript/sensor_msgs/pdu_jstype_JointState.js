@@ -20,7 +20,7 @@ export class JointState {
 
 
     constructor() {
-        this.header = null;
+        this.header = new Header();
         this.name = [];
         this.position = [];
         this.velocity = [];
