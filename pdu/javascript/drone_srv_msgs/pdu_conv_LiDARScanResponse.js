@@ -1,9 +1,9 @@
 import * as PduUtils from '../pdu_utils.js';
 import { LiDARScanResponse } from './pdu_jstype_LiDARScanResponse.js';
-import { PointCloud2 } from './pdu_jstype_PointCloud2.js';
-import { binary_read_recursive_PointCloud2, binary_write_recursive_PointCloud2 } from './pdu_conv_PointCloud2.js';
-import { Pose } from './pdu_jstype_Pose.js';
-import { binary_read_recursive_Pose, binary_write_recursive_Pose } from './pdu_conv_Pose.js';
+import { PointCloud2 } from '../sensor_msgs/pdu_jstype_PointCloud2.js';
+import { binary_read_recursive_PointCloud2, binary_write_recursive_PointCloud2 } from '../sensor_msgs/pdu_conv_PointCloud2.js';
+import { Pose } from '../geometry_msgs/pdu_jstype_Pose.js';
+import { binary_read_recursive_Pose, binary_write_recursive_Pose } from '../geometry_msgs/pdu_conv_Pose.js';
 
 
 /**

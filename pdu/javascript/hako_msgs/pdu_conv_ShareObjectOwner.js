@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { ShareObjectOwner } from './pdu_jstype_ShareObjectOwner.js';
-import { Twist } from './pdu_jstype_Twist.js';
-import { binary_read_recursive_Twist, binary_write_recursive_Twist } from './pdu_conv_Twist.js';
+import { Twist } from '../geometry_msgs/pdu_jstype_Twist.js';
+import { binary_read_recursive_Twist, binary_write_recursive_Twist } from '../geometry_msgs/pdu_conv_Twist.js';
 
 
 /**

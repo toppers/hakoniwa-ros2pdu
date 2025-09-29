@@ -2,8 +2,8 @@ import * as PduUtils from '../pdu_utils.js';
 import { HakoCmdCameraMove } from './pdu_jstype_HakoCmdCameraMove.js';
 import { HakoCmdHeader } from './pdu_jstype_HakoCmdHeader.js';
 import { binary_read_recursive_HakoCmdHeader, binary_write_recursive_HakoCmdHeader } from './pdu_conv_HakoCmdHeader.js';
-import { Vector3 } from './pdu_jstype_Vector3.js';
-import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from './pdu_conv_Vector3.js';
+import { Vector3 } from '../geometry_msgs/pdu_jstype_Vector3.js';
+import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from '../geometry_msgs/pdu_conv_Vector3.js';
 
 
 /**

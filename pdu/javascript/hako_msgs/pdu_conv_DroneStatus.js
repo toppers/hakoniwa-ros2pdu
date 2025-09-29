@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { DroneStatus } from './pdu_jstype_DroneStatus.js';
-import { Vector3 } from './pdu_jstype_Vector3.js';
-import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from './pdu_conv_Vector3.js';
+import { Vector3 } from '../geometry_msgs/pdu_jstype_Vector3.js';
+import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from '../geometry_msgs/pdu_conv_Vector3.js';
 
 
 /**

@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { CameraInfo } from './pdu_jstype_CameraInfo.js';
-import { Header } from './pdu_jstype_Header.js';
-import { binary_read_recursive_Header, binary_write_recursive_Header } from './pdu_conv_Header.js';
+import { Header } from '../std_msgs/pdu_jstype_Header.js';
+import { binary_read_recursive_Header, binary_write_recursive_Header } from '../std_msgs/pdu_conv_Header.js';
 import { RegionOfInterest } from './pdu_jstype_RegionOfInterest.js';
 import { binary_read_recursive_RegionOfInterest, binary_write_recursive_RegionOfInterest } from './pdu_conv_RegionOfInterest.js';
 

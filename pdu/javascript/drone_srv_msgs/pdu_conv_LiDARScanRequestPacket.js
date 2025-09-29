@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { LiDARScanRequestPacket } from './pdu_jstype_LiDARScanRequestPacket.js';
-import { ServiceRequestHeader } from './pdu_jstype_ServiceRequestHeader.js';
-import { binary_read_recursive_ServiceRequestHeader, binary_write_recursive_ServiceRequestHeader } from './pdu_conv_ServiceRequestHeader.js';
+import { ServiceRequestHeader } from '../hako_srv_msgs/pdu_jstype_ServiceRequestHeader.js';
+import { binary_read_recursive_ServiceRequestHeader, binary_write_recursive_ServiceRequestHeader } from '../hako_srv_msgs/pdu_conv_ServiceRequestHeader.js';
 import { LiDARScanRequest } from './pdu_jstype_LiDARScanRequest.js';
 import { binary_read_recursive_LiDARScanRequest, binary_write_recursive_LiDARScanRequest } from './pdu_conv_LiDARScanRequest.js';
 

@@ -1,2 +1,4 @@
 geometry_msgs/PoseWithCovariance
 geometry_msgs/Twist
+hako_msgs/HakoCameraData
+hako_msgs/SimpleVarray

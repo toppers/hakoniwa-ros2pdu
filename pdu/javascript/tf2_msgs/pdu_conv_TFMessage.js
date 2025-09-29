@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { TFMessage } from './pdu_jstype_TFMessage.js';
-import { TransformStamped } from './pdu_jstype_TransformStamped.js';
-import { binary_read_recursive_TransformStamped, binary_write_recursive_TransformStamped } from './pdu_conv_TransformStamped.js';
+import { TransformStamped } from '../geometry_msgs/pdu_jstype_TransformStamped.js';
+import { binary_read_recursive_TransformStamped, binary_write_recursive_TransformStamped } from '../geometry_msgs/pdu_conv_TransformStamped.js';
 
 
 /**

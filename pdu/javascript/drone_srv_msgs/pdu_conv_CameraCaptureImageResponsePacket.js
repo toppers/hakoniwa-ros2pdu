@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { CameraCaptureImageResponsePacket } from './pdu_jstype_CameraCaptureImageResponsePacket.js';
-import { ServiceResponseHeader } from './pdu_jstype_ServiceResponseHeader.js';
-import { binary_read_recursive_ServiceResponseHeader, binary_write_recursive_ServiceResponseHeader } from './pdu_conv_ServiceResponseHeader.js';
+import { ServiceResponseHeader } from '../hako_srv_msgs/pdu_jstype_ServiceResponseHeader.js';
+import { binary_read_recursive_ServiceResponseHeader, binary_write_recursive_ServiceResponseHeader } from '../hako_srv_msgs/pdu_conv_ServiceResponseHeader.js';
 import { CameraCaptureImageResponse } from './pdu_jstype_CameraCaptureImageResponse.js';
 import { binary_read_recursive_CameraCaptureImageResponse, binary_write_recursive_CameraCaptureImageResponse } from './pdu_conv_CameraCaptureImageResponse.js';
 

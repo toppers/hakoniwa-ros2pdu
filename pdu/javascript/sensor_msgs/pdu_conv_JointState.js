@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { JointState } from './pdu_jstype_JointState.js';
-import { Header } from './pdu_jstype_Header.js';
-import { binary_read_recursive_Header, binary_write_recursive_Header } from './pdu_conv_Header.js';
+import { Header } from '../std_msgs/pdu_jstype_Header.js';
+import { binary_read_recursive_Header, binary_write_recursive_Header } from '../std_msgs/pdu_conv_Header.js';
 
 
 /**

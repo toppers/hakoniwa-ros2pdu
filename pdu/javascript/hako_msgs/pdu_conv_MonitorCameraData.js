@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { MonitorCameraData } from './pdu_jstype_MonitorCameraData.js';
-import { CompressedImage } from './pdu_jstype_CompressedImage.js';
-import { binary_read_recursive_CompressedImage, binary_write_recursive_CompressedImage } from './pdu_conv_CompressedImage.js';
+import { CompressedImage } from '../sensor_msgs/pdu_jstype_CompressedImage.js';
+import { binary_read_recursive_CompressedImage, binary_write_recursive_CompressedImage } from '../sensor_msgs/pdu_conv_CompressedImage.js';
 
 
 /**

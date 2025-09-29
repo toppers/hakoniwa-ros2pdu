@@ -1,9 +1,9 @@
 import * as PduUtils from '../pdu_utils.js';
 import { GlobalPositionTarget } from './pdu_jstype_GlobalPositionTarget.js';
-import { Header } from './pdu_jstype_Header.js';
-import { binary_read_recursive_Header, binary_write_recursive_Header } from './pdu_conv_Header.js';
-import { Vector3 } from './pdu_jstype_Vector3.js';
-import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from './pdu_conv_Vector3.js';
+import { Header } from '../std_msgs/pdu_jstype_Header.js';
+import { binary_read_recursive_Header, binary_write_recursive_Header } from '../std_msgs/pdu_conv_Header.js';
+import { Vector3 } from '../geometry_msgs/pdu_jstype_Vector3.js';
+import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from '../geometry_msgs/pdu_conv_Vector3.js';
 
 
 /**

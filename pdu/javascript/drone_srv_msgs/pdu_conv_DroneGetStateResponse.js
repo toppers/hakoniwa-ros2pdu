@@ -1,9 +1,9 @@
 import * as PduUtils from '../pdu_utils.js';
 import { DroneGetStateResponse } from './pdu_jstype_DroneGetStateResponse.js';
-import { Pose } from './pdu_jstype_Pose.js';
-import { binary_read_recursive_Pose, binary_write_recursive_Pose } from './pdu_conv_Pose.js';
-import { HakoBatteryStatus } from './pdu_jstype_HakoBatteryStatus.js';
-import { binary_read_recursive_HakoBatteryStatus, binary_write_recursive_HakoBatteryStatus } from './pdu_conv_HakoBatteryStatus.js';
+import { Pose } from '../geometry_msgs/pdu_jstype_Pose.js';
+import { binary_read_recursive_Pose, binary_write_recursive_Pose } from '../geometry_msgs/pdu_conv_Pose.js';
+import { HakoBatteryStatus } from '../hako_msgs/pdu_jstype_HakoBatteryStatus.js';
+import { binary_read_recursive_HakoBatteryStatus, binary_write_recursive_HakoBatteryStatus } from '../hako_msgs/pdu_conv_HakoBatteryStatus.js';
 
 
 /**

@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { TransformStamped } from './pdu_jstype_TransformStamped.js';
-import { Header } from './pdu_jstype_Header.js';
-import { binary_read_recursive_Header, binary_write_recursive_Header } from './pdu_conv_Header.js';
+import { Header } from '../std_msgs/pdu_jstype_Header.js';
+import { binary_read_recursive_Header, binary_write_recursive_Header } from '../std_msgs/pdu_conv_Header.js';
 import { Transform } from './pdu_jstype_Transform.js';
 import { binary_read_recursive_Transform, binary_write_recursive_Transform } from './pdu_conv_Transform.js';
 

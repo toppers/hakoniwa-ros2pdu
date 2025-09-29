@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { PointCloud2 } from './pdu_jstype_PointCloud2.js';
-import { Header } from './pdu_jstype_Header.js';
-import { binary_read_recursive_Header, binary_write_recursive_Header } from './pdu_conv_Header.js';
+import { Header } from '../std_msgs/pdu_jstype_Header.js';
+import { binary_read_recursive_Header, binary_write_recursive_Header } from '../std_msgs/pdu_conv_Header.js';
 import { PointField } from './pdu_jstype_PointField.js';
 import { binary_read_recursive_PointField, binary_write_recursive_PointField } from './pdu_conv_PointField.js';
 

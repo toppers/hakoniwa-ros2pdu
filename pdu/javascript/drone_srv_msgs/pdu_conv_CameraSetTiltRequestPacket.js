@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { CameraSetTiltRequestPacket } from './pdu_jstype_CameraSetTiltRequestPacket.js';
-import { ServiceRequestHeader } from './pdu_jstype_ServiceRequestHeader.js';
-import { binary_read_recursive_ServiceRequestHeader, binary_write_recursive_ServiceRequestHeader } from './pdu_conv_ServiceRequestHeader.js';
+import { ServiceRequestHeader } from '../hako_srv_msgs/pdu_jstype_ServiceRequestHeader.js';
+import { binary_read_recursive_ServiceRequestHeader, binary_write_recursive_ServiceRequestHeader } from '../hako_srv_msgs/pdu_conv_ServiceRequestHeader.js';
 import { CameraSetTiltRequest } from './pdu_jstype_CameraSetTiltRequest.js';
 import { binary_read_recursive_CameraSetTiltRequest, binary_write_recursive_CameraSetTiltRequest } from './pdu_conv_CameraSetTiltRequest.js';
 

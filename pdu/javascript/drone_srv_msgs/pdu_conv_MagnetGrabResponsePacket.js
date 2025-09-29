@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { MagnetGrabResponsePacket } from './pdu_jstype_MagnetGrabResponsePacket.js';
-import { ServiceResponseHeader } from './pdu_jstype_ServiceResponseHeader.js';
-import { binary_read_recursive_ServiceResponseHeader, binary_write_recursive_ServiceResponseHeader } from './pdu_conv_ServiceResponseHeader.js';
+import { ServiceResponseHeader } from '../hako_srv_msgs/pdu_jstype_ServiceResponseHeader.js';
+import { binary_read_recursive_ServiceResponseHeader, binary_write_recursive_ServiceResponseHeader } from '../hako_srv_msgs/pdu_conv_ServiceResponseHeader.js';
 import { MagnetGrabResponse } from './pdu_jstype_MagnetGrabResponse.js';
 import { binary_read_recursive_MagnetGrabResponse, binary_write_recursive_MagnetGrabResponse } from './pdu_conv_MagnetGrabResponse.js';
 

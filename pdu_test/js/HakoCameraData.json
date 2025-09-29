@@ -1,0 +1,14 @@
+{
+  "request_id": 123,
+  "image": {
+    "header": {
+      "stamp": {
+        "sec": 1678886400,
+        "nanosec": 500000000
+      },
+      "frame_id": "camera_link"
+    },
+    "format": "jpeg",
+    "data": [255, 216, 255, 224, 0, 16, 74, 70, 73, 70, 0, 1, 1, 0, 0, 1]
+  }
+}

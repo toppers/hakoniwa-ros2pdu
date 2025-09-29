@@ -1,8 +1,12 @@
 import * as PduUtils from '../pdu_utils.js';
 import { {{ container.class_name }} } from './pdu_jstype_{{ container.msg_type_name }}.js';
 {% for imp in container.js_conv_imports -%}
-import { {{ imp.class_name }} } from './pdu_jstype_{{ imp.msg_type }}.js';
-import { binary_read_recursive_{{ imp.class_name }}, binary_write_recursive_{{ imp.class_name }} } from './pdu_conv_{{ imp.msg_type }}.js';
+{%- set import_path = './' -%}
+{%- if imp.dep_pkg != container.pkg_name -%}
+{%- set import_path = '../' + imp.dep_pkg + '/' -%}
+{%- endif -%}
+import { {{ imp.class_name }} } from '{{ import_path }}pdu_jstype_{{ imp.msg_type }}.js';
+import { binary_read_recursive_{{ imp.class_name }}, binary_write_recursive_{{ imp.class_name }} } from '{{ import_path }}pdu_conv_{{ imp.msg_type }}.js';
 {% endfor %}
 
 /**

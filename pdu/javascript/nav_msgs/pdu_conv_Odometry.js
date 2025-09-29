@@ -1,11 +1,11 @@
 import * as PduUtils from '../pdu_utils.js';
 import { Odometry } from './pdu_jstype_Odometry.js';
-import { Header } from './pdu_jstype_Header.js';
-import { binary_read_recursive_Header, binary_write_recursive_Header } from './pdu_conv_Header.js';
-import { PoseWithCovariance } from './pdu_jstype_PoseWithCovariance.js';
-import { binary_read_recursive_PoseWithCovariance, binary_write_recursive_PoseWithCovariance } from './pdu_conv_PoseWithCovariance.js';
-import { TwistWithCovariance } from './pdu_jstype_TwistWithCovariance.js';
-import { binary_read_recursive_TwistWithCovariance, binary_write_recursive_TwistWithCovariance } from './pdu_conv_TwistWithCovariance.js';
+import { Header } from '../std_msgs/pdu_jstype_Header.js';
+import { binary_read_recursive_Header, binary_write_recursive_Header } from '../std_msgs/pdu_conv_Header.js';
+import { PoseWithCovariance } from '../geometry_msgs/pdu_jstype_PoseWithCovariance.js';
+import { binary_read_recursive_PoseWithCovariance, binary_write_recursive_PoseWithCovariance } from '../geometry_msgs/pdu_conv_PoseWithCovariance.js';
+import { TwistWithCovariance } from '../geometry_msgs/pdu_jstype_TwistWithCovariance.js';
+import { binary_read_recursive_TwistWithCovariance, binary_write_recursive_TwistWithCovariance } from '../geometry_msgs/pdu_conv_TwistWithCovariance.js';
 
 
 /**

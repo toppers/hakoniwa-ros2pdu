@@ -1,11 +1,11 @@
 import * as PduUtils from '../pdu_utils.js';
 import { AttitudeTarget } from './pdu_jstype_AttitudeTarget.js';
-import { Header } from './pdu_jstype_Header.js';
-import { binary_read_recursive_Header, binary_write_recursive_Header } from './pdu_conv_Header.js';
-import { Quaternion } from './pdu_jstype_Quaternion.js';
-import { binary_read_recursive_Quaternion, binary_write_recursive_Quaternion } from './pdu_conv_Quaternion.js';
-import { Vector3 } from './pdu_jstype_Vector3.js';
-import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from './pdu_conv_Vector3.js';
+import { Header } from '../std_msgs/pdu_jstype_Header.js';
+import { binary_read_recursive_Header, binary_write_recursive_Header } from '../std_msgs/pdu_conv_Header.js';
+import { Quaternion } from '../geometry_msgs/pdu_jstype_Quaternion.js';
+import { binary_read_recursive_Quaternion, binary_write_recursive_Quaternion } from '../geometry_msgs/pdu_conv_Quaternion.js';
+import { Vector3 } from '../geometry_msgs/pdu_jstype_Vector3.js';
+import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from '../geometry_msgs/pdu_conv_Vector3.js';
 
 
 /**

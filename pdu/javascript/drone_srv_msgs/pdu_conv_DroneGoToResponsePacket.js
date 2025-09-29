@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { DroneGoToResponsePacket } from './pdu_jstype_DroneGoToResponsePacket.js';
-import { ServiceResponseHeader } from './pdu_jstype_ServiceResponseHeader.js';
-import { binary_read_recursive_ServiceResponseHeader, binary_write_recursive_ServiceResponseHeader } from './pdu_conv_ServiceResponseHeader.js';
+import { ServiceResponseHeader } from '../hako_srv_msgs/pdu_jstype_ServiceResponseHeader.js';
+import { binary_read_recursive_ServiceResponseHeader, binary_write_recursive_ServiceResponseHeader } from '../hako_srv_msgs/pdu_conv_ServiceResponseHeader.js';
 import { DroneGoToResponse } from './pdu_jstype_DroneGoToResponse.js';
 import { binary_read_recursive_DroneGoToResponse, binary_write_recursive_DroneGoToResponse } from './pdu_conv_DroneGoToResponse.js';
 

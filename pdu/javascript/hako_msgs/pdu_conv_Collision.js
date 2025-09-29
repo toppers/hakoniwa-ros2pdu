@@ -1,9 +1,9 @@
 import * as PduUtils from '../pdu_utils.js';
 import { Collision } from './pdu_jstype_Collision.js';
-import { Vector3 } from './pdu_jstype_Vector3.js';
-import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from './pdu_conv_Vector3.js';
-import { Point } from './pdu_jstype_Point.js';
-import { binary_read_recursive_Point, binary_write_recursive_Point } from './pdu_conv_Point.js';
+import { Vector3 } from '../geometry_msgs/pdu_jstype_Vector3.js';
+import { binary_read_recursive_Vector3, binary_write_recursive_Vector3 } from '../geometry_msgs/pdu_conv_Vector3.js';
+import { Point } from '../geometry_msgs/pdu_jstype_Point.js';
+import { binary_read_recursive_Point, binary_write_recursive_Point } from '../geometry_msgs/pdu_conv_Point.js';
 
 
 /**

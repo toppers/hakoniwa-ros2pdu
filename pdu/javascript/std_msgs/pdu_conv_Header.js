@@ -1,7 +1,7 @@
 import * as PduUtils from '../pdu_utils.js';
 import { Header } from './pdu_jstype_Header.js';
-import { Time } from './pdu_jstype_Time.js';
-import { binary_read_recursive_Time, binary_write_recursive_Time } from './pdu_conv_Time.js';
+import { Time } from '../builtin_interfaces/pdu_jstype_Time.js';
+import { binary_read_recursive_Time, binary_write_recursive_Time } from '../builtin_interfaces/pdu_conv_Time.js';
 
 
 /**
