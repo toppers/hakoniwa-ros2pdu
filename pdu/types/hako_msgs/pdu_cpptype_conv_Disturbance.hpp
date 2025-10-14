@@ -21,6 +21,7 @@
 #include "hako_msgs/pdu_cpptype_conv_DisturbanceAtm.hpp"
 #include "hako_msgs/pdu_cpptype_conv_DisturbanceBoundary.hpp"
 #include "hako_msgs/pdu_cpptype_conv_DisturbanceTemperature.hpp"
+#include "hako_msgs/pdu_cpptype_conv_DisturbanceUserCustom.hpp"
 #include "hako_msgs/pdu_cpptype_conv_DisturbanceWind.hpp"
 
 /***************************
@@ -28,6 +29,21 @@
  * PDU ==> CPP PDU
  *
  ***************************/
+static inline int cpp_pdu2cpp_struct_array_Disturbance_d_user_custom(const char* heap_ptr, Hako_Disturbance &src, HakoCpp_Disturbance &dst)
+{
+    // Convert using len and off
+    int offset = src._d_user_custom_off;
+    int length = src._d_user_custom_len;
+    if (length > 0) {
+        dst.d_user_custom.resize(length);
+        Hako_DisturbanceUserCustom *temp_struct_ptr = (Hako_DisturbanceUserCustom *)(heap_ptr + offset);
+        for (int i = 0; i < length; ++i) {
+            cpp_pdu2cpp_DisturbanceUserCustom(heap_ptr, *temp_struct_ptr, dst.d_user_custom[i]);
+            temp_struct_ptr++;
+        }
+    }
+    return 0;
+}
 
 static inline int cpp_pdu2cpp_Disturbance(const char* heap_ptr, Hako_Disturbance &src, HakoCpp_Disturbance &dst)
 {
@@ -39,6 +55,8 @@ static inline int cpp_pdu2cpp_Disturbance(const char* heap_ptr, Hako_Disturbance
     cpp_pdu2cpp_DisturbanceAtm(heap_ptr, src.d_atm, dst.d_atm);
     // Struct convert
     cpp_pdu2cpp_DisturbanceBoundary(heap_ptr, src.d_boundary, dst.d_boundary);
+    // struct array convertor
+    cpp_pdu2cpp_struct_array_Disturbance_d_user_custom(heap_ptr, src, dst);
     (void)heap_ptr;
     return 0;
 }
@@ -61,6 +79,23 @@ static inline int hako_convert_pdu2cpp_Disturbance(Hako_Disturbance &src, HakoCp
  * CPP PDU ==> PDU
  *
  ***************************/
+static inline bool cpp_cpp2pdu_struct_array_Disturbance_d_user_custom(HakoCpp_Disturbance &src, Hako_Disturbance &dst, PduDynamicMemory &dynamic_memory)
+{
+    // array struct
+    dst._d_user_custom_len = src.d_user_custom.size();
+    if (dst._d_user_custom_len > 0) {
+        Hako_DisturbanceUserCustom* temp_struct_ptr = (Hako_DisturbanceUserCustom*)dynamic_memory.allocate(dst._d_user_custom_len, sizeof(Hako_DisturbanceUserCustom));
+        dst._d_user_custom_off = dynamic_memory.get_offset(temp_struct_ptr);
+        for (int i = 0; i < dst._d_user_custom_len; ++i) {
+            cpp_cpp2pdu_DisturbanceUserCustom(src.d_user_custom[i], *temp_struct_ptr, dynamic_memory);
+            temp_struct_ptr++;
+        }
+    }
+    else {
+        dst._d_user_custom_off = dynamic_memory.get_total_size();
+    }
+    return true;
+}
 
 static inline bool cpp_cpp2pdu_Disturbance(HakoCpp_Disturbance &src, Hako_Disturbance &dst, PduDynamicMemory &dynamic_memory)
 {
@@ -73,6 +108,8 @@ static inline bool cpp_cpp2pdu_Disturbance(HakoCpp_Disturbance &src, Hako_Distur
         cpp_cpp2pdu_DisturbanceAtm(src.d_atm, dst.d_atm, dynamic_memory);
         // struct convert
         cpp_cpp2pdu_DisturbanceBoundary(src.d_boundary, dst.d_boundary, dynamic_memory);
+        //struct array convert
+        cpp_cpp2pdu_struct_array_Disturbance_d_user_custom(src, dst, dynamic_memory);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

@@ -1,6 +1,7 @@
 import { DisturbanceAtm } from '../hako_msgs/pdu_jstype_DisturbanceAtm.js';
 import { DisturbanceBoundary } from '../hako_msgs/pdu_jstype_DisturbanceBoundary.js';
 import { DisturbanceTemperature } from '../hako_msgs/pdu_jstype_DisturbanceTemperature.js';
+import { DisturbanceUserCustom } from '../hako_msgs/pdu_jstype_DisturbanceUserCustom.js';
 import { DisturbanceWind } from '../hako_msgs/pdu_jstype_DisturbanceWind.js';
 import { Point } from '../geometry_msgs/pdu_jstype_Point.js';
 import { Vector3 } from '../geometry_msgs/pdu_jstype_Vector3.js';
@@ -19,6 +20,8 @@ export class Disturbance {
     d_atm;
 /** @type { DisturbanceBoundary } */
     d_boundary;
+/** @type { Array<DisturbanceUserCustom> } */
+    d_user_custom;
 
 
     constructor() {
@@ -26,6 +29,7 @@ export class Disturbance {
         this.d_wind = new DisturbanceWind();
         this.d_atm = new DisturbanceAtm();
         this.d_boundary = new DisturbanceBoundary();
+        this.d_user_custom = [];
     }
 
     /**
@@ -77,6 +81,17 @@ export class Disturbance {
                 d['d_boundary'] = field_val;
             }
         }
+        {
+            // handle field 'd_user_custom'
+            const field_val = this.d_user_custom;
+            if (typeof field_val?.toDict === 'function') {
+                d['d_user_custom'] = field_val.toDict();
+            } else if (Array.isArray(field_val)) {
+                d['d_user_custom'] = field_val.map(item => typeof item?.toDict === 'function' ? item.toDict() : item);
+            } else {
+                d['d_user_custom'] = field_val;
+            }
+        }
         return d;
     }
 
@@ -108,6 +123,12 @@ export class Disturbance {
             const field_class = DisturbanceBoundary;
             if (d.d_boundary) {
                 obj.d_boundary = field_class.fromDict(d.d_boundary);
+            }
+        }
+        if (d.hasOwnProperty('d_user_custom')) {
+            const item_class = DisturbanceUserCustom;
+            if (Array.isArray(d.d_user_custom)) {
+                obj.d_user_custom = d.d_user_custom.map(item => item_class.fromDict(item));
             }
         }
         return obj;

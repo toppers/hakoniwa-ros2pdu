@@ -9,6 +9,7 @@ from ..hako_msgs.pdu_conv_DisturbanceTemperature import *
 from ..hako_msgs.pdu_conv_DisturbanceWind import *
 from ..hako_msgs.pdu_conv_DisturbanceAtm import *
 from ..hako_msgs.pdu_conv_DisturbanceBoundary import *
+from ..hako_msgs.pdu_conv_DisturbanceUserCustom import *
 
 
 
@@ -66,6 +67,25 @@ def binary_read_recursive_Disturbance(meta: binary_io.PduMetaData, binary_data: 
     tmp_py_obj = DisturbanceBoundary()
     binary_read_recursive_DisturbanceBoundary(meta, binary_data, tmp_py_obj, base_off + 40)
     py_obj.d_boundary = tmp_py_obj
+    
+    # array_type: varray 
+    # data_type: struct 
+    # member_name: d_user_custom 
+    # type_name: hako_msgs/DisturbanceUserCustom 
+    # offset: 88 size: 8 
+    # array_len: 8
+
+    array_size = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 88, 4))
+    offset_from_heap = binary_io.binTovalue("int32", binary_io.readBinary(binary_data, base_off + 88 + 4, 4))
+    one_elm_size = 8
+    i = 0
+    array_value = []
+    while i < array_size:
+        tmp_py_obj = DisturbanceUserCustom()
+        binary_read_recursive_DisturbanceUserCustom(meta, binary_data, tmp_py_obj, meta.heap_off + offset_from_heap + (i * one_elm_size))
+        array_value.append(tmp_py_obj)
+        i = i + 1
+    py_obj.d_user_custom = array_value    
     
     return py_obj
 
@@ -142,6 +162,24 @@ def binary_write_recursive_Disturbance(parent_off: int, bw_container: BinaryWrit
     off = 40
 
     binary_write_recursive_DisturbanceBoundary(parent_off + off, bw_container, allocator, py_obj.d_boundary)
+    
+    # array_type: varray 
+    # data_type: struct 
+    # member_name: d_user_custom 
+    # type_name: hako_msgs/DisturbanceUserCustom 
+    # offset: 88 size: 8 
+    # array_len: 8
+    type = "DisturbanceUserCustom"
+    off = 88
+
+    offset_from_heap = bw_container.heap_allocator.size()
+    array_size = len(py_obj.d_user_custom)
+    for i, elm in enumerate(py_obj.d_user_custom):
+        one_elm_size =  8
+        binary_write_recursive_DisturbanceUserCustom((parent_off + i * one_elm_size), bw_container, bw_container.heap_allocator, elm)
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)    
     
 
 if __name__ == "__main__":

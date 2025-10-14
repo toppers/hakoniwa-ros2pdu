@@ -7,6 +7,7 @@
 #include "hako_msgs/pdu_ctype_DisturbanceAtm.h"
 #include "hako_msgs/pdu_ctype_DisturbanceBoundary.h"
 #include "hako_msgs/pdu_ctype_DisturbanceTemperature.h"
+#include "hako_msgs/pdu_ctype_DisturbanceUserCustom.h"
 #include "hako_msgs/pdu_ctype_DisturbanceWind.h"
 
 typedef struct {
@@ -14,6 +15,9 @@ typedef struct {
         Hako_DisturbanceWind d_wind;
         Hako_DisturbanceAtm d_atm;
         Hako_DisturbanceBoundary d_boundary;
+        // hako_msgs/DisturbanceUserCustom d_user_custom[]
+        int _d_user_custom_len;
+        int _d_user_custom_off;
 } Hako_Disturbance;
 
 #endif /* _pdu_ctype_hako_msgs_Disturbance_H_ */

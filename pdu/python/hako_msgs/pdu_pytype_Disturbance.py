@@ -4,6 +4,7 @@ from typing import List
 from ..hako_msgs.pdu_pytype_DisturbanceAtm import DisturbanceAtm
 from ..hako_msgs.pdu_pytype_DisturbanceBoundary import DisturbanceBoundary
 from ..hako_msgs.pdu_pytype_DisturbanceTemperature import DisturbanceTemperature
+from ..hako_msgs.pdu_pytype_DisturbanceUserCustom import DisturbanceUserCustom
 from ..hako_msgs.pdu_pytype_DisturbanceWind import DisturbanceWind
 from ..geometry_msgs.pdu_pytype_Point import Point
 from ..geometry_msgs.pdu_pytype_Vector3 import Vector3
@@ -20,12 +21,14 @@ class Disturbance:
     d_wind: DisturbanceWind
     d_atm: DisturbanceAtm
     d_boundary: DisturbanceBoundary
+    d_user_custom: List[DisturbanceUserCustom]
 
     def __init__(self):
         self.d_temp = DisturbanceTemperature()
         self.d_wind = DisturbanceWind()
         self.d_atm = DisturbanceAtm()
         self.d_boundary = DisturbanceBoundary()
+        self.d_user_custom = []
 
     def __str__(self):
         return f"Disturbance(" + ", ".join([
@@ -33,6 +36,7 @@ class Disturbance:
             f"d_wind={self.d_wind}"
             f"d_atm={self.d_atm}"
             f"d_boundary={self.d_boundary}"
+            f"d_user_custom={self.d_user_custom}"
         ]) + ")"
 
     def __repr__(self):
@@ -83,6 +87,16 @@ class Disturbance:
             d['d_boundary'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
         else:
             d['d_boundary'] = field_val
+        # handle field 'd_user_custom'
+        field_val = self.d_user_custom
+        if isinstance(field_val, bytearray):
+            d['d_user_custom'] = list(field_val)
+        elif hasattr(field_val, 'to_dict'):
+            d['d_user_custom'] = field_val.to_dict()
+        elif isinstance(field_val, list):
+            d['d_user_custom'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
+        else:
+            d['d_user_custom'] = field_val
         return d
 
     @classmethod
@@ -159,6 +173,23 @@ class Disturbance:
                 obj.d_boundary = field_type.from_dict(value)
             else:
                 obj.d_boundary = value
+        # handle field 'd_user_custom'
+        if 'd_user_custom' in d:
+            field_type = cls.__annotations__.get('d_user_custom')
+            value = d['d_user_custom']
+            
+            if field_type is bytearray:
+                obj.d_user_custom = bytearray(value)
+            elif hasattr(field_type, '__origin__') and field_type.__origin__ is list:
+                list_item_type = field_type.__args__[0]
+                if hasattr(list_item_type, 'from_dict'):
+                    obj.d_user_custom = [list_item_type.from_dict(item) for item in value]
+                else:
+                    obj.d_user_custom = value
+            elif hasattr(field_type, 'from_dict'):
+                obj.d_user_custom = field_type.from_dict(value)
+            else:
+                obj.d_user_custom = value
         return obj
 
     def to_json(self, indent=2):

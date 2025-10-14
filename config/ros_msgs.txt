@@ -70,6 +70,7 @@ hako_msgs/SimTime
 hako_msgs/HakoCmdHeader
 hako_msgs/HakoCmdCameraMove
 hako_msgs/ShareObjectOwnerRequest
+hako_msgs/DisturbanceUserCustom
 hako_msgs/Disturbance
 can_msgs/HakoCan
 ev3_msgs/Ev3PduSensor

@@ -84,5 +84,34 @@ namespace hakoniwa.pdu.msgs.hako_msgs
                 _pdu.SetData("d_boundary", value.GetPdu());
             }
         }
+        private DisturbanceUserCustom[] _d_user_custom;
+        public DisturbanceUserCustom[] d_user_custom
+        {
+            get
+            {
+                if (_d_user_custom == null)
+                {
+                    var fieldPdus = _pdu.GetDataArray<IPdu>("d_user_custom");
+                    _d_user_custom = new DisturbanceUserCustom[fieldPdus.Length];
+                    DisturbanceUserCustom[] result = new DisturbanceUserCustom[fieldPdus.Length];
+                    for (int i = 0; i < fieldPdus.Length; i++)
+                    {
+                        _d_user_custom[i] = new DisturbanceUserCustom(fieldPdus[i]);
+                    }
+                }
+                return _d_user_custom;
+            }
+            set
+            {
+                _d_user_custom = new DisturbanceUserCustom[value.Length];
+                IPdu[] fieldPdus = new IPdu[value.Length];
+                for (int i = 0; i < value.Length; i++)
+                {
+                    fieldPdus[i] = value[i].GetPdu();
+                    _d_user_custom[i] = value[i];
+                }
+                _pdu.SetData("d_user_custom", fieldPdus);
+            }
+        }
     }
 }

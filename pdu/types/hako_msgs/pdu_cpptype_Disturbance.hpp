@@ -9,6 +9,7 @@
 #include "hako_msgs/pdu_cpptype_DisturbanceAtm.hpp"
 #include "hako_msgs/pdu_cpptype_DisturbanceBoundary.hpp"
 #include "hako_msgs/pdu_cpptype_DisturbanceTemperature.hpp"
+#include "hako_msgs/pdu_cpptype_DisturbanceUserCustom.hpp"
 #include "hako_msgs/pdu_cpptype_DisturbanceWind.hpp"
 
 typedef struct {
@@ -16,6 +17,7 @@ typedef struct {
         HakoCpp_DisturbanceWind d_wind;
         HakoCpp_DisturbanceAtm d_atm;
         HakoCpp_DisturbanceBoundary d_boundary;
+        std::vector<HakoCpp_DisturbanceUserCustom> d_user_custom;
 } HakoCpp_Disturbance;
 
 #endif /* _pdu_cpptype_hako_msgs_Disturbance_HPP_ */
