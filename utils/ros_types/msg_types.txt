@@ -1,1 +1,0 @@
-hako_msgs/MetaPdu
