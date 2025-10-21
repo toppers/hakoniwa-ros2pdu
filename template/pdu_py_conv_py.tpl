@@ -126,13 +126,13 @@ def binary_write_recursive_{{ container.get_msg_type(container.msg_type_name) }}
     binary = binary_io.typeTobin_array(type, py_obj.{{ item.member_name }}, one_elm_size)
     allocator.add(binary, expected_offset=(parent_off + off))
     {% else -%}
-    offset_from_heap = bw_container.heap_allocator.size()
+    offset_from_heap = bw_container.heap_allocator.size() + 8 # 8 bytes for array_size and offset
     array_size = len(py_obj.{{ item.member_name}})
-    binary = binary_io.typeTobin_array(type, py_obj.{{ item.member_name}}, {{ item.size }})
-    bw_container.heap_allocator.add(binary, expected_offset=0)
     a_b = array_size.to_bytes(4, byteorder='little')
     o_b = offset_from_heap.to_bytes(4, byteorder='little')
-    allocator.add(a_b + o_b, expected_offset=parent_off + off)
+    bw_container.heap_allocator.add(a_b + o_b, expected_offset=parent_off + off)
+    binary = binary_io.typeTobin_array(type, py_obj.{{ item.member_name}}, {{ item.size }})
+    bw_container.heap_allocator.add(binary, expected_offset=0)
     {% endif -%}
 {% else -%}
     {% if item.array_type == 'single' %}
@@ -146,12 +146,14 @@ def binary_write_recursive_{{ container.get_msg_type(container.msg_type_name) }}
     {% else %}
     offset_from_heap = bw_container.heap_allocator.size()
     array_size = len(py_obj.{{ item.member_name }})
+    if allocator.is_heap:
+        offset_from_heap += 8 # 8 bytes for array_size and offset
+    a_b = array_size.to_bytes(4, byteorder='little')
+    o_b = offset_from_heap.to_bytes(4, byteorder='little')
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)
     for i, elm in enumerate(py_obj.{{ item.member_name }}):
         one_elm_size =  {{ item.size }}
         binary_write_recursive_{{ container.get_msg_type(item.type_name) }}((parent_off + i * one_elm_size), bw_container, bw_container.heap_allocator, elm)
-    a_b = array_size.to_bytes(4, byteorder='little')
-    o_b = offset_from_heap.to_bytes(4, byteorder='little')
-    allocator.add(a_b + o_b, expected_offset=parent_off + off)    
     {% endif -%}
 {% endif -%}
 {% endfor %}
