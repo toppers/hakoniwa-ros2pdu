@@ -126,11 +126,13 @@ def binary_write_recursive_{{ container.get_msg_type(container.msg_type_name) }}
     binary = binary_io.typeTobin_array(type, py_obj.{{ item.member_name }}, one_elm_size)
     allocator.add(binary, expected_offset=(parent_off + off))
     {% else -%}
-    offset_from_heap = bw_container.heap_allocator.size() + 8 # 8 bytes for array_size and offset
+    offset_from_heap = bw_container.heap_allocator.size()
+    if allocator.is_heap:
+        offset_from_heap += 8 # 8 bytes for array_size and offset
     array_size = len(py_obj.{{ item.member_name}})
     a_b = array_size.to_bytes(4, byteorder='little')
     o_b = offset_from_heap.to_bytes(4, byteorder='little')
-    bw_container.heap_allocator.add(a_b + o_b, expected_offset=parent_off + off)
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)
     binary = binary_io.typeTobin_array(type, py_obj.{{ item.member_name}}, {{ item.size }})
     bw_container.heap_allocator.add(binary, expected_offset=0)
     {% endif -%}

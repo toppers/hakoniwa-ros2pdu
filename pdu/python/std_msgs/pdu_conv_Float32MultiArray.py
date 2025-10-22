@@ -96,11 +96,13 @@ def binary_write_recursive_Float32MultiArray(parent_off: int, bw_container: Bina
     type = "float32"
     off = 12
 
-    offset_from_heap = bw_container.heap_allocator.size() + 8 # 8 bytes for array_size and offset
+    offset_from_heap = bw_container.heap_allocator.size()
+    if allocator.is_heap:
+        offset_from_heap += 8 # 8 bytes for array_size and offset
     array_size = len(py_obj.data)
     a_b = array_size.to_bytes(4, byteorder='little')
     o_b = offset_from_heap.to_bytes(4, byteorder='little')
-    bw_container.heap_allocator.add(a_b + o_b, expected_offset=parent_off + off)
+    allocator.add(a_b + o_b, expected_offset=parent_off + off)
     binary = binary_io.typeTobin_array(type, py_obj.data, 4)
     bw_container.heap_allocator.add(binary, expected_offset=0)
     
