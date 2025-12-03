@@ -53,6 +53,17 @@ def binary_read_recursive_DroneStatus(meta: binary_io.PduMetaData, binary_data: 
     binary_read_recursive_Vector3(meta, binary_data, tmp_py_obj, base_off + 8)
     py_obj.propeller_wind = tmp_py_obj
     
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: collided_counts 
+    # type_name: int32 
+    # offset: 32 size: 4 
+    # array_len: 1
+
+    
+    bin = binary_io.readBinary(binary_data, base_off + 32, 4)
+    py_obj.collided_counts = binary_io.binTovalue("int32", bin)
+    
     return py_obj
 
 
@@ -123,6 +134,20 @@ def binary_write_recursive_DroneStatus(parent_off: int, bw_container: BinaryWrit
     off = 8
 
     binary_write_recursive_Vector3(parent_off + off, bw_container, allocator, py_obj.propeller_wind)
+    
+    # array_type: single 
+    # data_type: primitive 
+    # member_name: collided_counts 
+    # type_name: int32 
+    # offset: 32 size: 4 
+    # array_len: 1
+    type = "int32"
+    off = 32
+
+    
+    bin = binary_io.typeTobin(type, py_obj.collided_counts)
+    bin = get_binary(type, bin, 4)
+    allocator.add(bin, expected_offset=parent_off + off)
     
 
 if __name__ == "__main__":

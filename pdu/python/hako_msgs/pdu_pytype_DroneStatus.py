@@ -14,17 +14,20 @@ class DroneStatus:
     flight_mode: int
     internal_state: int
     propeller_wind: Vector3
+    collided_counts: int
 
     def __init__(self):
         self.flight_mode = 0
         self.internal_state = 0
         self.propeller_wind = Vector3()
+        self.collided_counts = 0
 
     def __str__(self):
         return f"DroneStatus(" + ", ".join([
             f"flight_mode={self.flight_mode}"
             f"internal_state={self.internal_state}"
             f"propeller_wind={self.propeller_wind}"
+            f"collided_counts={self.collided_counts}"
         ]) + ")"
 
     def __repr__(self):
@@ -65,6 +68,16 @@ class DroneStatus:
             d['propeller_wind'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
         else:
             d['propeller_wind'] = field_val
+        # handle field 'collided_counts'
+        field_val = self.collided_counts
+        if isinstance(field_val, bytearray):
+            d['collided_counts'] = list(field_val)
+        elif hasattr(field_val, 'to_dict'):
+            d['collided_counts'] = field_val.to_dict()
+        elif isinstance(field_val, list):
+            d['collided_counts'] = [item.to_dict() if hasattr(item, 'to_dict') else item for item in field_val]
+        else:
+            d['collided_counts'] = field_val
         return d
 
     @classmethod
@@ -124,6 +137,23 @@ class DroneStatus:
                 obj.propeller_wind = field_type.from_dict(value)
             else:
                 obj.propeller_wind = value
+        # handle field 'collided_counts'
+        if 'collided_counts' in d:
+            field_type = cls.__annotations__.get('collided_counts')
+            value = d['collided_counts']
+            
+            if field_type is bytearray:
+                obj.collided_counts = bytearray(value)
+            elif hasattr(field_type, '__origin__') and field_type.__origin__ is list:
+                list_item_type = field_type.__args__[0]
+                if hasattr(list_item_type, 'from_dict'):
+                    obj.collided_counts = [list_item_type.from_dict(item) for item in value]
+                else:
+                    obj.collided_counts = value
+            elif hasattr(field_type, 'from_dict'):
+                obj.collided_counts = field_type.from_dict(value)
+            else:
+                obj.collided_counts = value
         return obj
 
     def to_json(self, indent=2):

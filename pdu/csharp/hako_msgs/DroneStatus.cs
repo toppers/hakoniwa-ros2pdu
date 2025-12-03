@@ -43,5 +43,10 @@ namespace hakoniwa.pdu.msgs.hako_msgs
                 _pdu.SetData("propeller_wind", value.GetPdu());
             }
         }
+        public int collided_counts
+        {
+            get => _pdu.GetData<int>("collided_counts");
+            set => _pdu.SetData("collided_counts", value);
+        }
     }
 }

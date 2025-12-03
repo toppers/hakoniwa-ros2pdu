@@ -47,6 +47,14 @@ export function binary_read_recursive_DroneStatus(meta, binary_data, js_obj, bas
         js_obj.propeller_wind = tmp_obj;
     }
     
+    // member: collided_counts, type: int32 (primitive)
+
+    
+    {
+        const bin = PduUtils.readBinary(binary_data, base_off + 32, 4);
+        js_obj.collided_counts = PduUtils.binToValue("int32", bin);
+    }
+    
     return js_obj;
 }
 
@@ -99,6 +107,14 @@ export function binary_write_recursive_DroneStatus(parent_off, bw_container, all
 
     {
         binary_write_recursive_Vector3(parent_off + 8, bw_container, allocator, js_obj.propeller_wind);
+    }
+    
+    // member: collided_counts, type: int32 (primitive)
+
+    
+    {
+        const bin = PduUtils.typeToBin("int32", js_obj.collided_counts, 4);
+        allocator.add(bin, parent_off + 32);
     }
     
 }

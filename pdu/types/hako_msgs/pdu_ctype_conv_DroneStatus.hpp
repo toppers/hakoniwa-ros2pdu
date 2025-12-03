@@ -33,6 +33,8 @@ static inline int _pdu2ros_DroneStatus(const char* heap_ptr, Hako_DroneStatus &s
     hako_convert_pdu2ros(src.internal_state, dst.internal_state);
     // Struct convert
     _pdu2ros_Vector3(heap_ptr, src.propeller_wind, dst.propeller_wind);
+    // primitive convert
+    hako_convert_pdu2ros(src.collided_counts, dst.collided_counts);
     (void)heap_ptr;
     return 0;
 }
@@ -65,6 +67,8 @@ static inline bool _ros2pdu_DroneStatus(hako_msgs::msg::DroneStatus &src, Hako_D
         hako_convert_ros2pdu(src.internal_state, dst.internal_state);
         // struct convert
         _ros2pdu_Vector3(src.propeller_wind, dst.propeller_wind, dynamic_memory);
+        // primitive convert
+        hako_convert_ros2pdu(src.collided_counts, dst.collided_counts);
     } catch (const std::runtime_error& e) {
         std::cerr << "convertor error: " << e.what() << std::endl;
         return false;

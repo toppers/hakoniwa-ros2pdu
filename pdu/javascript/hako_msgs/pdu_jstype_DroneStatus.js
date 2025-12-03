@@ -12,12 +12,15 @@ export class DroneStatus {
     internal_state;
 /** @type { Vector3 } */
     propeller_wind;
+/** @type { number } */
+    collided_counts;
 
 
     constructor() {
         this.flight_mode = 0;
         this.internal_state = 0;
         this.propeller_wind = new Vector3();
+        this.collided_counts = 0;
     }
 
     /**
@@ -58,6 +61,17 @@ export class DroneStatus {
                 d['propeller_wind'] = field_val;
             }
         }
+        {
+            // handle field 'collided_counts'
+            const field_val = this.collided_counts;
+            if (typeof field_val?.toDict === 'function') {
+                d['collided_counts'] = field_val.toDict();
+            } else if (Array.isArray(field_val)) {
+                d['collided_counts'] = field_val.map(item => typeof item?.toDict === 'function' ? item.toDict() : item);
+            } else {
+                d['collided_counts'] = field_val;
+            }
+        }
         return d;
     }
 
@@ -78,6 +92,9 @@ export class DroneStatus {
             if (d.propeller_wind) {
                 obj.propeller_wind = field_class.fromDict(d.propeller_wind);
             }
+        }
+        if (d.hasOwnProperty('collided_counts')) {
+            obj.collided_counts = d.collided_counts;
         }
         return obj;
     }
