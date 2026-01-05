@@ -4,10 +4,11 @@ from pathlib import Path
 import jinja2
 
 class OffsetCalculator:
-    def __init__(self, template_dir, base_dir):
+    def __init__(self, template_dir, base_dir, additional_include_paths=None):
         self.template_env = jinja2.Environment(loader=jinja2.FileSystemLoader(template_dir))
         self.template_env.undefined = jinja2.StrictUndefined
         self.base_dir = Path(base_dir)
+        self.additional_include_paths = additional_include_paths if additional_include_paths is not None else []
 
     def _render_template(self, template_name, context):
         template = self.template_env.get_template(template_name)
@@ -30,11 +31,16 @@ class OffsetCalculator:
             f.write(c_code)
 
         # Cコードをコンパイル
-        include_path = self.base_dir / 'pdu' / 'types'
+        include_paths = [self.base_dir / 'pdu' / 'types']
+        include_paths.extend([Path(p) for p in self.additional_include_paths])
+        
         compile_command = [
-            'gcc', '-o', str(executable_path), str(c_file_path),
-            f"-I{include_path}"
+            'gcc', '-o', str(executable_path), str(c_file_path)
         ]
+        for ipath in include_paths:
+            print(f"Adding include path for compilation: {ipath}")
+            compile_command.append(f"-I{ipath}")
+
         try:
             subprocess.run(compile_command, check=True, capture_output=True, text=True)
         except subprocess.CalledProcessError as e:

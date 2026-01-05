@@ -1,12 +1,14 @@
 #!/bin/bash
 
 HAKONIWA_TOP_DIR=`pwd`
-IMAGE_NAME=`cat docker/image_name.txt`
-IMAGE_TAG=`cat appendix/latest_version.txt`
+
+DIR_PATH=`dirname $0`
+IMAGE_NAME=`cat ${DIR_PATH}/image_name.txt`
+IMAGE_TAG=`cat ${DIR_PATH}/../appendix/latest_version.txt`
 DOCKER_IMAGE=${IMAGE_NAME}:${IMAGE_TAG}
 
 ARCH=`arch`
-OS_TYPE=`bash utils/detect_os_type.bash`
+OS_TYPE=`bash ${DIR_PATH}/../utils/detect_os_type.bash`
 
 if [ ${OS_TYPE} != "Mac" ]
 then
